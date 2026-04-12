@@ -1,0 +1,59 @@
+using Godot;
+
+public partial class Paddle : Area2D
+{
+	[Export] float _movementSpeed = 200.0f;
+	[Export] float _boundaryMargin = 25.0f;
+
+	private Rect2 _viewportBoundary;
+
+	public override void _Ready()
+	{
+		_viewportBoundary = GetViewportRect();
+	}
+
+	public override void _Process(double delta)
+	{
+		HandlePaddleMovement(delta);
+	}
+
+	private void HandlePaddleMovement(double delta)
+	{
+		// var movementInput = Input.GetAxis("move_left", "move_right");
+
+		// Console.WriteLine(movementInput.ToString());
+
+		//Position += new Vector2(movementInput * _movementSpeed * (float) delta, Position.Y);
+		
+		HandleUserInput(delta);
+		RestrictPaddleToBoundary();
+	}
+
+	private void HandleUserInput(double delta)
+	{
+		var noChangeInPosition = 0;
+
+		if (Input.IsActionPressed("move_right"))
+		{
+			Position += new Vector2(_movementSpeed * (float)delta, noChangeInPosition);
+		}
+
+		if (Input.IsActionPressed("move_left"))
+		{
+			Position -= new Vector2(_movementSpeed * (float)delta, noChangeInPosition);
+		}
+	}
+
+	private void RestrictPaddleToBoundary()
+	{
+		if(Position.X < _viewportBoundary.Position.X + _boundaryMargin)
+		{
+			Position = new Vector2(_viewportBoundary.Position.X + _boundaryMargin, Position.Y);
+		}
+
+		if(Position.X > _viewportBoundary.End.X - _boundaryMargin)
+		{
+			Position = new Vector2(_viewportBoundary.End.X - _boundaryMargin, Position.Y);
+		}
+	}
+}

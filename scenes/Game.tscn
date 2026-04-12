@@ -12,8 +12,10 @@ texture = ExtResource("1_ibkli")
 centered = false
 
 [node name="Paddle" parent="." instance=ExtResource("2_qbsmt")]
-position = Vector2(557, 570)
+position = Vector2(561, 570)
 scale = Vector2(0.600926, 0.6009259)
+_movementSpeed = 400.0
+_boundaryMargin = 35.0
 
 [node name="Gem" parent="." instance=ExtResource("3_cpr0p")]
 position = Vector2(558.00006, 52)
