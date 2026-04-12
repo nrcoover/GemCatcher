@@ -22,7 +22,13 @@ public partial class Gem : Area2D
 
 	private float GetSpeedVariation()
 	{
-		var zeroOffset = 1;
-		return GD.Randf() + zeroOffset;
+		var randomNumber = new RandomNumberGenerator();
+		randomNumber.Randomize();
+
+		float randomFloat = randomNumber.RandfRange(1.0f, 3.0f);
+		
+		GD.Print($"Float: {randomFloat}");
+
+		return randomFloat;
 	}
 }
