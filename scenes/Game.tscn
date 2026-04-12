@@ -20,3 +20,19 @@ _boundaryMargin = 35.0
 [node name="Gem" parent="." instance=ExtResource("3_cpr0p")]
 position = Vector2(558.00006, 52)
 scale = Vector2(0.600926, 0.6009259)
+
+[node name="Gem2" parent="." instance=ExtResource("3_cpr0p")]
+position = Vector2(168, 59)
+scale = Vector2(0.600926, 0.6009259)
+
+[node name="Gem3" parent="." instance=ExtResource("3_cpr0p")]
+position = Vector2(1038, 54)
+scale = Vector2(0.600926, 0.6009259)
+
+[node name="Gem4" parent="." instance=ExtResource("3_cpr0p")]
+position = Vector2(817, 58)
+scale = Vector2(0.600926, 0.6009259)
+
+[node name="Gem5" parent="." instance=ExtResource("3_cpr0p")]
+position = Vector2(344, 58)
+scale = Vector2(0.600926, 0.6009259)
