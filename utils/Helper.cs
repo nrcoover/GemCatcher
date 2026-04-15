@@ -1,7 +1,6 @@
 using Godot;
-using System;
 
-public static partial class Helper : Object
+public static partial class Helper
 {
 	public static int GetRandomInt(int min, int max)
 	{
