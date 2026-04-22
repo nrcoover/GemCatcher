@@ -27,6 +27,7 @@ public partial class Game : Node2D
 		_gemContainer.AddChild(gem);
 
 		gem.OnScored += OnScored;
+		gem.OnGemOffScreen += OnGemOffScreen;
 
 		var margin = 85;
 
@@ -44,5 +45,11 @@ public partial class Game : Node2D
 	private void OnScored()
 	{
 		GD.Print("YOU SCORED!");
+	}
+
+	private void OnGemOffScreen()
+	{
+		GD.Print("UH OH! YOU MISSED A GEM!");
+		GameManager.Instance.MissedGemsCount ++;
 	}
 }

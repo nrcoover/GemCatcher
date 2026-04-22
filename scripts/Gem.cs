@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class Gem : Area2D
@@ -12,7 +13,9 @@ public partial class Gem : Area2D
 	[Export] float _maxScaleVariation = 0.75f;
 
 	[Signal] public delegate void OnScoredEventHandler();
-	
+	[Signal] public delegate void OnGemOffScreenEventHandler();
+
+	private bool _isOffScreen = false;
 	private float _speedVariation;
 	private float _rotationVariation;
 	private float _scaleVariation;
@@ -33,9 +36,22 @@ public partial class Gem : Area2D
 	{
 		HandlePosition(delta);
 		HandleRotation(delta);
+		if (!_isOffScreen)
+		{
+			HandleExitScreen();
+		}
 	}
 
-	private void HandlePosition(float delta)
+  private void HandleExitScreen()
+	{
+		if (Position.Y > GetViewportRect().End.Y)
+		{
+			_isOffScreen = true;
+			EmitSignal(SignalName.OnGemOffScreen);
+		}
+	}
+
+  private void HandlePosition(float delta)
 	{
 		var viewportBoundaryMargin = 75;
 
