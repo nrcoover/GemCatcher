@@ -9,7 +9,7 @@ public partial class Gem : Area2D
 	[Export] float _minRotationVariation = -0.5f;
 	[Export] float _maxRotationVariation = 0.5f;
 
-	[Export] private Paddle paddle;
+	[Signal] public delegate void OnScoredEventHandler();
 	
 	private float _speedVariation;
 	private float _rotationVariation;
@@ -62,10 +62,11 @@ public partial class Gem : Area2D
 
 	#region Signals
 
-	private void OnAreaEntered(Area2D area)
+	public void OnAreaEntered(Area2D area)
 	{
 		if (area is Paddle)
 		{
+			EmitSignal(SignalName.OnScored);
 			QueueFree();
 		}
 	}
