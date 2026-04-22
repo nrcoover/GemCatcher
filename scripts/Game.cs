@@ -24,6 +24,9 @@ public partial class Game : Node2D
 	private void SpawnGem()
 	{
 		var gem = (Gem)_gemScene.Instantiate();
+		_gemContainer.AddChild(gem);
+
+		gem.OnScored += OnScored;
 
 		var margin = 85;
 
@@ -36,7 +39,6 @@ public partial class Game : Node2D
 				xBoundaryCoordinate,
 				-margin
 			);
-		_gemContainer.AddChild(gem);
 	}
 
 	private void OnScored()
