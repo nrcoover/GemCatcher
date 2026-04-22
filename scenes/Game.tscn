@@ -5,10 +5,11 @@
 [ext_resource type="PackedScene" uid="uid://3kq5fr5oomem" path="res://scenes/Paddle.tscn" id="2_qbsmt"]
 [ext_resource type="PackedScene" uid="uid://8m2y1u6noqq5" path="res://scenes/Gem.tscn" id="3_cpr0p"]
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("paddle", "_gem")]
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_gemContainer")]
 script = ExtResource("1_78awf")
-paddle = NodePath("Paddle")
-_gem = NodePath("Gem")
+_gemScene = ExtResource("3_cpr0p")
+_gemSpawnTimer = NodePath("GemSpawnTimer")
+_gemContainer = NodePath("GemContainer")
 
 [node name="Background" type="Sprite2D" parent="."]
 scale = Vector2(0.600926, 0.6009259)
@@ -18,25 +19,11 @@ centered = false
 [node name="Paddle" parent="." instance=ExtResource("2_qbsmt")]
 position = Vector2(561, 570)
 scale = Vector2(0.600926, 0.6009259)
-_movementSpeed = 400.0
+_movementSpeed = 500.0
 _boundaryMargin = 35.0
 
-[node name="Gem" parent="." instance=ExtResource("3_cpr0p")]
-position = Vector2(558.00006, 52)
-scale = Vector2(0.600926, 0.6009259)
+[node name="GemContainer" type="Node" parent="."]
 
-[node name="Gem2" parent="." instance=ExtResource("3_cpr0p")]
-position = Vector2(168, 59)
-scale = Vector2(0.600926, 0.6009259)
-
-[node name="Gem3" parent="." instance=ExtResource("3_cpr0p")]
-position = Vector2(1038, 54)
-scale = Vector2(0.600926, 0.6009259)
-
-[node name="Gem4" parent="." instance=ExtResource("3_cpr0p")]
-position = Vector2(817, 58)
-scale = Vector2(0.600926, 0.6009259)
-
-[node name="Gem5" parent="." instance=ExtResource("3_cpr0p")]
-position = Vector2(344, 58)
-scale = Vector2(0.600926, 0.6009259)
+[node name="GemSpawnTimer" type="Timer" parent="."]
+wait_time = 1.75
+autostart = true

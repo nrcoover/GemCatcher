@@ -1,13 +1,14 @@
 using Godot;
-using System;
 
 public partial class Game : Node2D
 {
-	[Export] private Paddle paddle;
-	[Export] private Gem _gem;
+	[Export] private PackedScene _gemScene;
+	[Export] private Timer _gemSpawnTimer;
+	[Export] private Node _gemContainer;
 
 	public override void _Ready()
 	{
+		SpawnGem();
 		SubscribeToSignals();
 	}
 
@@ -17,7 +18,25 @@ public partial class Game : Node2D
 
 	private void SubscribeToSignals()
 	{
-		_gem.OnScored += OnScored;
+		_gemSpawnTimer.Timeout += SpawnGem;
+	}
+
+	private void SpawnGem()
+	{
+		var gem = (Gem)_gemScene.Instantiate();
+
+		var margin = 85;
+
+		var xBoundaryCoordinate = Helper.GetRandomFloat(
+				GetViewportRect().Position.X + margin, 
+				GetViewportRect().End.X - margin
+			);
+
+		gem.Position = new Vector2(
+				xBoundaryCoordinate,
+				-margin
+			);
+		_gemContainer.AddChild(gem);
 	}
 
 	private void OnScored()

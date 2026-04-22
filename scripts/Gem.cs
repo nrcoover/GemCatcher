@@ -8,15 +8,19 @@ public partial class Gem : Area2D
 	[Export] float _rotationSpeed = 15.0f;
 	[Export] float _minRotationVariation = -0.5f;
 	[Export] float _maxRotationVariation = 0.5f;
+	[Export] float _minScaleVariation = 0.5f;
+	[Export] float _maxScaleVariation = 0.75f;
 
 	[Signal] public delegate void OnScoredEventHandler();
 	
 	private float _speedVariation;
 	private float _rotationVariation;
+	private float _scaleVariation;
 
 	public override void _Ready()
 	{
 		SetVariations();
+		SetScale();
 		SubscribeToSignals();
 	}
 
@@ -53,6 +57,13 @@ public partial class Gem : Area2D
 		_speedVariation = Helper.GetRandomFloat(_minSpeedVariation, _maxSpeedVariation);
 
 		_rotationVariation = Helper.GetRandomFloat(_minRotationVariation, _maxRotationVariation);
+
+		_scaleVariation = Helper.GetRandomFloat(_minScaleVariation, _maxScaleVariation);
+	}
+
+	private void SetScale()
+	{
+		Scale = new Vector2(_scaleVariation, _scaleVariation);
 	}
 
 	private void SubscribeToSignals()
