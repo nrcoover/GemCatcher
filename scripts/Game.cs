@@ -50,6 +50,6 @@ public partial class Game : Node2D
 	private void OnGemOffScreen()
 	{
 		GD.Print("UH OH! YOU MISSED A GEM!");
-		GameManager.Instance.MissedGemsCount ++;
+		GameManager.Instance.IncrementMissedGems();
 	}
 }
