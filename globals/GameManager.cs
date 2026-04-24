@@ -10,20 +10,18 @@ public partial class GameManager : Node
 
 	public override void _Ready()
 	{
-		if (Instance == null)
-		{
-			Instance = this;
-		}
+		Instance ??= this;
+    ConnectSignals();
 	}
 
-	public override void _Process(double delta)
+#region Signals
+
+	public void OnGameOver()
 	{
+		ResetGame();
 	}
 
-	private void ResetGame()
-	{
-		SetMissedGemCount(0);
-	}
+#endregion
 
 #region Manage Gems
 
@@ -48,8 +46,21 @@ public partial class GameManager : Node
 		if (_missedGemsCount >= MAX_MISSED_GEMS)
 		{
 			GD.Print("Maximum Missed Gems Exceeded! GAME OVER!");
+			SignalManager.Instance.EmitGameOverSignal();
 		}
 	}
 
 #endregion
+
+	private void ConnectSignals()
+	{
+		SignalManager.Instance.GameOver += OnGameOver;
+	}
+
+	private void ResetGame()
+	{
+		SetMissedGemCount(0);
+		GD.Print("Game Reset!");
+		GetTree().ReloadCurrentScene();
+	}
 }
