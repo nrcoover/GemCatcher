@@ -2,7 +2,7 @@ using Godot;
 
 public partial class GameManager : Node
 {
-	public static GameManager Instance;
+	public static GameManager Instance {get; private set;}
 
 	private int _missedGemsCount = 0;
 
@@ -20,7 +20,7 @@ public partial class GameManager : Node
 	{
 		if (Instance == null)
 		{
-			Instance = new GameManager();
+			Instance = this;
 		}
 	}
 
