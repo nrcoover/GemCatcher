@@ -3,10 +3,13 @@ using Godot;
 public partial class GameManager : Node
 {
 	const int MAX_MISSED_GEMS = 3;
+	const int MAX_HEALTH = 3;
+	const int MIN_HEALTH = 0;
 
 	public static GameManager Instance {get; private set;}
 
 	private int _missedGemsCount = 0;
+	private int _health = MAX_HEALTH;
 
 	public override void _Ready()
 	{
@@ -23,6 +26,36 @@ public partial class GameManager : Node
 
 #endregion
 
+#region Manage Health
+
+	public int GetHealth()
+	{
+		return _health;
+	}
+
+	private void SetHealth(int value)
+	{
+		if (value > MAX_HEALTH)
+		{
+			_health = MAX_HEALTH;
+		} 
+		else if (value < MIN_HEALTH) 
+		{
+			_health = MIN_HEALTH;
+		} 
+		else
+		{
+			_health = value;
+		}
+	}
+
+	public void DecrementHealth()
+	{
+		SetHealth(GetHealth() - 1);
+	}
+
+#endregion
+
 #region Manage Gems
 
 	public int GetMissedGemCount()
@@ -30,22 +63,23 @@ public partial class GameManager : Node
 		return _missedGemsCount; 
 	}
 
-	public void SetMissedGemCount(int value)
+	private void SetMissedGemCount(int value)
 	{
 		_missedGemsCount = Mathf.Abs(value);
+		GD.Print("Missed Gems: " + _missedGemsCount.ToString());
 	}
 
 	public void IncrementMissedGems()
 	{
-		_missedGemsCount ++;
-		GD.Print("Missed Gems: " + _missedGemsCount.ToString());
+		SetMissedGemCount(GetMissedGemCount() + 1);
 
-		// TODO: Replace handling Game Over with health count
-		// if health count == 0, then the game is over
-		// This current method doesn't work if health can be restored.
-		if (_missedGemsCount >= MAX_MISSED_GEMS)
+		DecrementHealth();
+
+		if (GetMissedGemCount() >= MAX_MISSED_GEMS
+				&& GetHealth() <= MIN_HEALTH)
 		{
 			GD.Print("Maximum Missed Gems Exceeded! GAME OVER!");
+			GD.Print($"Health: {GetHealth()}; Missed Gems: {GetMissedGemCount()}");
 			SignalManager.Instance.EmitGameOverSignal();
 		}
 	}
