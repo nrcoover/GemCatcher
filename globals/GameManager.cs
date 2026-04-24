@@ -14,7 +14,7 @@ public partial class GameManager : Node
 	public override void _Ready()
 	{
 		Instance ??= this;
-    ConnectSignals();
+    SubscribeToSignals();
 	}
 
 #region Signals
@@ -86,7 +86,7 @@ public partial class GameManager : Node
 
 #endregion
 
-	private void ConnectSignals()
+	private void SubscribeToSignals()
 	{
 		SignalManager.Instance.GameOver += OnGameOver;
 	}
