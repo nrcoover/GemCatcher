@@ -2,8 +2,8 @@
 
 [ext_resource type="LabelSettings" uid="uid://chgj4ustuw6f4" path="res://resources/play_alpha_96_font.tres" id="1_h6icy"]
 [ext_resource type="Script" uid="uid://roupoeg0m343" path="res://scripts/MainMenuUi.cs" id="1_it30p"]
-[ext_resource type="LabelSettings" uid="uid://rt0ki30nmj6o" path="res://resources/play_blue_96_font.tres" id="2_7v7mi"]
-[ext_resource type="LabelSettings" uid="uid://ct3q0xxaftm74" path="res://resources/play_magenta_96_font.tres" id="3_gh1cy"]
+[ext_resource type="LabelSettings" uid="uid://b3ni7wr13moyl" path="res://resources/play_light-blue_96_font.tres" id="3_it30p"]
+[ext_resource type="LabelSettings" uid="uid://dfcdcmlpx5pv5" path="res://resources/play_violet_96_font.tres" id="4_56fvm"]
 [ext_resource type="LabelSettings" uid="uid://m1lcbkrbyxv8" path="res://resources/play_teal_96_font.tres" id="4_it30p"]
 [ext_resource type="Texture2D" uid="uid://b5w75r40sc3p3" path="res://assets/element_red_diamond.png" id="5_7v7mi"]
 [ext_resource type="LabelSettings" uid="uid://bvp27oyhve2cn" path="res://resources/play_white_16_font_normal.tres" id="6_gh1cy"]
@@ -43,8 +43,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 36
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 56
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 24
 
@@ -77,7 +77,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 96
 text = "GEM CATCHER"
-label_settings = ExtResource("2_7v7mi")
+label_settings = ExtResource("3_it30p")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -91,7 +91,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 96
 text = "GEM CATCHER"
-label_settings = ExtResource("3_gh1cy")
+label_settings = ExtResource("4_56fvm")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -128,6 +128,7 @@ pivot_offset = Vector2(50, 25)
 theme_override_constants/separation = 18
 
 [node name="PlayButton" type="TextureButton" parent="HBoxContainer2"]
+modulate = Color(0, 1.6254054, 1.876242, 1)
 layout_mode = 2
 texture_normal = ExtResource("5_7v7mi")
 
@@ -147,6 +148,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="QuitButton" type="TextureButton" parent="HBoxContainer2"]
+modulate = Color(0.92217916, 1.198152, 1.513, 1)
 layout_mode = 2
 texture_normal = ExtResource("5_7v7mi")
 

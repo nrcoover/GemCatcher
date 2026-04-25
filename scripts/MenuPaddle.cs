@@ -2,14 +2,14 @@ using Godot;
 
 public partial class MenuPaddle : Area2D
 {
-	[Export] float PathMultiplier = 0.5f;
-	[Export] float MovementSpeed = 50;
-	[Export] float Scaler = 0.5f;
-
+	[Export] float _pathMultiplier = 0.5f;
+	[Export] float _movementSpeed = 50;
+	[Export] float _scaler = 1.25f;
 
 	private float _viewportHeight;
 	private float _viewportLength;
 	private float _paddlePathLenght;
+	private float _paddlePositionOffsetY;
 	private Vector2 _paddleStartPosition;
 	private Vector2 _paddleScale;
 	private Marker2D _markerLeft;
@@ -33,9 +33,15 @@ public partial class MenuPaddle : Area2D
 		var viewport = GetViewportRect();
 		_viewportHeight =  Mathf.Abs(viewport.Position.Y - viewport.End.Y);
 		_viewportLength =  Mathf.Abs(viewport.Position.X - viewport.End.X);
-		_paddlePathLenght = _viewportLength * PathMultiplier;
+
+		_paddlePathLenght = _viewportLength * _pathMultiplier;
+		_paddlePositionOffsetY = viewport.End.Y / 2.5f;
 		_paddleStartPosition = GetViewport().GetVisibleRect().Size / 2;
-		_paddleScale = new Vector2(Scaler, Scaler);
+		_paddleStartPosition = new Vector2(
+				_paddleStartPosition.X,
+				_paddleStartPosition.Y + _paddlePositionOffsetY
+			);
+		_paddleScale = new Vector2(_scaler, _scaler);
 	}
 
 	private void SetProperties()
@@ -68,6 +74,6 @@ public partial class MenuPaddle : Area2D
 			_direction = 1;
 		}
 
-		Position += new Vector2(_direction * MovementSpeed * delta, 0);
+		Position += new Vector2(_direction * _movementSpeed * delta, 0);
 	}
 }

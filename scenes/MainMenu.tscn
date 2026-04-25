@@ -10,9 +10,9 @@ script = ExtResource("1_826wr")
 Paddle = ExtResource("2_ucygd")
 
 [node name="Background" type="Sprite2D" parent="."]
-position = Vector2(1574.0001, -375)
+position = Vector2(2206.0002, -256)
 rotation = 1.5707964
-scale = Vector2(1.475, 1.475)
+scale = Vector2(2.4019992, 2.4019992)
 texture = ExtResource("1_yqorp")
 centered = false
 flip_h = true
