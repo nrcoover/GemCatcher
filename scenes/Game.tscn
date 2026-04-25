@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=12 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/GameBg.png" id="1_ibkli"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://ci18yyqg2giqu" path="res://scenes/Heart.tscn" id="7_kiw3p"]
 [ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/bgm_action_5.mp3" id="8_400sg"]
 [ext_resource type="AudioStream" uid="uid://dtfk07ryobxgf" path="res://assets/explode.wav" id="9_g4kob"]
+[ext_resource type="AudioStream" uid="uid://boe377tli867s" path="res://assets/spell1_0.wav" id="10_qy1jj"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_aug50"]
 font = ExtResource("5_s0nni")
@@ -20,13 +21,14 @@ shadow_size = 6
 shadow_color = Color(0.95686275, 0.44313726, 0.44313726, 1)
 shadow_offset = Vector2(1.25, 1.25)
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_gemContainer", "_scoreLabel", "_explosion", "_heart1", "_heart2", "_heart3")]
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_gemContainer", "_scoreLabel", "_explosion", "_scoreSound", "_heart1", "_heart2", "_heart3")]
 script = ExtResource("1_78awf")
 _gemScene = ExtResource("3_cpr0p")
 _gemSpawnTimer = NodePath("GemSpawnTimer")
 _gemContainer = NodePath("GemContainer")
 _scoreLabel = NodePath("CanvasLayer/MarginContainer/ScoreLabel")
 _explosion = NodePath("Explosion")
+_scoreSound = NodePath("ScoreSound")
 _heart1 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart1Faded/Heart1Full")
 _heart2 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart2Faded/Heart2Full")
 _heart3 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart3Faded/Heart3Full")
@@ -101,4 +103,8 @@ autoplay = true
 
 [node name="Explosion" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("9_g4kob")
+volume_db = -16.0
+
+[node name="ScoreSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("10_qy1jj")
 volume_db = -16.0

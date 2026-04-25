@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 public partial class Gem : Area2D
