@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using Godot;
 
 public partial class Game : Node2D
@@ -17,6 +16,7 @@ public partial class Game : Node2D
 	[Export] private Timer _gemSpawnTimer;
 	[Export] private Node _gemContainer;
 	[Export] private Label _scoreLabel;
+	[Export] private AudioStreamPlayer _explosion;
 
 	[Export] private Node2D _heart1;
 	[Export] private Node2D _heart2;
@@ -30,13 +30,21 @@ public partial class Game : Node2D
 		SubscribeToSignals();
 	}
 
-	public override void _Process(double delta)
+	public async void OnInitiateDeathSequenceAsync()
 	{
+		GetTree().Paused = true;
+		await ToSignal(GetTree().CreateTimer(2.0f), SceneTreeTimer.SignalName.Timeout);
+		_explosion.Play();
+		await ToSignal(GetTree().CreateTimer(1.5f), SceneTreeTimer.SignalName.Timeout);
+		
+		GameManager.Instance.ResetGame();
+		LevelManager.Instance.LoadMainMenu();
 	}
 
 	private void SubscribeToSignals()
 	{
 		_gemSpawnTimer.Timeout += SpawnGem;
+		SignalManager.Instance.InitiateDeathSequence += OnInitiateDeathSequenceAsync;
 	}
 
 	private void SpawnGem()

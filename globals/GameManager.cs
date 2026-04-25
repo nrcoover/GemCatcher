@@ -18,11 +18,17 @@ public partial class GameManager : Node
     SubscribeToSignals();
 	}
 
+	public void ResetGame()
+	{
+		SetMissedGemCount(0);
+		SetHealth(MAX_HEALTH);
+	}
+
 #region Signals
 
 	public void OnGameOver()
 	{
-		ResetGame();
+		SignalManager.Instance.EmitInitiateDeathSequence();
 	}
 
 #endregion
@@ -89,12 +95,5 @@ public partial class GameManager : Node
 	private void SubscribeToSignals()
 	{
 		SignalManager.Instance.GameOver += OnGameOver;
-	}
-
-	private void ResetGame()
-	{
-		SetMissedGemCount(0);
-		SetHealth(MAX_HEALTH);
-		LevelManager.Instance.LoadMainMenu();
 	}
 }

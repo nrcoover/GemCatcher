@@ -21,6 +21,7 @@ public partial class LevelManager : Node
 	public void LoadMainMenu()
 	{
 		GetTree().ChangeSceneToPacked(MainMenu);
+		GetTree().Paused = false;
 	}
 
 	public void QuitGame()

@@ -1,13 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://8m2y1u6noqq5"]
+[gd_scene load_steps=5 format=3 uid="uid://8m2y1u6noqq5"]
 
 [ext_resource type="Script" uid="uid://b4i4niwmui66q" path="res://scripts/Gem.cs" id="1_o8oug"]
 [ext_resource type="Texture2D" uid="uid://b5w75r40sc3p3" path="res://assets/element_red_diamond.png" id="1_wfabg"]
+[ext_resource type="AudioStream" uid="uid://boe377tli867s" path="res://assets/spell1_0.wav" id="3_tx2gm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o8oug"]
 size = Vector2(36.769558, 36.769558)
 
-[node name="Gem" type="Area2D"]
+[node name="Gem" type="Area2D" node_paths=PackedStringArray("_scoreSound")]
 script = ExtResource("1_o8oug")
+_scoreSound = NodePath("ScoreSound")
 _maxSpeedVariation = 1.75
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -18,3 +20,10 @@ position = Vector2(0, -4.7683716e-07)
 rotation = 0.7853982
 scale = Vector2(0.9999999, 0.9999999)
 shape = SubResource("RectangleShape2D_o8oug")
+
+[node name="ScoreSound" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(0, -4.7683716e-07)
+rotation = 0.7853982
+scale = Vector2(0.9999999, 0.9999999)
+stream = ExtResource("3_tx2gm")
+volume_db = -12.0
