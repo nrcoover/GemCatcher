@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=10 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/GameBg.png" id="1_ibkli"]
@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/Play-Regular.ttf" id="5_s0nni"]
 [ext_resource type="PackedScene" uid="uid://caewt57tbc7r5" path="res://scenes/HeartFaded.tscn" id="6_aug50"]
 [ext_resource type="PackedScene" uid="uid://ci18yyqg2giqu" path="res://scenes/Heart.tscn" id="7_kiw3p"]
+[ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/bgm_action_5.mp3" id="8_400sg"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_aug50"]
 font = ExtResource("5_s0nni")
@@ -90,3 +91,8 @@ position = Vector2(-118, 15)
 
 [node name="Heart1Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart1Faded" instance=ExtResource("7_kiw3p")]
 scale = Vector2(1, 1)
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_400sg")
+volume_db = -24.0
+autoplay = true
