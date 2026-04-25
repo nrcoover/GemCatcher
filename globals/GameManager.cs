@@ -5,6 +5,7 @@ public partial class GameManager : Node
 	const int MAX_MISSED_GEMS = 3;
 	const int MAX_HEALTH = 3;
 	const int MIN_HEALTH = 0;
+	private int _high_score = 0;
 
 	public static GameManager Instance {get; private set;}
 

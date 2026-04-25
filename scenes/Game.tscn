@@ -1,15 +1,27 @@
-[gd_scene load_steps=5 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=7 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/GameBg.png" id="1_ibkli"]
 [ext_resource type="PackedScene" uid="uid://3kq5fr5oomem" path="res://scenes/Paddle.tscn" id="2_qbsmt"]
 [ext_resource type="PackedScene" uid="uid://8m2y1u6noqq5" path="res://scenes/Gem.tscn" id="3_cpr0p"]
+[ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/Play-Regular.ttf" id="5_s0nni"]
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_gemContainer")]
+[sub_resource type="LabelSettings" id="LabelSettings_aug50"]
+font = ExtResource("5_s0nni")
+font_size = 32
+font_color = Color(0.9490196, 0.21568628, 0.21568628, 1)
+outline_size = 7
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 6
+shadow_color = Color(0.95686275, 0.44313726, 0.44313726, 1)
+shadow_offset = Vector2(1.25, 1.25)
+
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_gemContainer", "_scoreLabel")]
 script = ExtResource("1_78awf")
 _gemScene = ExtResource("3_cpr0p")
 _gemSpawnTimer = NodePath("GemSpawnTimer")
 _gemContainer = NodePath("GemContainer")
+_scoreLabel = NodePath("CanvasLayer/MarginContainer/ScoreLabel")
 
 [node name="Background" type="Sprite2D" parent="."]
 scale = Vector2(0.600926, 0.6009259)
@@ -27,3 +39,23 @@ _boundaryMargin = 35.0
 [node name="GemSpawnTimer" type="Timer" parent="."]
 wait_time = 1.75
 autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 16
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Score: 000"
+label_settings = SubResource("LabelSettings_aug50")
