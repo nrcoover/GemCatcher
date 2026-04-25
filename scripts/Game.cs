@@ -74,7 +74,6 @@ public partial class Game : Node2D
 	private void UpdateHealthUi()
 	{
 		var currentHealth = GameManager.Instance.GetHealth();
-		GD.Print($"HEALTH UI UPDATE CALLED! Current Health {currentHealth}");
 
 		switch (currentHealth)
 		{
@@ -82,31 +81,26 @@ public partial class Game : Node2D
 				_heart1.Visible = true;
 				_heart2.Visible = true;
 				_heart3.Visible = true;
-				GD.Print("Full Health!" + currentHealth);
 				break;
 			case (int)HealthStatus.Injured:
 				_heart1.Visible = false;
 				_heart2.Visible = true;
 				_heart3.Visible = true;
-				GD.Print("Injured!" + currentHealth);
 				break;
 			case (int)HealthStatus.MortallyWounded:
 				_heart1.Visible = false;
 				_heart2.Visible = false;
 				_heart3.Visible = true;
-				GD.Print("Mortally Wounded!" + currentHealth);
 				break;
 			case (int)HealthStatus.Dead:
 				_heart1.Visible = false;
 				_heart2.Visible = false;
 				_heart3.Visible = false;
-				GD.Print("Dead!" + currentHealth);
 				break;
 			default:
 				_heart1.Visible = false;
 				_heart2.Visible = false;
 				_heart3.Visible = false;
-				GD.Print("Very Dead!" + currentHealth);
 				break;
 		}
 	}
