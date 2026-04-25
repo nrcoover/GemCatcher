@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3 uid="uid://caewt57tbc7r5"]
+
+[ext_resource type="Texture2D" uid="uid://b5w75r40sc3p3" path="res://assets/element_red_diamond.png" id="1_ofeb3"]
+
+[node name="Heart" type="Node2D"]
+scale = Vector2(0.3, 0.3)
+
+[node name="Heart" type="Sprite2D" parent="."]
+modulate = Color(0.5171842, 0.51718456, 0.51718444, 0.5058824)
+texture = ExtResource("1_ofeb3")
+
+[node name="Heart2" type="Sprite2D" parent="."]
+self_modulate = Color(0.5171842, 0.51718456, 0.51718444, 0.5058824)
+position = Vector2(24, 24)
+texture = ExtResource("1_ofeb3")
+
+[node name="Heart3" type="Sprite2D" parent="."]
+modulate = Color(0.5171842, 0.51718456, 0.51718444, 0.5058824)
+position = Vector2(48, 0)
+texture = ExtResource("1_ofeb3")
+
+[node name="Heart6" type="Sprite2D" parent="."]
+modulate = Color(0.5171842, 0.51718456, 0.51718444, 0.5058824)
+position = Vector2(-48, 0)
+texture = ExtResource("1_ofeb3")
+
+[node name="Heart7" type="Sprite2D" parent="."]
+modulate = Color(0.5171842, 0.51718456, 0.51718444, 0.5058824)
+position = Vector2(-24, -24)
+texture = ExtResource("1_ofeb3")
+
+[node name="Heart8" type="Sprite2D" parent="."]
+modulate = Color(0.5171842, 0.51718456, 0.51718444, 0.5058824)
+position = Vector2(24, -24)
+texture = ExtResource("1_ofeb3")
+
+[node name="Heart4" type="Sprite2D" parent="."]
+modulate = Color(0.5171842, 0.51718456, 0.51718444, 0.5058824)
+position = Vector2(-24, 24)
+texture = ExtResource("1_ofeb3")
+
+[node name="Heart5" type="Sprite2D" parent="."]
+modulate = Color(0.5171842, 0.51718456, 0.51718444, 0.5058824)
+position = Vector2(0, 48)
+texture = ExtResource("1_ofeb3")

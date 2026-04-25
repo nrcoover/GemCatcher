@@ -1,10 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=9 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/GameBg.png" id="1_ibkli"]
 [ext_resource type="PackedScene" uid="uid://3kq5fr5oomem" path="res://scenes/Paddle.tscn" id="2_qbsmt"]
 [ext_resource type="PackedScene" uid="uid://8m2y1u6noqq5" path="res://scenes/Gem.tscn" id="3_cpr0p"]
 [ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/Play-Regular.ttf" id="5_s0nni"]
+[ext_resource type="PackedScene" uid="uid://caewt57tbc7r5" path="res://scenes/HeartFaded.tscn" id="6_aug50"]
+[ext_resource type="PackedScene" uid="uid://ci18yyqg2giqu" path="res://scenes/Heart.tscn" id="7_kiw3p"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_aug50"]
 font = ExtResource("5_s0nni")
@@ -16,17 +18,22 @@ shadow_size = 6
 shadow_color = Color(0.95686275, 0.44313726, 0.44313726, 1)
 shadow_offset = Vector2(1.25, 1.25)
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_gemContainer", "_scoreLabel")]
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_gemContainer", "_scoreLabel", "_heart1", "_heart2", "_heart3")]
 script = ExtResource("1_78awf")
 _gemScene = ExtResource("3_cpr0p")
 _gemSpawnTimer = NodePath("GemSpawnTimer")
 _gemContainer = NodePath("GemContainer")
 _scoreLabel = NodePath("CanvasLayer/MarginContainer/ScoreLabel")
+_heart1 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart1Faded/Heart1Full")
+_heart2 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart2Faded/Heart2Full")
+_heart3 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart3Faded/Heart3Full")
 
 [node name="Background" type="Sprite2D" parent="."]
-scale = Vector2(0.600926, 0.6009259)
+scale = Vector2(0.60370374, 0.6037037)
 texture = ExtResource("1_ibkli")
 centered = false
+flip_h = true
+flip_v = true
 
 [node name="Paddle" parent="." instance=ExtResource("2_qbsmt")]
 position = Vector2(561, 570)
@@ -59,3 +66,27 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 text = "Score: 000"
 label_settings = SubResource("LabelSettings_aug50")
+
+[node name="HeartContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+alignment = 2
+
+[node name="Heart3Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
+position = Vector2(-12, 15)
+
+[node name="Heart3Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart3Faded" instance=ExtResource("7_kiw3p")]
+scale = Vector2(1, 1)
+
+[node name="Heart2Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
+position = Vector2(-64, 15)
+
+[node name="Heart2Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart2Faded" instance=ExtResource("7_kiw3p")]
+scale = Vector2(1, 1)
+
+[node name="Heart1Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
+position = Vector2(-118, 15)
+
+[node name="Heart1Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart1Faded" instance=ExtResource("7_kiw3p")]
+scale = Vector2(1, 1)

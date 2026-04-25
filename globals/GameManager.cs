@@ -53,6 +53,7 @@ public partial class GameManager : Node
 	public void DecrementHealth()
 	{
 		SetHealth(GetHealth() - 1);
+		GD.Print($"Health: {_health}");
 	}
 
 #endregion
@@ -67,7 +68,6 @@ public partial class GameManager : Node
 	private void SetMissedGemCount(int value)
 	{
 		_missedGemsCount = Mathf.Abs(value);
-		GD.Print("Missed Gems: " + _missedGemsCount.ToString());
 	}
 
 	public void IncrementMissedGems()
@@ -79,7 +79,6 @@ public partial class GameManager : Node
 		if (GetMissedGemCount() >= MAX_MISSED_GEMS
 				&& GetHealth() <= MIN_HEALTH)
 		{
-			GD.Print("Maximum Missed Gems Exceeded! GAME OVER!");
 			GD.Print($"Health: {GetHealth()}; Missed Gems: {GetMissedGemCount()}");
 			SignalManager.Instance.EmitGameOverSignal();
 		}
@@ -95,7 +94,7 @@ public partial class GameManager : Node
 	private void ResetGame()
 	{
 		SetMissedGemCount(0);
-		GD.Print("Game Reset!");
+		SetHealth(MAX_HEALTH);
 		LevelManager.Instance.LoadMainMenu();
 	}
 }
