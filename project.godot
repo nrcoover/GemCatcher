@@ -13,7 +13,7 @@ config_version=5
 config/name="GemCatcher"
 run/main_scene="uid://cr3xrjvpb4sfi"
 config/features=PackedStringArray("4.5", "C#", "Mobile")
-config/icon="res://icon.svg"
+config/icon="uid://d1oy1mgl4kmo6"
 
 [autoload]
 
