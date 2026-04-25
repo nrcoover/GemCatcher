@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cr3xrjvpb4sfi"]
+[gd_scene load_steps=6 format=3 uid="uid://cr3xrjvpb4sfi"]
 
 [ext_resource type="Script" uid="uid://qlppeaoc1bfl" path="res://scripts/MainMenu.cs" id="1_826wr"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/GameBg.png" id="1_yqorp"]
 [ext_resource type="PackedScene" uid="uid://b25aayi7r7oav" path="res://scenes/MenuPaddle.tscn" id="2_ucygd"]
 [ext_resource type="PackedScene" uid="uid://cubv40p7fxyh5" path="res://scenes/MainMenuUi.tscn" id="4_ow34m"]
+[ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/bgm_action_5.mp3" id="5_l72w3"]
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_826wr")
@@ -21,3 +22,9 @@ flip_v = true
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="MainMenuUi" parent="CanvasLayer" instance=ExtResource("4_ow34m")]
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_l72w3")
+volume_db = -24.0
+pitch_scale = 0.5
+autoplay = true
