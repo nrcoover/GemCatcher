@@ -19,12 +19,6 @@ public partial class Paddle : Area2D
 
 	private void HandlePaddleMovement(double delta)
 	{
-		// var movementInput = Input.GetAxis("move_left", "move_right");
-
-		// Console.WriteLine(movementInput.ToString());
-
-		//Position += new Vector2(movementInput * _movementSpeed * (float) delta, Position.Y);
-		
 		HandleUserInput(delta);
 		RestrictPaddleToBoundary();
 	}
