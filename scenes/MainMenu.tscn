@@ -1,12 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://cr3xrjvpb4sfi"]
+[gd_scene load_steps=5 format=3 uid="uid://cr3xrjvpb4sfi"]
 
 [ext_resource type="Script" uid="uid://qlppeaoc1bfl" path="res://scripts/MainMenu.cs" id="1_826wr"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/GameBg.png" id="1_yqorp"]
-[ext_resource type="LabelSettings" uid="uid://ct3q0xxaftm74" path="res://resources/play_magenta_96_font.tres" id="2_2wh52"]
-[ext_resource type="LabelSettings" uid="uid://chgj4ustuw6f4" path="res://resources/play_alpha_96_font.tres" id="2_l72w3"]
 [ext_resource type="PackedScene" uid="uid://b25aayi7r7oav" path="res://scenes/MenuPaddle.tscn" id="2_ucygd"]
-[ext_resource type="LabelSettings" uid="uid://rt0ki30nmj6o" path="res://resources/play_blue_96_font.tres" id="3_ow34m"]
-[ext_resource type="LabelSettings" uid="uid://m1lcbkrbyxv8" path="res://resources/play_teal_96_font.tres" id="4_ow34m"]
+[ext_resource type="PackedScene" uid="uid://cubv40p7fxyh5" path="res://scenes/MainMenuUi.tscn" id="4_ow34m"]
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_826wr")
@@ -23,100 +20,4 @@ flip_v = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="MainMenuUi" type="Control" parent="CanvasLayer"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="CenterMarker" type="Label" parent="CanvasLayer/MainMenuUi"]
-visible = false
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -5.5
-offset_right = 5.5
-offset_bottom = 23.0
-grow_horizontal = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-text = "C"
-horizontal_alignment = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenuUi"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 36
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
-
-[node name="TitleContainer" type="Control" parent="CanvasLayer/MainMenuUi/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-
-[node name="TitleAlpha" type="Label" parent="CanvasLayer/MainMenuUi/MarginContainer/TitleContainer"]
-layout_mode = 0
-offset_left = -332.0
-offset_right = 331.0
-offset_bottom = 112.0
-size_flags_horizontal = 4
-size_flags_vertical = 0
-theme_override_font_sizes/font_size = 96
-text = "GEM CATCHER"
-label_settings = ExtResource("2_l72w3")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="TitleBlue" type="Label" parent="CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/TitleAlpha"]
-layout_mode = 0
-offset_left = -8.0
-offset_top = -8.0
-offset_right = 655.0
-offset_bottom = 104.0
-size_flags_horizontal = 4
-size_flags_vertical = 0
-theme_override_font_sizes/font_size = 96
-text = "GEM CATCHER"
-label_settings = ExtResource("3_ow34m")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="TitleMagenta" type="Label" parent="CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/TitleAlpha/TitleBlue"]
-layout_mode = 0
-offset_left = -8.0
-offset_top = -8.0
-offset_right = 655.0
-offset_bottom = 104.0
-size_flags_horizontal = 4
-size_flags_vertical = 0
-theme_override_font_sizes/font_size = 96
-text = "GEM CATCHER"
-label_settings = ExtResource("2_2wh52")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="TitleTeal" type="Label" parent="CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/TitleAlpha/TitleBlue/TitleMagenta"]
-layout_mode = 0
-offset_left = -8.0
-offset_top = -8.0
-offset_right = 655.0
-offset_bottom = 104.0
-scale = Vector2(1, 0.9948849)
-size_flags_horizontal = 4
-size_flags_vertical = 0
-theme_override_font_sizes/font_size = 96
-text = "GEM CATCHER"
-label_settings = ExtResource("4_ow34m")
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="MainMenuUi" parent="CanvasLayer" instance=ExtResource("4_ow34m")]

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="GemCatcher"
-run/main_scene="uid://ddw7l2oan3t5h"
+run/main_scene="uid://cr3xrjvpb4sfi"
 config/features=PackedStringArray("4.5", "C#", "Mobile")
 config/icon="res://icon.svg"
 
@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 SignalManager="*res://globals/SignalManager.cs"
 GameManager="*res://globals/GameManager.cs"
+LevelManager="*res://globals/LevelManager.cs"
 
 [dotnet]
 

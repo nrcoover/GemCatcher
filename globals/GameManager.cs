@@ -95,6 +95,6 @@ public partial class GameManager : Node
 	{
 		SetMissedGemCount(0);
 		GD.Print("Game Reset!");
-		GetTree().ReloadCurrentScene();
+		LevelManager.Instance.LoadMainMenu();
 	}
 }
