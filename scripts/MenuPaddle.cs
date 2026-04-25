@@ -36,8 +36,6 @@ public partial class MenuPaddle : Area2D
 		_paddlePathLenght = _viewportLength * PathMultiplier;
 		_paddleStartPosition = GetViewport().GetVisibleRect().Size / 2;
 		_paddleScale = new Vector2(Scaler, Scaler);
-
-		GD.Print($"Height: {_viewportHeight}; Length: {_viewportLength}; _paddleStartPosition: {_paddleStartPosition}; Path Legnth: {_paddlePathLenght}");
 	}
 
 	private void SetProperties()
@@ -56,9 +54,6 @@ public partial class MenuPaddle : Area2D
 
 		_markerLeft.Position = new Vector2(Position.X - _paddlePathLenght/2, Position.Y);
 		_markerRight.Position = new Vector2(Position.X + _paddlePathLenght/2, Position.Y);
-
-		GD.Print($"Left Marker: {_markerLeft.Position}");
-		GD.Print($"Right Marker: {_markerRight.Position}");
 	}
 
 	private void HandlePaddleMovement(float delta)
