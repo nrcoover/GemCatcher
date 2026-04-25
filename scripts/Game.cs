@@ -18,6 +18,7 @@ public partial class Game : Node2D
 	[Export] private Label _scoreLabel;
 	[Export] private AudioStreamPlayer _explosion;
 	[Export] private AudioStreamPlayer2D _scoreSound;
+	[Export] private AudioStreamPlayer2D _hurtSound;
 
 	[Export] private Node2D _heart1;
 	[Export] private Node2D _heart2;
@@ -118,6 +119,7 @@ public partial class Game : Node2D
 	private void OnGemOffScreen()
 	{
 		GameManager.Instance.IncrementMissedGems();
+		_hurtSound.Play();
 		UpdateHealthUi();
 	}
 
