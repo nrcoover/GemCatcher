@@ -32,6 +32,11 @@ public partial class Game : Node2D
 		SubscribeToSignals();
 	}
 
+	public override void _ExitTree()
+	{
+		UnsubscribeFromSignals();
+	}
+
 	public async void OnInitiateDeathSequenceAsync()
 	{
 		GetTree().Paused = true;
@@ -47,6 +52,10 @@ public partial class Game : Node2D
 	{
 		_gemSpawnTimer.Timeout += SpawnGem;
 		SignalManager.Instance.InitiateDeathSequence += OnInitiateDeathSequenceAsync;
+	}
+
+	private void UnsubscribeFromSignals() {
+		SignalManager.Instance.InitiateDeathSequence -= OnInitiateDeathSequenceAsync;
 	}
 
 	private void SpawnGem()

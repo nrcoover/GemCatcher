@@ -18,6 +18,11 @@ public partial class GameManager : Node
     SubscribeToSignals();
 	}
 
+	public override void _ExitTree()
+	{
+		UnsubscribeFromSignals();
+	}
+
 	public void ResetGame()
 	{
 		SetMissedGemCount(0);
@@ -59,7 +64,6 @@ public partial class GameManager : Node
 	public void DecrementHealth()
 	{
 		SetHealth(GetHealth() - 1);
-		GD.Print($"Health: {_health}");
 	}
 
 #endregion
@@ -85,7 +89,6 @@ public partial class GameManager : Node
 		if (GetMissedGemCount() >= MAX_MISSED_GEMS
 				&& GetHealth() <= MIN_HEALTH)
 		{
-			GD.Print($"Health: {GetHealth()}; Missed Gems: {GetMissedGemCount()}");
 			SignalManager.Instance.EmitGameOverSignal();
 		}
 	}
@@ -95,5 +98,10 @@ public partial class GameManager : Node
 	private void SubscribeToSignals()
 	{
 		SignalManager.Instance.GameOver += OnGameOver;
+	}
+
+	private void UnsubscribeFromSignals()
+	{
+		SignalManager.Instance.GameOver -= OnGameOver;
 	}
 }
