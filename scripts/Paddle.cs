@@ -4,6 +4,7 @@ public partial class Paddle : Area2D
 {
 	[Export] float _movementSpeed = 200.0f;
 	[Export] float _boundaryMargin = 25.0f;
+	[Export] float _boostMultiplier = 1.5f;
 
 	private Rect2 _viewportBoundary;
 
@@ -26,15 +27,31 @@ public partial class Paddle : Area2D
 	private void HandleUserInput(double delta)
 	{
 		var noChangeInPosition = 0;
+		float calculatedMovementSpeed;
+
+		if (Input.IsActionPressed("boost"))
+		{
+			calculatedMovementSpeed = _movementSpeed * _boostMultiplier;
+		}
+		else
+		{
+			calculatedMovementSpeed = _movementSpeed;
+		}
 
 		if (Input.IsActionPressed("move_right"))
 		{
-			Position += new Vector2(_movementSpeed * (float)delta, noChangeInPosition);
+			Position += new Vector2(
+				calculatedMovementSpeed * (float)delta,
+				noChangeInPosition
+			);
 		}
 
 		if (Input.IsActionPressed("move_left"))
 		{
-			Position -= new Vector2(_movementSpeed * (float)delta, noChangeInPosition);
+			Position -= new Vector2(
+				calculatedMovementSpeed * (float)delta, 
+				noChangeInPosition
+			);
 		}
 	}
 
