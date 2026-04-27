@@ -16,6 +16,7 @@ public partial class Game : Node2D
 	[Export] private Timer _gemSpawnTimer;
 	[Export] private Node _gemContainer;
 	[Export] private Label _scoreLabel;
+
 	[Export] private AudioStreamPlayer _explosion;
 	[Export] private AudioStreamPlayer2D _scoreSound;
 	[Export] private AudioStreamPlayer2D _hurtSound;

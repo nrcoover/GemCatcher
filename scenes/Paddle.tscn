@@ -7,8 +7,12 @@
 radius = 12.0
 height = 104.0
 
-[node name="Paddle" type="Area2D"]
+[node name="Paddle" type="Area2D" node_paths=PackedStringArray("_boostRefuelTimer")]
 script = ExtResource("1_6kxou")
+_boostRefuelTimer = NodePath("BoostRefuelTimer")
+_boostFuel = 100.0
+_boostBurnRate = 25.0
+_boostRefuelRate = 12.5
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_ry5ju")
@@ -16,3 +20,6 @@ texture = ExtResource("1_ry5ju")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_6kxou")
+
+[node name="BoostRefuelTimer" type="Timer" parent="."]
+wait_time = 2.0

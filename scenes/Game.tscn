@@ -42,11 +42,12 @@ centered = false
 flip_h = true
 flip_v = true
 
-[node name="Paddle" parent="." instance=ExtResource("2_qbsmt")]
+[node name="Paddle" parent="." node_paths=PackedStringArray("_boostLabel") instance=ExtResource("2_qbsmt")]
 position = Vector2(561, 570)
 scale = Vector2(0.600926, 0.6009259)
 _movementSpeed = 500.0
 _boundaryMargin = 35.0
+_boostLabel = NodePath("../CanvasLayer/MarginContainer/BoostLabel")
 
 [node name="GemContainer" type="Node" parent="."]
 
@@ -97,6 +98,14 @@ position = Vector2(-118, 15)
 
 [node name="Heart1Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart1Faded" instance=ExtResource("7_kiw3p")]
 scale = Vector2(1, 1)
+
+[node name="BoostLabel" type="Label" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "boost: 
+000"
+horizontal_alignment = 1
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_400sg")

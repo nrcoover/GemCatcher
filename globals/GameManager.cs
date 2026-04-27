@@ -89,7 +89,7 @@ public partial class GameManager : Node
 		if (GetMissedGemCount() >= MAX_MISSED_GEMS
 				&& GetHealth() <= MIN_HEALTH)
 		{
-			SignalManager.Instance.EmitGameOverSignal();
+			SignalManager.Instance.EmitGameOver();
 		}
 	}
 
