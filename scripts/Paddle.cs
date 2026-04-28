@@ -9,7 +9,9 @@ public partial class Paddle : Area2D
 	[Export] float _boostMultiplier = 1.5f;
 
 	[Export] Label _boostLabel;
+	[Export] Label _boostPercentageLabel;
 	[Export] Timer _boostRefuelTimer;
+	[Export] AnimationPlayer _animator;
 	[Export] ProgressBar _progressBarLeft;
 	[Export] ProgressBar _progressBarRight;
 	[Export] private float _boostBurnRate;
@@ -86,6 +88,7 @@ public partial class Paddle : Area2D
 		_isBoostable = false;
 		_isBoosting = false;
 		_boostRefuelTimer.Start();
+		_animator.Play("flashing_warning");
 		// play audio announcing fuel depletion
   }
 
@@ -204,6 +207,7 @@ public partial class Paddle : Area2D
 	private void UpdateBoostUi()
 	{
 		_boostLabel.Text = $"Boost:\n{_boostFuel}";
+		_boostPercentageLabel.Text = $"{Mathf.RoundToInt(_boostFuel)}";
 		_progressBarLeft.Value = _boostFuel / 2;
 		_progressBarRight.Value = _boostFuel / 2;
 	}

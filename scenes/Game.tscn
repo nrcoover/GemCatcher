@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=20 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/GameBg.png" id="1_ibkli"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://caewt57tbc7r5" path="res://scenes/HeartFaded.tscn" id="6_aug50"]
 [ext_resource type="PackedScene" uid="uid://ci18yyqg2giqu" path="res://scenes/Heart.tscn" id="7_kiw3p"]
 [ext_resource type="StyleBox" uid="uid://7wqdduovmlnj" path="res://resources/ui/left_progress_bar.tres" id="8_2rd6h"]
+[ext_resource type="LabelSettings" uid="uid://bvp27oyhve2cn" path="res://resources/play_white_16_font_normal.tres" id="8_7ua8r"]
 [ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/bgm_action_5.mp3" id="8_400sg"]
 [ext_resource type="StyleBox" uid="uid://bwo0qb8ps4fh6" path="res://resources/ui/right_progress_bar.tres" id="9_7ua8r"]
 [ext_resource type="AudioStream" uid="uid://dtfk07ryobxgf" path="res://assets/explode.wav" id="9_g4kob"]
@@ -23,6 +24,71 @@ outline_color = Color(0, 0, 0, 1)
 shadow_size = 6
 shadow_color = Color(0.95686275, 0.44313726, 0.44313726, 1)
 shadow_offset = Vector2(1.25, 1.25)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2rd6h"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="Animation" id="Animation_7ua8r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft:theme_override_styles/fill:bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(2.887845e-06, 0.709896, 0.48012656, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight:theme_override_styles/fill:bg_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(2.887845e-06, 0.709896, 0.48012656, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_r7sob"]
+resource_name = "flashing_warning"
+length = 2.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft:theme_override_styles/fill:bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 0.8999999, 1.0999999, 1.4, 1.7, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(2.887845e-06, 0.709896, 0.48012656, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(2.887845e-06, 0.709896, 0.48012656, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight:theme_override_styles/fill:bg_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 0.8999999, 1.0999999, 1.4, 1.7, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(2.887845e-06, 0.709896, 0.48012656, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(2.887845e-06, 0.709896, 0.48012656, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_y5y3l"]
+_data = {
+&"RESET": SubResource("Animation_7ua8r"),
+&"flashing_warning": SubResource("Animation_r7sob")
+}
 
 [node name="Game" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_gemContainer", "_scoreLabel", "_explosion", "_scoreSound", "_hurtSound", "_heart1", "_heart2", "_heart3")]
 script = ExtResource("1_78awf")
@@ -44,12 +110,14 @@ centered = false
 flip_h = true
 flip_v = true
 
-[node name="Paddle" parent="." node_paths=PackedStringArray("_boostLabel", "_progressBarLeft", "_progressBarRight") instance=ExtResource("2_qbsmt")]
+[node name="Paddle" parent="." node_paths=PackedStringArray("_boostLabel", "_boostPercentageLabel", "_animator", "_progressBarLeft", "_progressBarRight") instance=ExtResource("2_qbsmt")]
 position = Vector2(561, 570)
 scale = Vector2(0.600926, 0.6009259)
 _movementSpeed = 500.0
 _boundaryMargin = 35.0
-_boostLabel = NodePath("../CanvasLayer/MarginContainer/BoostLabel")
+_boostLabel = NodePath("../CanvasLayer/MarginContainer/BoostDebugLabel")
+_boostPercentageLabel = NodePath("../CanvasLayer/MarginContainer/BoostPercentageLabel")
+_animator = NodePath("../AnimationPlayer")
 _progressBarLeft = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft")
 _progressBarRight = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight")
 
@@ -103,7 +171,8 @@ position = Vector2(-118, 15)
 [node name="Heart1Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart1Faded" instance=ExtResource("7_kiw3p")]
 scale = Vector2(1, 1)
 
-[node name="BoostLabel" type="Label" parent="CanvasLayer/MarginContainer"]
+[node name="BoostDebugLabel" type="Label" parent="CanvasLayer/MarginContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
@@ -111,8 +180,17 @@ text = "boost:
 000"
 horizontal_alignment = 1
 
+[node name="BoostPercentageLabel" type="Label" parent="CanvasLayer/MarginContainer"]
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "BOOST VALUE"
+label_settings = ExtResource("8_7ua8r")
+
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer"]
 layout_mode = 2
+size_flags_vertical = 8
 alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer/HBoxContainer"]
@@ -136,6 +214,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.7607843, 0, 0, 0)
 theme_override_font_sizes/font_size = 12
+theme_override_styles/background = SubResource("StyleBoxFlat_2rd6h")
 theme_override_styles/fill = ExtResource("8_2rd6h")
 value = 100.0
 rounded = true
@@ -147,6 +226,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.7607843, 0, 0, 0)
 theme_override_font_sizes/font_size = 12
+theme_override_styles/background = SubResource("StyleBoxFlat_2rd6h")
 theme_override_styles/fill = ExtResource("9_7ua8r")
 value = 100.0
 rounded = true
@@ -169,3 +249,8 @@ pitch_scale = 2.0
 stream = ExtResource("11_3xj3m")
 volume_db = -8.0
 pitch_scale = 0.75
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_y5y3l")
+}
