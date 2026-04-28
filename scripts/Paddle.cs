@@ -10,6 +10,8 @@ public partial class Paddle : Area2D
 
 	[Export] Label _boostLabel;
 	[Export] Timer _boostRefuelTimer;
+	[Export] ProgressBar _progressBarLeft;
+	[Export] ProgressBar _progressBarRight;
 	[Export] private float _boostBurnRate;
 	[Export] private float _boostRefuelRate;
 	private float _boostFuel;
@@ -24,8 +26,8 @@ public partial class Paddle : Area2D
 	{
 		_viewportBoundary = GetViewportRect();
 		SubscribeToSignals();
-		UpdateBoostUi();
 		InitializeVariables();
+		UpdateBoostUi();
 	}
   
   public override void _Process(double delta)
@@ -202,6 +204,8 @@ public partial class Paddle : Area2D
 	private void UpdateBoostUi()
 	{
 		_boostLabel.Text = $"Boost:\n{_boostFuel}";
+		_progressBarLeft.Value = _boostFuel / 2;
+		_progressBarRight.Value = _boostFuel / 2;
 	}
 
 #endregion

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=15 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/GameBg.png" id="1_ibkli"]
@@ -7,7 +7,9 @@
 [ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/Play-Regular.ttf" id="5_s0nni"]
 [ext_resource type="PackedScene" uid="uid://caewt57tbc7r5" path="res://scenes/HeartFaded.tscn" id="6_aug50"]
 [ext_resource type="PackedScene" uid="uid://ci18yyqg2giqu" path="res://scenes/Heart.tscn" id="7_kiw3p"]
+[ext_resource type="StyleBox" uid="uid://7wqdduovmlnj" path="res://resources/ui/left_progress_bar.tres" id="8_2rd6h"]
 [ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/bgm_action_5.mp3" id="8_400sg"]
+[ext_resource type="StyleBox" uid="uid://bwo0qb8ps4fh6" path="res://resources/ui/right_progress_bar.tres" id="9_7ua8r"]
 [ext_resource type="AudioStream" uid="uid://dtfk07ryobxgf" path="res://assets/explode.wav" id="9_g4kob"]
 [ext_resource type="AudioStream" uid="uid://boe377tli867s" path="res://assets/spell1_0.wav" id="10_qy1jj"]
 [ext_resource type="AudioStream" uid="uid://dfdhu6sspy4it" path="res://assets/404766__owlstorm__retro-video-game-sfx-punch-2.wav" id="11_3xj3m"]
@@ -42,12 +44,14 @@ centered = false
 flip_h = true
 flip_v = true
 
-[node name="Paddle" parent="." node_paths=PackedStringArray("_boostLabel") instance=ExtResource("2_qbsmt")]
+[node name="Paddle" parent="." node_paths=PackedStringArray("_boostLabel", "_progressBarLeft", "_progressBarRight") instance=ExtResource("2_qbsmt")]
 position = Vector2(561, 570)
 scale = Vector2(0.600926, 0.6009259)
 _movementSpeed = 500.0
 _boundaryMargin = 35.0
 _boostLabel = NodePath("../CanvasLayer/MarginContainer/BoostLabel")
+_progressBarLeft = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft")
+_progressBarRight = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight")
 
 [node name="GemContainer" type="Node" parent="."]
 
@@ -101,11 +105,51 @@ scale = Vector2(1, 1)
 
 [node name="BoostLabel" type="Label" parent="CanvasLayer/MarginContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "boost: 
 000"
 horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 350
+theme_override_constants/margin_right = 350
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/separation = -1
+alignment = 1
+
+[node name="ProgressBarLeft" type="ProgressBar" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.7607843, 0, 0, 0)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/fill = ExtResource("8_2rd6h")
+value = 100.0
+rounded = true
+fill_mode = 1
+
+[node name="ProgressBarRight" type="ProgressBar" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.7607843, 0, 0, 0)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/fill = ExtResource("9_7ua8r")
+value = 100.0
+rounded = true
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_400sg")
