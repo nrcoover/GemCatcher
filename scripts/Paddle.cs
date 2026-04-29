@@ -163,19 +163,23 @@ public partial class Paddle : Area2D
 	{
 		_boostDepleted = _boostFuel <= 0;
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
+		
+		var isBurningFuel = _isBoosting && !_boostDepleted;
+		var isRunningOnFumes = _isBoosting && _boostDepleted;
+		var isReadyForRefueling = !_isBoosting && _boostDepleted
+													 || !_isBoosting && !_boostDepleted && !_isFullyFueled;
 
 		switch (true)
 		{
-			case true when _isBoosting && !_boostDepleted:
+			case true when isBurningFuel:
 				BurnFuel(delta);
 				break;
 
-			case true when _isBoosting && _boostDepleted:
+			case true when isRunningOnFumes:
 				SignalManager.Instance.EmitBoostFuelDepleted();
 				break;
 
-			case true when !_isBoosting && _boostDepleted
-									|| !_isBoosting && !_boostDepleted && !_isFullyFueled:
+			case true when isReadyForRefueling:
 				RefuelBoost(delta);
 				break;
 		}
