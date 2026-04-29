@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=24 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/GameBg.png" id="1_ibkli"]
@@ -14,6 +14,8 @@
 [ext_resource type="AudioStream" uid="uid://dtfk07ryobxgf" path="res://assets/explode.wav" id="9_g4kob"]
 [ext_resource type="AudioStream" uid="uid://boe377tli867s" path="res://assets/spell1_0.wav" id="10_qy1jj"]
 [ext_resource type="AudioStream" uid="uid://dfdhu6sspy4it" path="res://assets/404766__owlstorm__retro-video-game-sfx-punch-2.wav" id="11_3xj3m"]
+[ext_resource type="AudioStream" uid="uid://dw8ladfm3gy58" path="res://assets/475557__rannem__bip.wav" id="13_r7sob"]
+[ext_resource type="AudioStream" uid="uid://ogfnhm87ce0t" path="res://assets/492651__rvgerxini__power-down.mp3" id="13_y5y3l"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_aug50"]
 font = ExtResource("5_s0nni")
@@ -57,6 +59,50 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_r7sob"]
 resource_name = "flashing_warning"
+length = 3.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft:theme_override_styles/fill:bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.79999995, 1, 1.2, 1.4, 1.5999999, 1.8, 2.1, 2.4, 2.7000003, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(2.887845e-06, 0.709896, 0.48012656, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight:theme_override_styles/fill:bg_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.79999995, 1, 1.2, 1.4, 1.5999999, 1.8, 2.1, 2.4, 2.7000003, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(2.887845e-06, 0.709896, 0.48012656, 1)]
+}
+tracks/2/type = "audio"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("PowerDown")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_y5y3l")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/2/use_blend = true
+
+[sub_resource type="Animation" id="Animation_y5y3l"]
+resource_name = "yellow_warning"
 length = 2.0
 step = 0.1
 tracks/0/type = "value"
@@ -66,10 +112,10 @@ tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContaine
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 0.8999999, 1.0999999, 1.4, 1.7, 2),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.3, 0.6, 0.90000004, 1.1, 1.3000001, 1.5, 1.7, 1.8, 1.9, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Color(2.887845e-06, 0.709896, 0.48012656, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(2.887845e-06, 0.709896, 0.48012656, 1)]
+"values": [Color(2.887845e-06, 0.709896, 0.48012656, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -78,16 +124,145 @@ tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContaine
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 0.8999999, 1.0999999, 1.4, 1.7, 2),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.3, 0.6, 0.90000004, 1.1, 1.3000001, 1.5, 1.7, 1.8, 1.9, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Color(2.887845e-06, 0.709896, 0.48012656, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(0.8862745, 0.2, 0.2, 1), Color(0.98031443, 0.45865119, 0.41893202, 1), Color(2.887845e-06, 0.709896, 0.48012656, 1)]
+"values": [Color(2.887845e-06, 0.709896, 0.48012656, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1)]
 }
+tracks/2/type = "audio"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WarningBlip")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}],
+"times": PackedFloat32Array(0, 0.3, 0.6, 0.9, 1.1, 1.3, 1.5, 1.7, 1.8, 1.9)
+}
+tracks/2/use_blend = true
+
+[sub_resource type="Animation" id="Animation_vjgi4"]
+resource_name = "yellow_warning_level_1"
+length = 2.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft:theme_override_styles/fill:bg_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.5, 0.8, 1.1, 1.3000001, 1.5, 1.7, 1.8, 1.9, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(2.887845e-06, 0.709896, 0.48012656, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight:theme_override_styles/fill:bg_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.5, 0.8, 1.1, 1.3000001, 1.5, 1.7, 1.8, 1.9, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(2.887845e-06, 0.709896, 0.48012656, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1), Color(0.8620679, 0.7428377, 0.06229925, 1), Color(0.9941979, 0.89203614, 0.4325407, 1)]
+}
+tracks/2/type = "audio"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("WarningBlip")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("13_r7sob")
+}],
+"times": PackedFloat32Array(0.2, 0.5, 0.8, 1.1, 1.3, 1.5, 1.7, 1.8, 1.9)
+}
+tracks/2/use_blend = true
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_y5y3l"]
 _data = {
 &"RESET": SubResource("Animation_7ua8r"),
-&"flashing_warning": SubResource("Animation_r7sob")
+&"flashing_warning": SubResource("Animation_r7sob"),
+&"yellow_warning": SubResource("Animation_y5y3l"),
+&"yellow_warning_level_1": SubResource("Animation_vjgi4")
 }
 
 [node name="Game" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_gemContainer", "_scoreLabel", "_explosion", "_scoreSound", "_hurtSound", "_heart1", "_heart2", "_heart3")]
@@ -239,6 +414,13 @@ autoplay = true
 [node name="Explosion" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("9_g4kob")
 volume_db = -16.0
+
+[node name="WarningBlip" type="AudioStreamPlayer" parent="."]
+pitch_scale = 2.0
+
+[node name="PowerDown" type="AudioStreamPlayer" parent="."]
+volume_db = -24.0
+pitch_scale = 0.8
 
 [node name="ScoreSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("10_qy1jj")
