@@ -204,7 +204,7 @@ public partial class Paddle : Area2D
   private void BurnFuel(float delta)
 	{
 		_boostFuel -= _boostBurnRate * delta;
-		GD.Print($"Is Burning: {_boostFuel}");
+		// GD.Print($"Is Burning: {_boostFuel}");
 	}
 
 	private void RefuelBoost(float delta)
@@ -217,7 +217,7 @@ public partial class Paddle : Area2D
 			_isFullyFueled = true;
 		}
 
-		GD.Print($"Is Refueling: {_boostFuel}");
+		// GD.Print($"Is Refueling: {_boostFuel}");
 	}
 
 	private void HandleFuelConsumptionAnimation()
@@ -265,7 +265,7 @@ public partial class Paddle : Area2D
 		} 
 		else if (_isBoostable && !_isBoosting && isLowOnFuel)
 		{
-			if (_animator.CurrentAnimation != Constants.Animations.FuelWarningLevel1)
+			if (_animator.CurrentAnimation != Constants.Animations.RefuelingYellow)
 			{
 				GD.Print("REFILLING");
 				_animator.Play(Constants.Animations.RefuelingYellow);
