@@ -32,7 +32,7 @@ public partial class Paddle : Area2D
 
 	public override void _Ready()
 	{
-		_viewportBoundary = GetViewportRect();
+		_animator.Play(Constants.Animations.Reset);
 		SubscribeToSignals();
 		InitializeVariables();
 		UpdateBoostUi();
@@ -52,6 +52,7 @@ public partial class Paddle : Area2D
 
 	private void InitializeVariables()
   {
+		_viewportBoundary = GetViewportRect();
     _boostFuel = MAX_BOOST_FUEL;
 		_boostDepleted = false;
 		_isBoosting = false;
