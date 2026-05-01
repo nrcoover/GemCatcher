@@ -85,20 +85,6 @@ tracks/1/keys = {
 "update": 0,
 "values": [Color(2.887845e-06, 0.709896, 0.48012656, 1), Color(0.8620679, 0.7428377, 0.06229925, 1)]
 }
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Paddle")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0.2),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [],
-"method": &"OnLowFuelRangeEntered"
-}]
-}
 
 [sub_resource type="Animation" id="Animation_attvq"]
 resource_name = "end-low-fuel-warning"

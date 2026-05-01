@@ -67,14 +67,12 @@ public partial class Paddle : Area2D
 		_boostRefuelTimer.Timeout += OnRefuelTimeout;
 		SignalManager.Instance.BoostFuelDepleted += OnBoostFuelDepleted;
 		SignalManager.Instance.BoostDisengaged += OnBoostDisengaged;
-		SignalManager.Instance.LowFuelRangeEntered += OnLowFuelRangeEntered;
 	}
 
   private void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.BoostFuelDepleted -= OnBoostFuelDepleted;
 		SignalManager.Instance.BoostDisengaged -= OnBoostDisengaged;
-		SignalManager.Instance.LowFuelRangeEntered -= OnLowFuelRangeEntered;
 	}
 
 	private void OnRefuelTimeout()

@@ -8,8 +8,6 @@ public partial class SignalManager : Node
 	[Signal] public delegate void InitiateDeathSequenceEventHandler();
 	[Signal] public delegate void BoostFuelDepletedEventHandler();
 	[Signal] public delegate void BoostDisengagedEventHandler();
-	[Signal] public delegate void LowFuelRangeEnteredEventHandler();
-	[Signal] public delegate void LowFuelRangeExitedEventHandler();
 
 	public override void _Ready()
 	{
@@ -34,15 +32,5 @@ public partial class SignalManager : Node
 	public void EmitBoostDisengaged()
 	{
 		EmitSignal(SignalName.BoostDisengaged);
-	}
-
-	public void EmitLowFuelRangeEntered()
-	{
-		EmitSignal(SignalName.LowFuelRangeEntered);
-	}
-
-	public void EmitLowFuelRangeExited()
-	{
-		EmitSignal(SignalName.LowFuelRangeEntered);
 	}
 }
