@@ -40,4 +40,9 @@ public partial class SignalManager : Node
 	{
 		EmitSignal(SignalName.LowFuelRangeEntered);
 	}
+
+	public void EmitLowFuelRangeExited()
+	{
+		EmitSignal(SignalName.LowFuelRangeEntered);
+	}
 }

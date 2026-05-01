@@ -4,6 +4,12 @@ public partial class Paddle : Area2D
 {
 	const float MAX_BOOST_FUEL = 100.0f;
 
+	enum FuelState {
+		Low = 50,
+		Urgent = 30,
+		Emergency = 15,
+	}
+
 	[Export] float _movementSpeed = 200.0f;
 	[Export] float _boundaryMargin = 25.0f;
 	[Export] float _boostMultiplier = 1.5f;
@@ -60,12 +66,14 @@ public partial class Paddle : Area2D
 		_boostRefuelTimer.Timeout += OnRefuelTimeout;
 		SignalManager.Instance.BoostFuelDepleted += OnBoostFuelDepleted;
 		SignalManager.Instance.BoostDisengaged += OnBoostDisengaged;
+		SignalManager.Instance.LowFuelRangeEntered += OnLowFuelRangeEntered;
 	}
 
-	private void UnsubscribeFromSignals()
+  private void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.BoostFuelDepleted -= OnBoostFuelDepleted;
 		SignalManager.Instance.BoostDisengaged -= OnBoostDisengaged;
+		SignalManager.Instance.LowFuelRangeEntered -= OnLowFuelRangeEntered;
 	}
 
 	private void OnRefuelTimeout()
@@ -90,6 +98,11 @@ public partial class Paddle : Area2D
 		_boostRefuelTimer.Start();
 		_animator.Play("flashing_warning");
 		// play audio announcing fuel depletion
+  }
+
+  private void OnLowFuelRangeEntered()
+  {
+    GD.Print("Low Fuel Range Entered!");
   }
 
 #endregion
@@ -183,9 +196,11 @@ public partial class Paddle : Area2D
 				RefuelBoost(delta);
 				break;
 		}
+
+		HandleFuelConsumptionAnimation();
 	}
 
-	private void BurnFuel(float delta)
+  private void BurnFuel(float delta)
 	{
 		_boostFuel -= _boostBurnRate * delta;
 		GD.Print($"Is Burning: {_boostFuel}");
@@ -204,6 +219,59 @@ public partial class Paddle : Area2D
 		GD.Print($"Is Refueling: {_boostFuel}");
 	}
 
+	private void HandleFuelConsumptionAnimation()
+  {
+		var isLowOnFuel = _boostFuel < (int)FuelState.Low;
+
+		if (!isLowOnFuel && _animator.IsPlaying())
+		{
+			_animator.Play(Constants.Animations.EndLowFuelWarning);
+			return;
+		}
+		else if (!isLowOnFuel)
+		{
+			return;			
+		}
+
+		if (_isBoostable && _isBoosting && isLowOnFuel)
+		{
+			switch (true)
+			{
+				case true when _boostFuel < (int)FuelState.Emergency:
+					if (_animator.CurrentAnimation != Constants.Animations.FuelWarningLevel3)
+					{
+						_animator.Play(Constants.Animations.FuelWarningLevel3);
+						GD.Print("EMERGENCY! LOW FUEL!!!");
+					}
+					break;
+
+				case true when _boostFuel < (int)FuelState.Urgent:
+					if (_animator.CurrentAnimation != Constants.Animations.FuelWarningLevel2)
+					{
+						_animator.Play(Constants.Animations.FuelWarningLevel2);
+						GD.Print("URGENT LOW FUEL");
+					}
+					break;
+
+				default:
+					if (_animator.CurrentAnimation != Constants.Animations.FuelWarningLevel1)
+					{
+						_animator.Play(Constants.Animations.FuelWarningLevel1);
+						GD.Print("WARNING LOW FUEL");
+					}
+					break;
+			}
+		} 
+		else if (_isBoostable && !_isBoosting && isLowOnFuel)
+		{
+			if (_animator.CurrentAnimation != Constants.Animations.FuelWarningLevel1)
+			{
+				GD.Print("REFILLING");
+				_animator.Play(Constants.Animations.RefuelingYellow);
+			}
+		}
+  }
+
 #endregion
 
 #region UI UPdates
@@ -212,6 +280,9 @@ public partial class Paddle : Area2D
 	{
 		_boostLabel.Text = $"Boost:\n{_boostFuel}";
 		_boostPercentageLabel.Text = $"{Mathf.RoundToInt(_boostFuel)}";
+
+		// Dividing by 2 to have the two progress bars act as 1
+		// Each provides half of a full progress bar's value
 		_progressBarLeft.Value = _boostFuel / 2;
 		_progressBarRight.Value = _boostFuel / 2;
 	}
