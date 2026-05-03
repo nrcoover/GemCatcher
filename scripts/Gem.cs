@@ -23,12 +23,18 @@ public partial class Gem : Area2D
 	{
 		SetVariations();
 		SetScale();
+		SetColor();
 		SubscribeToSignals();
 	}
 
 	public override void _Process(double delta)
 	{
 		HandleMovement((float)delta);
+	}
+	
+	private void SubscribeToSignals()
+	{
+		AreaEntered += OnAreaEntered;
 	}
 
 		private void HandleMovement(float delta)
@@ -81,9 +87,9 @@ public partial class Gem : Area2D
 		Scale = new Vector2(_scaleVariation, _scaleVariation);
 	}
 
-	private void SubscribeToSignals()
+	private void SetColor()
 	{
-		AreaEntered += OnAreaEntered;
+		this.Modulate = Helper.GetColorFromRainbow();
 	}
 
 	#region Signals

@@ -1,19 +1,18 @@
 [gd_scene load_steps=5 format=3 uid="uid://8m2y1u6noqq5"]
 
 [ext_resource type="Script" uid="uid://b4i4niwmui66q" path="res://scripts/Gem.cs" id="1_o8oug"]
-[ext_resource type="Texture2D" uid="uid://b5w75r40sc3p3" path="res://assets/element_red_diamond.png" id="1_wfabg"]
+[ext_resource type="Texture2D" uid="uid://c2a4m3pjt6egg" path="res://assets/base_diamond.png" id="2_tx2gm"]
 [ext_resource type="AudioStream" uid="uid://boe377tli867s" path="res://assets/spell1_0.wav" id="3_tx2gm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o8oug"]
 size = Vector2(36.769558, 36.769558)
 
-[node name="Gem" type="Area2D" node_paths=PackedStringArray("_scoreSound")]
+[node name="Gem" type="Area2D"]
 script = ExtResource("1_o8oug")
-_scoreSound = NodePath("ScoreSound")
 _maxSpeedVariation = 1.75
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_wfabg")
+texture = ExtResource("2_tx2gm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -4.7683716e-07)
