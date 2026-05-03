@@ -3,6 +3,7 @@ using Godot;
 public partial class Paddle : Area2D
 {
 	const float MAX_BOOST_FUEL = 100.0f;
+	const float DEFAULT_REFUEL_RATE = 12.5f;
 
 	enum FuelState {
 		Low = 50,
@@ -21,7 +22,7 @@ public partial class Paddle : Area2D
 	[Export] ProgressBar _progressBarLeft;
 	[Export] ProgressBar _progressBarRight;
 	[Export] private float _boostBurnRate;
-	[Export] private float _boostRefuelRate;
+	[Export] private float _boostRefuelRate = 12.5f;
 	private float _boostFuel;
 	private bool _boostDepleted;
 	private bool _isBoosting;
@@ -192,7 +193,15 @@ public partial class Paddle : Area2D
 				break;
 
 			case true when isReadyForRefueling:
-				RefuelBoost(delta);
+				if (!_isBoostable)
+				{
+					var impedenceMultiplier = .5f;
+					RefuelBoost(delta, DEFAULT_REFUEL_RATE * impedenceMultiplier);
+				}
+				else
+				{
+					RefuelBoost(delta);
+				}
 				break;
 		}
 
@@ -202,12 +211,13 @@ public partial class Paddle : Area2D
   private void BurnFuel(float delta)
 	{
 		_boostFuel -= _boostBurnRate * delta;
-		// GD.Print($"Is Burning: {_boostFuel}");
+
+		GD.Print($"Is Burning: {_boostFuel}");
 	}
 
-	private void RefuelBoost(float delta)
+	private void RefuelBoost(float delta, float refuelRate = DEFAULT_REFUEL_RATE)
 	{
-		_boostFuel += _boostRefuelRate * delta;
+		_boostFuel += refuelRate * delta;
 
 		if (_boostFuel > MAX_BOOST_FUEL)
 		{
@@ -215,7 +225,7 @@ public partial class Paddle : Area2D
 			_isFullyFueled = true;
 		}
 
-		// GD.Print($"Is Refueling: {_boostFuel}");
+		GD.Print($"Is Refueling: {_boostFuel}");
 	}
 
 	private void HandleFuelConsumptionAnimation()
