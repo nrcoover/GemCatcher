@@ -5,8 +5,8 @@
 [ext_resource type="LabelSettings" uid="uid://b3ni7wr13moyl" path="res://resources/play_light-blue_96_font.tres" id="3_it30p"]
 [ext_resource type="LabelSettings" uid="uid://dfcdcmlpx5pv5" path="res://resources/play_violet_96_font.tres" id="4_56fvm"]
 [ext_resource type="LabelSettings" uid="uid://m1lcbkrbyxv8" path="res://resources/play_teal_96_font.tres" id="4_it30p"]
-[ext_resource type="Texture2D" uid="uid://b5w75r40sc3p3" path="res://assets/element_red_diamond.png" id="5_7v7mi"]
 [ext_resource type="LabelSettings" uid="uid://bvp27oyhve2cn" path="res://resources/play_white_16_font_normal.tres" id="6_gh1cy"]
+[ext_resource type="Texture2D" uid="uid://c2a4m3pjt6egg" path="res://assets/base_diamond.png" id="6_it30p"]
 
 [node name="MainMenuUi" type="Control" node_paths=PackedStringArray("PlayButton", "QuitButton")]
 layout_mode = 3
@@ -128,9 +128,9 @@ pivot_offset = Vector2(50, 25)
 theme_override_constants/separation = 18
 
 [node name="PlayButton" type="TextureButton" parent="HBoxContainer2"]
-modulate = Color(0, 1.6254054, 1.876242, 1)
+self_modulate = Color(0.53333336, 1, 0.53333336, 1)
 layout_mode = 2
-texture_normal = ExtResource("5_7v7mi")
+texture_normal = ExtResource("6_it30p")
 
 [node name="PlayLabel" type="Label" parent="HBoxContainer2/PlayButton"]
 layout_mode = 1
@@ -148,9 +148,9 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="QuitButton" type="TextureButton" parent="HBoxContainer2"]
-modulate = Color(0.92217916, 1.198152, 1.513, 1)
+self_modulate = Color(1, 0.53333336, 0.53333336, 1)
 layout_mode = 2
-texture_normal = ExtResource("5_7v7mi")
+texture_normal = ExtResource("6_it30p")
 
 [node name="QuitLabel" type="Label" parent="HBoxContainer2/QuitButton"]
 layout_mode = 1
