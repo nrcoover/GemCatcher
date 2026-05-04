@@ -1,15 +1,73 @@
-[gd_scene load_steps=5 format=3 uid="uid://8m2y1u6noqq5"]
+[gd_scene load_steps=9 format=3 uid="uid://8m2y1u6noqq5"]
 
 [ext_resource type="Script" uid="uid://b4i4niwmui66q" path="res://scripts/Gem.cs" id="1_o8oug"]
 [ext_resource type="Texture2D" uid="uid://c2a4m3pjt6egg" path="res://assets/base_diamond.png" id="2_tx2gm"]
 [ext_resource type="AudioStream" uid="uid://boe377tli867s" path="res://assets/spell1_0.wav" id="3_tx2gm"]
 
+[sub_resource type="Curve" id="Curve_tx2gm"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5241379, 0.64245415), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o8oug"]
 size = Vector2(36.769558, 36.769558)
 
-[node name="Gem" type="Area2D"]
+[sub_resource type="Animation" id="Animation_tx2gm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_xfm3s"]
+resource_name = "sparkle"
+length = 0.5
+loop_mode = 2
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 0.9999998),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1.5720325, 1.5720325, 1.5720325, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_y72vu"]
+_data = {
+&"RESET": SubResource("Animation_tx2gm"),
+&"sparkle": SubResource("Animation_xfm3s")
+}
+
+[node name="Gem" type="Area2D" node_paths=PackedStringArray("_particles")]
 script = ExtResource("1_o8oug")
+_particles = NodePath("Particles")
 _maxSpeedVariation = 1.75
+
+[node name="Particles" type="CPUParticles2D" parent="."]
+position = Vector2(0, -10)
+amount = 65
+lifetime = 0.7
+preprocess = 0.64
+randomness = 0.18
+lifetime_randomness = 0.07
+emission_shape = 1
+emission_sphere_radius = 21.51
+gravity = Vector2(0, -980)
+scale_amount_min = 0.0
+scale_amount_max = 3.46
+scale_amount_curve = SubResource("Curve_tx2gm")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_tx2gm")
@@ -26,3 +84,10 @@ rotation = 0.7853982
 scale = Vector2(0.9999999, 0.9999999)
 stream = ExtResource("3_tx2gm")
 volume_db = -12.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite2D")
+libraries = {
+&"": SubResource("AnimationLibrary_y72vu")
+}
+autoplay = "sparkle"

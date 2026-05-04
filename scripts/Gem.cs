@@ -2,6 +2,7 @@ using Godot;
 
 public partial class Gem : Area2D
 {
+	[Export] CpuParticles2D _particles;
 	[Export] float _movementSpeed = 100;
 	[Export] float _minSpeedVariation = 1.0f;
 	[Export] float _maxSpeedVariation = 3.5f;
@@ -14,6 +15,7 @@ public partial class Gem : Area2D
 	[Signal] public delegate void OnScoredEventHandler();
 	[Signal] public delegate void OnGemOffScreenEventHandler();
 
+	private Color _color;
 	private bool _isOffScreen = false;
 	private float _speedVariation;
 	private float _rotationVariation;
@@ -89,7 +91,9 @@ public partial class Gem : Area2D
 
 	private void SetColor()
 	{
-		this.Modulate = Helper.GetColorFromRainbow();
+		_color = Helper.GetColorFromRainbow();
+		this.Modulate = _color;
+		_particles.Modulate = _color;
 	}
 
 	#region Signals
