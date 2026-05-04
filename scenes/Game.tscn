@@ -1,9 +1,10 @@
-[gd_scene load_steps=29 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=30 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/GameBg.png" id="1_ibkli"]
 [ext_resource type="PackedScene" uid="uid://3kq5fr5oomem" path="res://scenes/Paddle.tscn" id="2_qbsmt"]
 [ext_resource type="PackedScene" uid="uid://8m2y1u6noqq5" path="res://scenes/Gem.tscn" id="3_cpr0p"]
+[ext_resource type="Texture2D" uid="uid://caub2q4sy25lg" path="res://assets/pexels-tobias-eicher-2160223093-36575402.jpg" id="4_vjgi4"]
 [ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/Play-Regular.ttf" id="5_s0nni"]
 [ext_resource type="PackedScene" uid="uid://caewt57tbc7r5" path="res://scenes/HeartFaded.tscn" id="6_aug50"]
 [ext_resource type="PackedScene" uid="uid://ci18yyqg2giqu" path="res://scenes/Heart.tscn" id="7_kiw3p"]
@@ -456,7 +457,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(6.542704e-09, 0.14422342, 0.18176739, 1)
+color = Color(0, 0.007851406, 0.011702084, 1)
 
 [node name="Background2" type="Sprite2D" parent="Background/ColorRect"]
 self_modulate = Color(0.77942044, 0.7852611, 0.69765097, 1)
@@ -465,6 +466,13 @@ texture = ExtResource("1_ibkli")
 centered = false
 flip_h = true
 flip_v = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Background/ColorRect/Background2"]
+self_modulate = Color(0.47816715, 0.47816715, 0.47816715, 1)
+position = Vector2(-150.7362, -467.11664)
+scale = Vector2(0.80555725, 0.80555725)
+texture = ExtResource("4_vjgi4")
+centered = false
 
 [node name="Paddle" parent="." node_paths=PackedStringArray("_boostLabel", "_boostPercentageLabel", "_animator", "_progressBarLeft", "_progressBarRight") instance=ExtResource("2_qbsmt")]
 position = Vector2(561, 570)
