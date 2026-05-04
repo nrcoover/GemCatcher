@@ -24,38 +24,38 @@ public static partial class Helper
 
 	public static Color GetColorFromRainbow()
 	{
-		string selectedColorhex = Constants.CustomColors.RedPastelle;
+		string selectedColorhex = Constants.CustomColors.RedBright;
 
 		var randomNumber = GetRandomInt(0, 7) % 7;
 
 		switch (randomNumber)
 		{
 			case 0:
-				selectedColorhex = Constants.CustomColors.RedPastelle;
+				selectedColorhex = Constants.CustomColors.RedBright;
 				break;
 			
 			case 1:
-				selectedColorhex = Constants.CustomColors.OrangePastelle;
+				selectedColorhex = Constants.CustomColors.OrangeBright;
 				break;
 
 			case 2:
-				selectedColorhex = Constants.CustomColors.YellowPastelle;
+				selectedColorhex = Constants.CustomColors.YellowBright;
 				break;
 
 			case 3:
-				selectedColorhex = Constants.CustomColors.GreenPastelle;
+				selectedColorhex = Constants.CustomColors.GreenBright;
 				break;
 
 			case 4:
-				selectedColorhex = Constants.CustomColors.BluePastelle;
+				selectedColorhex = Constants.CustomColors.BlueBright;
 				break;
 
 			case 5:
-				selectedColorhex = Constants.CustomColors.PurplePastelle;
+				selectedColorhex = Constants.CustomColors.PurpleBright;
 				break;
 
 			case 6:
-				selectedColorhex = Constants.CustomColors.PinkPastelle;
+				selectedColorhex = Constants.CustomColors.PinkBright;
 				break;
 		}
 
