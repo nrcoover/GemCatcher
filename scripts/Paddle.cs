@@ -67,12 +67,14 @@ public partial class Paddle : Area2D
 	{
 		_boostRefuelTimer.Timeout += OnRefuelTimeout;
 		SignalManager.Instance.BoostFuelDepleted += OnBoostFuelDepleted;
+		SignalManager.Instance.BoostEngaged += OnBoostEngaged;
 		SignalManager.Instance.BoostDisengaged += OnBoostDisengaged;
 	}
 
   private void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.BoostFuelDepleted -= OnBoostFuelDepleted;
+		SignalManager.Instance.BoostDisengaged -= OnBoostEngaged;
 		SignalManager.Instance.BoostDisengaged -= OnBoostDisengaged;
 	}
 
@@ -84,10 +86,18 @@ public partial class Paddle : Area2D
 
 	private void OnBoostDisengaged()
   {
+		_isBoosting = false;
+  }
+
+	private void OnBoostEngaged()
+  {
 		if (_isBoostable)
 		{
     	_isBoosting = true;
 		}
+		// determine direction of motion
+		// dynamically create particles from boost movement
+		// play boosting sound
   }
 
 	private void OnBoostFuelDepleted()
@@ -125,7 +135,7 @@ public partial class Paddle : Area2D
 				&& !_boostDepleted
 			)
 		{
-			_isBoosting = true;
+			SignalManager.Instance.EmitBoostEngaged();
 			calculatedMovementSpeed = _movementSpeed * _boostMultiplier;
 		}
 		else

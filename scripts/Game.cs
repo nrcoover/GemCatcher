@@ -53,10 +53,12 @@ public partial class Game : Node2D
 	{
 		_gemSpawnTimer.Timeout += SpawnGem;
 		SignalManager.Instance.InitiateDeathSequence += OnInitiateDeathSequenceAsync;
+		SignalManager.Instance.Scored += OnScored;
 	}
 
 	private void UnsubscribeFromSignals() {
 		SignalManager.Instance.InitiateDeathSequence -= OnInitiateDeathSequenceAsync;
+		SignalManager.Instance.Scored -= OnScored;
 	}
 
 	private void SpawnGem()
@@ -64,7 +66,6 @@ public partial class Game : Node2D
 		var gem = (Gem)_gemScene.Instantiate();
 		_gemContainer.AddChild(gem);
 
-		gem.OnScored += OnScored;
 		gem.OnGemOffScreen += OnGemOffScreen;
 
 		var margin = 85;
@@ -89,6 +90,12 @@ public partial class Game : Node2D
 
 	private void UpdateScoreUi()
 	{
+		// Create Tween to update score
+		// start at white
+		// flash to bright white
+		// fade from flash to color of captured gem
+		// will need to pass the gem color to the function
+		// likely need to update the signal function signature
 		_scoreLabel.Text = string.Format("Score: {0:000}", _score);
 	}
 

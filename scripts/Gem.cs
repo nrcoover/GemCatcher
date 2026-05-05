@@ -12,7 +12,6 @@ public partial class Gem : Area2D
 	[Export] float _minScaleVariation = 0.5f;
 	[Export] float _maxScaleVariation = 0.75f;
 
-	[Signal] public delegate void OnScoredEventHandler();
 	[Signal] public delegate void OnGemOffScreenEventHandler();
 
 	private Color _color;
@@ -102,7 +101,7 @@ public partial class Gem : Area2D
 	{
 		if (area is Paddle)
 		{
-			EmitSignal(SignalName.OnScored);
+			SignalManager.Instance.EmitScored();
 			QueueFree();
 		}
 	}
