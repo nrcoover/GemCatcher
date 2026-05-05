@@ -1,0 +1,167 @@
+[gd_scene load_steps=9 format=3 uid="uid://cq8skradygbr0"]
+
+[ext_resource type="Script" uid="uid://bj7ab0dvyiw7p" path="res://scenes/MotionBackdrop.cs" id="1_8a1xo"]
+[ext_resource type="Texture2D" uid="uid://caub2q4sy25lg" path="res://assets/pexels-tobias-eicher-2160223093-36575402.jpg" id="1_wrp1p"]
+[ext_resource type="Texture2D" uid="uid://0jynaad8qky5" path="res://assets/pexels-daniel-cid-634838605-17505904.jpg" id="2_vx43d"]
+[ext_resource type="Texture2D" uid="uid://dqbf81ktbqacl" path="res://assets/pexels-marek-pavlik-1929759405-37269552.jpg" id="3_tw1rg"]
+[ext_resource type="Texture2D" uid="uid://nf2qvl6dlh2j" path="res://assets/pexels-daniel-cid-634838605-17505896.jpg" id="3_vx43d"]
+
+[sub_resource type="Animation" id="Animation_wrp1p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../StarsBackground2:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../StarsBackground3:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../StarsBackground4:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_8ud4o"]
+resource_name = "sway"
+length = 40.0
+loop_mode = 1
+step = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 10, 20.125, 30.125, 40),
+"transitions": PackedFloat32Array(0.5, 1, 1, 0.5, 0.5),
+"update": 0,
+"values": [0.0, -0.06981317007977318, 0.0, 0.06981317007977318, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../StarsBackground2:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 10, 20, 30, 39.875),
+"transitions": PackedFloat32Array(1, 1, 1, 0.5, 0.5),
+"update": 0,
+"values": [0.0, -0.06981317007977318, 0.0, 0.06981317007977318, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../StarsBackground3:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 10, 20, 30, 39.875),
+"transitions": PackedFloat32Array(1, 1, 1, 0.5, 0.5),
+"update": 0,
+"values": [0.0, -0.06981317007977318, 0.0, 0.06981317007977318, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../StarsBackground4:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 10, 20, 30, 39.875),
+"transitions": PackedFloat32Array(1, 1, 1, 0.5, 0.5),
+"update": 0,
+"values": [0.0, -0.06981317007977318, 0.0, 0.06981317007977318, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_vx43d"]
+_data = {
+&"RESET": SubResource("Animation_wrp1p"),
+&"sway": SubResource("Animation_8ud4o")
+}
+
+[node name="MotionBackdrop" type="Node2D" node_paths=PackedStringArray("_background1", "_background2", "_background3", "_background4")]
+script = ExtResource("1_8a1xo")
+_background1 = NodePath("StarsBackground1")
+_background2 = NodePath("StarsBackground2")
+_background3 = NodePath("StarsBackground3")
+_background4 = NodePath("StarsBackground4")
+
+[node name="StarsBackground1" type="Sprite2D" parent="."]
+self_modulate = Color(0.47816715, 0.47816715, 0.47816715, 1)
+position = Vector2(576, 324)
+scale = Vector2(0.48631787, 0.4863178)
+texture = ExtResource("1_wrp1p")
+centered = false
+offset = Vector2(-1371.5309, -1246.0989)
+
+[node name="StarsBackground2" type="Sprite2D" parent="."]
+self_modulate = Color(0.47816715, 0.47816715, 0.47816715, 1)
+position = Vector2(576, 324)
+scale = Vector2(0.41576496, 0.41576484)
+texture = ExtResource("2_vx43d")
+centered = false
+offset = Vector2(-2263.8618, -1152.2958)
+
+[node name="StarsBackground3" type="Sprite2D" parent="."]
+self_modulate = Color(0.47816715, 0.47816715, 0.47816715, 1)
+position = Vector2(576, 324.00003)
+scale = Vector2(0.40054858, 0.40054855)
+texture = ExtResource("3_vx43d")
+centered = false
+offset = Vector2(-2162.9453, -1063.8489)
+
+[node name="StarsBackground4" type="Sprite2D" parent="."]
+self_modulate = Color(0.47816715, 0.47816715, 0.47816715, 1)
+position = Vector2(576, 324)
+scale = Vector2(0.20162039, 0.20162037)
+texture = ExtResource("3_tw1rg")
+centered = false
+offset = Vector2(-3884.0015, -2105.4102)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../StarsBackground1")
+libraries = {
+&"": SubResource("AnimationLibrary_vx43d")
+}
+autoplay = "sway"
+
+[node name="Center" type="Marker2D" parent="."]
+position = Vector2(576, 324)
