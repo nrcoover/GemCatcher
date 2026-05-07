@@ -326,44 +326,12 @@ public partial class Paddle : Area2D
 
 	private void EngageRightParticles()
 	{
-		// Tween tween = CreateTween();
-
-		// tween.TweenProperty(
-		// 		this._leftParticles, 
-		// 		PropertyName.Visible.ToString(), 
-		// 		false, 
-		// 		0
-		// 	);
-
-		// tween.TweenProperty(
-		// 	this._rightParticles, 
-		// 	PropertyName.Visible.ToString(), 
-		// 	true, 
-		// 	0.25f
-		// );
-
 		SetParticleEmission(_leftParticles, false);
 		SetParticleEmission(_rightParticles, true);
 	}
 
 	private void EngageLeftParticles()
 	{
-		// Tween tween = CreateTween();
-		
-		// tween.TweenProperty(
-		// 		this._rightParticles, 
-		// 		PropertyName.Visible.ToString(), 
-		// 		false, 
-		// 		0
-		// 	);
-
-		// tween.TweenProperty(
-		// 	this._leftParticles, 
-		// 	PropertyName.Visible.ToString(), 
-		// 	true, 
-		// 	0.25f
-		// );
-
 		SetParticleEmission(_rightParticles, false);
 		SetParticleEmission(_leftParticles, true);
 	}
