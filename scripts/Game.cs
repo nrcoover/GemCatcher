@@ -33,6 +33,14 @@ public partial class Game : Node2D
 		SubscribeToSignals();
 	}
 
+	 public override void _UnhandledInput(InputEvent @event)
+	{
+		if (@event.IsActionPressed("exit"))
+		{
+			HandleEscape();
+		}
+	}
+
 	public override void _ExitTree()
 	{
 		UnsubscribeFromSignals();
@@ -59,6 +67,14 @@ public partial class Game : Node2D
 	private void UnsubscribeFromSignals() {
 		SignalManager.Instance.InitiateDeathSequence -= OnInitiateDeathSequenceAsync;
 		SignalManager.Instance.Scored -= OnScored;
+	}
+
+	private void HandleEscape()
+	{
+		if (Input.IsKeyPressed(Key.Escape))
+		{
+			LevelManager.Instance.LoadMainMenu();
+		}
 	}
 
 	private void SpawnGem()
