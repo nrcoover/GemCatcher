@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 public partial class Paddle : Area2D
@@ -142,11 +141,6 @@ public partial class Paddle : Area2D
 		_boostRefuelTimer.Start();
 		_animator.Play("flashing_warning");
 		// play audio announcing fuel depletion
-  }
-
-  private void OnLowFuelRangeEntered()
-  {
-    GD.Print("Low Fuel Range Entered!");
   }
 
 #endregion
