@@ -42,15 +42,6 @@ public partial class Paddle : Area2D
 		ResetParticleSystems();
 	}
 
-  private void ResetParticleSystems()
-  {
-    SetParticleEmission(_leftParticles, false);
-		SetParticleEmission(_rightParticles, false);
-
-		_leftParticles.Visible = true;
-		_rightParticles.Visible = true;
-  }
-
   public override void _Process(double delta)
 	{
 		HandlePaddleMovement((float)delta);
@@ -92,6 +83,14 @@ public partial class Paddle : Area2D
 		_isBoosting = false;
 		_isBoostable = true;
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
+  }
+
+	private void ResetParticleSystems()
+  {
+    DisengageAllParticles();
+
+		_leftParticles.Visible = true;
+		_rightParticles.Visible = true;
   }
 
 #region Signals
