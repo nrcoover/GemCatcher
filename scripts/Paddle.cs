@@ -47,11 +47,7 @@ public partial class Paddle : Area2D
 		HandlePaddleMovement((float)delta);
 		HandleFuelConsumption((float)delta);
 		UpdateBoostUi();
-
-		if (_isBoosting)
-		{
-			HandleParticles();
-		}
+		HandleParticles();
 	}
 
   public override void _UnhandledInput(InputEvent @event)
@@ -140,6 +136,8 @@ public partial class Paddle : Area2D
 		_boostRefuelTimer.Start();
 		_animator.Play("flashing_warning");
 		// play audio announcing fuel depletion
+
+		DisengageAllParticles();
   }
 
 #endregion
@@ -157,10 +155,13 @@ public partial class Paddle : Area2D
 		var noChangeInPosition = 0;
 		float calculatedMovementSpeed;
 
-		if (Input.IsActionPressed("boost") 
-				&& _isBoostable 
-				&& !_boostDepleted
-			)
+		bool canBoost =
+			Input.IsActionPressed("boost") &&
+			_isBoostable &&
+			!_boostDepleted &&
+			_boostFuel > 0;
+
+		if (canBoost)
 		{
 			calculatedMovementSpeed = _movementSpeed * _boostMultiplier;
 		}
@@ -337,19 +338,21 @@ public partial class Paddle : Area2D
 
 	private void HandleParticles()
 	{
-		if (!_isBoosting || !_isBoostable)
+		var canBoost = _isBoosting && _isBoostable;
+
+		if (!canBoost)
 		{
 			GD.Print("EARLY EXIT!!!!!!!!!!");
 			DisengageAllParticles();
 			return;
 		}
 
-		if (Input.IsActionPressed("move_right"))
+		if (canBoost && Input.IsActionPressed("move_right"))
 		{
 			GD.Print("RIGHT PARTICLES");
 			EngageLeftParticles();
 		}
-		else if (Input.IsActionPressed("move_left"))
+		else if (canBoost && Input.IsActionPressed("move_left"))
 		{
 			GD.Print("LEFT PARTICLES");
 			EngageRightParticles();
