@@ -7,11 +7,143 @@
 radius = 12.0
 height = 104.0
 
-[node name="Paddle" type="Area2D" node_paths=PackedStringArray("_boostRefuelTimer")]
+[node name="Paddle" type="Area2D" node_paths=PackedStringArray("_boostRefuelTimer", "_leftParticles", "_rightParticles")]
 modulate = Color(1.224127, 1.224127, 1.224127, 1)
 script = ExtResource("1_6kxou")
 _boostRefuelTimer = NodePath("BoostRefuelTimer")
+_leftParticles = NodePath("LeftBoostParticles")
+_rightParticles = NodePath("RightBoostParticles")
 _boostBurnRate = 25.0
+
+[node name="LeftBoostParticles" type="Node2D" parent="."]
+visible = false
+position = Vector2(-50, 0)
+
+[node name="ParticlesRed" type="CPUParticles2D" parent="LeftBoostParticles"]
+lifetime = 0.5
+speed_scale = 1.25
+randomness = 0.04
+emission_shape = 1
+emission_sphere_radius = 12.49
+gravity = Vector2(-650, 980)
+scale_amount_min = 2.0
+scale_amount_max = 6.0
+color = Color(0.94, 0.12533332, 0, 1)
+hue_variation_min = -1.0
+hue_variation_max = 1.0
+
+[node name="ParticlesOrange" type="CPUParticles2D" parent="LeftBoostParticles"]
+lifetime = 0.5
+speed_scale = 1.25
+randomness = 0.04
+emission_shape = 1
+emission_sphere_radius = 18.23
+gravity = Vector2(-650, 980)
+linear_accel_min = -25.0
+linear_accel_max = 25.0
+scale_amount_min = 2.0
+scale_amount_max = 6.0
+color = Color(0.94, 0.47, 0, 1)
+hue_variation_min = -1.0
+hue_variation_max = 1.0
+
+[node name="ParticlesYellow" type="CPUParticles2D" parent="LeftBoostParticles"]
+lifetime = 0.5
+speed_scale = 1.25
+randomness = 0.04
+emission_shape = 1
+emission_sphere_radius = 22.33
+gravity = Vector2(-650, 980)
+linear_accel_min = -25.0
+linear_accel_max = 25.0
+tangential_accel_max = 50.0
+scale_amount_min = 1.5
+scale_amount_max = 4.0
+color = Color(0.94, 0.94, 0, 1)
+hue_variation_min = -1.0
+hue_variation_max = 1.0
+
+[node name="ParticlesBlack" type="CPUParticles2D" parent="LeftBoostParticles"]
+lifetime = 0.5
+explosiveness = 0.88
+randomness = 0.04
+lifetime_randomness = 0.21
+emission_shape = 1
+emission_sphere_radius = 28.07
+gravity = Vector2(-650, 980)
+linear_accel_min = -25.0
+linear_accel_max = 25.0
+tangential_accel_max = 50.0
+scale_amount_min = 6.0
+scale_amount_max = 12.0
+color = Color(0, 0, 0, 1)
+hue_variation_min = -1.0
+hue_variation_max = 1.0
+
+[node name="RightBoostParticles" type="Node2D" parent="."]
+visible = false
+position = Vector2(50, 0)
+
+[node name="ParticlesRed" type="CPUParticles2D" parent="RightBoostParticles"]
+lifetime = 0.5
+speed_scale = 1.25
+randomness = 0.04
+emission_shape = 1
+emission_sphere_radius = 12.49
+gravity = Vector2(650, 980)
+scale_amount_min = 2.0
+scale_amount_max = 6.0
+color = Color(0.94, 0.12533332, 0, 1)
+hue_variation_min = -1.0
+hue_variation_max = 1.0
+
+[node name="ParticlesOrange" type="CPUParticles2D" parent="RightBoostParticles"]
+lifetime = 0.5
+speed_scale = 1.25
+randomness = 0.04
+emission_shape = 1
+emission_sphere_radius = 18.23
+gravity = Vector2(650, 980)
+linear_accel_min = -25.0
+linear_accel_max = 25.0
+scale_amount_min = 2.0
+scale_amount_max = 6.0
+color = Color(0.94, 0.47, 0, 1)
+hue_variation_min = -1.0
+hue_variation_max = 1.0
+
+[node name="ParticlesYellow" type="CPUParticles2D" parent="RightBoostParticles"]
+lifetime = 0.5
+speed_scale = 1.25
+randomness = 0.04
+emission_shape = 1
+emission_sphere_radius = 22.33
+gravity = Vector2(650, 980)
+linear_accel_min = -25.0
+linear_accel_max = 25.0
+tangential_accel_max = 50.0
+scale_amount_min = 1.5
+scale_amount_max = 4.0
+color = Color(0.94, 0.94, 0, 1)
+hue_variation_min = -1.0
+hue_variation_max = 1.0
+
+[node name="ParticlesBlack" type="CPUParticles2D" parent="RightBoostParticles"]
+lifetime = 0.5
+explosiveness = 0.88
+randomness = 0.04
+lifetime_randomness = 0.21
+emission_shape = 1
+emission_sphere_radius = 28.07
+gravity = Vector2(650, 980)
+linear_accel_min = -25.0
+linear_accel_max = 25.0
+tangential_accel_max = 50.0
+scale_amount_min = 6.0
+scale_amount_max = 12.0
+color = Color(0, 0, 0, 1)
+hue_variation_min = -1.0
+hue_variation_max = 1.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_ry5ju")

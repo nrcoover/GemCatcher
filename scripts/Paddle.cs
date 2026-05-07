@@ -21,6 +21,8 @@ public partial class Paddle : Area2D
 	[Export] AnimationPlayer _animator;
 	[Export] ProgressBar _progressBarLeft;
 	[Export] ProgressBar _progressBarRight;
+	[Export] Node2D _leftParticles;
+	[Export] Node2D _rightParticles;
 	[Export] private float _boostBurnRate;
 	[Export] private float _boostRefuelRate = 12.5f;
 	private float _boostFuel;
@@ -41,10 +43,14 @@ public partial class Paddle : Area2D
   
   public override void _Process(double delta)
 	{
-		HandlePaddleMovement((float)delta);
 		HandleFuelConsumption((float)delta);
 		UpdateBoostUi();
 	}
+
+  public override void _PhysicsProcess(double delta)
+  {
+		HandlePaddleMovement((float)delta);
+  }
 
 	public override void _ExitTree()
 	{
@@ -74,7 +80,7 @@ public partial class Paddle : Area2D
   private void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.BoostFuelDepleted -= OnBoostFuelDepleted;
-		SignalManager.Instance.BoostDisengaged -= OnBoostEngaged;
+		SignalManager.Instance.BoostEngaged -= OnBoostEngaged;
 		SignalManager.Instance.BoostDisengaged -= OnBoostDisengaged;
 	}
 
@@ -87,6 +93,7 @@ public partial class Paddle : Area2D
 	private void OnBoostDisengaged()
   {
 		_isBoosting = false;
+		DisengageAllParticles();
   }
 
 	private void OnBoostEngaged()
@@ -95,8 +102,8 @@ public partial class Paddle : Area2D
 		{
     	_isBoosting = true;
 		}
-		// determine direction of motion
-		// dynamically create particles from boost movement
+
+		HandleParticles();
 		// play boosting sound
   }
 
@@ -140,6 +147,8 @@ public partial class Paddle : Area2D
 		}
 		else
 		{
+			// TODO: Move to unhandled input of boost release?
+			SignalManager.Instance.EmitBoostDisengaged();
 			calculatedMovementSpeed = _movementSpeed;
 		}
 
@@ -222,7 +231,7 @@ public partial class Paddle : Area2D
 	{
 		_boostFuel -= _boostBurnRate * delta;
 
-		GD.Print($"Is Burning: {_boostFuel}");
+		// GD.Print($"Is Burning: {_boostFuel}");
 	}
 
 	private void RefuelBoost(float delta, float refuelRate = DEFAULT_REFUEL_RATE)
@@ -235,7 +244,7 @@ public partial class Paddle : Area2D
 			_isFullyFueled = true;
 		}
 
-		GD.Print($"Is Refueling: {_boostFuel}");
+		// GD.Print($"Is Refueling: {_boostFuel}");
 	}
 
 	private void HandleFuelConsumptionAnimation()
@@ -260,7 +269,7 @@ public partial class Paddle : Area2D
 					if (_animator.CurrentAnimation != Constants.Animations.FuelWarningLevel3)
 					{
 						_animator.Play(Constants.Animations.FuelWarningLevel3);
-						GD.Print("EMERGENCY! LOW FUEL!!!");
+						// GD.Print("EMERGENCY! LOW FUEL!!!");
 					}
 					break;
 
@@ -268,7 +277,7 @@ public partial class Paddle : Area2D
 					if (_animator.CurrentAnimation != Constants.Animations.FuelWarningLevel2)
 					{
 						_animator.Play(Constants.Animations.FuelWarningLevel2);
-						GD.Print("URGENT LOW FUEL");
+						// GD.Print("URGENT LOW FUEL");
 					}
 					break;
 
@@ -276,7 +285,7 @@ public partial class Paddle : Area2D
 					if (_animator.CurrentAnimation != Constants.Animations.FuelWarningLevel1)
 					{
 						_animator.Play(Constants.Animations.FuelWarningLevel1);
-						GD.Print("WARNING LOW FUEL");
+						// GD.Print("WARNING LOW FUEL");
 					}
 					break;
 			}
@@ -285,11 +294,50 @@ public partial class Paddle : Area2D
 		{
 			if (_animator.CurrentAnimation != Constants.Animations.RefuelingYellow)
 			{
-				GD.Print("REFILLING");
+				// GD.Print("REFILLING");
 				_animator.Play(Constants.Animations.RefuelingYellow);
 			}
 		}
   }
+
+	private void EngageRightParticles()
+	{
+		_leftParticles.Visible = false;
+		_rightParticles.Visible = true;
+	}
+
+	private void EngageLeftParticles()
+	{
+		_leftParticles.Visible = true;
+		_rightParticles.Visible = false;
+	}
+
+	private void DisengageAllParticles()
+	{
+		_leftParticles.Visible = false;
+		_rightParticles.Visible = false;
+	}
+
+	private void HandleParticles()
+	{
+		if (!_isBoosting || !_isBoostable)
+		{
+			GD.Print("EARLY EXIT!!!!!!!!!!");
+			return;
+		}
+
+		if (Input.IsActionPressed("move_right"))
+		{
+			GD.Print("RIGHT PARTICLES");
+			EngageLeftParticles();
+		}
+
+		if (Input.IsActionPressed("move_left"))
+		{
+			GD.Print("LEFT PARTICLES");
+			EngageRightParticles();
+		}
+	}
 
 #endregion
 
