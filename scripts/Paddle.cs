@@ -27,9 +27,17 @@ public partial class Paddle : Area2D
 	[Export] private float _boostRefuelRate = 12.5f;
 	private float _boostFuel;
 	private bool _boostDepleted;
-	private bool _isBoosting;
 	private bool _isBoostable;
 	private bool _isFullyFueled;
+	
+	private bool _isTryingToBoost =>
+	Input.IsActionPressed("boost");
+
+	private bool _canBoost =>
+		_isTryingToBoost &&
+		_isBoostable &&
+		!_boostDepleted &&
+		_boostFuel > 0;
 
 	private Rect2 _viewportBoundary;
 
@@ -76,7 +84,6 @@ public partial class Paddle : Area2D
 		_viewportBoundary = GetViewportRect();
     _boostFuel = MAX_BOOST_FUEL;
 		_boostDepleted = false;
-		_isBoosting = false;
 		_isBoostable = true;
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
   }
@@ -114,17 +121,11 @@ public partial class Paddle : Area2D
 
 	private void OnBoostDisengaged()
   {
-		_isBoosting = false;
 		DisengageAllParticles();
   }
 
 	private void OnBoostEngaged()
   {
-		if (_isBoostable)
-		{
-    	_isBoosting = true;
-		}
-
 		// play boosting sound
   }
 
@@ -132,7 +133,6 @@ public partial class Paddle : Area2D
   {
     _boostDepleted = true;
 		_isBoostable = false;
-		_isBoosting = false;
 		_boostRefuelTimer.Start();
 		_animator.Play("flashing_warning");
 		// play audio announcing fuel depletion
@@ -172,7 +172,7 @@ public partial class Paddle : Area2D
 
 		if (Input.IsActionJustReleased("boost"))
 		{
-			_isBoosting = false;
+			SignalManager.Instance.EmitBoostDisengaged();
 		}
 
 		if (Input.IsActionPressed("move_right"))
@@ -213,11 +213,11 @@ public partial class Paddle : Area2D
 	{
 		_boostDepleted = _boostFuel <= 0;
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
-		
-		var isBurningFuel = _isBoosting && !_boostDepleted;
-		var isRunningOnFumes = _isBoosting && _boostDepleted;
-		var isReadyForRefueling = !_isBoosting && _boostDepleted
-													 || !_isBoosting && !_boostDepleted && !_isFullyFueled;
+
+		var isBurningFuel = _canBoost;
+		var isRunningOnFumes = _isTryingToBoost && _boostDepleted;
+		var isReadyForRefueling = !isRunningOnFumes
+													 || isBurningFuel && !_isFullyFueled;
 
 		switch (true)
 		{
@@ -279,7 +279,7 @@ public partial class Paddle : Area2D
 			return;			
 		}
 
-		if (_isBoostable && _isBoosting && isLowOnFuel)
+		if (_isBoostable && _isTryingToBoost && isLowOnFuel)
 		{
 			switch (true)
 			{
@@ -308,7 +308,7 @@ public partial class Paddle : Area2D
 					break;
 			}
 		} 
-		else if (_isBoostable && !_isBoosting && isLowOnFuel)
+		else if (_isBoostable && !_isTryingToBoost && isLowOnFuel)
 		{
 			if (_animator.CurrentAnimation != Constants.Animations.RefuelingYellow)
 			{
@@ -338,21 +338,19 @@ public partial class Paddle : Area2D
 
 	private void HandleParticles()
 	{
-		var canBoost = _isBoosting && _isBoostable;
-
-		if (!canBoost)
+		if (!_canBoost)
 		{
 			GD.Print("EARLY EXIT!!!!!!!!!!");
 			DisengageAllParticles();
 			return;
 		}
 
-		if (canBoost && Input.IsActionPressed("move_right"))
+		if (_canBoost && Input.IsActionPressed("move_right"))
 		{
 			GD.Print("RIGHT PARTICLES");
 			EngageLeftParticles();
 		}
-		else if (canBoost && Input.IsActionPressed("move_left"))
+		else if (_canBoost && Input.IsActionPressed("move_left"))
 		{
 			GD.Print("LEFT PARTICLES");
 			EngageRightParticles();
