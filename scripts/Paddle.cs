@@ -216,8 +216,7 @@ public partial class Paddle : Area2D
 
 		var isBurningFuel = _canBoost;
 		var isRunningOnFumes = _isTryingToBoost && _boostDepleted;
-		var isReadyForRefueling = !isRunningOnFumes
-													 || isBurningFuel && !_isFullyFueled;
+		var isReadyForRefueling = !isBurningFuel && !_isFullyFueled;
 
 		switch (true)
 		{
