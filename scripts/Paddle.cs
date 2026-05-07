@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class Paddle : Area2D
@@ -39,18 +40,45 @@ public partial class Paddle : Area2D
 		SubscribeToSignals();
 		InitializeVariables();
 		UpdateBoostUi();
-	}
-  
-  public override void _Process(double delta)
-	{
-		HandleFuelConsumption((float)delta);
-		UpdateBoostUi();
+		ResetParticleSystems();
 	}
 
-  public override void _PhysicsProcess(double delta)
+  private void ResetParticleSystems()
   {
-		HandlePaddleMovement((float)delta);
+    SetParticleEmission(_leftParticles, false);
+		SetParticleEmission(_rightParticles, false);
+
+		_leftParticles.Visible = true;
+		_rightParticles.Visible = true;
   }
+
+  public override void _Process(double delta)
+	{
+		HandlePaddleMovement((float)delta);
+		HandleFuelConsumption((float)delta);
+		UpdateBoostUi();
+
+		if (_isBoosting)
+		{
+			HandleParticles();
+		}
+	}
+
+  public override void _UnhandledInput(InputEvent @event)
+	{
+		if (@event.IsActionPressed("boost"))
+		{
+			if (_isBoostable && !_boostDepleted)
+			{
+				SignalManager.Instance.EmitBoostEngaged();
+			}
+		}
+
+		if (@event.IsActionReleased("boost"))
+		{
+			SignalManager.Instance.EmitBoostDisengaged();
+		}
+	}
 
 	public override void _ExitTree()
 	{
@@ -103,7 +131,6 @@ public partial class Paddle : Area2D
     	_isBoosting = true;
 		}
 
-		HandleParticles();
 		// play boosting sound
   }
 
@@ -142,13 +169,10 @@ public partial class Paddle : Area2D
 				&& !_boostDepleted
 			)
 		{
-			SignalManager.Instance.EmitBoostEngaged();
 			calculatedMovementSpeed = _movementSpeed * _boostMultiplier;
 		}
 		else
 		{
-			// TODO: Move to unhandled input of boost release?
-			SignalManager.Instance.EmitBoostDisengaged();
 			calculatedMovementSpeed = _movementSpeed;
 		}
 
@@ -302,20 +326,52 @@ public partial class Paddle : Area2D
 
 	private void EngageRightParticles()
 	{
-		_leftParticles.Visible = false;
-		_rightParticles.Visible = true;
+		// Tween tween = CreateTween();
+
+		// tween.TweenProperty(
+		// 		this._leftParticles, 
+		// 		PropertyName.Visible.ToString(), 
+		// 		false, 
+		// 		0
+		// 	);
+
+		// tween.TweenProperty(
+		// 	this._rightParticles, 
+		// 	PropertyName.Visible.ToString(), 
+		// 	true, 
+		// 	0.25f
+		// );
+
+		SetParticleEmission(_leftParticles, false);
+		SetParticleEmission(_rightParticles, true);
 	}
 
 	private void EngageLeftParticles()
 	{
-		_leftParticles.Visible = true;
-		_rightParticles.Visible = false;
+		// Tween tween = CreateTween();
+		
+		// tween.TweenProperty(
+		// 		this._rightParticles, 
+		// 		PropertyName.Visible.ToString(), 
+		// 		false, 
+		// 		0
+		// 	);
+
+		// tween.TweenProperty(
+		// 	this._leftParticles, 
+		// 	PropertyName.Visible.ToString(), 
+		// 	true, 
+		// 	0.25f
+		// );
+
+		SetParticleEmission(_rightParticles, false);
+		SetParticleEmission(_leftParticles, true);
 	}
 
 	private void DisengageAllParticles()
 	{
-		_leftParticles.Visible = false;
-		_rightParticles.Visible = false;
+		SetParticleEmission(_leftParticles, false);
+		SetParticleEmission(_rightParticles, false);
 	}
 
 	private void HandleParticles()
@@ -323,6 +379,7 @@ public partial class Paddle : Area2D
 		if (!_isBoosting || !_isBoostable)
 		{
 			GD.Print("EARLY EXIT!!!!!!!!!!");
+			DisengageAllParticles();
 			return;
 		}
 
@@ -331,11 +388,25 @@ public partial class Paddle : Area2D
 			GD.Print("RIGHT PARTICLES");
 			EngageLeftParticles();
 		}
-
-		if (Input.IsActionPressed("move_left"))
+		else if (Input.IsActionPressed("move_left"))
 		{
 			GD.Print("LEFT PARTICLES");
 			EngageRightParticles();
+		}
+		else
+		{
+			DisengageAllParticles();
+		}
+	}
+
+	private void SetParticleEmission(Node node, bool isEmitting)
+	{
+		foreach (Node child in node.GetChildren())
+		{
+			if (child is CpuParticles2D cpuParticles)
+			{
+				cpuParticles.Emitting = isEmitting;
+			}
 		}
 	}
 
