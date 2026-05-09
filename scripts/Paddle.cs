@@ -267,7 +267,7 @@ public partial class Paddle : Area2D
 				? DEFAULT_REFUEL_RATE * 0.5f
 				: DEFAULT_REFUEL_RATE;
 
-			GD.Print($"DEFAULT: {DEFAULT_REFUEL_RATE} | RATE: {refuelRate}");
+			// GD.Print($"DEFAULT: {DEFAULT_REFUEL_RATE} | RATE: {refuelRate}");
 
 			if (_canRefuel)
 			{
