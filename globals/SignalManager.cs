@@ -9,7 +9,7 @@ public partial class SignalManager : Node
 	[Signal] public delegate void BoostFuelDepletedEventHandler();
 	[Signal] public delegate void BoostEngagedEventHandler();
 	[Signal] public delegate void BoostDisengagedEventHandler();
-	[Signal] public delegate void ScoredEventHandler();
+	[Signal] public delegate void ScoredEventHandler(Color color);
 
 	public override void _Ready()
 	{
@@ -41,8 +41,8 @@ public partial class SignalManager : Node
 		EmitSignal(SignalName.BoostDisengaged);
 	}
 
-	public void EmitScored()
+	public void EmitScored(Color color)
 	{
-		EmitSignal(SignalName.Scored);
+		EmitSignal(SignalName.Scored, color);
 	}
 }

@@ -21,11 +21,10 @@
 [sub_resource type="LabelSettings" id="LabelSettings_aug50"]
 font = ExtResource("5_s0nni")
 font_size = 32
-font_color = Color(0.9490196, 0.21568628, 0.21568628, 1)
 outline_size = 7
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 6
-shadow_color = Color(0.95686275, 0.44313726, 0.44313726, 1)
+shadow_color = Color(0.6677593, 0.6677593, 0.6677593, 1)
 shadow_offset = Vector2(1.25, 1.25)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2rd6h"]

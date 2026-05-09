@@ -101,7 +101,7 @@ public partial class Gem : Area2D
 	{
 		if (area is Paddle)
 		{
-			SignalManager.Instance.EmitScored();
+			SignalManager.Instance.EmitScored(this.Modulate);
 			QueueFree();
 		}
 	}

@@ -12,6 +12,9 @@ public static partial class Constants
 
   public static class CustomColors
   {
+    // Basic Colors
+    public static readonly string White = "FFFFFF";
+
     // Pastelle Colors
     public static readonly string RedPastelle = "FF8888";
     public static readonly string OrangePastelle = "FFCC88";

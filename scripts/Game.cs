@@ -97,23 +97,42 @@ public partial class Game : Node2D
 			);
 	}
 
-	private void OnScored()
+	private void OnScored(Color color)
 	{
 		IncrementScore(DEFAULT_POINT_VALUE);
 		_scoreSound.Play();
-		UpdateScoreUi();
+		UpdateScoreUi(color);
 	}
 
-	private void UpdateScoreUi()
-	{
-		// Create Tween to update score
-		// start at white
-		// flash to bright white
-		// fade from flash to color of captured gem
-		// will need to pass the gem color to the function
-		// likely need to update the signal function signature
-		_scoreLabel.Text = string.Format("Score: {0:000}", _score);
-	}
+	private void UpdateScoreUi(Color color)
+{
+	_scoreLabel.Text = $"Score: {_score:000}";
+
+	var scaleMultiplier = 1.10f;
+	_scoreLabel.SelfModulate = Colors.White;
+	_scoreLabel.Scale = Vector2.One * scaleMultiplier;
+
+	var tween = CreateTween();
+	var tweenTime = 0.35f;
+
+	tween.SetParallel(true);
+
+	tween.TweenProperty(
+		_scoreLabel,
+		PropertyName.SelfModulate.ToString(),
+		color,
+		tweenTime
+	).SetTrans(Tween.TransitionType.Cubic)
+	 .SetEase(Tween.EaseType.Out);
+
+	tween.TweenProperty(
+		_scoreLabel,
+		PropertyName.Scale.ToString(),
+		Vector2.One,
+		tweenTime
+	).SetTrans(Tween.TransitionType.Back)
+	 .SetEase(Tween.EaseType.Out);
+}
 
 	private void UpdateHealthUi()
 	{
