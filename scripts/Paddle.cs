@@ -48,11 +48,11 @@ public partial class Paddle : Area2D
 		_boostFuel > 0;
 
 	private bool _canRefuel =>
-		_boostFuel < MAX_BOOST_FUEL &&
-		(
-			!(_isTryingToBoost && _boostLockedUntilRelease) 
-			|| (!_isTryingToBoost && _boostLockedUntilRelease)
-		);
+    _boostFuel < MAX_BOOST_FUEL &&
+    !_boostLockedUntilRelease;
+
+	private bool _isInCooldown =>
+    !_boostersReady;
 
 	private Rect2 _viewportBoundary;
 	
@@ -151,20 +151,22 @@ public partial class Paddle : Area2D
   }
 
 	private void OnBoostDisengaged()
-  {
-		if (_boostLockedUntilRelease)
-		{
-			_animator.Play("flashing_warning");
-		 	_boostRefuelTimer.Start();
-			GD.Print("BOOST LOCK RELEASED");
-		}
+{
+    if (_boostLockedUntilRelease)
+    {
+        _boostLockedUntilRelease = false;
 
-		DisengageAllParticles();
-  }
+        _animator.Play("flashing_warning");
+        _boostRefuelTimer.Start();
+
+        GD.Print("BOOST LOCK RELEASED");
+    }
+
+    DisengageAllParticles();
+}
 
 	private void OnRefuelTimeout()
 	{
-		_boostLockedUntilRelease = false;
 		_boostersReady = true;
 
 		// sound effect for "boosters reengaged" (conversely "boosters depleted; cool-down in progress)
@@ -179,12 +181,6 @@ public partial class Paddle : Area2D
 		// play audio announcing fuel depletion
 
 		_animator.Stop();
-
-		// if (!Input.IsActionPressed("boost"))
-		// {
-		// 	_animator.Play("flashing_warning");
-		// 	_boostRefuelTimer.Start();
-		// }
 
 		DisengageAllParticles();
   }
@@ -204,11 +200,6 @@ public partial class Paddle : Area2D
 		var noChangeInPosition = 0;
 		float calculatedMovementSpeed;
 
-		// bool canBoost =
-		// 	Input.IsActionPressed("boost") &&
-		// 	!_boostLockedUntilRelease &&
-		// 	_boostFuel > 0;
-
 		if (_canBoost)
 		{
 			calculatedMovementSpeed = _movementSpeed * _boostMultiplier;
@@ -217,11 +208,6 @@ public partial class Paddle : Area2D
 		{
 			calculatedMovementSpeed = _movementSpeed;
 		}
-
-		// if (Input.IsActionJustReleased("boost"))
-		// {
-		// 	SignalManager.Instance.EmitBoostDisengaged();
-		// }
 
 		if (Input.IsActionPressed("move_right"))
 		{
@@ -265,19 +251,24 @@ public partial class Paddle : Area2D
 		{
 			BurnFuel(delta);
 
-			if (_boostFuel <= 0)
+			if (_boostFuel <= 0 && _boostersReady)
 			{
-				_boostFuel = 0;
-				SignalManager.Instance.EmitBoostFuelDepleted();
+					_boostFuel = 0;
+					SignalManager.Instance.EmitBoostFuelDepleted();
 			}
 		}
-		else if (_canRefuel)
+		else
 		{
 			float refuelRate = _boostLockedUntilRelease
 				? DEFAULT_REFUEL_RATE * 0.5f
 				: DEFAULT_REFUEL_RATE;
 
-			RefuelBoost(delta, refuelRate);
+			GD.Print($"DEFAULT: {DEFAULT_REFUEL_RATE} | RATE: {refuelRate}");
+
+			if (_canRefuel)
+			{
+				RefuelBoost(delta, refuelRate);
+			}
 		}
 
 		HandleFuelConsumptionAnimation();
@@ -305,6 +296,13 @@ public partial class Paddle : Area2D
 
 	private void HandleFuelConsumptionAnimation()
   {
+		if (_isInCooldown)
+    {
+        // TODO: Play cooldown warning animation
+
+        return;
+    }
+
 		var isLowOnFuel = _boostFuel < (int)FuelState.Low;
 
 		if (!isLowOnFuel && _animator.IsPlaying())
@@ -317,7 +315,7 @@ public partial class Paddle : Area2D
 			return;			
 		}
 
-		if (!_boostLockedUntilRelease && _isTryingToBoost && isLowOnFuel)
+		if (_canBoost && isLowOnFuel)
 		{
 			switch (true)
 			{
@@ -382,19 +380,19 @@ public partial class Paddle : Area2D
 	{
 		if (!_canBoost)
 		{
-			GD.Print("EARLY EXIT!!!!!!!!!!");
+			// GD.Print("EARLY EXIT!!!!!!!!!!");
 			DisengageAllParticles();
 			return;
 		}
 
 		if (_canBoost && Input.IsActionPressed("move_right"))
 		{
-			GD.Print("RIGHT PARTICLES");
+			// GD.Print("RIGHT PARTICLES");
 			EngageLeftParticles();
 		}
 		else if (_canBoost && Input.IsActionPressed("move_left"))
 		{
-			GD.Print("LEFT PARTICLES");
+			// GD.Print("LEFT PARTICLES");
 			EngageRightParticles();
 		}
 		else
