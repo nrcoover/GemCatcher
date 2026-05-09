@@ -7,9 +7,10 @@
 radius = 12.0
 height = 104.0
 
-[node name="Paddle" type="Area2D" node_paths=PackedStringArray("_boostRefuelTimer", "_leftParticles", "_rightParticles")]
+[node name="Paddle" type="Area2D" node_paths=PackedStringArray("_debugLogLabel", "_boostRefuelTimer", "_leftParticles", "_rightParticles")]
 modulate = Color(1.224127, 1.224127, 1.224127, 1)
 script = ExtResource("1_6kxou")
+_debugLogLabel = NodePath("DebugLog")
 _boostRefuelTimer = NodePath("BoostRefuelTimer")
 _leftParticles = NodePath("LeftBoostParticles")
 _rightParticles = NodePath("RightBoostParticles")
@@ -155,3 +156,10 @@ shape = SubResource("CapsuleShape2D_6kxou")
 
 [node name="BoostRefuelTimer" type="Timer" parent="."]
 wait_time = 5.0
+
+[node name="DebugLog" type="Label" parent="."]
+offset_left = 57.0
+offset_top = -147.0
+offset_right = 222.0
+offset_bottom = 1.0
+text = "DEGUGGING:"

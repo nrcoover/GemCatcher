@@ -2,6 +2,14 @@ using Godot;
 
 public partial class Paddle : Area2D
 {
+
+	#region Variables - Debugging
+
+	const bool IS_DEBUGGING = true;
+	[Export] Label _debugLogLabel;
+
+	#endregion
+
 	const float MAX_BOOST_FUEL = 100.0f;
 	const float DEFAULT_REFUEL_RATE = 12.5f;
 
@@ -26,20 +34,39 @@ public partial class Paddle : Area2D
 	[Export] private float _boostBurnRate;
 	[Export] private float _boostRefuelRate = 12.5f;
 	private float _boostFuel;
-	private bool _boostDepleted;
-	private bool _isBoostable;
 	private bool _isFullyFueled;
+	private bool _boostLockedUntilRelease;
+	private bool _boostersReady;
 	
 	private bool _isTryingToBoost =>
 	Input.IsActionPressed("boost");
 
 	private bool _canBoost =>
 		_isTryingToBoost &&
-		_isBoostable &&
-		!_boostDepleted &&
+		!_boostLockedUntilRelease &&
+		_boostersReady &&
 		_boostFuel > 0;
 
+	private bool _canRefuel =>
+		_boostFuel < MAX_BOOST_FUEL &&
+		(
+			!(_isTryingToBoost && _boostLockedUntilRelease) 
+			|| (!_isTryingToBoost && _boostLockedUntilRelease)
+		);
+
 	private Rect2 _viewportBoundary;
+	
+  private void HandleDebugLog()
+  {
+    _debugLogLabel.Text = "BEBUGGING: \n"
+			+ $"Fuel: {_boostFuel},\n" 
+			+ $"BoostersReady: {_boostersReady},\n"
+			+ $"CanBoost: {_canBoost},\n"
+			+ $"CanRefuel: {_canRefuel},\n"
+			+ $"Locked: {_boostLockedUntilRelease},\n"
+			+ $"Boosting: {_isTryingToBoost},\n"
+			;
+  }
 
 	public override void _Ready()
 	{
@@ -56,13 +83,18 @@ public partial class Paddle : Area2D
 		HandleFuelConsumption((float)delta);
 		UpdateBoostUi();
 		HandleParticles();
+
+		if (IS_DEBUGGING)
+		{
+			HandleDebugLog();
+		}
 	}
 
   public override void _UnhandledInput(InputEvent @event)
 	{
 		if (@event.IsActionPressed("boost"))
 		{
-			if (_isBoostable && !_boostDepleted)
+			if (_canBoost)
 			{
 				SignalManager.Instance.EmitBoostEngaged();
 			}
@@ -83,8 +115,8 @@ public partial class Paddle : Area2D
   {
 		_viewportBoundary = GetViewportRect();
     _boostFuel = MAX_BOOST_FUEL;
-		_boostDepleted = false;
-		_isBoostable = true;
+		_boostLockedUntilRelease = false;
+		_boostersReady = true;
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
   }
 
@@ -113,29 +145,46 @@ public partial class Paddle : Area2D
 		SignalManager.Instance.BoostDisengaged -= OnBoostDisengaged;
 	}
 
-	private void OnRefuelTimeout()
-	{
-		_isBoostable = true;
-		// sound effect for "boosters reengaged" (conversely "boosters depleted; cool-down in progress)
-	}
-
-	private void OnBoostDisengaged()
-  {
-		DisengageAllParticles();
-  }
-
 	private void OnBoostEngaged()
   {
 		// play boosting sound
   }
 
+	private void OnBoostDisengaged()
+  {
+		if (_boostLockedUntilRelease)
+		{
+			_animator.Play("flashing_warning");
+		 	_boostRefuelTimer.Start();
+			GD.Print("BOOST LOCK RELEASED");
+		}
+
+		DisengageAllParticles();
+  }
+
+	private void OnRefuelTimeout()
+	{
+		_boostLockedUntilRelease = false;
+		_boostersReady = true;
+
+		// sound effect for "boosters reengaged" (conversely "boosters depleted; cool-down in progress)
+	}
+
 	private void OnBoostFuelDepleted()
   {
-    _boostDepleted = true;
-		_isBoostable = false;
-		_boostRefuelTimer.Start();
-		_animator.Play("flashing_warning");
+    _boostFuel = 0;
+		_boostersReady = false; // TODO: WHY NO WORKIE?
+		_boostLockedUntilRelease = true;
+
 		// play audio announcing fuel depletion
+
+		_animator.Stop();
+
+		// if (!Input.IsActionPressed("boost"))
+		// {
+		// 	_animator.Play("flashing_warning");
+		// 	_boostRefuelTimer.Start();
+		// }
 
 		DisengageAllParticles();
   }
@@ -155,13 +204,12 @@ public partial class Paddle : Area2D
 		var noChangeInPosition = 0;
 		float calculatedMovementSpeed;
 
-		bool canBoost =
-			Input.IsActionPressed("boost") &&
-			_isBoostable &&
-			!_boostDepleted &&
-			_boostFuel > 0;
+		// bool canBoost =
+		// 	Input.IsActionPressed("boost") &&
+		// 	!_boostLockedUntilRelease &&
+		// 	_boostFuel > 0;
 
-		if (canBoost)
+		if (_canBoost)
 		{
 			calculatedMovementSpeed = _movementSpeed * _boostMultiplier;
 		}
@@ -170,10 +218,10 @@ public partial class Paddle : Area2D
 			calculatedMovementSpeed = _movementSpeed;
 		}
 
-		if (Input.IsActionJustReleased("boost"))
-		{
-			SignalManager.Instance.EmitBoostDisengaged();
-		}
+		// if (Input.IsActionJustReleased("boost"))
+		// {
+		// 	SignalManager.Instance.EmitBoostDisengaged();
+		// }
 
 		if (Input.IsActionPressed("move_right"))
 		{
@@ -211,34 +259,25 @@ public partial class Paddle : Area2D
 	
 	private void HandleFuelConsumption(float delta)
 	{
-		_boostDepleted = _boostFuel <= 0;
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
 
-		var isBurningFuel = _canBoost;
-		var isRunningOnFumes = _isTryingToBoost && _boostDepleted;
-		var isReadyForRefueling = !isBurningFuel && !_isFullyFueled;
-
-		switch (true)
+		if (_canBoost)
 		{
-			case true when isBurningFuel:
-				BurnFuel(delta);
-				break;
+			BurnFuel(delta);
 
-			case true when isRunningOnFumes:
+			if (_boostFuel <= 0)
+			{
+				_boostFuel = 0;
 				SignalManager.Instance.EmitBoostFuelDepleted();
-				break;
+			}
+		}
+		else if (_canRefuel)
+		{
+			float refuelRate = _boostLockedUntilRelease
+				? DEFAULT_REFUEL_RATE * 0.5f
+				: DEFAULT_REFUEL_RATE;
 
-			case true when isReadyForRefueling:
-				if (!_isBoostable)
-				{
-					var impedenceMultiplier = .5f;
-					RefuelBoost(delta, DEFAULT_REFUEL_RATE * impedenceMultiplier);
-				}
-				else
-				{
-					RefuelBoost(delta);
-				}
-				break;
+			RefuelBoost(delta, refuelRate);
 		}
 
 		HandleFuelConsumptionAnimation();
@@ -278,7 +317,7 @@ public partial class Paddle : Area2D
 			return;			
 		}
 
-		if (_isBoostable && _isTryingToBoost && isLowOnFuel)
+		if (!_boostLockedUntilRelease && _isTryingToBoost && isLowOnFuel)
 		{
 			switch (true)
 			{
@@ -307,7 +346,7 @@ public partial class Paddle : Area2D
 					break;
 			}
 		} 
-		else if (_isBoostable && !_isTryingToBoost && isLowOnFuel)
+		else if (!_boostLockedUntilRelease && !_isTryingToBoost && isLowOnFuel)
 		{
 			if (_animator.CurrentAnimation != Constants.Animations.RefuelingYellow)
 			{
@@ -317,7 +356,11 @@ public partial class Paddle : Area2D
 		}
   }
 
-	private void EngageRightParticles()
+#endregion
+
+#region Manage Particle System
+
+		private void EngageRightParticles()
 	{
 		SetParticleEmission(_leftParticles, false);
 		SetParticleEmission(_rightParticles, true);
@@ -370,7 +413,7 @@ public partial class Paddle : Area2D
 			}
 		}
 	}
-
+	
 #endregion
 
 #region UI UPdates
