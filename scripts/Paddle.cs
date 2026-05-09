@@ -37,6 +37,7 @@ public partial class Paddle : Area2D
 	private bool _isFullyFueled;
 	private bool _boostLockedUntilRelease;
 	private bool _boostersReady;
+	private bool _isInCooldown;
 	
 	private bool _isTryingToBoost =>
 	Input.IsActionPressed("boost");
@@ -51,9 +52,6 @@ public partial class Paddle : Area2D
     _boostFuel < MAX_BOOST_FUEL &&
     !_boostLockedUntilRelease;
 
-	private bool _isInCooldown =>
-    !_boostersReady;
-
 	private Rect2 _viewportBoundary;
 	
   private void HandleDebugLog()
@@ -63,6 +61,7 @@ public partial class Paddle : Area2D
 			+ $"BoostersReady: {_boostersReady},\n"
 			+ $"CanBoost: {_canBoost},\n"
 			+ $"CanRefuel: {_canRefuel},\n"
+			+ $"InCooldown: {_isInCooldown},\n"
 			+ $"Locked: {_boostLockedUntilRelease},\n"
 			+ $"Boosting: {_isTryingToBoost},\n"
 			;
@@ -118,6 +117,7 @@ public partial class Paddle : Area2D
 		_boostLockedUntilRelease = false;
 		_boostersReady = true;
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
+		_isInCooldown = false;
   }
 
 	private void ResetParticleSystems()
@@ -150,40 +150,44 @@ public partial class Paddle : Area2D
 		// play boosting sound
   }
 
-	private void OnBoostDisengaged()
-{
-    if (_boostLockedUntilRelease)
-    {
-        _boostLockedUntilRelease = false;
+	private void OnBoostDisengaged() 
+	{
+		if (_boostLockedUntilRelease)
+		{
+			_boostLockedUntilRelease = false;
+			_isInCooldown = true;
 
-        _animator.Play("flashing_warning");
-        _boostRefuelTimer.Start();
+			_animator.Play("flashing_warning");
+			_boostRefuelTimer.Start();
 
-        GD.Print("BOOST LOCK RELEASED");
-    }
+			GD.Print("BOOST LOCK RELEASED");
+		}
 
-    DisengageAllParticles();
-}
+		DisengageAllParticles();
+	}
 
 	private void OnRefuelTimeout()
 	{
 		_boostersReady = true;
+		_isInCooldown = false;
 
 		// sound effect for "boosters reengaged" (conversely "boosters depleted; cool-down in progress)
 	}
 
 	private void OnBoostFuelDepleted()
-  {
-    _boostFuel = 0;
-		_boostersReady = false; // TODO: WHY NO WORKIE?
+	{
+		_boostFuel = 0;
+
+		_boostersReady = false;
 		_boostLockedUntilRelease = true;
+		_isInCooldown = false;
 
 		// play audio announcing fuel depletion
 
 		_animator.Stop();
 
 		DisengageAllParticles();
-  }
+	}
 
 #endregion
   
@@ -259,7 +263,7 @@ public partial class Paddle : Area2D
 		}
 		else
 		{
-			float refuelRate = _boostLockedUntilRelease
+			float refuelRate = _isInCooldown
 				? DEFAULT_REFUEL_RATE * 0.5f
 				: DEFAULT_REFUEL_RATE;
 
@@ -298,7 +302,7 @@ public partial class Paddle : Area2D
   {
 		if (_isInCooldown)
     {
-        // TODO: Play cooldown warning animation
+        // TODO: Play alternative animation (not made yet...)
 
         return;
     }
