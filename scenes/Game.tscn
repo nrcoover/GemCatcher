@@ -1,9 +1,10 @@
-[gd_scene load_steps=30 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=31 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/GameBg.png" id="1_ibkli"]
 [ext_resource type="PackedScene" uid="uid://3kq5fr5oomem" path="res://scenes/Paddle.tscn" id="2_qbsmt"]
 [ext_resource type="PackedScene" uid="uid://8m2y1u6noqq5" path="res://scenes/Gem.tscn" id="3_cpr0p"]
+[ext_resource type="PackedScene" uid="uid://d2eah2eim18xg" path="res://scenes/Camera.tscn" id="3_kyk2p"]
 [ext_resource type="PackedScene" uid="uid://cq8skradygbr0" path="res://scenes/MotionBackdrop.tscn" id="4_vjgi4"]
 [ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/Play-Regular.ttf" id="5_s0nni"]
 [ext_resource type="PackedScene" uid="uid://caewt57tbc7r5" path="res://scenes/HeartFaded.tscn" id="6_aug50"]
@@ -429,8 +430,9 @@ _data = {
 &"yellow_warning_level_3": SubResource("Animation_sv1m6")
 }
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_gemContainer", "_scoreLabel", "_explosion", "_scoreSound", "_hurtSound", "_heart1", "_heart2", "_heart3")]
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_gemSpawnTimer", "_gemContainer", "_scoreLabel", "_explosion", "_scoreSound", "_hurtSound", "_heart1", "_heart2", "_heart3")]
 script = ExtResource("1_78awf")
+_camera = NodePath("Camera2D")
 _gemScene = ExtResource("3_cpr0p")
 _gemSpawnTimer = NodePath("GemSpawnTimer")
 _gemContainer = NodePath("GemContainer")
@@ -441,6 +443,10 @@ _hurtSound = NodePath("HurtSound")
 _heart1 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart1Faded/Heart1Full")
 _heart2 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart2Faded/Heart2Full")
 _heart3 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart3Faded/Heart3Full")
+_shakeIntensity = 30
+_shakeTime = 0.25
+
+[node name="Camera2D" parent="." instance=ExtResource("3_kyk2p")]
 
 [node name="Background" type="Sprite2D" parent="."]
 modulate = Color(1.0656178, 1.2172825, 1.3689471, 1)

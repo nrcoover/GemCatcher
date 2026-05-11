@@ -12,6 +12,7 @@ public partial class Game : Node2D
 		Dead = 0
 	}
 
+	[Export] private Camera _camera;
 	[Export] private PackedScene _gemScene;
 	[Export] private Timer _gemSpawnTimer;
 	[Export] private Node _gemContainer;
@@ -24,6 +25,9 @@ public partial class Game : Node2D
 	[Export] private Node2D _heart1;
 	[Export] private Node2D _heart2;
 	[Export] private Node2D _heart3;
+
+	[Export] private int _shakeIntensity;
+	[Export] private float _shakeTime;
 
 	private int _score = 0;
 
@@ -172,6 +176,7 @@ public partial class Game : Node2D
 	{
 		GameManager.Instance.IncrementMissedGems();
 		_hurtSound.Play();
+		_camera.ScreenShake(_shakeIntensity, _shakeTime);
 		UpdateHealthUi();
 	}
 
