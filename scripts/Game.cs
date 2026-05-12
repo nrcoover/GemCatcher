@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class Game : Node2D
@@ -26,6 +27,8 @@ public partial class Game : Node2D
 	[Export] private int _shakeIntensity;
 	[Export] private float _shakeTime;
 
+	private Tween _colorScaleTween;
+
 	private int _score = 0;
 
 	public override void _Ready()
@@ -48,6 +51,8 @@ public partial class Game : Node2D
 
 	public async void OnInitiateDeathSequenceAsync()
 	{
+		_colorScaleTween.Kill();
+
 		GetTree().Paused = true;
 		await ToSignal(GetTree().CreateTimer(1.0f), SceneTreeTimer.SignalName.Timeout);
 		_explosion.Play();
@@ -93,12 +98,17 @@ public partial class Game : Node2D
 		_scoreLabel.SelfModulate = Colors.White;
 		_scoreLabel.Scale = Vector2.One * scaleMultiplier;
 
-		var tween = CreateTween();
+		CreateColorScaleTween(color);
+	}
+
+  private void CreateColorScaleTween(Color color)
+  {
+    _colorScaleTween = CreateTween();
 		var tweenTime = 0.35f;
 
-		tween.SetParallel(true);
+		_colorScaleTween.SetParallel(true);
 
-		tween.TweenProperty(
+		_colorScaleTween.TweenProperty(
 			_scoreLabel,
 			PropertyName.SelfModulate.ToString(),
 			color,
@@ -106,16 +116,16 @@ public partial class Game : Node2D
 		).SetTrans(Tween.TransitionType.Cubic)
 		.SetEase(Tween.EaseType.Out);
 
-		tween.TweenProperty(
+		_colorScaleTween.TweenProperty(
 			_scoreLabel,
 			PropertyName.Scale.ToString(),
 			Vector2.One,
 			tweenTime
 		).SetTrans(Tween.TransitionType.Back)
 		.SetEase(Tween.EaseType.Out);
-	}
+  }
 
-	private void UpdateHealthUi()
+  private void UpdateHealthUi()
 	{
 		var currentHealth = GameManager.Instance.GetHealth();
 

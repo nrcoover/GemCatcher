@@ -38,6 +38,8 @@ public partial class Paddle : Area2D
 	private bool _boostLockedUntilRelease;
 	private bool _boostersReady;
 	private bool _isInCooldown;
+
+	private Tween _colorScaleTween;
 	
 	private bool _isTryingToBoost =>
 	Input.IsActionPressed("boost");
@@ -136,6 +138,8 @@ public partial class Paddle : Area2D
 		SignalManager.Instance.BoostFuelDepleted += OnBoostFuelDepleted;
 		SignalManager.Instance.BoostEngaged += OnBoostEngaged;
 		SignalManager.Instance.BoostDisengaged += OnBoostDisengaged;
+		SignalManager.Instance.Scored += OnScored;
+		SignalManager.Instance.GameOver += OnGameOver;
 	}
 
   private void UnsubscribeFromSignals()
@@ -143,6 +147,7 @@ public partial class Paddle : Area2D
 		SignalManager.Instance.BoostFuelDepleted -= OnBoostFuelDepleted;
 		SignalManager.Instance.BoostEngaged -= OnBoostEngaged;
 		SignalManager.Instance.BoostDisengaged -= OnBoostDisengaged;
+		SignalManager.Instance.Scored -= OnScored;
 	}
 
 	private void OnBoostEngaged()
@@ -188,6 +193,21 @@ public partial class Paddle : Area2D
 
 		DisengageAllParticles();
 	}
+
+	private void OnScored(Color color)
+  {
+    CreateColorScaleTweenAsync(color);
+  }
+	
+  private void OnGameOver()
+  {
+		if (_colorScaleTween == null)
+		{
+			return;
+		}
+		
+    _colorScaleTween.Kill();
+  }
 
 #endregion
   
@@ -432,4 +452,53 @@ public partial class Paddle : Area2D
 	}
 
 #endregion
+
+	private async void CreateColorScaleTweenAsync(Color color)
+	{
+		var tweenTime = 0.25f;
+		var originalScale = Scale;
+		var scaleMultiplier = 1.15f;
+
+		_colorScaleTween = CreateTween();
+
+		_colorScaleTween.SetParallel(true);
+
+		_colorScaleTween.TweenProperty(
+			this,
+			PropertyName.Modulate.ToString(),
+			color,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Cubic)
+		.SetEase(Tween.EaseType.Out);
+
+		_colorScaleTween.TweenProperty(
+			this,
+			PropertyName.Scale.ToString(),
+			originalScale * scaleMultiplier,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Back)
+		.SetEase(Tween.EaseType.Out);
+
+		await ToSignal(_colorScaleTween, Tween.SignalName.Finished);
+
+		_colorScaleTween = CreateTween();
+
+		_colorScaleTween.SetParallel(true);
+
+		_colorScaleTween.TweenProperty(
+			this,
+			PropertyName.Modulate.ToString(),
+			Colors.White,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Cubic)
+		.SetEase(Tween.EaseType.Out);
+
+		_colorScaleTween.TweenProperty(
+			this,
+			PropertyName.Scale.ToString(),
+			originalScale,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Back)
+		.SetEase(Tween.EaseType.Out);
+	}
 }
