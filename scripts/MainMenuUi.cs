@@ -21,12 +21,12 @@ public partial class MainMenuUi : Control
 
 	private void InitializeTitleColors()
 	{
-		_titleLayer1.Modulate = new Color(Constants.CustomColors.PurpleBright);
-		_titleLayer2.Modulate = Color.FromString(Constants.CustomColors.BlueBright, Colors.White);
-		_titleLayer3.Modulate = Color.FromString(Constants.CustomColors.GreenBright, Colors.White);
-		_titleLayer4.Modulate = Color.FromString(Constants.CustomColors.YellowBright, Colors.White);
-		_titleLayer5.Modulate = Color.FromString(Constants.CustomColors.OrangeBright, Colors.White);
-		_titleLayer6.Modulate = Color.FromString(Constants.CustomColors.RedBright, Colors.White);
+		_titleLayer1.Modulate = new Color(Constants.CustomColors.PurplePastelle);
+		_titleLayer2.Modulate = new Color(Constants.CustomColors.BluePastelle);
+		_titleLayer3.Modulate = new Color(Constants.CustomColors.GreenPastelle);
+		_titleLayer4.Modulate = new Color(Constants.CustomColors.YellowPastelle);
+		_titleLayer5.Modulate = new Color(Constants.CustomColors.OrangePastelle);
+		_titleLayer6.Modulate = new Color(Constants.CustomColors.RedPastelle);
 	}
 
   private void OnPlayClicked()
