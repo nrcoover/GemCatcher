@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://2sfkess71hko"]
+
+[ext_resource type="LabelSettings" uid="uid://chgj4ustuw6f4" path="res://resources/play_alpha_96_font.tres" id="1_5i6ao"]
+[ext_resource type="LabelSettings" uid="uid://duqwjryppltkm" path="res://resources/play_white_96_font.tres" id="2_moeti"]
+
+[node name="TitleAlpha" type="Label"]
+offset_left = -332.0
+offset_right = 331.0
+offset_bottom = 112.0
+scale = Vector2(1.0186015, 1)
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 96
+text = "GEM CATCHER"
+label_settings = ExtResource("1_5i6ao")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TitleWhite" type="Label" parent="."]
+layout_mode = 0
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 655.0
+offset_bottom = 104.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 96
+text = "GEM CATCHER"
+label_settings = ExtResource("2_moeti")
+horizontal_alignment = 1
+vertical_alignment = 1
