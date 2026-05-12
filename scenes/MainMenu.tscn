@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://cr3xrjvpb4sfi"]
+[gd_scene load_steps=7 format=3 uid="uid://cr3xrjvpb4sfi"]
 
 [ext_resource type="Script" uid="uid://qlppeaoc1bfl" path="res://scripts/MainMenu.cs" id="1_826wr"]
 [ext_resource type="PackedScene" uid="uid://b25aayi7r7oav" path="res://scenes/MenuPaddle.tscn" id="2_ucygd"]
 [ext_resource type="PackedScene" uid="uid://cq8skradygbr0" path="res://scenes/MotionBackdrop.tscn" id="3_826wr"]
+[ext_resource type="PackedScene" uid="uid://bbrkr3etn88hu" path="res://scenes/GemSpawner.tscn" id="4_826wr"]
 [ext_resource type="PackedScene" uid="uid://cubv40p7fxyh5" path="res://scenes/MainMenuUi.tscn" id="4_ow34m"]
 [ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/bgm_action_5.mp3" id="5_l72w3"]
 
@@ -12,6 +13,8 @@ Paddle = ExtResource("2_ucygd")
 
 [node name="MotionBackdrop" parent="." instance=ExtResource("3_826wr")]
 _useBackgroundOverride = true
+
+[node name="GemSpawner" parent="." instance=ExtResource("4_826wr")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

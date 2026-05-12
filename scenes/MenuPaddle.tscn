@@ -8,11 +8,15 @@ radius = 12.0
 height = 104.0
 
 [node name="Paddle" type="Area2D"]
+modulate = Color(1.224127, 1.224127, 1.224127, 1)
 script = ExtResource("1_otq3i")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 10
+z_as_relative = false
 texture = ExtResource("2_4kfjo")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_6kxou")
