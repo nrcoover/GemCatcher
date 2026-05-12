@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://cq8skradygbr0"]
+[gd_scene load_steps=10 format=3 uid="uid://cq8skradygbr0"]
 
 [ext_resource type="Script" uid="uid://bj7ab0dvyiw7p" path="res://scenes/MotionBackdrop.cs" id="1_8a1xo"]
 [ext_resource type="Texture2D" uid="uid://caub2q4sy25lg" path="res://assets/pexels-tobias-eicher-2160223093-36575402.jpg" id="1_wrp1p"]
 [ext_resource type="Texture2D" uid="uid://0jynaad8qky5" path="res://assets/pexels-daniel-cid-634838605-17505904.jpg" id="2_vx43d"]
 [ext_resource type="Texture2D" uid="uid://dqbf81ktbqacl" path="res://assets/pexels-marek-pavlik-1929759405-37269552.jpg" id="3_tw1rg"]
 [ext_resource type="Texture2D" uid="uid://nf2qvl6dlh2j" path="res://assets/pexels-daniel-cid-634838605-17505896.jpg" id="3_vx43d"]
+[ext_resource type="Texture2D" uid="uid://gbrtmcmj1eki" path="res://assets/pexels-jarod-8408709.jpg" id="6_yp3j7"]
 
 [sub_resource type="Animation" id="Animation_wrp1p"]
 length = 0.001
@@ -56,12 +57,24 @@ tracks/3/keys = {
 "update": 0,
 "values": [0.0]
 }
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../BackgroundOverride:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [-3.1415925]
+}
 
 [sub_resource type="Animation" id="Animation_8ud4o"]
 resource_name = "sway"
 length = 40.0
 loop_mode = 1
-step = 0.5
+step = 10.0
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -69,7 +82,7 @@ tracks/0/path = NodePath(".:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 10, 20.125, 30.125, 40),
+"times": PackedFloat32Array(0, 10, 20, 30, 40),
 "transitions": PackedFloat32Array(0.5, 1, 1, 0.5, 0.5),
 "update": 0,
 "values": [0.0, -0.06981317007977318, 0.0, 0.06981317007977318, 0.0]
@@ -81,7 +94,7 @@ tracks/1/path = NodePath("../StarsBackground2:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 10, 20, 30, 39.875),
+"times": PackedFloat32Array(0, 10, 20, 30, 40),
 "transitions": PackedFloat32Array(1, 1, 1, 0.5, 0.5),
 "update": 0,
 "values": [0.0, -0.06981317007977318, 0.0, 0.06981317007977318, 0.0]
@@ -93,7 +106,7 @@ tracks/2/path = NodePath("../StarsBackground3:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 10, 20, 30, 39.875),
+"times": PackedFloat32Array(0, 10, 20, 30, 40),
 "transitions": PackedFloat32Array(1, 1, 1, 0.5, 0.5),
 "update": 0,
 "values": [0.0, -0.06981317007977318, 0.0, 0.06981317007977318, 0.0]
@@ -105,10 +118,22 @@ tracks/3/path = NodePath("../StarsBackground4:rotation")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 10, 20, 30, 39.875),
+"times": PackedFloat32Array(0, 10, 20, 30, 40),
 "transitions": PackedFloat32Array(1, 1, 1, 0.5, 0.5),
 "update": 0,
 "values": [0.0, -0.06981317007977318, 0.0, 0.06981317007977318, 0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../BackgroundOverride:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 10, 20, 30, 40),
+"transitions": PackedFloat32Array(1, 1, 1, 0.5, 0.5),
+"update": 0,
+"values": [-3.1415925, -3.2114058236695664, -3.141592653589793, -3.07177948351002, -3.141592653589793]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_vx43d"]
@@ -117,8 +142,9 @@ _data = {
 &"sway": SubResource("Animation_8ud4o")
 }
 
-[node name="MotionBackdrop" type="Node2D" node_paths=PackedStringArray("_background1", "_background2", "_background3", "_background4")]
+[node name="MotionBackdrop" type="Node2D" node_paths=PackedStringArray("_backgroundOverride", "_background1", "_background2", "_background3", "_background4")]
 script = ExtResource("1_8a1xo")
+_backgroundOverride = NodePath("BackgroundOverride")
 _background1 = NodePath("StarsBackground1")
 _background2 = NodePath("StarsBackground2")
 _background3 = NodePath("StarsBackground3")
@@ -155,6 +181,17 @@ scale = Vector2(0.20162039, 0.20162037)
 texture = ExtResource("3_tw1rg")
 centered = false
 offset = Vector2(-3884.0015, -2105.4102)
+
+[node name="BackgroundOverride" type="Sprite2D" parent="."]
+modulate = Color(0.55815613, 0.55815613, 0.55815613, 1)
+position = Vector2(576, 323.99997)
+rotation = -3.1415925
+scale = Vector2(0.2988031, 0.29880303)
+texture = ExtResource("6_yp3j7")
+centered = false
+offset = Vector2(-2302.52, -1700.1167)
+flip_h = true
+flip_v = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../StarsBackground1")

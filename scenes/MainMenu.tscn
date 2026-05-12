@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://cr3xrjvpb4sfi"]
 
 [ext_resource type="Script" uid="uid://qlppeaoc1bfl" path="res://scripts/MainMenu.cs" id="1_826wr"]
-[ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/GameBg.png" id="1_yqorp"]
 [ext_resource type="PackedScene" uid="uid://b25aayi7r7oav" path="res://scenes/MenuPaddle.tscn" id="2_ucygd"]
+[ext_resource type="PackedScene" uid="uid://cq8skradygbr0" path="res://scenes/MotionBackdrop.tscn" id="3_826wr"]
 [ext_resource type="PackedScene" uid="uid://cubv40p7fxyh5" path="res://scenes/MainMenuUi.tscn" id="4_ow34m"]
 [ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/bgm_action_5.mp3" id="5_l72w3"]
 
@@ -10,14 +10,8 @@
 script = ExtResource("1_826wr")
 Paddle = ExtResource("2_ucygd")
 
-[node name="Background" type="Sprite2D" parent="."]
-position = Vector2(2206.0002, -256)
-rotation = 1.5707964
-scale = Vector2(2.4019992, 2.4019992)
-texture = ExtResource("1_yqorp")
-centered = false
-flip_h = true
-flip_v = true
+[node name="MotionBackdrop" parent="." instance=ExtResource("3_826wr")]
+_useBackgroundOverride = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

@@ -2,10 +2,12 @@ using Godot;
 
 public partial class MotionBackdrop : Node2D
 {
+	[Export] Sprite2D _backgroundOverride;
 	[Export] Sprite2D _background1;
 	[Export] Sprite2D _background2;
 	[Export] Sprite2D _background3;
 	[Export] Sprite2D _background4;
+	[Export] bool _useBackgroundOverride;
 
 	public override void _Ready()
 	{
@@ -20,29 +22,42 @@ public partial class MotionBackdrop : Node2D
 
 		var randonInteger = Helper.GetRandomInt(randomMin, randomMax) % randomMax;
 
-		switch (randonInteger)
+		if (_useBackgroundOverride)
 		{
-			case 0:
-				ShowBackground1();
-				break;
-			case 1:
-				ShowBackground2();
-				break;
-			case 2:
-				ShowBackground3();
-				break;
-			case 3:
-				ShowBackground4();
-				break;
+			ShowBackgroundOverride();
+		}
+		else
+		{
+			switch (randonInteger)
+			{
+				case 0:
+					ShowBackground1();
+					break;
+				case 1:
+					ShowBackground2();
+					break;
+				case 2:
+					ShowBackground3();
+					break;
+				case 3:
+					ShowBackground4();
+					break;
+			}
 		}
 	}
 
 	private void HideAllBackgrounds()
 	{
+		_backgroundOverride.Hide();
 		_background1.Hide();
 		_background2.Hide();
 		_background3.Hide();
 		_background4.Hide();
+	}
+
+	private void ShowBackgroundOverride()
+	{
+		_backgroundOverride.Show();
 	}
 
 	private void ShowBackground1()
