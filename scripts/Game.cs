@@ -13,9 +13,6 @@ public partial class Game : Node2D
 	}
 
 	[Export] private Camera _camera;
-	[Export] private PackedScene _gemScene;
-	[Export] private Timer _gemSpawnTimer;
-	[Export] private Node _gemContainer;
 	[Export] private Label _scoreLabel;
 
 	[Export] private AudioStreamPlayer _explosion;
@@ -33,7 +30,6 @@ public partial class Game : Node2D
 
 	public override void _Ready()
 	{
-		SpawnGem();
 		SubscribeToSignals();
 	}
 
@@ -63,14 +59,15 @@ public partial class Game : Node2D
 
 	private void SubscribeToSignals()
 	{
-		_gemSpawnTimer.Timeout += SpawnGem;
 		SignalManager.Instance.InitiateDeathSequence += OnInitiateDeathSequenceAsync;
 		SignalManager.Instance.Scored += OnScored;
+		SignalManager.Instance.GemOffScreen += OnGemOffScreen;
 	}
 
 	private void UnsubscribeFromSignals() {
 		SignalManager.Instance.InitiateDeathSequence -= OnInitiateDeathSequenceAsync;
 		SignalManager.Instance.Scored -= OnScored;
+		SignalManager.Instance.GemOffScreen -= OnGemOffScreen;
 	}
 
 	private void HandleEscape()
@@ -81,26 +78,6 @@ public partial class Game : Node2D
 		}
 	}
 
-	private void SpawnGem()
-	{
-		var gem = (Gem)_gemScene.Instantiate();
-		_gemContainer.AddChild(gem);
-
-		gem.OnGemOffScreen += OnGemOffScreen;
-
-		var margin = 85;
-
-		var xBoundaryCoordinate = Helper.GetRandomFloat(
-				GetViewportRect().Position.X + margin, 
-				GetViewportRect().End.X - margin
-			);
-
-		gem.Position = new Vector2(
-				xBoundaryCoordinate,
-				-margin
-			);
-	}
-
 	private void OnScored(Color color)
 	{
 		IncrementScore(DEFAULT_POINT_VALUE);
@@ -109,34 +86,34 @@ public partial class Game : Node2D
 	}
 
 	private void UpdateScoreUi(Color color)
-{
-	_scoreLabel.Text = $"Score: {_score:000}";
+	{
+		_scoreLabel.Text = $"Score: {_score:000}";
 
-	var scaleMultiplier = 1.10f;
-	_scoreLabel.SelfModulate = Colors.White;
-	_scoreLabel.Scale = Vector2.One * scaleMultiplier;
+		var scaleMultiplier = 1.10f;
+		_scoreLabel.SelfModulate = Colors.White;
+		_scoreLabel.Scale = Vector2.One * scaleMultiplier;
 
-	var tween = CreateTween();
-	var tweenTime = 0.35f;
+		var tween = CreateTween();
+		var tweenTime = 0.35f;
 
-	tween.SetParallel(true);
+		tween.SetParallel(true);
 
-	tween.TweenProperty(
-		_scoreLabel,
-		PropertyName.SelfModulate.ToString(),
-		color,
-		tweenTime
-	).SetTrans(Tween.TransitionType.Cubic)
-	 .SetEase(Tween.EaseType.Out);
+		tween.TweenProperty(
+			_scoreLabel,
+			PropertyName.SelfModulate.ToString(),
+			color,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Cubic)
+		.SetEase(Tween.EaseType.Out);
 
-	tween.TweenProperty(
-		_scoreLabel,
-		PropertyName.Scale.ToString(),
-		Vector2.One,
-		tweenTime
-	).SetTrans(Tween.TransitionType.Back)
-	 .SetEase(Tween.EaseType.Out);
-}
+		tween.TweenProperty(
+			_scoreLabel,
+			PropertyName.Scale.ToString(),
+			Vector2.One,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Back)
+		.SetEase(Tween.EaseType.Out);
+	}
 
 	private void UpdateHealthUi()
 	{

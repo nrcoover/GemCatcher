@@ -12,8 +12,6 @@ public partial class Gem : Area2D
 	[Export] float _minScaleVariation = 0.5f;
 	[Export] float _maxScaleVariation = 0.75f;
 
-	[Signal] public delegate void OnGemOffScreenEventHandler();
-
 	private Color _color;
 	private bool _isOffScreen = false;
 	private float _speedVariation;
@@ -53,7 +51,7 @@ public partial class Gem : Area2D
 		if (Position.Y > GetViewportRect().End.Y)
 		{
 			_isOffScreen = true;
-			EmitSignal(SignalName.OnGemOffScreen);
+			SignalManager.Instance.EmitGemOffScreen();
 		}
 	}
 

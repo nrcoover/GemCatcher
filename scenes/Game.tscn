@@ -3,11 +3,11 @@
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/GameBg.png" id="1_ibkli"]
 [ext_resource type="PackedScene" uid="uid://3kq5fr5oomem" path="res://scenes/Paddle.tscn" id="2_qbsmt"]
-[ext_resource type="PackedScene" uid="uid://8m2y1u6noqq5" path="res://scenes/Gem.tscn" id="3_cpr0p"]
 [ext_resource type="PackedScene" uid="uid://d2eah2eim18xg" path="res://scenes/Camera.tscn" id="3_kyk2p"]
 [ext_resource type="PackedScene" uid="uid://cq8skradygbr0" path="res://scenes/MotionBackdrop.tscn" id="4_vjgi4"]
 [ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/Play-Regular.ttf" id="5_s0nni"]
 [ext_resource type="PackedScene" uid="uid://caewt57tbc7r5" path="res://scenes/HeartFaded.tscn" id="6_aug50"]
+[ext_resource type="PackedScene" uid="uid://bbrkr3etn88hu" path="res://scenes/GemSpawner.tscn" id="6_kyk2p"]
 [ext_resource type="PackedScene" uid="uid://ci18yyqg2giqu" path="res://scenes/Heart.tscn" id="7_kiw3p"]
 [ext_resource type="StyleBox" uid="uid://7wqdduovmlnj" path="res://resources/ui/left_progress_bar.tres" id="8_2rd6h"]
 [ext_resource type="LabelSettings" uid="uid://bvp27oyhve2cn" path="res://resources/play_white_16_font_normal.tres" id="8_7ua8r"]
@@ -430,12 +430,9 @@ _data = {
 &"yellow_warning_level_3": SubResource("Animation_sv1m6")
 }
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_gemSpawnTimer", "_gemContainer", "_scoreLabel", "_explosion", "_scoreSound", "_hurtSound", "_heart1", "_heart2", "_heart3")]
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_explosion", "_scoreSound", "_hurtSound", "_heart1", "_heart2", "_heart3")]
 script = ExtResource("1_78awf")
 _camera = NodePath("Camera2D")
-_gemScene = ExtResource("3_cpr0p")
-_gemSpawnTimer = NodePath("GemSpawnTimer")
-_gemContainer = NodePath("GemContainer")
 _scoreLabel = NodePath("CanvasLayer/MarginContainer/ScoreLabel")
 _explosion = NodePath("Explosion")
 _scoreSound = NodePath("ScoreSound")
@@ -485,11 +482,7 @@ _animator = NodePath("../AnimationPlayer")
 _progressBarLeft = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft")
 _progressBarRight = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight")
 
-[node name="GemContainer" type="Node" parent="."]
-
-[node name="GemSpawnTimer" type="Timer" parent="."]
-wait_time = 1.75
-autostart = true
+[node name="GemSpawner" parent="." instance=ExtResource("6_kyk2p")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
