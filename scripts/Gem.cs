@@ -101,6 +101,9 @@ public partial class Gem : Area2D
 		{
 			SignalManager.Instance.EmitScored(this.Modulate);
 			QueueFree();
+		} else if (area is MenuPaddle)
+		{
+			QueueFree();
 		}
 	}
 

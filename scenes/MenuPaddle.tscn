@@ -7,7 +7,7 @@
 radius = 12.0
 height = 104.0
 
-[node name="Paddle" type="Area2D"]
+[node name="MenuPaddle" type="Area2D"]
 modulate = Color(1.224127, 1.224127, 1.224127, 1)
 script = ExtResource("1_otq3i")
 

@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class MenuPaddle : Area2D
@@ -16,16 +17,34 @@ public partial class MenuPaddle : Area2D
 	private Marker2D _markerRight;
 	private int _direction = 1;
 
+	private Tween _colorScaleTween;
+
 	public override void _Ready()
 	{
 		InstantiateVariables();
 		SetProperties();
 		InstantiateMarkers();
+		SubscribeToSignals();
 	}
 
-	public override void _Process(double delta)
+  public override void _Process(double delta)
 	{
 		HandlePaddleMovement((float)delta);
+	}
+
+  public override void _ExitTree()
+  {
+    _colorScaleTween.Kill();
+  }
+	
+  private void SubscribeToSignals()
+  {
+    AreaEntered += OnAreaEntered;
+  }
+
+	private void OnAreaEntered(Area2D area)
+	{
+		CreateColorScaleTweenAsync(area.Modulate);
 	}
 
 	private void InstantiateVariables()
@@ -75,5 +94,54 @@ public partial class MenuPaddle : Area2D
 		}
 
 		Position += new Vector2(_direction * _movementSpeed * delta, 0);
+	}
+
+	private async void CreateColorScaleTweenAsync(Color color)
+	{
+		var tweenTime = 0.25f;
+		var originalScale = Scale;
+		var scaleMultiplier = 1.15f;
+
+		_colorScaleTween = CreateTween();
+
+		_colorScaleTween.SetParallel(true);
+
+		_colorScaleTween.TweenProperty(
+			this,
+			PropertyName.Modulate.ToString(),
+			color,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Cubic)
+		.SetEase(Tween.EaseType.Out);
+
+		_colorScaleTween.TweenProperty(
+			this,
+			PropertyName.Scale.ToString(),
+			originalScale * scaleMultiplier,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Back)
+		.SetEase(Tween.EaseType.Out);
+
+		await ToSignal(_colorScaleTween, Tween.SignalName.Finished);
+
+		_colorScaleTween = CreateTween();
+
+		_colorScaleTween.SetParallel(true);
+
+		_colorScaleTween.TweenProperty(
+			this,
+			PropertyName.Modulate.ToString(),
+			Colors.White,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Cubic)
+		.SetEase(Tween.EaseType.Out);
+
+		_colorScaleTween.TweenProperty(
+			this,
+			PropertyName.Scale.ToString(),
+			originalScale,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Back)
+		.SetEase(Tween.EaseType.Out);
 	}
 }
