@@ -5,7 +5,7 @@
 [ext_resource type="LabelSettings" uid="uid://bvp27oyhve2cn" path="res://resources/play_white_16_font_normal.tres" id="6_gh1cy"]
 [ext_resource type="Texture2D" uid="uid://c2a4m3pjt6egg" path="res://assets/base_diamond.png" id="6_it30p"]
 
-[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_quitButton", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6")]
+[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_quitButton", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_titleTimer", "_titleContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,14 +15,16 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_it30p")
-_playButton = NodePath("HBoxContainer2/PlayButton")
-_quitButton = NodePath("HBoxContainer2/QuitButton")
-_titleLayer1 = NodePath("MarginContainer/TitleContainer2/TitleAlpha")
-_titleLayer2 = NodePath("MarginContainer/TitleContainer2/TitleAlpha2")
-_titleLayer3 = NodePath("MarginContainer/TitleContainer2/TitleAlpha3")
-_titleLayer4 = NodePath("MarginContainer/TitleContainer2/TitleAlpha4")
-_titleLayer5 = NodePath("MarginContainer/TitleContainer2/TitleAlpha5")
-_titleLayer6 = NodePath("MarginContainer/TitleContainer2/TitleAlpha6")
+_playButton = NodePath("HBoxContainer/PlayButton")
+_quitButton = NodePath("HBoxContainer/QuitButton")
+_titleLayer1 = NodePath("MarginContainer/TitleContainer/TitleAlpha")
+_titleLayer2 = NodePath("MarginContainer/TitleContainer/TitleAlpha2")
+_titleLayer3 = NodePath("MarginContainer/TitleContainer/TitleAlpha3")
+_titleLayer4 = NodePath("MarginContainer/TitleContainer/TitleAlpha4")
+_titleLayer5 = NodePath("MarginContainer/TitleContainer/TitleAlpha5")
+_titleLayer6 = NodePath("MarginContainer/TitleContainer/TitleAlpha6")
+_titleTimer = NodePath("TitleTimer")
+_titleContainer = NodePath("MarginContainer/TitleContainer")
 
 [node name="CenterMarker" type="Label" parent="."]
 visible = false
@@ -51,12 +53,12 @@ theme_override_constants/margin_top = 56
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 24
 
-[node name="TitleContainer2" type="Control" parent="MarginContainer"]
+[node name="TitleContainer" type="Control" parent="MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
 
-[node name="TitleAlpha" parent="MarginContainer/TitleContainer2" instance=ExtResource("6_56fvm")]
+[node name="TitleAlpha" parent="MarginContainer/TitleContainer" instance=ExtResource("6_56fvm")]
 z_index = 5
 z_as_relative = false
 layout_mode = 0
@@ -65,7 +67,7 @@ offset_top = -16.0
 offset_right = 319.0
 offset_bottom = 96.0
 
-[node name="TitleAlpha2" parent="MarginContainer/TitleContainer2" instance=ExtResource("6_56fvm")]
+[node name="TitleAlpha2" parent="MarginContainer/TitleContainer" instance=ExtResource("6_56fvm")]
 z_index = 4
 z_as_relative = false
 layout_mode = 0
@@ -74,14 +76,14 @@ offset_top = -8.0
 offset_right = 325.1116
 offset_bottom = 104.0
 
-[node name="TitleAlpha3" parent="MarginContainer/TitleContainer2" instance=ExtResource("6_56fvm")]
+[node name="TitleAlpha3" parent="MarginContainer/TitleContainer" instance=ExtResource("6_56fvm")]
 z_index = 3
 z_as_relative = false
 layout_mode = 0
 offset_left = -331.7768
 offset_right = 331.2232
 
-[node name="TitleAlpha4" parent="MarginContainer/TitleContainer2" instance=ExtResource("6_56fvm")]
+[node name="TitleAlpha4" parent="MarginContainer/TitleContainer" instance=ExtResource("6_56fvm")]
 z_index = 2
 z_as_relative = false
 layout_mode = 0
@@ -90,7 +92,7 @@ offset_top = 8.0
 offset_right = 337.3348
 offset_bottom = 120.0
 
-[node name="TitleAlpha5" parent="MarginContainer/TitleContainer2" instance=ExtResource("6_56fvm")]
+[node name="TitleAlpha5" parent="MarginContainer/TitleContainer" instance=ExtResource("6_56fvm")]
 z_index = 1
 z_as_relative = false
 layout_mode = 0
@@ -99,7 +101,7 @@ offset_top = 16.0
 offset_right = 343.4464
 offset_bottom = 128.0
 
-[node name="TitleAlpha6" parent="MarginContainer/TitleContainer2" instance=ExtResource("6_56fvm")]
+[node name="TitleAlpha6" parent="MarginContainer/TitleContainer" instance=ExtResource("6_56fvm")]
 z_as_relative = false
 layout_mode = 0
 offset_left = -313.442
@@ -107,7 +109,7 @@ offset_top = 24.0
 offset_right = 349.558
 offset_bottom = 136.0
 
-[node name="HBoxContainer2" type="BoxContainer" parent="."]
+[node name="HBoxContainer" type="BoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -124,12 +126,12 @@ scale = Vector2(2, 2)
 pivot_offset = Vector2(50, 25)
 theme_override_constants/separation = 18
 
-[node name="PlayButton" type="TextureButton" parent="HBoxContainer2"]
+[node name="PlayButton" type="TextureButton" parent="HBoxContainer"]
 self_modulate = Color(0.53333336, 1, 0.53333336, 1)
 layout_mode = 2
 texture_normal = ExtResource("6_it30p")
 
-[node name="PlayLabel" type="Label" parent="HBoxContainer2/PlayButton"]
+[node name="PlayLabel" type="Label" parent="HBoxContainer/PlayButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -144,12 +146,12 @@ label_settings = ExtResource("6_gh1cy")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="QuitButton" type="TextureButton" parent="HBoxContainer2"]
+[node name="QuitButton" type="TextureButton" parent="HBoxContainer"]
 self_modulate = Color(1, 0.53333336, 0.53333336, 1)
 layout_mode = 2
 texture_normal = ExtResource("6_it30p")
 
-[node name="QuitLabel" type="Label" parent="HBoxContainer2/QuitButton"]
+[node name="QuitLabel" type="Label" parent="HBoxContainer/QuitButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -163,3 +165,7 @@ text = "QUIT"
 label_settings = ExtResource("6_gh1cy")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="TitleTimer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
