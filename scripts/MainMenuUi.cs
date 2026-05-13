@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Godot;
 
 public partial class MainMenuUi : Control
@@ -46,29 +47,30 @@ public partial class MainMenuUi : Control
 	}
 	
   private async void HandleLabelTweeningAsync()
-  {
-    var labels = _titleContainer.GetChildren();
+	{
+		var labels = _titleContainer.GetChildren();
 
-		GD.Print($"Labels Variable: {labels}");
+		if (labels.Count == 0) return;
 
-		if (labels.Count > 0)
+		foreach (Node node in labels)
 		{
-			foreach (Label label in labels) {
-				CreateColorScaleTweenAsync(Colors.White, label);
-				GD.Print($"Current Label: {label}");
-				await ToSignal(_colorScaleTween, Tween.SignalName.Finished);
-			}
-
-			labels.RemoveAt(labels.Count - 1);
-			labels.Reverse();
-			
-			foreach (Label label in labels) {
-				CreateColorScaleTweenAsync(Colors.White, label);
-				GD.Print($"Current Label: {label}");
-				await ToSignal(_colorScaleTween, Tween.SignalName.Finished);
+			if (node is Label label)
+			{
+				await CreateColorScaleTweenAsync(Colors.White, label);
 			}
 		}
-  }
+
+		labels.RemoveAt(labels.Count - 1);
+		labels.Reverse();
+
+		foreach (Node node in labels)
+		{
+			if (node is Label label)
+			{
+				await CreateColorScaleTweenAsync(Colors.White, label);
+			}
+		}
+	}
 
   private void OnPlayClicked()
   {
@@ -80,53 +82,51 @@ public partial class MainMenuUi : Control
     LevelManager.Instance.QuitGame();
   }
 
-	private async void CreateColorScaleTweenAsync(Color color, Label label)
+	private async Task CreateColorScaleTweenAsync(Color color, Label label)
 	{
-		var tweenTime = 0.05f;
-		var originalScale = Scale;
+		var tweenTime = 0.03f;
+		var originalScale = label.Scale;
 		var scaleMultiplier = 1.01f;
 		var originalColor = label.Modulate;
 
-		_colorScaleTween = CreateTween();
+		var tween = CreateTween();
 
-		_colorScaleTween.SetParallel(true);
+		tween.SetParallel(true);
 
-		_colorScaleTween.TweenProperty(
+		tween.TweenProperty(
 			label,
 			PropertyName.Modulate.ToString(),
 			color,
 			tweenTime
-		).SetTrans(Tween.TransitionType.Cubic)
-		.SetEase(Tween.EaseType.Out);
+		);
 
-		_colorScaleTween.TweenProperty(
+		tween.TweenProperty(
 			label,
 			PropertyName.Scale.ToString(),
 			originalScale * scaleMultiplier,
 			tweenTime
-		).SetTrans(Tween.TransitionType.Back)
-		.SetEase(Tween.EaseType.Out);
+		);
 
-		await ToSignal(_colorScaleTween, Tween.SignalName.Finished);
+		await ToSignal(tween, Tween.SignalName.Finished);
 
-		_colorScaleTween = CreateTween();
+		tween = CreateTween();
 
-		_colorScaleTween.SetParallel(true);
+		tween.SetParallel(true);
 
-		_colorScaleTween.TweenProperty(
+		tween.TweenProperty(
 			label,
 			PropertyName.Modulate.ToString(),
 			originalColor,
 			tweenTime
-		).SetTrans(Tween.TransitionType.Cubic)
-		.SetEase(Tween.EaseType.Out);
+		);
 
-		_colorScaleTween.TweenProperty(
+		tween.TweenProperty(
 			label,
 			PropertyName.Scale.ToString(),
 			originalScale,
 			tweenTime
-		).SetTrans(Tween.TransitionType.Back)
-		.SetEase(Tween.EaseType.Out);
+		);
+
+		await ToSignal(tween, Tween.SignalName.Finished);
 	}
 }
