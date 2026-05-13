@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using Godot;
 
 public partial class MainMenuUi : Control
@@ -14,12 +14,15 @@ public partial class MainMenuUi : Control
 	[Export] Timer _titleTimer;
 	[Export] Control _titleContainer;
 
-	private Tween _colorScaleTween;
+	private Dictionary<Label, Vector2> _baseScales = [];
+	private Dictionary<Label, Color> _baseColors = [];
+
+	private bool _isAnimatingTitle = false;
+	private bool _isFirstAnimationRun = false;
 
 	public override void _Ready()
 	{
-		_playButton.Pressed += OnPlayClicked;
-		_quitButton.Pressed += OnQuitClicked;
+		_isFirstAnimationRun = true;
 
 		InitializeTitleColors();
 		HandleLabelTweeningAsync();
@@ -28,6 +31,8 @@ public partial class MainMenuUi : Control
 
 	public void SubscribeToSignals()
 	{
+		_playButton.Pressed += OnPlayClicked;
+		_quitButton.Pressed += OnQuitClicked;
 		_titleTimer.Timeout += OnTitleTimeout;
 	}
 
@@ -36,40 +41,72 @@ public partial class MainMenuUi : Control
     HandleLabelTweeningAsync();
   }
 
-  private void InitializeTitleColors()
+	private void InitializeTitleColors()
 	{
-		_titleLayer1.Modulate = new Color(Constants.CustomColors.PurplePastelle);
-		_titleLayer2.Modulate = new Color(Constants.CustomColors.BluePastelle);
-		_titleLayer3.Modulate = new Color(Constants.CustomColors.GreenPastelle);
-		_titleLayer4.Modulate = new Color(Constants.CustomColors.YellowPastelle);
-		_titleLayer5.Modulate = new Color(Constants.CustomColors.OrangePastelle);
-		_titleLayer6.Modulate = new Color(Constants.CustomColors.RedPastelle);
+		StoreLabelDefaults(_titleLayer1, Constants.CustomColors.PurplePastelle);
+		StoreLabelDefaults(_titleLayer2, Constants.CustomColors.BluePastelle);
+		StoreLabelDefaults(_titleLayer3, Constants.CustomColors.GreenPastelle);
+		StoreLabelDefaults(_titleLayer4, Constants.CustomColors.YellowPastelle);
+		StoreLabelDefaults(_titleLayer5, Constants.CustomColors.OrangePastelle);
+		StoreLabelDefaults(_titleLayer6, Constants.CustomColors.RedPastelle);
+	}
+
+	private void StoreLabelDefaults(Label label, string colorHex)
+	{
+		label.Modulate = new Color(colorHex);
+
+		_baseScales[label] = label.Scale;
+		_baseColors[label] = label.Modulate;
 	}
 	
   private async void HandleLabelTweeningAsync()
 	{
+		if (_isFirstAnimationRun)
+		{
+			await ToSignal(GetTree().CreateTimer(2.0f), SceneTreeTimer.SignalName.Timeout);
+			_isFirstAnimationRun = false;
+			_titleTimer.Start();
+		}
+		
+		if (_isAnimatingTitle) return;
+
+		_isAnimatingTitle = true;
+
 		var labels = _titleContainer.GetChildren();
 
-		if (labels.Count == 0) return;
+		float delayBetweenLabels = 0.16f;
 
 		foreach (Node node in labels)
 		{
 			if (node is Label label)
 			{
-				await CreateColorScaleTweenAsync(Colors.White, label);
+				CreateColorScaleTween(label);
+
+				await ToSignal(
+					GetTree().CreateTimer(delayBetweenLabels),
+					SceneTreeTimer.SignalName.Timeout
+				);
 			}
 		}
 
-		labels.RemoveAt(labels.Count - 1);
-		labels.Reverse();
+		var reverseLabels = new Godot.Collections.Array<Node>(labels);
+		reverseLabels.RemoveAt(reverseLabels.Count - 1);
+		reverseLabels.Reverse();
 
-		foreach (Node node in labels)
+		foreach (Node node in reverseLabels)
 		{
 			if (node is Label label)
 			{
-				await CreateColorScaleTweenAsync(Colors.White, label);
+				CreateColorScaleTween(label);
+
+				await ToSignal(
+					GetTree().CreateTimer(delayBetweenLabels),
+					SceneTreeTimer.SignalName.Timeout
+				);
 			}
 		}
+
+		_isAnimatingTitle = false;
 	}
 
   private void OnPlayClicked()
@@ -82,51 +119,51 @@ public partial class MainMenuUi : Control
     LevelManager.Instance.QuitGame();
   }
 
-	private async Task CreateColorScaleTweenAsync(Color color, Label label)
+	private void CreateColorScaleTween(Label label)
 	{
-		var tweenTime = 0.03f;
-		var originalScale = label.Scale;
-		var scaleMultiplier = 1.01f;
-		var originalColor = label.Modulate;
+		float tweenTime = 0.22f;
+		float scaleMultiplier = 1.015f;
 
-		var tween = CreateTween();
+		Vector2 originalScale = _baseScales[label];
+		Color originalColor = _baseColors[label];
+		Color flashColor = originalColor.Lightened(0.45f);
+
+		Tween tween = CreateTween();
 
 		tween.SetParallel(true);
 
 		tween.TweenProperty(
 			label,
 			PropertyName.Modulate.ToString(),
-			color,
+			flashColor,
 			tweenTime
-		);
+		).SetTrans(Tween.TransitionType.Sine)
+		.SetEase(Tween.EaseType.Out);
 
 		tween.TweenProperty(
 			label,
 			PropertyName.Scale.ToString(),
 			originalScale * scaleMultiplier,
 			tweenTime
-		);
+		).SetTrans(Tween.TransitionType.Sine)
+		.SetEase(Tween.EaseType.Out);
 
-		await ToSignal(tween, Tween.SignalName.Finished);
-
-		tween = CreateTween();
-
-		tween.SetParallel(true);
+		tween.SetParallel(false);
 
 		tween.TweenProperty(
 			label,
 			PropertyName.Modulate.ToString(),
 			originalColor,
 			tweenTime
-		);
+		).SetTrans(Tween.TransitionType.Sine)
+		.SetEase(Tween.EaseType.InOut);
 
-		tween.TweenProperty(
+		tween.Parallel().TweenProperty(
 			label,
 			PropertyName.Scale.ToString(),
 			originalScale,
 			tweenTime
-		);
-
-		await ToSignal(tween, Tween.SignalName.Finished);
+		).SetTrans(Tween.TransitionType.Sine)
+		.SetEase(Tween.EaseType.InOut);
 	}
 }

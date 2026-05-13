@@ -110,7 +110,11 @@ public partial class Paddle : Area2D
 	public override void _ExitTree()
 	{
 		UnsubscribeFromSignals();
-    _colorScaleTween.Kill();
+
+		if (_colorScaleTween != null)
+		{
+    	_colorScaleTween.Kill();
+		}
 	}
 
 	private void InitializeVariables()

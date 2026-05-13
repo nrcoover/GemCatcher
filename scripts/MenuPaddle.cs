@@ -34,7 +34,10 @@ public partial class MenuPaddle : Area2D
 
   public override void _ExitTree()
   {
-    _colorScaleTween.Kill();
+		if (_colorScaleTween != null)
+		{
+    	_colorScaleTween.Kill();
+		}
   }
 	
   private void SubscribeToSignals()
