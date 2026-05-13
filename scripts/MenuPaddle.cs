@@ -27,20 +27,20 @@ public partial class MenuPaddle : Area2D
 		SubscribeToSignals();
 	}
 
-  public override void _Process(double delta)
+	public override void _Process(double delta)
 	{
 		HandlePaddleMovement((float)delta);
 	}
 
-  public override void _ExitTree()
-  {
-    _colorScaleTween.Kill();
-  }
-	
-  private void SubscribeToSignals()
-  {
-    AreaEntered += OnAreaEntered;
-  }
+	public override void _ExitTree()
+	{
+		_colorScaleTween.Kill();
+	}
+
+	private void SubscribeToSignals()
+	{
+		AreaEntered += OnAreaEntered;
+	}
 
 	private void OnAreaEntered(Area2D area)
 	{
@@ -50,8 +50,8 @@ public partial class MenuPaddle : Area2D
 	private void InstantiateVariables()
 	{
 		var viewport = GetViewportRect();
-		_viewportHeight =  Mathf.Abs(viewport.Position.Y - viewport.End.Y);
-		_viewportLength =  Mathf.Abs(viewport.Position.X - viewport.End.X);
+		_viewportHeight = Mathf.Abs(viewport.Position.Y - viewport.End.Y);
+		_viewportLength = Mathf.Abs(viewport.Position.X - viewport.End.X);
 
 		_paddlePathLenght = _viewportLength * _pathMultiplier;
 		_paddlePositionOffsetY = viewport.End.Y / 2.5f;
@@ -77,8 +77,8 @@ public partial class MenuPaddle : Area2D
 		AddChild(_markerLeft);
 		AddChild(_markerRight);
 
-		_markerLeft.Position = new Vector2(Position.X - _paddlePathLenght/2, Position.Y);
-		_markerRight.Position = new Vector2(Position.X + _paddlePathLenght/2, Position.Y);
+		_markerLeft.Position = new Vector2(Position.X - _paddlePathLenght / 2, Position.Y);
+		_markerRight.Position = new Vector2(Position.X + _paddlePathLenght / 2, Position.Y);
 	}
 
 	private void HandlePaddleMovement(float delta)

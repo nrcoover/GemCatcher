@@ -31,12 +31,12 @@ public partial class MainMenuUi : Control
 		_titleTimer.Timeout += OnTitleTimeout;
 	}
 
-  private void OnTitleTimeout()
-  {
-    HandleLabelTweeningAsync();
-  }
+	private void OnTitleTimeout()
+	{
+		HandleLabelTweeningAsync();
+	}
 
-  private void InitializeTitleColors()
+	private void InitializeTitleColors()
 	{
 		_titleLayer1.Modulate = new Color(Constants.CustomColors.PurplePastelle);
 		_titleLayer2.Modulate = new Color(Constants.CustomColors.BluePastelle);
@@ -45,8 +45,8 @@ public partial class MainMenuUi : Control
 		_titleLayer5.Modulate = new Color(Constants.CustomColors.OrangePastelle);
 		_titleLayer6.Modulate = new Color(Constants.CustomColors.RedPastelle);
 	}
-	
-  private async void HandleLabelTweeningAsync()
+
+	private async void HandleLabelTweeningAsync()
 	{
 		var labels = _titleContainer.GetChildren();
 
@@ -72,15 +72,15 @@ public partial class MainMenuUi : Control
 		}
 	}
 
-  private void OnPlayClicked()
-  {
-    LevelManager.Instance.LoadGame();
-  }
+	private void OnPlayClicked()
+	{
+		LevelManager.Instance.LoadGame();
+	}
 
 	private void OnQuitClicked()
-  {
-    LevelManager.Instance.QuitGame();
-  }
+	{
+		LevelManager.Instance.QuitGame();
+	}
 
 	private async Task CreateColorScaleTweenAsync(Color color, Label label)
 	{

@@ -2,7 +2,7 @@ using Godot;
 
 public partial class SignalManager : Node
 {
-	public static SignalManager Instance { get; private set;}
+	public static SignalManager Instance { get; private set; }
 
 	[Signal] public delegate void GameOverEventHandler();
 	[Signal] public delegate void InitiateDeathSequenceEventHandler();
@@ -22,7 +22,7 @@ public partial class SignalManager : Node
 		EmitSignal(SignalName.GameOver);
 	}
 
-	public void EmitInitiateDeathSequence() 
+	public void EmitInitiateDeathSequence()
 	{
 		EmitSignal(SignalName.InitiateDeathSequence);
 	}

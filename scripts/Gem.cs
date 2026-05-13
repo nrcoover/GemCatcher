@@ -30,13 +30,13 @@ public partial class Gem : Area2D
 	{
 		HandleMovement((float)delta);
 	}
-	
+
 	private void SubscribeToSignals()
 	{
 		AreaEntered += OnAreaEntered;
 	}
 
-		private void HandleMovement(float delta)
+	private void HandleMovement(float delta)
 	{
 		HandlePosition(delta);
 		HandleRotation(delta);
@@ -46,7 +46,7 @@ public partial class Gem : Area2D
 		}
 	}
 
-  private void HandleExitScreen()
+	private void HandleExitScreen()
 	{
 		if (Position.Y > GetViewportRect().End.Y)
 		{
@@ -55,7 +55,7 @@ public partial class Gem : Area2D
 		}
 	}
 
-  private void HandlePosition(float delta)
+	private void HandlePosition(float delta)
 	{
 		var viewportBoundaryMargin = 75;
 
@@ -101,7 +101,8 @@ public partial class Gem : Area2D
 		{
 			SignalManager.Instance.EmitScored(this.Modulate);
 			QueueFree();
-		} else if (area is MenuPaddle)
+		}
+		else if (area is MenuPaddle)
 		{
 			QueueFree();
 		}

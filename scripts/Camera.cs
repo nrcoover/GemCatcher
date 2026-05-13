@@ -15,12 +15,12 @@ public partial class Camera : Camera2D
 		if (_activeShakeTime > 0.0f)
 		{
 			_shakeTime += (float)(delta * _shakeTimeSpeed);
-      _activeShakeTime -= (float)delta;
+			_activeShakeTime -= (float)delta;
 
-      this.Offset = new Vector2(
-				noise.GetNoise2D(_shakeTime, 0) * _shakeIntensity,
-				noise.GetNoise2D(0, _shakeTime) * _shakeIntensity
-			);
+			this.Offset = new Vector2(
+					  noise.GetNoise2D(_shakeTime, 0) * _shakeIntensity,
+					  noise.GetNoise2D(0, _shakeTime) * _shakeIntensity
+				  );
 
 			_shakeIntensity = Mathf.Max(_shakeIntensity - _shakeDecay * (float)delta, 0.0f);
 		}
