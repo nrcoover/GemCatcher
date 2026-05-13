@@ -2,15 +2,15 @@ using Godot;
 
 public partial class MainMenu : Node2D
 {
-	[Export] PackedScene Paddle {get; set;}
-	[Export] float _paddleScale = 0.75f; 
+	[Export] PackedScene Paddle { get; set; }
+	[Export] float _paddleScale = 0.75f;
 
 	public override void _Ready()
 	{
 		InstantiatePaddle();
 	}
 
-		private void InstantiatePaddle()
+	private void InstantiatePaddle()
 	{
 		var paddle = (MenuPaddle)Paddle.Instantiate();
 		AddChild(paddle);

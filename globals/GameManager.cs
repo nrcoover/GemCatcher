@@ -7,7 +7,7 @@ public partial class GameManager : Node
 	const int MIN_HEALTH = 0;
 	private int _high_score = 0;
 
-	public static GameManager Instance {get; private set;}
+	public static GameManager Instance { get; private set; }
 
 	private int _missedGemsCount = 0;
 	private int _health = MAX_HEALTH;
@@ -15,7 +15,7 @@ public partial class GameManager : Node
 	public override void _Ready()
 	{
 		Instance ??= this;
-    SubscribeToSignals();
+		SubscribeToSignals();
 	}
 
 	public override void _ExitTree()
@@ -29,16 +29,16 @@ public partial class GameManager : Node
 		SetHealth(MAX_HEALTH);
 	}
 
-#region Signals
+	#region Signals
 
 	public void OnGameOver()
 	{
 		SignalManager.Instance.EmitInitiateDeathSequence();
 	}
 
-#endregion
+	#endregion
 
-#region Manage Health
+	#region Manage Health
 
 	public int GetHealth()
 	{
@@ -50,11 +50,11 @@ public partial class GameManager : Node
 		if (value > MAX_HEALTH)
 		{
 			_health = MAX_HEALTH;
-		} 
-		else if (value < MIN_HEALTH) 
+		}
+		else if (value < MIN_HEALTH)
 		{
 			_health = MIN_HEALTH;
-		} 
+		}
 		else
 		{
 			_health = value;
@@ -66,13 +66,13 @@ public partial class GameManager : Node
 		SetHealth(GetHealth() - 1);
 	}
 
-#endregion
+	#endregion
 
-#region Manage Gems
+	#region Manage Gems
 
 	public int GetMissedGemCount()
 	{
-		return _missedGemsCount; 
+		return _missedGemsCount;
 	}
 
 	private void SetMissedGemCount(int value)
@@ -93,7 +93,7 @@ public partial class GameManager : Node
 		}
 	}
 
-#endregion
+	#endregion
 
 	private void SubscribeToSignals()
 	{

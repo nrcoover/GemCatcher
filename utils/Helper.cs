@@ -8,7 +8,7 @@ public static partial class Helper
 		randomNumber.Randomize();
 
 		int randomInt = randomNumber.RandiRange(min, max);
-		
+
 		return randomInt;
 	}
 
@@ -18,7 +18,7 @@ public static partial class Helper
 		randomNumber.Randomize();
 
 		float randomFloat = randomNumber.RandfRange(min, max);
-		
+
 		return randomFloat;
 	}
 
@@ -33,7 +33,7 @@ public static partial class Helper
 			case 0:
 				selectedColorhex = Constants.CustomColors.RedPastelle;
 				break;
-			
+
 			case 1:
 				selectedColorhex = Constants.CustomColors.OrangePastelle;
 				break;

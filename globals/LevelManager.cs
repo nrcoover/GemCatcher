@@ -2,7 +2,7 @@ using Godot;
 
 public partial class LevelManager : Node
 {
-	public static LevelManager Instance { get; private set;}
+	public static LevelManager Instance { get; private set; }
 
 	private PackedScene Game;
 	private PackedScene MainMenu;

@@ -13,7 +13,8 @@ public partial class Paddle : Area2D
 	const float MAX_BOOST_FUEL = 100.0f;
 	const float DEFAULT_REFUEL_RATE = 12.5f;
 
-	enum FuelState {
+	enum FuelState
+	{
 		Low = 50,
 		Urgent = 30,
 		Emergency = 15,
@@ -40,7 +41,7 @@ public partial class Paddle : Area2D
 	private bool _isInCooldown;
 
 	private Tween _colorScaleTween;
-	
+
 	private bool _isTryingToBoost =>
 	Input.IsActionPressed("boost");
 
@@ -51,23 +52,23 @@ public partial class Paddle : Area2D
 		_boostFuel > 0;
 
 	private bool _canRefuel =>
-    _boostFuel < MAX_BOOST_FUEL &&
-    !_boostLockedUntilRelease;
+	_boostFuel < MAX_BOOST_FUEL &&
+	!_boostLockedUntilRelease;
 
 	private Rect2 _viewportBoundary;
-	
-  private void HandleDebugLog()
-  {
-    _debugLogLabel.Text = "BEBUGGING: \n"
-			+ $"Fuel: {_boostFuel},\n" 
-			+ $"BoostersReady: {_boostersReady},\n"
-			+ $"CanBoost: {_canBoost},\n"
-			+ $"CanRefuel: {_canRefuel},\n"
-			+ $"InCooldown: {_isInCooldown},\n"
-			+ $"Locked: {_boostLockedUntilRelease},\n"
-			+ $"Boosting: {_isTryingToBoost},\n"
-			;
-  }
+
+	private void HandleDebugLog()
+	{
+		_debugLogLabel.Text = "BEBUGGING: \n"
+				+ $"Fuel: {_boostFuel},\n"
+				+ $"BoostersReady: {_boostersReady},\n"
+				+ $"CanBoost: {_canBoost},\n"
+				+ $"CanRefuel: {_canRefuel},\n"
+				+ $"InCooldown: {_isInCooldown},\n"
+				+ $"Locked: {_boostLockedUntilRelease},\n"
+				+ $"Boosting: {_isTryingToBoost},\n"
+				;
+	}
 
 	public override void _Ready()
 	{
@@ -78,7 +79,7 @@ public partial class Paddle : Area2D
 		ResetParticleSystems();
 	}
 
-  public override void _Process(double delta)
+	public override void _Process(double delta)
 	{
 		HandlePaddleMovement((float)delta);
 		HandleFuelConsumption((float)delta);
@@ -91,7 +92,7 @@ public partial class Paddle : Area2D
 		}
 	}
 
-  public override void _UnhandledInput(InputEvent @event)
+	public override void _UnhandledInput(InputEvent @event)
 	{
 		if (@event.IsActionPressed("boost"))
 		{
@@ -110,28 +111,28 @@ public partial class Paddle : Area2D
 	public override void _ExitTree()
 	{
 		UnsubscribeFromSignals();
-    _colorScaleTween.Kill();
+		_colorScaleTween.Kill();
 	}
 
 	private void InitializeVariables()
-  {
+	{
 		_viewportBoundary = GetViewportRect();
-    _boostFuel = MAX_BOOST_FUEL;
+		_boostFuel = MAX_BOOST_FUEL;
 		_boostLockedUntilRelease = false;
 		_boostersReady = true;
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
 		_isInCooldown = false;
-  }
+	}
 
 	private void ResetParticleSystems()
-  {
-    DisengageAllParticles();
+	{
+		DisengageAllParticles();
 
 		_leftParticles.Visible = true;
 		_rightParticles.Visible = true;
-  }
+	}
 
-#region Signals
+	#region Signals
 
 	private void SubscribeToSignals()
 	{
@@ -143,7 +144,7 @@ public partial class Paddle : Area2D
 		SignalManager.Instance.GameOver += OnGameOver;
 	}
 
-  private void UnsubscribeFromSignals()
+	private void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.BoostFuelDepleted -= OnBoostFuelDepleted;
 		SignalManager.Instance.BoostEngaged -= OnBoostEngaged;
@@ -152,11 +153,11 @@ public partial class Paddle : Area2D
 	}
 
 	private void OnBoostEngaged()
-  {
+	{
 		// play boosting sound
-  }
+	}
 
-	private void OnBoostDisengaged() 
+	private void OnBoostDisengaged()
 	{
 		if (_boostLockedUntilRelease)
 		{
@@ -196,24 +197,24 @@ public partial class Paddle : Area2D
 	}
 
 	private void OnScored(Color color)
-  {
-    CreateColorScaleTweenAsync(color);
-  }
-	
-  private void OnGameOver()
-  {
+	{
+		CreateColorScaleTweenAsync(color);
+	}
+
+	private void OnGameOver()
+	{
 		if (_colorScaleTween == null)
 		{
 			return;
 		}
-		
-    _colorScaleTween.Kill();
-  }
 
-#endregion
-  
-#region Paddle Movement
-	
+		_colorScaleTween.Kill();
+	}
+
+	#endregion
+
+	#region Paddle Movement
+
 	private void HandlePaddleMovement(float delta)
 	{
 		HandleUserInput(delta);
@@ -245,7 +246,7 @@ public partial class Paddle : Area2D
 		if (Input.IsActionPressed("move_left"))
 		{
 			Position -= new Vector2(
-				calculatedMovementSpeed * delta, 
+				calculatedMovementSpeed * delta,
 				noChangeInPosition
 			);
 		}
@@ -253,21 +254,21 @@ public partial class Paddle : Area2D
 
 	private void RestrictPaddleToBoundary()
 	{
-		if(Position.X < _viewportBoundary.Position.X + _boundaryMargin)
+		if (Position.X < _viewportBoundary.Position.X + _boundaryMargin)
 		{
 			Position = new Vector2(_viewportBoundary.Position.X + _boundaryMargin, Position.Y);
 		}
 
-		if(Position.X > _viewportBoundary.End.X - _boundaryMargin)
+		if (Position.X > _viewportBoundary.End.X - _boundaryMargin)
 		{
 			Position = new Vector2(_viewportBoundary.End.X - _boundaryMargin, Position.Y);
 		}
 	}
 
-#endregion
+	#endregion
 
-#region Manage Boost
-	
+	#region Manage Boost
+
 	private void HandleFuelConsumption(float delta)
 	{
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
@@ -278,8 +279,8 @@ public partial class Paddle : Area2D
 
 			if (_boostFuel <= 0 && _boostersReady)
 			{
-					_boostFuel = 0;
-					SignalManager.Instance.EmitBoostFuelDepleted();
+				_boostFuel = 0;
+				SignalManager.Instance.EmitBoostFuelDepleted();
 			}
 		}
 		else
@@ -299,7 +300,7 @@ public partial class Paddle : Area2D
 		HandleFuelConsumptionAnimation();
 	}
 
-  private void BurnFuel(float delta)
+	private void BurnFuel(float delta)
 	{
 		_boostFuel -= _boostBurnRate * delta;
 
@@ -320,13 +321,13 @@ public partial class Paddle : Area2D
 	}
 
 	private void HandleFuelConsumptionAnimation()
-  {
+	{
 		if (_isInCooldown)
-    {
-        // TODO: Play alternative animation (not made yet...)
+		{
+			// TODO: Play alternative animation (not made yet...)
 
-        return;
-    }
+			return;
+		}
 
 		var isLowOnFuel = _boostFuel < (int)FuelState.Low;
 
@@ -337,7 +338,7 @@ public partial class Paddle : Area2D
 		}
 		else if (!isLowOnFuel)
 		{
-			return;			
+			return;
 		}
 
 		if (_canBoost && isLowOnFuel)
@@ -368,7 +369,7 @@ public partial class Paddle : Area2D
 					}
 					break;
 			}
-		} 
+		}
 		else if (!_boostLockedUntilRelease && !_isTryingToBoost && isLowOnFuel)
 		{
 			if (_animator.CurrentAnimation != Constants.Animations.RefuelingYellow)
@@ -377,13 +378,13 @@ public partial class Paddle : Area2D
 				_animator.Play(Constants.Animations.RefuelingYellow);
 			}
 		}
-  }
+	}
 
-#endregion
+	#endregion
 
-#region Manage Particle System
+	#region Manage Particle System
 
-		private void EngageRightParticles()
+	private void EngageRightParticles()
 	{
 		SetParticleEmission(_leftParticles, false);
 		SetParticleEmission(_rightParticles, true);
@@ -436,10 +437,10 @@ public partial class Paddle : Area2D
 			}
 		}
 	}
-	
-#endregion
 
-#region UI UPdates
+	#endregion
+
+	#region UI UPdates
 
 	private void UpdateBoostUi()
 	{
@@ -452,7 +453,7 @@ public partial class Paddle : Area2D
 		_progressBarRight.Value = _boostFuel / 2;
 	}
 
-#endregion
+	#endregion
 
 	private async void CreateColorScaleTweenAsync(Color color)
 	{

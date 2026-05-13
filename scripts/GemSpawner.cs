@@ -25,7 +25,7 @@ public partial class GemSpawner : Node2D
 		var margin = 85;
 
 		var xBoundaryCoordinate = Helper.GetRandomFloat(
-				GetViewportRect().Position.X + margin, 
+				GetViewportRect().Position.X + margin,
 				GetViewportRect().End.X - margin
 			);
 

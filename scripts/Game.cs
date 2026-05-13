@@ -36,7 +36,7 @@ public partial class Game : Node2D
 		SubscribeToSignals();
 	}
 
-	 public override void _UnhandledInput(InputEvent @event)
+	public override void _UnhandledInput(InputEvent @event)
 	{
 		if (@event.IsActionPressed("exit"))
 		{
@@ -57,7 +57,7 @@ public partial class Game : Node2D
 		await ToSignal(GetTree().CreateTimer(1.0f), SceneTreeTimer.SignalName.Timeout);
 		_explosion.Play();
 		await ToSignal(GetTree().CreateTimer(1.5f), SceneTreeTimer.SignalName.Timeout);
-		
+
 		GameManager.Instance.ResetGame();
 		LevelManager.Instance.LoadMainMenu();
 	}
@@ -69,7 +69,8 @@ public partial class Game : Node2D
 		SignalManager.Instance.GemOffScreen += OnGemOffScreen;
 	}
 
-	private void UnsubscribeFromSignals() {
+	private void UnsubscribeFromSignals()
+	{
 		SignalManager.Instance.InitiateDeathSequence -= OnInitiateDeathSequenceAsync;
 		SignalManager.Instance.Scored -= OnScored;
 		SignalManager.Instance.GemOffScreen -= OnGemOffScreen;
@@ -101,9 +102,9 @@ public partial class Game : Node2D
 		CreateColorScaleTween(color);
 	}
 
-  private void CreateColorScaleTween(Color color)
-  {
-    _colorScaleTween = CreateTween();
+	private void CreateColorScaleTween(Color color)
+	{
+		_colorScaleTween = CreateTween();
 		var tweenTime = 0.35f;
 
 		_colorScaleTween.SetParallel(true);
@@ -123,9 +124,9 @@ public partial class Game : Node2D
 			tweenTime
 		).SetTrans(Tween.TransitionType.Back)
 		.SetEase(Tween.EaseType.Out);
-  }
+	}
 
-  private void UpdateHealthUi()
+	private void UpdateHealthUi()
 	{
 		var currentHealth = GameManager.Instance.GetHealth();
 
