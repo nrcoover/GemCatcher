@@ -109,6 +109,12 @@ offset_top = 24.0
 offset_right = 349.558
 offset_bottom = 136.0
 
+[node name="LeftBoundary" type="Marker2D" parent="MarginContainer/TitleContainer"]
+position = Vector2(-300, 35)
+
+[node name="RightBoundary" type="Marker2D" parent="MarginContainer/TitleContainer"]
+position = Vector2(300, 35)
+
 [node name="HBoxContainer" type="BoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
