@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dls61awq12jhp" path="res://scripts/Paddle.cs" id="1_6kxou"]
 [ext_resource type="Texture2D" uid="uid://cnkl8lfb1hs81" path="res://assets/paddleBlu.png" id="1_ry5ju"]
-[ext_resource type="AudioStream" uid="uid://c4r3lm1a0bugh" path="res://assets/203264__metrostock99__rocket-booster-raw-editable.wav" id="3_jlx5f"]
+[ext_resource type="AudioStream" uid="uid://ca1sx4i73y6ck" path="res://assets/774270__thelittlecrow__rocket-launch-boost-and-burning-version-b.wav" id="3_jlx5f"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6kxou"]
 radius = 12.0
@@ -168,5 +168,5 @@ text = "DEGUGGING:"
 
 [node name="BoostSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_jlx5f")
-volume_db = -26.909
+volume_db = -12.0
 pitch_scale = 1.5
