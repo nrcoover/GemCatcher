@@ -14,14 +14,8 @@ Paddle = ExtResource("2_ucygd")
 [node name="MotionBackdrop" parent="." instance=ExtResource("3_826wr")]
 _useBackgroundOverride = true
 
-[node name="GemSpawner" parent="." node_paths=PackedStringArray("_layer1", "_layer2", "_layer3", "_layer4", "_layer5", "_layer6") instance=ExtResource("4_826wr")]
+[node name="GemSpawner" parent="." instance=ExtResource("4_826wr")]
 _isOnMainMenu = true
-_layer1 = NodePath("../CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/CanvasLayer1/GemContainer")
-_layer2 = NodePath("../CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/CanvasLayer2/GemContainer")
-_layer3 = NodePath("../CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/CanvasLayer3/GemContainer")
-_layer4 = NodePath("../CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/CanvasLayer4/GemContainer")
-_layer5 = NodePath("../CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/CanvasLayer5/GemContainer")
-_layer6 = NodePath("../CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/CanvasLayer6/GemContainer")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
