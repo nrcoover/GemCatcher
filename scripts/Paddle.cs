@@ -27,6 +27,7 @@ public partial class Paddle : Area2D
 	[Export] Label _boostPercentageLabel;
 	[Export] Timer _boostRefuelTimer;
 	[Export] AnimationPlayer _animator;
+	[Export] AnimationPlayer _selfAnimator;
 	[Export] ProgressBar _progressBarLeft;
 	[Export] ProgressBar _progressBarRight;
 	[Export] Node2D _leftParticles;
@@ -333,10 +334,13 @@ public partial class Paddle : Area2D
   {
 		if (_isInCooldown)
     {
-        // TODO: Play alternative animation (not made yet...)
+			_selfAnimator.Play("flash-yellow");
 
-        return;
-    }
+			return;
+    } else
+		{
+			_selfAnimator.Play("RESET");
+		}
 
 		var isLowOnFuel = _boostFuel < (int)FuelState.Low;
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://3kq5fr5oomem"]
+[gd_scene load_steps=8 format=3 uid="uid://3kq5fr5oomem"]
 
 [ext_resource type="Script" uid="uid://dls61awq12jhp" path="res://scripts/Paddle.cs" id="1_6kxou"]
 [ext_resource type="Texture2D" uid="uid://cnkl8lfb1hs81" path="res://assets/paddleBlu.png" id="1_ry5ju"]
@@ -8,11 +8,50 @@
 radius = 12.0
 height = 104.0
 
-[node name="Paddle" type="Area2D" node_paths=PackedStringArray("_debugLogLabel", "_boostRefuelTimer", "_leftParticles", "_rightParticles", "_boostSound")]
+[sub_resource type="Animation" id="Animation_jlx5f"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1.224127, 1.224127, 1.224127, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_c7ra2"]
+resource_name = "flash-yellow"
+loop_mode = 1
+step = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1.224127, 1.224127, 1.224127, 1), Color(0.8439447, 0.83195937, 0, 1), Color(1.224127, 1.224127, 1.224127, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_s6nv3"]
+_data = {
+&"RESET": SubResource("Animation_jlx5f"),
+&"flash-yellow": SubResource("Animation_c7ra2")
+}
+
+[node name="Paddle" type="Area2D" node_paths=PackedStringArray("_debugLogLabel", "_boostRefuelTimer", "_selfAnimator", "_leftParticles", "_rightParticles", "_boostSound")]
 modulate = Color(1.224127, 1.224127, 1.224127, 1)
 script = ExtResource("1_6kxou")
 _debugLogLabel = NodePath("DebugLog")
 _boostRefuelTimer = NodePath("BoostRefuelTimer")
+_selfAnimator = NodePath("AnimationPlayer")
 _leftParticles = NodePath("LeftBoostParticles")
 _rightParticles = NodePath("RightBoostParticles")
 _boostSound = NodePath("BoostSound")
@@ -170,3 +209,8 @@ text = "DEGUGGING:"
 stream = ExtResource("3_jlx5f")
 volume_db = -12.0
 pitch_scale = 1.5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_s6nv3")
+}
