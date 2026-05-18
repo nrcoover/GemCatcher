@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cubv40p7fxyh5"]
+[gd_scene load_steps=4 format=3 uid="uid://cubv40p7fxyh5"]
 
 [ext_resource type="Script" uid="uid://roupoeg0m343" path="res://scripts/MainMenuUi.cs" id="1_it30p"]
+[ext_resource type="PackedScene" uid="uid://dqthwsums7jjw" path="res://scenes/GemButton.tscn" id="3_pqhkh"]
 [ext_resource type="PackedScene" uid="uid://2sfkess71hko" path="res://scenes/MenuTitle.tscn" id="6_56fvm"]
-[ext_resource type="LabelSettings" uid="uid://bvp27oyhve2cn" path="res://resources/play_white_16_font_normal.tres" id="6_gh1cy"]
-[ext_resource type="Texture2D" uid="uid://c2a4m3pjt6egg" path="res://assets/base_diamond.png" id="6_it30p"]
 
 [node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_quitButton", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_titleTimer", "_titleContainer")]
 layout_mode = 3
@@ -132,45 +131,21 @@ scale = Vector2(2, 2)
 pivot_offset = Vector2(50, 25)
 theme_override_constants/separation = 18
 
-[node name="PlayButton" type="TextureButton" parent="HBoxContainer"]
-self_modulate = Color(0.53333336, 1, 0.53333336, 1)
+[node name="PlayButton" parent="HBoxContainer" instance=ExtResource("3_pqhkh")]
 layout_mode = 2
-texture_normal = ExtResource("6_it30p")
 
-[node name="PlayLabel" type="Label" parent="HBoxContainer/PlayButton"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 11.538818
-offset_bottom = 13.215942
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.795, 0.795)
+[node name="ButtonLabel" parent="HBoxContainer/PlayButton" index="0"]
 text = "PLAY"
-label_settings = ExtResource("6_gh1cy")
-horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="QuitButton" type="TextureButton" parent="HBoxContainer"]
+[node name="QuitButton" parent="HBoxContainer" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 0.53333336, 0.53333336, 1)
 layout_mode = 2
-texture_normal = ExtResource("6_it30p")
 
-[node name="QuitLabel" type="Label" parent="HBoxContainer/QuitButton"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 11.538818
-offset_bottom = 13.215942
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.795, 0.795)
+[node name="ButtonLabel" parent="HBoxContainer/QuitButton" index="0"]
 text = "QUIT"
-label_settings = ExtResource("6_gh1cy")
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="TitleTimer" type="Timer" parent="."]
 wait_time = 5.0
+
+[editable path="HBoxContainer/PlayButton"]
+[editable path="HBoxContainer/QuitButton"]
