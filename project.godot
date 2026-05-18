@@ -21,6 +21,10 @@ SignalManager="*res://globals/SignalManager.cs"
 GameManager="*res://globals/GameManager.cs"
 LevelManager="*res://globals/LevelManager.cs"
 
+[display]
+
+window/stretch/mode="canvas_items"
+
 [dotnet]
 
 project/assembly_name="GemCatcher"
