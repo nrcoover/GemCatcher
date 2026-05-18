@@ -57,6 +57,7 @@ _maxSpeedVariation = 1.75
 
 [node name="Particles" type="CPUParticles2D" parent="."]
 position = Vector2(0, -10)
+emitting = false
 amount = 65
 lifetime = 0.7
 preprocess = 0.64

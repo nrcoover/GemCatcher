@@ -23,6 +23,7 @@ public partial class Gem : Area2D
 		SetVariations();
 		SetScale();
 		SetColor();
+		BeginParticleEmission();
 		SubscribeToSignals();
 	}
 
@@ -93,6 +94,16 @@ public partial class Gem : Area2D
 		_particles.Modulate = _color;
 	}
 
+	private void BeginParticleEmission()
+	{
+		_particles.Emitting = true;
+	}
+
+	private void EndParticleEmission()
+	{
+		_particles.Emitting = false;
+	}
+
 	#region Signals
 
 	public void OnAreaEntered(Area2D area)
@@ -100,9 +111,11 @@ public partial class Gem : Area2D
 		if (area is Paddle)
 		{
 			SignalManager.Instance.EmitScored(this.Modulate);
+			EndParticleEmission();
 			QueueFree();
 		} else if (area is MenuPaddle)
 		{
+			EndParticleEmission();
 			QueueFree();
 		}
 	}
