@@ -1,19 +1,21 @@
-[gd_scene load_steps=4 format=3 uid="uid://3kq5fr5oomem"]
+[gd_scene load_steps=5 format=3 uid="uid://3kq5fr5oomem"]
 
 [ext_resource type="Script" uid="uid://dls61awq12jhp" path="res://scripts/Paddle.cs" id="1_6kxou"]
 [ext_resource type="Texture2D" uid="uid://cnkl8lfb1hs81" path="res://assets/paddleBlu.png" id="1_ry5ju"]
+[ext_resource type="AudioStream" uid="uid://c4r3lm1a0bugh" path="res://assets/203264__metrostock99__rocket-booster-raw-editable.wav" id="3_jlx5f"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6kxou"]
 radius = 12.0
 height = 104.0
 
-[node name="Paddle" type="Area2D" node_paths=PackedStringArray("_debugLogLabel", "_boostRefuelTimer", "_leftParticles", "_rightParticles")]
+[node name="Paddle" type="Area2D" node_paths=PackedStringArray("_debugLogLabel", "_boostRefuelTimer", "_leftParticles", "_rightParticles", "_boostSound")]
 modulate = Color(1.224127, 1.224127, 1.224127, 1)
 script = ExtResource("1_6kxou")
 _debugLogLabel = NodePath("DebugLog")
 _boostRefuelTimer = NodePath("BoostRefuelTimer")
 _leftParticles = NodePath("LeftBoostParticles")
 _rightParticles = NodePath("RightBoostParticles")
+_boostSound = NodePath("BoostSound")
 _boostBurnRate = 25.0
 
 [node name="LeftBoostParticles" type="Node2D" parent="."]
@@ -163,3 +165,8 @@ offset_top = -147.0
 offset_right = 222.0
 offset_bottom = 1.0
 text = "DEGUGGING:"
+
+[node name="BoostSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_jlx5f")
+volume_db = -26.909
+pitch_scale = 1.5

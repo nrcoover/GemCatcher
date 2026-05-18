@@ -31,6 +31,8 @@ public partial class Paddle : Area2D
 	[Export] ProgressBar _progressBarRight;
 	[Export] Node2D _leftParticles;
 	[Export] Node2D _rightParticles;
+
+	[Export] AudioStreamPlayer2D _boostSound;
 	[Export] private float _boostBurnRate;
 	[Export] private float _boostRefuelRate = 12.5f;
 	private float _boostFuel;
@@ -157,7 +159,7 @@ public partial class Paddle : Area2D
 
 	private void OnBoostEngaged()
   {
-		// play boosting sound
+		PlayBoostAudio();
   }
 
 	private void OnBoostDisengaged() 
@@ -172,6 +174,8 @@ public partial class Paddle : Area2D
 
 			GD.Print("BOOST LOCK RELEASED");
 		}
+
+		StopBoostAudio();
 
 		DisengageAllParticles();
 	}
@@ -191,6 +195,8 @@ public partial class Paddle : Area2D
 		_boostersReady = false;
 		_boostLockedUntilRelease = true;
 		_isInCooldown = false;
+
+		StopBoostAudio();
 
 		// play audio announcing fuel depletion
 
@@ -505,5 +511,23 @@ public partial class Paddle : Area2D
 			tweenTime
 		).SetTrans(Tween.TransitionType.Back)
 		.SetEase(Tween.EaseType.Out);
+	}
+
+	private void PlayBoostAudio()
+	{
+		if (!_isTryingToBoost)
+		{
+			return;
+		}
+
+		if (!_boostSound.IsPlaying())
+		{
+			_boostSound.Play();
+		}
+	}
+
+	private void StopBoostAudio()
+	{
+		_boostSound.Stop();
 	}
 }
