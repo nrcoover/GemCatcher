@@ -17,8 +17,11 @@ public partial class GemSpawner : Node2D
 		{
 			SetBoundaryMarkers();
 		}
+		else
+		{
+			SpawnGem();
+		}
 
-		SpawnGem();
 		SubscribeToSignals();
 	}
 
