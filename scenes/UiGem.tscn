@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://ckq0nr3mb2i5u"]
+
+[ext_resource type="PackedScene" uid="uid://8m2y1u6noqq5" path="res://scenes/Gem.tscn" id="1_n3ya8"]
+
+[node name="UiGem" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Gem" parent="." instance=ExtResource("1_n3ya8")]
+
+[editable path="Gem"]
