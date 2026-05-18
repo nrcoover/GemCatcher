@@ -405,6 +405,13 @@ public partial class Paddle : Area2D
 		SetParticleEmission(_leftParticles, true);
 	}
 
+	private void EngageOnlySmokeParticles()
+	{
+		DisengageAllParticles();
+		SetParticleEmission(_leftParticles, true, true);
+		SetParticleEmission(_rightParticles, true, true);
+	}
+
 	private void DisengageAllParticles()
 	{
 		SetParticleEmission(_leftParticles, false);
@@ -430,19 +437,33 @@ public partial class Paddle : Area2D
 			// GD.Print("LEFT PARTICLES");
 			EngageRightParticles();
 		}
+		else if (_isTryingToBoost && _canBoost)
+		{
+			EngageOnlySmokeParticles();
+		}
 		else
 		{
 			DisengageAllParticles();
 		}
 	}
 
-	private void SetParticleEmission(Node node, bool isEmitting)
+	private void SetParticleEmission(Node node, bool isEmitting, bool isSmoking = false)
 	{
 		foreach (Node child in node.GetChildren())
 		{
-			if (child is CpuParticles2D cpuParticles)
+			if (isSmoking)
 			{
-				cpuParticles.Emitting = isEmitting;
+				if (child is CpuParticles2D cpuParticles && child.Name == "ParticlesBlack")
+				{
+					cpuParticles.Emitting = isEmitting;
+				}
+			}
+			else
+			{
+				if (child is CpuParticles2D cpuParticles)
+				{
+					cpuParticles.Emitting = isEmitting;
+				}
 			}
 		}
 	}
