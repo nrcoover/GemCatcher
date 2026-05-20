@@ -507,6 +507,11 @@ public partial class Paddle : Area2D
 
 	private async void CreateColorScaleTweenAsync(Color color)
 	{
+		if (_isOverheating)
+		{
+			return;
+		}
+
 		var tweenTime = 0.25f;
 		var originalScale = Scale;
 		var scaleMultiplier = 1.15f;
