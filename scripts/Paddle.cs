@@ -57,6 +57,12 @@ public partial class Paddle : Area2D
     _boostFuel < MAX_BOOST_FUEL &&
     !_boostLockedUntilRelease;
 
+	private bool _isOverheating =>
+		_boostFuel != MAX_BOOST_FUEL
+		&& !_canBoost 
+		&& !_canRefuel
+		&& _isTryingToBoost;
+
 	private Rect2 _viewportBoundary;
 	
   private void HandleDebugLog()
@@ -332,15 +338,7 @@ public partial class Paddle : Area2D
 
 	private void HandleFuelConsumptionAnimation()
   {
-		if (_isInCooldown)
-    {
-			_selfAnimator.Play("flash-yellow");
-
-			return;
-    } else
-		{
-			_selfAnimator.Play("RESET");
-		}
+		HandlePaddleAnimation();
 
 		var isLowOnFuel = _boostFuel < (int)FuelState.Low;
 
@@ -392,6 +390,24 @@ public partial class Paddle : Area2D
 			}
 		}
   }
+
+	public void HandlePaddleAnimation()
+	{
+		if (_isInCooldown)
+    {
+			_selfAnimator.Play("flash-yellow");
+
+			return;
+    } 
+		else if (_isOverheating)
+		{
+			_selfAnimator.Play("flash-red-fast");
+		}
+		else
+		{
+			_selfAnimator.Play("RESET");
+		}
+	}
 
 #endregion
 

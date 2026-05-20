@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://3kq5fr5oomem"]
+[gd_scene load_steps=10 format=3 uid="uid://3kq5fr5oomem"]
 
 [ext_resource type="Script" uid="uid://dls61awq12jhp" path="res://scripts/Paddle.cs" id="1_6kxou"]
 [ext_resource type="Texture2D" uid="uid://cnkl8lfb1hs81" path="res://assets/paddleBlu.png" id="1_ry5ju"]
@@ -23,6 +23,41 @@ tracks/0/keys = {
 "values": [Color(1.224127, 1.224127, 1.224127, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_s6nv3"]
+resource_name = "flash-red"
+loop_mode = 1
+step = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1.224127, 1.224127, 1.224127, 1), Color(0.99978286, 0.26040283, 0.20119143, 1), Color(1.224127, 1.224127, 1.224127, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_236v3"]
+resource_name = "flash-red-fast"
+length = 0.5
+loop_mode = 1
+step = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1.224127, 1.224127, 1.224127, 1), Color(0.87060624, 0, 0, 1), Color(1.224127, 1.224127, 1.224127, 1)]
+}
+
 [sub_resource type="Animation" id="Animation_c7ra2"]
 resource_name = "flash-yellow"
 loop_mode = 1
@@ -37,12 +72,14 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5, 1),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Color(1.224127, 1.224127, 1.224127, 1), Color(0.8439447, 0.83195937, 0, 1), Color(1.224127, 1.224127, 1.224127, 1)]
+"values": [Color(1.224127, 1.224127, 1.224127, 1), Color(0.850985, 0.70982546, 0, 1), Color(1.224127, 1.224127, 1.224127, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_s6nv3"]
 _data = {
 &"RESET": SubResource("Animation_jlx5f"),
+&"flash-red": SubResource("Animation_s6nv3"),
+&"flash-red-fast": SubResource("Animation_236v3"),
 &"flash-yellow": SubResource("Animation_c7ra2")
 }
 
@@ -197,6 +234,12 @@ shape = SubResource("CapsuleShape2D_6kxou")
 
 [node name="BoostRefuelTimer" type="Timer" parent="."]
 wait_time = 5.0
+
+[node name="SelfDestructTimer" type="Timer" parent="."]
+wait_time = 5.0
+
+[node name="SelfDestructWarningTimer" type="Timer" parent="."]
+wait_time = 2.0
 
 [node name="DebugLog" type="Label" parent="."]
 offset_left = 57.0
