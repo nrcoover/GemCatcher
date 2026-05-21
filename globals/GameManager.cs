@@ -18,18 +18,27 @@ public partial class GameManager : Node
     SubscribeToSignals();
 	}
 
-	public override void _ExitTree()
+	public override void _Process(double _delta)
+	{
+		CheckForGameOver();
+	}
+
+  public override void _ExitTree()
 	{
 		UnsubscribeFromSignals();
 	}
+	
+#region Signals
 
-	public void ResetGame()
+	private void SubscribeToSignals()
 	{
-		SetMissedGemCount(0);
-		SetHealth(MAX_HEALTH);
+		SignalManager.Instance.GameOver += OnGameOver;
 	}
 
-#region Signals
+	private void UnsubscribeFromSignals()
+	{
+		SignalManager.Instance.GameOver -= OnGameOver;
+	}
 
 	public void OnGameOver()
 	{
@@ -37,6 +46,20 @@ public partial class GameManager : Node
 	}
 
 #endregion
+	
+  private void CheckForGameOver()
+  {
+    if (GetHealth() <= 0)
+		{
+			SignalManager.Instance.EmitGameOver();
+		}
+  }
+
+	public void ResetGame()
+	{
+		SetMissedGemCount(0);
+		SetHealth(MAX_HEALTH);
+	}
 
 #region Manage Health
 
@@ -94,14 +117,4 @@ public partial class GameManager : Node
 	}
 
 #endregion
-
-	private void SubscribeToSignals()
-	{
-		SignalManager.Instance.GameOver += OnGameOver;
-	}
-
-	private void UnsubscribeFromSignals()
-	{
-		SignalManager.Instance.GameOver -= OnGameOver;
-	}
 }

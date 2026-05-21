@@ -11,6 +11,7 @@ public partial class SignalManager : Node
 	[Signal] public delegate void BoostDisengagedEventHandler();
 	[Signal] public delegate void ScoredEventHandler(Color color);
 	[Signal] public delegate void GemOffScreenEventHandler();
+	[Signal] public delegate void PlayerHurtEventHandler();
 
 	public override void _Ready()
 	{
@@ -50,5 +51,10 @@ public partial class SignalManager : Node
 	public void EmitGemOffScreen()
 	{
 		EmitSignal(SignalName.GemOffScreen);
+	}
+
+	public void EmitPlayerHurt()
+	{
+		EmitSignal(SignalName.PlayerHurt);
 	}
 }

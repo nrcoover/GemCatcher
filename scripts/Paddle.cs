@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class Paddle : Area2D
@@ -26,6 +27,7 @@ public partial class Paddle : Area2D
 	[Export] Label _boostLabel;
 	[Export] Label _boostPercentageLabel;
 	[Export] Timer _boostRefuelTimer;
+	[Export] Timer _selfDestructWarningTimer;
 	[Export] Timer _selfDestructTimer;
 	[Export] AnimationPlayer _animator;
 	[Export] AnimationPlayer _selfAnimator;
@@ -77,7 +79,7 @@ public partial class Paddle : Area2D
 			+ $"Locked: {_boostLockedUntilRelease},\n"
 			+ $"Boosting: {_isTryingToBoost},\n"
 			+ $"Overheating: {_isOverheating},\n"
-			+ $"Self Destruct Countdown: {_selfDestructTimer.TimeLeft},\n"
+			+ $"Self Destruct Countdown: {_selfDestructWarningTimer.TimeLeft},\n"
 			;
   }
 
@@ -152,6 +154,7 @@ public partial class Paddle : Area2D
 	private void SubscribeToSignals()
 	{
 		_boostRefuelTimer.Timeout += OnRefuelTimeout;
+		_selfDestructWarningTimer.Timeout += OnSelfDestructWarningTimeout;
 		_selfDestructTimer.Timeout += OnSelfDestructTimeout;
 		SignalManager.Instance.BoostFuelDepleted += OnBoostFuelDepleted;
 		SignalManager.Instance.BoostEngaged += OnBoostEngaged;
@@ -199,15 +202,18 @@ public partial class Paddle : Area2D
 		// sound effect for "boosters reengaged" (conversely "boosters depleted; cool-down in progress)
 	}
 	
-  private void OnSelfDestructTimeout()
-  {
-		var currentHealth = GameManager.Instance.GetHealth();
+  private void OnSelfDestructWarningTimeout()
+	{
+		_selfDestructTimer.Start();
+	}
 
-		while (currentHealth >= 0)
-		{
-			GameManager.Instance.DecrementHealth();
-		}
-  }
+	
+  private void OnSelfDestructTimeout()
+	{
+		GameManager.Instance.DecrementHealth();
+		SignalManager.Instance.EmitPlayerHurt();
+		_selfDestructTimer.Start();
+	}
 
 	private void OnBoostFuelDepleted()
 	{
@@ -410,6 +416,7 @@ public partial class Paddle : Area2D
 		if (_isInCooldown)
     {
 			_selfAnimator.Play("flash-yellow");
+			_selfDestructWarningTimer.Stop();
 			_selfDestructTimer.Stop();
 
 			return;
@@ -418,7 +425,7 @@ public partial class Paddle : Area2D
 		{
 			if (_selfAnimator.CurrentAnimation != "flash-red-fast")
 			{
-				_selfDestructTimer.Start();
+				_selfDestructWarningTimer.Start();
 			}
 			_selfAnimator.Play("flash-red-fast");
 		}

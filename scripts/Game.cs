@@ -68,12 +68,14 @@ public partial class Game : Node2D
 		SignalManager.Instance.InitiateDeathSequence += OnInitiateDeathSequenceAsync;
 		SignalManager.Instance.Scored += OnScored;
 		SignalManager.Instance.GemOffScreen += OnGemOffScreen;
+		SignalManager.Instance.PlayerHurt += OnPlayerHurt;
 	}
 
-	private void UnsubscribeFromSignals() {
+  private void UnsubscribeFromSignals() {
 		SignalManager.Instance.InitiateDeathSequence -= OnInitiateDeathSequenceAsync;
 		SignalManager.Instance.Scored -= OnScored;
 		SignalManager.Instance.GemOffScreen -= OnGemOffScreen;
+		SignalManager.Instance.PlayerHurt -= OnPlayerHurt;
 	}
 
 	private void HandleEscape()
@@ -90,6 +92,11 @@ public partial class Game : Node2D
 		_scoreSound.Play();
 		UpdateScoreUi(color);
 	}
+	
+  private void OnPlayerHurt()
+  {
+    IncurDamage();
+  }
 
 	private void UpdateScoreUi(Color color)
 	{
@@ -163,6 +170,11 @@ public partial class Game : Node2D
 	private void OnGemOffScreen()
 	{
 		GameManager.Instance.IncrementMissedGems();
+		SignalManager.Instance.EmitPlayerHurt();
+	}
+
+	private void IncurDamage()
+	{
 		_hurtSound.Play();
 		_camera.ScreenShake(_shakeIntensity, _shakeTime);
 		UpdateHealthUi();
