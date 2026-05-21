@@ -65,11 +65,12 @@ _data = {
 &"flash-yellow": SubResource("Animation_c7ra2")
 }
 
-[node name="Paddle" type="Area2D" node_paths=PackedStringArray("_debugLogLabel", "_boostRefuelTimer", "_selfAnimator", "_leftParticles", "_rightParticles", "_boostSound")]
+[node name="Paddle" type="Area2D" node_paths=PackedStringArray("_debugLogLabel", "_boostRefuelTimer", "_selfDestructTimer", "_selfAnimator", "_leftParticles", "_rightParticles", "_boostSound")]
 modulate = Color(1.224127, 1.224127, 1.224127, 1)
 script = ExtResource("1_6kxou")
 _debugLogLabel = NodePath("DebugLog")
 _boostRefuelTimer = NodePath("BoostRefuelTimer")
+_selfDestructTimer = NodePath("SelfDestructTimer")
 _selfAnimator = NodePath("AnimationPlayer")
 _leftParticles = NodePath("LeftBoostParticles")
 _rightParticles = NodePath("RightBoostParticles")
@@ -219,9 +220,7 @@ wait_time = 5.0
 
 [node name="SelfDestructTimer" type="Timer" parent="."]
 wait_time = 5.0
-
-[node name="SelfDestructWarningTimer" type="Timer" parent="."]
-wait_time = 2.0
+one_shot = true
 
 [node name="DebugLog" type="Label" parent="."]
 offset_left = 57.0

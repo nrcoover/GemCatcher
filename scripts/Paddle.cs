@@ -26,6 +26,7 @@ public partial class Paddle : Area2D
 	[Export] Label _boostLabel;
 	[Export] Label _boostPercentageLabel;
 	[Export] Timer _boostRefuelTimer;
+	[Export] Timer _selfDestructTimer;
 	[Export] AnimationPlayer _animator;
 	[Export] AnimationPlayer _selfAnimator;
 	[Export] ProgressBar _progressBarLeft;
@@ -75,6 +76,8 @@ public partial class Paddle : Area2D
 			+ $"InCooldown: {_isInCooldown},\n"
 			+ $"Locked: {_boostLockedUntilRelease},\n"
 			+ $"Boosting: {_isTryingToBoost},\n"
+			+ $"Overheating: {_isOverheating},\n"
+			+ $"Self Destruct Countdown: {_selfDestructTimer.TimeLeft},\n"
 			;
   }
 
@@ -149,6 +152,7 @@ public partial class Paddle : Area2D
 	private void SubscribeToSignals()
 	{
 		_boostRefuelTimer.Timeout += OnRefuelTimeout;
+		_selfDestructTimer.Timeout += OnSelfDestructTimeout;
 		SignalManager.Instance.BoostFuelDepleted += OnBoostFuelDepleted;
 		SignalManager.Instance.BoostEngaged += OnBoostEngaged;
 		SignalManager.Instance.BoostDisengaged += OnBoostDisengaged;
@@ -194,6 +198,16 @@ public partial class Paddle : Area2D
 
 		// sound effect for "boosters reengaged" (conversely "boosters depleted; cool-down in progress)
 	}
+	
+  private void OnSelfDestructTimeout()
+  {
+		var currentHealth = GameManager.Instance.GetHealth();
+
+		while (currentHealth >= 0)
+		{
+			GameManager.Instance.DecrementHealth();
+		}
+  }
 
 	private void OnBoostFuelDepleted()
 	{
@@ -396,11 +410,16 @@ public partial class Paddle : Area2D
 		if (_isInCooldown)
     {
 			_selfAnimator.Play("flash-yellow");
+			_selfDestructTimer.Stop();
 
 			return;
     } 
 		else if (_isOverheating)
 		{
+			if (_selfAnimator.CurrentAnimation != "flash-red-fast")
+			{
+				_selfDestructTimer.Start();
+			}
 			_selfAnimator.Play("flash-red-fast");
 		}
 		else
