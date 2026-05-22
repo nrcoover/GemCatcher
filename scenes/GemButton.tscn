@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dqthwsums7jjw"]
 
 [ext_resource type="Texture2D" uid="uid://c2a4m3pjt6egg" path="res://assets/base_diamond.png" id="1_53y1h"]
-[ext_resource type="Script" uid="uid://bi0gj5hxbqbnb" path="res://scenes/GemButton.cs" id="2_htack"]
+[ext_resource type="Script" uid="uid://bi0gj5hxbqbnb" path="res://scripts/GemButton.cs" id="2_htack"]
 [ext_resource type="LabelSettings" uid="uid://bvp27oyhve2cn" path="res://resources/play_white_16_font_normal.tres" id="3_dlmdy"]
 [ext_resource type="AudioStream" uid="uid://di4fr2u86dhv8" path="res://assets/545238__mr_fritz__item-sparkle.wav" id="4_ayqph"]
 
