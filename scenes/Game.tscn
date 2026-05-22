@@ -430,7 +430,7 @@ _data = {
 &"yellow_warning_level_3": SubResource("Animation_sv1m6")
 }
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_explosion", "_scoreSound", "_hurtSound", "_heart1", "_heart2", "_heart3")]
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_explosion", "_scoreSound", "_hurtSound", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
 script = ExtResource("1_78awf")
 _camera = NodePath("Camera2D")
 _scoreLabel = NodePath("CanvasLayer/MarginContainer/ScoreLabel")
@@ -440,6 +440,8 @@ _hurtSound = NodePath("HurtSound")
 _heart1 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart1Faded/Heart1Full")
 _heart2 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart2Faded/Heart2Full")
 _heart3 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart3Faded/Heart3Full")
+_heart4 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart4Faded/Heart4Full")
+_heart5 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart5Faded/Heart5Full")
 _shakeIntensity = 30
 _shakeTime = 0.25
 
@@ -510,20 +512,32 @@ size_flags_horizontal = 8
 size_flags_vertical = 0
 alignment = 2
 
-[node name="Heart3Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
+[node name="Heart5Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
 position = Vector2(-12, 15)
+
+[node name="Heart5Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart5Faded" instance=ExtResource("7_kiw3p")]
+scale = Vector2(1, 1)
+
+[node name="Heart4Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
+position = Vector2(-66, 15)
+
+[node name="Heart4Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart4Faded" instance=ExtResource("7_kiw3p")]
+scale = Vector2(1, 1)
+
+[node name="Heart3Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
+position = Vector2(-120, 15)
 
 [node name="Heart3Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart3Faded" instance=ExtResource("7_kiw3p")]
 scale = Vector2(1, 1)
 
 [node name="Heart2Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
-position = Vector2(-64, 15)
+position = Vector2(-174, 15)
 
 [node name="Heart2Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart2Faded" instance=ExtResource("7_kiw3p")]
 scale = Vector2(1, 1)
 
 [node name="Heart1Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
-position = Vector2(-118, 15)
+position = Vector2(-228, 15)
 
 [node name="Heart1Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart1Faded" instance=ExtResource("7_kiw3p")]
 scale = Vector2(1, 1)

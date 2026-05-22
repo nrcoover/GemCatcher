@@ -2,8 +2,8 @@ using Godot;
 
 public partial class GameManager : Node
 {
-	const int MAX_MISSED_GEMS = 3;
-	const int MAX_HEALTH = 3;
+	const int MAX_MISSED_GEMS = 5;
+	const int MAX_HEALTH = 5;
 	const int MIN_HEALTH = 0;
 	private int _high_score = 0;
 

@@ -7,8 +7,10 @@ public partial class Game : Node2D
 
 	enum HealthStatus
 	{
-		FullHealth = 3,
-		Injured = 2,
+		FullHealth = 5,
+		FleshWound = 4,
+		Injured = 3,
+		Hurt = 2,
 		MortallyWounded = 1,
 		Dead = 0
 	}
@@ -23,6 +25,8 @@ public partial class Game : Node2D
 	[Export] private Node2D _heart1;
 	[Export] private Node2D _heart2;
 	[Export] private Node2D _heart3;
+	[Export] private Node2D _heart4;
+	[Export] private Node2D _heart5;
 
 	[Export] private int _shakeIntensity;
 	[Export] private float _shakeTime;
@@ -143,26 +147,43 @@ public partial class Game : Node2D
 				_heart1.Visible = true;
 				_heart2.Visible = true;
 				_heart3.Visible = true;
+				_heart4.Visible = true;
+				_heart5.Visible = true;
 				break;
-			case (int)HealthStatus.Injured:
+			case (int)HealthStatus.FleshWound:
 				_heart1.Visible = false;
 				_heart2.Visible = true;
 				_heart3.Visible = true;
+				_heart4.Visible = true;
+				_heart5.Visible = true;
+				break;
+			case (int)HealthStatus.Injured:
+				_heart1.Visible = false;
+				_heart2.Visible = false;
+				_heart3.Visible = true;
+				_heart4.Visible = true;
+				_heart5.Visible = true;
+				break;
+			case (int)HealthStatus.Hurt:
+				_heart1.Visible = false;
+				_heart2.Visible = false;
+				_heart3.Visible = false;
+				_heart4.Visible = true;
+				_heart5.Visible = true;
 				break;
 			case (int)HealthStatus.MortallyWounded:
 				_heart1.Visible = false;
 				_heart2.Visible = false;
-				_heart3.Visible = true;
-				break;
-			case (int)HealthStatus.Dead:
-				_heart1.Visible = false;
-				_heart2.Visible = false;
 				_heart3.Visible = false;
+				_heart4.Visible = false;
+				_heart5.Visible = true;
 				break;
 			default:
 				_heart1.Visible = false;
 				_heart2.Visible = false;
 				_heart3.Visible = false;
+				_heart4.Visible = false;
+				_heart5.Visible = false;
 				break;
 		}
 	}
