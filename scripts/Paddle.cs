@@ -36,6 +36,9 @@ public partial class Paddle : Area2D
 	[Export] Node2D _rightParticles;
 
 	[Export] AudioStreamPlayer2D _boostSound;
+	[Export] AudioStreamPlayer _audioDisengageBoosters;
+	[Export] AudioStreamPlayer _audioBoostersReengaged;
+	[Export] AudioStreamPlayer _audioCooldownInProgress;
 	[Export] private float _boostBurnRate;
 	[Export] private float _boostRefuelRate = 12.5f;
 	private float _boostFuel;
@@ -186,6 +189,9 @@ public partial class Paddle : Area2D
 			_boostRefuelTimer.Start();
 
 			GD.Print("BOOST LOCK RELEASED");
+
+			_audioDisengageBoosters.Stop();
+			PlayAudioStream(_audioCooldownInProgress);
 		}
 
 		StopBoostAudio();
@@ -198,7 +204,7 @@ public partial class Paddle : Area2D
 		_boostersReady = true;
 		_isInCooldown = false;
 
-		// sound effect for "boosters reengaged" (conversely "boosters depleted; cool-down in progress)
+		PlayAudioStream(_audioBoostersReengaged);
 	}
 	
   private void OnSelfDestructWarningTimeout()
@@ -224,7 +230,7 @@ public partial class Paddle : Area2D
 
 		StopBoostAudio();
 
-		// play audio announcing fuel depletion
+		PlayAudioStream(_audioDisengageBoosters);
 
 		_animator.Stop();
 
@@ -600,5 +606,13 @@ public partial class Paddle : Area2D
 	private void StopBoostAudio()
 	{
 		_boostSound.Stop();
+	}
+
+	private void PlayAudioStream(AudioStreamPlayer audio)
+	{
+		if (!audio.IsPlaying())
+		{
+			audio.Play();
+		}
 	}
 }

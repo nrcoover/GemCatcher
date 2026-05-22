@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=34 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/GameBg.png" id="1_ibkli"]
@@ -18,6 +18,9 @@
 [ext_resource type="AudioStream" uid="uid://dfdhu6sspy4it" path="res://assets/404766__owlstorm__retro-video-game-sfx-punch-2.wav" id="11_3xj3m"]
 [ext_resource type="AudioStream" uid="uid://dw8ladfm3gy58" path="res://assets/475557__rannem__bip.wav" id="13_r7sob"]
 [ext_resource type="AudioStream" uid="uid://ogfnhm87ce0t" path="res://assets/492651__rvgerxini__power-down.mp3" id="13_y5y3l"]
+[ext_resource type="AudioStream" uid="uid://bhkxrv2ytglu8" path="res://assets/disengage-boosters.mp3" id="15_45i86"]
+[ext_resource type="AudioStream" uid="uid://dgkejar3yrf6q" path="res://assets/boosters-reengaged.mp3" id="16_a8wo8"]
+[ext_resource type="AudioStream" uid="uid://h63jsdluxsal" path="res://assets/cooldown-in-progress.mp3" id="17_attvq"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_aug50"]
 font = ExtResource("5_s0nni")
@@ -147,7 +150,7 @@ tracks/1/keys = {
 tracks/2/type = "audio"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("PowerDown")
+tracks/2/path = NodePath("Audio/SFX/PowerDown")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -221,7 +224,7 @@ tracks/1/keys = {
 tracks/2/type = "audio"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("WarningBlip")
+tracks/2/path = NodePath("Audio/SFX/WarningBlip")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -302,7 +305,7 @@ tracks/1/keys = {
 tracks/2/type = "audio"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("WarningBlip")
+tracks/2/path = NodePath("Audio/SFX/WarningBlip")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -347,7 +350,7 @@ tracks/1/keys = {
 tracks/2/type = "audio"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("WarningBlip")
+tracks/2/path = NodePath("Audio/SFX/WarningBlip")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -396,7 +399,7 @@ tracks/1/keys = {
 tracks/2/type = "audio"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("WarningBlip")
+tracks/2/path = NodePath("Audio/SFX/WarningBlip")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -434,7 +437,7 @@ _data = {
 script = ExtResource("1_78awf")
 _camera = NodePath("Camera2D")
 _scoreLabel = NodePath("CanvasLayer/MarginContainer/ScoreLabel")
-_explosion = NodePath("Explosion")
+_explosion = NodePath("Audio/SFX/Explosion")
 _scoreSound = NodePath("ScoreSound")
 _hurtSound = NodePath("HurtSound")
 _heart1 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart1Faded/Heart1Full")
@@ -473,7 +476,7 @@ flip_v = true
 
 [node name="MotionBackdrop" parent="." instance=ExtResource("4_vjgi4")]
 
-[node name="Paddle" parent="." node_paths=PackedStringArray("_boostLabel", "_boostPercentageLabel", "_animator", "_progressBarLeft", "_progressBarRight") instance=ExtResource("2_qbsmt")]
+[node name="Paddle" parent="." node_paths=PackedStringArray("_boostLabel", "_boostPercentageLabel", "_animator", "_progressBarLeft", "_progressBarRight", "_audioDisengageBoosters", "_audioBoostersReengaged", "_audioCooldownInProgress") instance=ExtResource("2_qbsmt")]
 position = Vector2(561, 570)
 scale = Vector2(0.600926, 0.6009259)
 _movementSpeed = 500.0
@@ -483,6 +486,9 @@ _boostPercentageLabel = NodePath("../CanvasLayer/MarginContainer/BoostPercentage
 _animator = NodePath("../AnimationPlayer")
 _progressBarLeft = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft")
 _progressBarRight = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight")
+_audioDisengageBoosters = NodePath("../Audio/Voice/DisengageBoosters")
+_audioBoostersReengaged = NodePath("../Audio/Voice/BoostersReengaged")
+_audioCooldownInProgress = NodePath("../Audio/Voice/CoolDownInProgress")
 
 [node name="GemSpawner" parent="." instance=ExtResource("6_kyk2p")]
 
@@ -602,21 +608,40 @@ theme_override_styles/fill = ExtResource("9_7ua8r")
 value = 100.0
 rounded = true
 
-[node name="Music" type="AudioStreamPlayer" parent="."]
+[node name="Audio" type="Node" parent="."]
+
+[node name="Music" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("8_400sg")
 volume_db = -24.0
 autoplay = true
 
-[node name="Explosion" type="AudioStreamPlayer" parent="."]
+[node name="SFX" type="Node" parent="Audio"]
+
+[node name="Explosion" type="AudioStreamPlayer" parent="Audio/SFX"]
 stream = ExtResource("9_g4kob")
 volume_db = -16.0
 
-[node name="WarningBlip" type="AudioStreamPlayer" parent="."]
+[node name="WarningBlip" type="AudioStreamPlayer" parent="Audio/SFX"]
 pitch_scale = 2.0
 
-[node name="PowerDown" type="AudioStreamPlayer" parent="."]
+[node name="PowerDown" type="AudioStreamPlayer" parent="Audio/SFX"]
 volume_db = -24.0
 pitch_scale = 0.8
+
+[node name="Voice" type="Node" parent="Audio"]
+
+[node name="DisengageBoosters" type="AudioStreamPlayer" parent="Audio/Voice"]
+stream = ExtResource("15_45i86")
+volume_db = -12.0
+parameters/looping = true
+
+[node name="BoostersReengaged" type="AudioStreamPlayer" parent="Audio/Voice"]
+stream = ExtResource("16_a8wo8")
+volume_db = -12.0
+
+[node name="CoolDownInProgress" type="AudioStreamPlayer" parent="Audio/Voice"]
+stream = ExtResource("17_attvq")
+volume_db = -12.0
 
 [node name="ScoreSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("10_qy1jj")
