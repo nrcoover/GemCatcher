@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using System.Linq;
 using Godot;
 
 public partial class Game : Node2D
@@ -33,6 +35,7 @@ public partial class Game : Node2D
 	private Tween _colorScaleTween;
 
 	private int _score = 0;
+	private bool _isDying = false;
 
 	public override void _Ready()
 	{
@@ -55,13 +58,33 @@ public partial class Game : Node2D
 
 	public async void OnInitiateDeathSequenceAsync()
 	{
-		_colorScaleTween.Kill();
+		if (_isDying)
+		{
+			return;
+		}
 
-		GetTree().Paused = true;
-		await ToSignal(GetTree().CreateTimer(1.0f), SceneTreeTimer.SignalName.Timeout);
-		_explosion.Play();
-		await ToSignal(GetTree().CreateTimer(1.5f), SceneTreeTimer.SignalName.Timeout);
+		_isDying = true;
+
+		KillAllTweens();
+		StopMoveableObjectProcessing();
+		StopAllAudio();
 		
+		await DeathCameraShake();
+
+		if (!IsInsideTree())
+		{
+			return;
+		}
+
+		_explosion.Play();
+
+		await CreateTimerAsync(2.5f);
+
+		if (!IsInsideTree())
+		{
+			return;
+		}
+
 		GameManager.Instance.ResetGame();
 		LevelManager.Instance.LoadMainMenu();
 	}
@@ -203,5 +226,77 @@ public partial class Game : Node2D
 	private void IncrementScore(int points)
 	{
 		_score += points;
+	}
+
+	private void StopMoveableObjectProcessing()
+	{
+		var moveables = Helper.GetAllObjectsInGroup(
+			GetTree().Root,
+			Constants.GroupNames.MoveableObjects
+		);
+
+		foreach (Node2D moveable in moveables.Cast<Node2D>())
+		{
+			moveable.ProcessMode = ProcessModeEnum.Disabled;
+		}
+	}
+
+	private void StopAllAudio()
+	{
+		var audioStreams = Helper.GetAllObjectsInGroup(
+			GetTree().Root,
+			Constants.GroupNames.AudioStreams
+		);
+
+		foreach (Node audio in audioStreams)
+		{
+			if (audio.Name == "Explosion" || audio.Name == "HurtSound")
+			{
+				continue;
+			}
+
+			if (audio is AudioStreamPlayer player)
+			{
+				player.Stop();
+			}
+			else if (audio is AudioStreamPlayer2D player2D)
+			{
+				player2D.Stop();
+			}
+		}
+	}
+
+	private void KillAllTweens()
+	{
+		if (_colorScaleTween != null)
+		{
+			_colorScaleTween.Kill();
+		}
+	}
+
+	private async Task CreateTimerAsync(float timeInSeconds)
+	{
+		var tree = GetTree();
+
+		if (tree == null)
+		{
+			return;
+		}
+
+		await ToSignal(
+			tree.CreateTimer(timeInSeconds),
+			SceneTreeTimer.SignalName.Timeout
+		);
+	}
+
+	private async Task DeathCameraShake()
+	{
+		var shakeTime = 2.0f;
+		var minShakeIntensity = _shakeIntensity * 0.1f;
+		var maxShakeIntensity = _shakeIntensity * 3;
+
+		_camera.RampScreenShake(shakeTime, minShakeIntensity, maxShakeIntensity);
+
+		await CreateTimerAsync(shakeTime);
 	}
 }

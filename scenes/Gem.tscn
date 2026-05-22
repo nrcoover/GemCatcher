@@ -50,7 +50,7 @@ _data = {
 &"sparkle": SubResource("Animation_xfm3s")
 }
 
-[node name="Gem" type="Area2D" node_paths=PackedStringArray("_particles")]
+[node name="Gem" type="Area2D" node_paths=PackedStringArray("_particles") groups=["Moveable Objects"]]
 script = ExtResource("1_o8oug")
 _particles = NodePath("Particles")
 _maxSpeedVariation = 1.75
@@ -79,7 +79,7 @@ rotation = 0.7853982
 scale = Vector2(0.9999999, 0.9999999)
 shape = SubResource("RectangleShape2D_o8oug")
 
-[node name="ScoreSound" type="AudioStreamPlayer2D" parent="."]
+[node name="ScoreSound" type="AudioStreamPlayer2D" parent="." groups=["Audio Streams"]]
 position = Vector2(0, -4.7683716e-07)
 rotation = 0.7853982
 scale = Vector2(0.9999999, 0.9999999)

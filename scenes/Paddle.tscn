@@ -65,7 +65,7 @@ _data = {
 &"flash-yellow": SubResource("Animation_c7ra2")
 }
 
-[node name="Paddle" type="Area2D" node_paths=PackedStringArray("_debugLogLabel", "_boostRefuelTimer", "_selfDestructWarningTimer", "_selfDestructTimer", "_selfAnimator", "_leftParticles", "_rightParticles", "_boostSound")]
+[node name="Paddle" type="Area2D" node_paths=PackedStringArray("_debugLogLabel", "_boostRefuelTimer", "_selfDestructWarningTimer", "_selfDestructTimer", "_selfAnimator", "_leftParticles", "_rightParticles", "_boostSound") groups=["Moveable Objects"]]
 modulate = Color(1.224127, 1.224127, 1.224127, 1)
 script = ExtResource("1_6kxou")
 _debugLogLabel = NodePath("DebugLog")
@@ -233,7 +233,7 @@ offset_right = 222.0
 offset_bottom = 1.0
 text = "DEGUGGING:"
 
-[node name="BoostSound" type="AudioStreamPlayer2D" parent="."]
+[node name="BoostSound" type="AudioStreamPlayer2D" parent="." groups=["Audio Streams"]]
 stream = ExtResource("3_jlx5f")
 volume_db = -12.0
 pitch_scale = 1.5

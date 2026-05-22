@@ -48,4 +48,10 @@ public static partial class Constants
     public static readonly string PurpleMuted = "7755AA";
     public static readonly string PinkMuted = "AA55AA";
   }
+
+  public static class GroupNames
+  {
+    public static readonly string MoveableObjects = "Moveable Objects";
+    public static readonly string AudioStreams = "Audio Streams";
+  }
 }

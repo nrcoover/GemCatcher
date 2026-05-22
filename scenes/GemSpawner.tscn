@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dh8dsybin7xf6" path="res://scripts/GemSpawner.cs" id="1_23civ"]
 [ext_resource type="PackedScene" uid="uid://8m2y1u6noqq5" path="res://scenes/Gem.tscn" id="2_inrc3"]
 
-[node name="GemSpawner" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_gemContainer")]
+[node name="GemSpawner" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_gemContainer") groups=["Moveable Objects"]]
 script = ExtResource("1_23civ")
 _gemSpawnTimer = NodePath("GemSpawnTimer")
 _gemScene = ExtResource("2_inrc3")

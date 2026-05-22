@@ -71,4 +71,11 @@ public static partial class Helper
 
 		return new Color(selectedColorhex);
 	}
+
+	public static Godot.Collections.Array<Node> GetAllObjectsInGroup(Node rootScene, string groupName)
+	{
+		var objects = rootScene.GetTree().GetNodesInGroup(groupName);
+
+		return objects;
+	}
 }
