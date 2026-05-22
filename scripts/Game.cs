@@ -19,7 +19,9 @@ public partial class Game : Node2D
 	[Export] private Camera _camera;
 	[Export] private Label _scoreLabel;
 
-	[Export] private AudioStreamPlayer _explosion;
+	[Export] private AudioStreamPlayer _audioExplosion;
+	[Export] private AudioStreamPlayer _audioCommencingMission;
+	[Export] private AudioStreamPlayer _audioMissionFailure;
 	[Export] private AudioStreamPlayer2D _scoreSound;
 	[Export] private AudioStreamPlayer2D _hurtSound;
 
@@ -41,6 +43,7 @@ public partial class Game : Node2D
 	{
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 		SubscribeToSignals();
+		_audioCommencingMission.Play();
 	}
 
 	 public override void _UnhandledInput(InputEvent @event)
@@ -76,9 +79,7 @@ public partial class Game : Node2D
 			return;
 		}
 
-		_explosion.Play();
-
-		await CreateTimerAsync(2.5f);
+		await HandleDeathSequenceAudio();
 
 		if (!IsInsideTree())
 		{
@@ -298,5 +299,16 @@ public partial class Game : Node2D
 		_camera.RampScreenShake(shakeTime, minShakeIntensity, maxShakeIntensity);
 
 		await CreateTimerAsync(shakeTime);
+	}
+
+	private async Task HandleDeathSequenceAudio()
+	{
+		_audioExplosion.Play();
+
+		await CreateTimerAsync(1.5f);
+
+		_audioMissionFailure.Play();
+
+		await CreateTimerAsync(2.5f);
 	}
 }

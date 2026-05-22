@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=36 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/GameBg.png" id="1_ibkli"]
@@ -20,7 +20,9 @@
 [ext_resource type="AudioStream" uid="uid://ogfnhm87ce0t" path="res://assets/492651__rvgerxini__power-down.mp3" id="13_y5y3l"]
 [ext_resource type="AudioStream" uid="uid://bhkxrv2ytglu8" path="res://assets/disengage-boosters.mp3" id="15_45i86"]
 [ext_resource type="AudioStream" uid="uid://dgkejar3yrf6q" path="res://assets/boosters-reengaged.mp3" id="16_a8wo8"]
+[ext_resource type="AudioStream" uid="uid://thtaruqgrqt7" path="res://assets/commencing-mission.mp3" id="16_bneo8"]
 [ext_resource type="AudioStream" uid="uid://h63jsdluxsal" path="res://assets/cooldown-in-progress.mp3" id="17_attvq"]
+[ext_resource type="AudioStream" uid="uid://dvquwwx0ef4na" path="res://assets/mission-failure.mp3" id="17_ocgqw"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_aug50"]
 font = ExtResource("5_s0nni")
@@ -433,11 +435,13 @@ _data = {
 &"yellow_warning_level_3": SubResource("Animation_sv1m6")
 }
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_explosion", "_scoreSound", "_hurtSound", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_explosion", "_audioCommencingMission", "_audioMissionFailure", "_scoreSound", "_hurtSound", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
 script = ExtResource("1_78awf")
 _camera = NodePath("Camera2D")
 _scoreLabel = NodePath("CanvasLayer/MarginContainer/ScoreLabel")
 _explosion = NodePath("Audio/SFX/Explosion")
+_audioCommencingMission = NodePath("Audio/Voice/CommencingMission")
+_audioMissionFailure = NodePath("Audio/Voice/MissionFailure")
 _scoreSound = NodePath("ScoreSound")
 _hurtSound = NodePath("HurtSound")
 _heart1 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart1Faded/Heart1Full")
@@ -634,6 +638,14 @@ pitch_scale = 0.8
 stream = ExtResource("15_45i86")
 volume_db = -12.0
 parameters/looping = true
+
+[node name="CommencingMission" type="AudioStreamPlayer" parent="Audio/Voice" groups=["Audio Streams"]]
+stream = ExtResource("16_bneo8")
+volume_db = -12.0
+
+[node name="MissionFailure" type="AudioStreamPlayer" parent="Audio/Voice" groups=["Audio Streams"]]
+stream = ExtResource("17_ocgqw")
+volume_db = -12.0
 
 [node name="BoostersReengaged" type="AudioStreamPlayer" parent="Audio/Voice" groups=["Audio Streams"]]
 stream = ExtResource("16_a8wo8")
