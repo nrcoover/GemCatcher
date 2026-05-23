@@ -436,11 +436,12 @@ _data = {
 &"yellow_warning_level_3": SubResource("Animation_sv1m6")
 }
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_audioExplosion", "_audioCommencingMission", "_audioMissionFailure", "_scoreSound", "_hurtSound", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommencingMission", "_audioMissionFailure", "_scoreSound", "_hurtSound", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
 script = ExtResource("1_78awf")
 _camera = NodePath("Camera2D")
 _scoreLabel = NodePath("CanvasLayer/MarginContainer/ScoreLabel")
 _audioExplosion = NodePath("Audio/SFX/Explosion")
+_audioCommanderEncouragement = NodePath("Audio/Voice/CommanderEncouragement")
 _audioCommencingMission = NodePath("Audio/Voice/CommencingMission")
 _audioMissionFailure = NodePath("Audio/Voice/MissionFailure")
 _scoreSound = NodePath("ScoreSound")
@@ -644,9 +645,10 @@ parameters/looping = true
 stream = ExtResource("16_bneo8")
 volume_db = -12.0
 
-[node name="CommanderEncouragement" type="AudioStreamPlayer" parent="Audio/Voice" groups=["Audio Streams"]]
+[node name="CommanderEncouragement" type="AudioStreamPlayer2D" parent="Audio/Voice" groups=["Audio Streams"]]
+position = Vector2(1045, 591)
 stream = ExtResource("17_jbgew")
-volume_db = -16.0
+volume_db = -8.0
 
 [node name="MissionFailure" type="AudioStreamPlayer" parent="Audio/Voice" groups=["Audio Streams"]]
 stream = ExtResource("17_ocgqw")

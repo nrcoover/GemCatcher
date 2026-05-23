@@ -20,6 +20,7 @@ public partial class Game : Node2D
 	[Export] private Label _scoreLabel;
 
 	[Export] private AudioStreamPlayer _audioExplosion;
+	[Export] private AudioStreamPlayer2D _audioCommanderEncouragement;
 	[Export] private AudioStreamPlayer _audioCommencingMission;
 	[Export] private AudioStreamPlayer _audioMissionFailure;
 	[Export] private AudioStreamPlayer2D _scoreSound;
@@ -39,14 +40,14 @@ public partial class Game : Node2D
 	private int _score = 0;
 	private bool _isDying = false;
 
-	public override void _Ready()
+	public override async void _Ready()
 	{
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 		SubscribeToSignals();
-		_audioCommencingMission.Play();
+		await PlayGameStartSequenceAsync();
 	}
 
-	 public override void _UnhandledInput(InputEvent @event)
+  public override void _UnhandledInput(InputEvent @event)
 	{
 		if (@event.IsActionPressed("exit"))
 		{
@@ -289,6 +290,15 @@ public partial class Game : Node2D
 			SceneTreeTimer.SignalName.Timeout
 		);
 	}
+	
+	private async Task PlayGameStartSequenceAsync()
+  {
+		_audioCommencingMission.Play();
+
+		await CreateTimerAsync(1.5f);
+
+		_audioCommanderEncouragement.Play();
+  }
 
 	private async Task DeathCameraShake()
 	{
