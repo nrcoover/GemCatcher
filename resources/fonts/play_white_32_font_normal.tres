@@ -1,0 +1,9 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://bbnbitfk5t73d"]
+
+[ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/fonts/Play-Regular.ttf" id="1_q1oah"]
+
+[resource]
+font = ExtResource("1_q1oah")
+font_size = 32
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(1.25, 1.25)

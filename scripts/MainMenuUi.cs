@@ -4,7 +4,15 @@ using Godot;
 public partial class MainMenuUi : Control
 {
 	[Export] TextureButton _playButton;
+	[Export] TextureButton _rulesButton;
+	[Export] TextureButton _movesButton;
 	[Export] TextureButton _quitButton;
+	[Export] TextureButton _creditsButton;
+
+	[Export] MenuModal _movesModal;
+	[Export] MenuModal _rulesModal;
+	[Export] MenuModal _creditsModal;
+	
 	[Export] Label _titleLayer1;
 	[Export] Label _titleLayer2;
 	[Export] Label _titleLayer3;
@@ -24,22 +32,66 @@ public partial class MainMenuUi : Control
 	{
 		_isFirstAnimationRun = true;
 
+		CloseAllModals();
 		InitializeTitleColors();
 		HandleLabelTweeningAsync();
 		SubscribeToSignals();
 	}
 
+#region Signals
+
 	public void SubscribeToSignals()
 	{
-		_playButton.Pressed += OnPlayClicked;
-		_quitButton.Pressed += OnQuitClicked;
 		_titleTimer.Timeout += OnTitleTimeout;
+		_playButton.Pressed += OnPlayClicked;
+		_rulesButton.Pressed += OnRulesClicked;
+		_movesButton.Pressed += OnMovesClicked;
+		_quitButton.Pressed += OnQuitClicked;
+		_creditsButton.Pressed += OnCreditsClicked;
 	}
 
-  private void OnTitleTimeout()
+	private void OnTitleTimeout()
   {
     HandleLabelTweeningAsync();
   }
+
+	private void OnPlayClicked()
+  {
+    LevelManager.Instance.LoadGame();
+  }
+
+  private void OnRulesClicked()
+	{
+		CloseAllModals();
+		_rulesModal.Visible = true;
+	}
+
+
+  private void OnMovesClicked()
+	{
+		CloseAllModals();
+		_movesModal.Visible = true;
+	}
+	
+	private void OnQuitClicked()
+  {
+    LevelManager.Instance.QuitGame();
+  }
+
+  private void OnCreditsClicked()
+	{
+		CloseAllModals();
+		_creditsModal.Visible = true;
+	}
+
+#endregion
+
+	private void CloseAllModals()
+	{
+		_rulesModal.Visible = false;
+		_movesModal.Visible = false;
+		_creditsModal.Visible = false;
+	}
 
 	private void InitializeTitleColors()
 	{
@@ -108,16 +160,6 @@ public partial class MainMenuUi : Control
 
 		_isAnimatingTitle = false;
 	}
-
-  private void OnPlayClicked()
-  {
-    LevelManager.Instance.LoadGame();
-  }
-
-	private void OnQuitClicked()
-  {
-    LevelManager.Instance.QuitGame();
-  }
 
 	private void CreateColorScaleTween(Label label)
 	{

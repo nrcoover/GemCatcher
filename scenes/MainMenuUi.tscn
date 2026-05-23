@@ -1,10 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://cubv40p7fxyh5"]
+[gd_scene load_steps=5 format=3 uid="uid://cubv40p7fxyh5"]
 
 [ext_resource type="Script" uid="uid://roupoeg0m343" path="res://scripts/MainMenuUi.cs" id="1_it30p"]
 [ext_resource type="PackedScene" uid="uid://dqthwsums7jjw" path="res://scenes/GemButton.tscn" id="3_pqhkh"]
+[ext_resource type="PackedScene" uid="uid://dvxadunjhuoll" path="res://scenes/MenuModal.tscn" id="4_h6icy"]
 [ext_resource type="PackedScene" uid="uid://2sfkess71hko" path="res://scenes/MenuTitle.tscn" id="6_56fvm"]
 
-[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_quitButton", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_titleTimer", "_titleContainer")]
+[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_movesModal", "_rulesModal", "_creditsModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_titleTimer", "_titleContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -14,8 +15,14 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_it30p")
-_playButton = NodePath("HBoxContainer/PlayButton")
-_quitButton = NodePath("HBoxContainer/QuitButton")
+_playButton = NodePath("MarginContainer/HBoxButtons/PlayButton")
+_rulesButton = NodePath("MarginContainer/HBoxButtons/RulesButton")
+_movesButton = NodePath("MarginContainer/HBoxButtons/MovesButton")
+_quitButton = NodePath("MarginContainer/HBoxButtons/QuitButton")
+_creditsButton = NodePath("MarginContainer/HBoxButtons/CreditsButton")
+_movesModal = NodePath("MovesModal")
+_rulesModal = NodePath("RulesModal")
+_creditsModal = NodePath("CreditsModal")
 _titleLayer1 = NodePath("MarginContainer/TitleContainer/TitleAlpha")
 _titleLayer2 = NodePath("MarginContainer/TitleContainer/TitleAlpha2")
 _titleLayer3 = NodePath("MarginContainer/TitleContainer/TitleAlpha3")
@@ -114,38 +121,79 @@ position = Vector2(-300, 35)
 [node name="RightBoundary" type="Marker2D" parent="MarginContainer/TitleContainer"]
 position = Vector2(300, 35)
 
-[node name="HBoxContainer" type="BoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -50.0
-offset_top = -24.0
-offset_right = 50.0
-offset_bottom = 24.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(2, 2)
-pivot_offset = Vector2(50, 25)
-theme_override_constants/separation = 18
+[node name="HBoxButtons" type="BoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+alignment = 1
 
-[node name="PlayButton" parent="HBoxContainer" instance=ExtResource("3_pqhkh")]
+[node name="PlayButton" parent="MarginContainer/HBoxButtons" instance=ExtResource("3_pqhkh")]
 layout_mode = 2
 
-[node name="ButtonLabel" parent="HBoxContainer/PlayButton" index="0"]
+[node name="ButtonLabel" parent="MarginContainer/HBoxButtons/PlayButton" index="0"]
 text = "PLAY"
 
-[node name="QuitButton" parent="HBoxContainer" instance=ExtResource("3_pqhkh")]
+[node name="RulesButton" parent="MarginContainer/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.53333336, 0.8, 1, 1)
+layout_mode = 2
+
+[node name="ButtonLabel" parent="MarginContainer/HBoxButtons/RulesButton" index="0"]
+text = "RULES"
+
+[node name="MovesButton" parent="MarginContainer/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(1, 0.8, 0.53333336, 1)
+layout_mode = 2
+
+[node name="ButtonLabel" parent="MarginContainer/HBoxButtons/MovesButton" index="0"]
+text = "MOVES"
+
+[node name="QuitButton" parent="MarginContainer/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 0.53333336, 0.53333336, 1)
 layout_mode = 2
 
-[node name="ButtonLabel" parent="HBoxContainer/QuitButton" index="0"]
+[node name="ButtonLabel" parent="MarginContainer/HBoxButtons/QuitButton" index="0"]
 text = "QUIT"
+
+[node name="CreditsButton" parent="MarginContainer/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(1, 1, 0.53333336, 1)
+layout_mode = 2
+
+[node name="ButtonLabel" parent="MarginContainer/HBoxButtons/CreditsButton" index="0"]
+text = "CREDITS"
 
 [node name="TitleTimer" type="Timer" parent="."]
 wait_time = 5.0
 
-[editable path="HBoxContainer/PlayButton"]
-[editable path="HBoxContainer/QuitButton"]
+[node name="MovesModal" parent="." instance=ExtResource("4_h6icy")]
+visible = false
+layout_mode = 1
+
+[node name="Title" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
+text = "MOVES"
+
+[node name="RulesModal" parent="." instance=ExtResource("4_h6icy")]
+visible = false
+layout_mode = 1
+
+[node name="Title" parent="RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
+text = "RULES"
+
+[node name="CreditsModal" parent="." instance=ExtResource("4_h6icy")]
+visible = false
+layout_mode = 1
+
+[node name="Title" parent="CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
+text = "CREDITS"
+
+[editable path="MarginContainer/HBoxButtons/PlayButton"]
+[editable path="MarginContainer/HBoxButtons/RulesButton"]
+[editable path="MarginContainer/HBoxButtons/MovesButton"]
+[editable path="MarginContainer/HBoxButtons/QuitButton"]
+[editable path="MarginContainer/HBoxButtons/CreditsButton"]
+[editable path="MovesModal"]
+[editable path="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
+[editable path="RulesModal"]
+[editable path="RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
+[editable path="CreditsModal"]
+[editable path="CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
