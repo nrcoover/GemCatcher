@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cq8skradygbr0" path="res://scenes/MotionBackdrop.tscn" id="3_826wr"]
 [ext_resource type="PackedScene" uid="uid://bbrkr3etn88hu" path="res://scenes/GemSpawner.tscn" id="4_826wr"]
 [ext_resource type="PackedScene" uid="uid://cubv40p7fxyh5" path="res://scenes/MainMenuUi.tscn" id="4_ow34m"]
-[ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/bgm_action_5.mp3" id="5_l72w3"]
+[ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/audio/sfx/bgm_action_5.mp3" id="5_l72w3"]
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_826wr")
@@ -28,3 +28,5 @@ pitch_scale = 0.5
 autoplay = true
 
 [editable path="CanvasLayer/MainMenuUi"]
+[editable path="CanvasLayer/MainMenuUi/HBoxContainer/PlayButton"]
+[editable path="CanvasLayer/MainMenuUi/HBoxContainer/QuitButton"]

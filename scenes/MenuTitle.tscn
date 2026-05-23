@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://2sfkess71hko"]
 
-[ext_resource type="LabelSettings" uid="uid://chgj4ustuw6f4" path="res://resources/play_alpha_96_font.tres" id="1_5i6ao"]
-[ext_resource type="LabelSettings" uid="uid://duqwjryppltkm" path="res://resources/play_white_96_font.tres" id="2_moeti"]
+[ext_resource type="LabelSettings" uid="uid://chgj4ustuw6f4" path="res://resources/fonts/play_alpha_96_font.tres" id="1_5i6ao"]
+[ext_resource type="LabelSettings" uid="uid://duqwjryppltkm" path="res://resources/fonts/play_white_96_font.tres" id="2_moeti"]
 
 [node name="TitleAlpha" type="Label"]
 offset_left = -332.0

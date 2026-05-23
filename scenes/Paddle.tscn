@@ -1,8 +1,8 @@
 [gd_scene load_steps=9 format=3 uid="uid://3kq5fr5oomem"]
 
 [ext_resource type="Script" uid="uid://dls61awq12jhp" path="res://scripts/Paddle.cs" id="1_6kxou"]
-[ext_resource type="Texture2D" uid="uid://cnkl8lfb1hs81" path="res://assets/paddleBlu.png" id="1_ry5ju"]
-[ext_resource type="AudioStream" uid="uid://ca1sx4i73y6ck" path="res://assets/774270__thelittlecrow__rocket-launch-boost-and-burning-version-b.wav" id="3_jlx5f"]
+[ext_resource type="Texture2D" uid="uid://cnkl8lfb1hs81" path="res://assets/images/sprites/paddleBlu.png" id="1_ry5ju"]
+[ext_resource type="AudioStream" uid="uid://ca1sx4i73y6ck" path="res://assets/audio/sfx/774270__thelittlecrow__rocket-launch-boost-and-burning-version-b.wav" id="3_jlx5f"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6kxou"]
 radius = 12.0

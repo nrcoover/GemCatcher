@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://caewt57tbc7r5"]
 
-[ext_resource type="Texture2D" uid="uid://b5w75r40sc3p3" path="res://assets/element_red_diamond.png" id="1_ofeb3"]
+[ext_resource type="Texture2D" uid="uid://b5w75r40sc3p3" path="res://assets/images/sprites/element_red_diamond.png" id="1_ofeb3"]
 
 [node name="Heart" type="Node2D"]
 scale = Vector2(0.3, 0.3)

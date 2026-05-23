@@ -1,11 +1,11 @@
 [gd_scene load_steps=10 format=3 uid="uid://cq8skradygbr0"]
 
 [ext_resource type="Script" uid="uid://bj7ab0dvyiw7p" path="res://scripts/MotionBackdrop.cs" id="1_8a1xo"]
-[ext_resource type="Texture2D" uid="uid://caub2q4sy25lg" path="res://assets/pexels-tobias-eicher-2160223093-36575402.jpg" id="1_wrp1p"]
-[ext_resource type="Texture2D" uid="uid://0jynaad8qky5" path="res://assets/pexels-daniel-cid-634838605-17505904.jpg" id="2_vx43d"]
-[ext_resource type="Texture2D" uid="uid://dqbf81ktbqacl" path="res://assets/pexels-marek-pavlik-1929759405-37269552.jpg" id="3_tw1rg"]
-[ext_resource type="Texture2D" uid="uid://nf2qvl6dlh2j" path="res://assets/pexels-daniel-cid-634838605-17505896.jpg" id="3_vx43d"]
-[ext_resource type="Texture2D" uid="uid://gbrtmcmj1eki" path="res://assets/pexels-jarod-8408709.jpg" id="6_yp3j7"]
+[ext_resource type="Texture2D" uid="uid://caub2q4sy25lg" path="res://assets/images/backgrounds/pexels-tobias-eicher-2160223093-36575402.jpg" id="1_wrp1p"]
+[ext_resource type="Texture2D" uid="uid://0jynaad8qky5" path="res://assets/images/backgrounds/pexels-daniel-cid-634838605-17505904.jpg" id="2_vx43d"]
+[ext_resource type="Texture2D" uid="uid://dqbf81ktbqacl" path="res://assets/images/backgrounds/pexels-marek-pavlik-1929759405-37269552.jpg" id="3_tw1rg"]
+[ext_resource type="Texture2D" uid="uid://nf2qvl6dlh2j" path="res://assets/images/backgrounds/pexels-daniel-cid-634838605-17505896.jpg" id="3_vx43d"]
+[ext_resource type="Texture2D" uid="uid://gbrtmcmj1eki" path="res://assets/images/backgrounds/pexels-jarod-8408709.jpg" id="6_yp3j7"]
 
 [sub_resource type="Animation" id="Animation_wrp1p"]
 length = 0.001
