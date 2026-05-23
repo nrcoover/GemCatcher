@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://c2a4m3pjt6egg" path="res://assets/base_diamond.png" id="1_53y1h"]
 [ext_resource type="Script" uid="uid://bi0gj5hxbqbnb" path="res://scripts/GemButton.cs" id="2_htack"]
 [ext_resource type="LabelSettings" uid="uid://bvp27oyhve2cn" path="res://resources/play_white_16_font_normal.tres" id="3_dlmdy"]
-[ext_resource type="AudioStream" uid="uid://di4fr2u86dhv8" path="res://assets/545238__mr_fritz__item-sparkle.wav" id="4_ayqph"]
+[ext_resource type="AudioStream" uid="uid://boe377tli867s" path="res://assets/spell1_0.wav" id="4_53y1h"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7v7mi"]
 particle_flag_disable_z = true
@@ -46,5 +46,5 @@ randomness = 0.16
 process_material = SubResource("ParticleProcessMaterial_7v7mi")
 
 [node name="Sparkle" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("4_ayqph")
-volume_db = -8.0
+stream = ExtResource("4_53y1h")
+volume_db = -16.0
