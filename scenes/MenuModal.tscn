@@ -1,9 +1,27 @@
-[gd_scene load_steps=5 format=3 uid="uid://dvxadunjhuoll"]
+[gd_scene load_steps=6 format=3 uid="uid://dvxadunjhuoll"]
 
 [ext_resource type="LabelSettings" uid="uid://bbnbitfk5t73d" path="res://resources/fonts/play_white_32_font_normal.tres" id="1_sb0or"]
 [ext_resource type="Script" uid="uid://thscbc72cl7r" path="res://scripts/MenuModal.cs" id="1_sxpnb"]
 [ext_resource type="LabelSettings" uid="uid://5mcorwbq3ffs" path="res://resources/fonts/play_white_24_font_normal.tres" id="2_sxpnb"]
 [ext_resource type="PackedScene" uid="uid://dqthwsums7jjw" path="res://scenes/GemButton.tscn" id="3_8awu7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sxpnb"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(1.7647461, 1.2793851, 2.1359046, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 64
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 64
+corner_detail = 5
+shadow_size = 3
 
 [node name="MenuModal" type="Control" node_paths=PackedStringArray("_closeButton")]
 z_index = 20
@@ -31,6 +49,7 @@ theme_override_constants/margin_bottom = 100
 [node name="Panel" type="Panel" parent="MarginOuter"]
 self_modulate = Color(0.19434929, 0.19434926, 0.19434926, 1)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sxpnb")
 
 [node name="MarginInner" type="MarginContainer" parent="MarginOuter/Panel"]
 layout_mode = 1
