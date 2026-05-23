@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=38 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/images/backgrounds/GameBg.png" id="1_ibkli"]
@@ -19,6 +19,7 @@
 [ext_resource type="AudioStream" uid="uid://dw8ladfm3gy58" path="res://assets/audio/sfx/475557__rannem__bip.wav" id="13_r7sob"]
 [ext_resource type="AudioStream" uid="uid://ogfnhm87ce0t" path="res://assets/audio/sfx/492651__rvgerxini__power-down.mp3" id="13_y5y3l"]
 [ext_resource type="AudioStream" uid="uid://bhkxrv2ytglu8" path="res://assets/audio/dialogue/disengage-boosters.mp3" id="15_45i86"]
+[ext_resource type="PackedScene" uid="uid://0vd5n2cpnev8" path="res://scenes/GameOverScreen.tscn" id="15_jbgew"]
 [ext_resource type="AudioStream" uid="uid://dgkejar3yrf6q" path="res://assets/audio/dialogue/boosters-reengaged.mp3" id="16_a8wo8"]
 [ext_resource type="AudioStream" uid="uid://thtaruqgrqt7" path="res://assets/audio/dialogue/commencing-mission.mp3" id="16_bneo8"]
 [ext_resource type="AudioStream" uid="uid://h63jsdluxsal" path="res://assets/audio/dialogue/cooldown-in-progress.mp3" id="17_attvq"]
@@ -618,6 +619,9 @@ theme_override_styles/background = SubResource("StyleBoxFlat_2rd6h")
 theme_override_styles/fill = ExtResource("9_7ua8r")
 value = 100.0
 rounded = true
+
+[node name="GameOverScreen" parent="CanvasLayer" instance=ExtResource("15_jbgew")]
+visible = false
 
 [node name="Audio" type="Node" parent="."]
 

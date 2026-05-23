@@ -322,9 +322,13 @@ public partial class Game : Node2D
 
 	private async Task HandleDeathSequenceAudioAsync()
 	{
+		SignalManager.Instance.EmitShowGameOverScreen();
+		
 		_audioExplosion.Play();
 
 		await CreateTimerAsync(1.5f);
+
+		SignalManager.Instance.EmitShowMissionFailurePanel();
 
 		_audioMissionFailure.Play();
 

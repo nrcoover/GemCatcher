@@ -12,6 +12,8 @@ public partial class SignalManager : Node
 	[Signal] public delegate void ScoredEventHandler(Color color);
 	[Signal] public delegate void GemOffScreenEventHandler();
 	[Signal] public delegate void PlayerHurtEventHandler();
+	[Signal] public delegate void ShowGameOverScreenEventHandler();
+	[Signal] public delegate void ShowMissionFailurePanelEventHandler();
 
 	public override void _Ready()
 	{
@@ -56,5 +58,15 @@ public partial class SignalManager : Node
 	public void EmitPlayerHurt()
 	{
 		EmitSignal(SignalName.PlayerHurt);
+	}
+
+	public void EmitShowGameOverScreen()
+	{
+		EmitSignal(SignalName.ShowGameOverScreen);
+	}
+
+	public void EmitShowMissionFailurePanel()
+	{
+		EmitSignal(SignalName.ShowMissionFailurePanel);
 	}
 }
