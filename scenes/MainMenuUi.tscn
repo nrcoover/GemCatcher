@@ -16,11 +16,11 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_it30p")
-_playButton = NodePath("MarginContainer/HBoxButtons/PlayButton")
-_rulesButton = NodePath("MarginContainer/HBoxButtons/RulesButton")
-_movesButton = NodePath("MarginContainer/HBoxButtons/MovesButton")
-_quitButton = NodePath("MarginContainer/HBoxButtons/QuitButton")
-_creditsButton = NodePath("MarginContainer/HBoxButtons/CreditsButton")
+_playButton = NodePath("MarginButtons/HBoxButtons/PlayButton")
+_rulesButton = NodePath("MarginButtons/HBoxButtons/RulesButton")
+_movesButton = NodePath("MarginButtons/HBoxButtons/MovesButton")
+_quitButton = NodePath("MarginButtons/HBoxButtons/QuitButton")
+_creditsButton = NodePath("MarginButtons/HBoxButtons/CreditsButton")
 _movesModal = NodePath("MovesModal")
 _rulesModal = NodePath("RulesModal")
 _creditsModal = NodePath("CreditsModal")
@@ -122,49 +122,64 @@ position = Vector2(-300, 35)
 [node name="RightBoundary" type="Marker2D" parent="MarginContainer/TitleContainer"]
 position = Vector2(300, 35)
 
-[node name="HBoxButtons" type="BoxContainer" parent="MarginContainer"]
+[node name="TitleTimer" type="Timer" parent="."]
+wait_time = 5.0
+
+[node name="MarginButtons" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -384.0
+offset_bottom = -216.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.5, 1.5)
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 56
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="HBoxButtons" type="BoxContainer" parent="MarginButtons"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 24
 alignment = 1
 
-[node name="PlayButton" parent="MarginContainer/HBoxButtons" instance=ExtResource("3_pqhkh")]
+[node name="PlayButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 layout_mode = 2
 
-[node name="ButtonLabel" parent="MarginContainer/HBoxButtons/PlayButton" index="0"]
+[node name="ButtonLabel" parent="MarginButtons/HBoxButtons/PlayButton" index="0"]
 text = "PLAY"
 
-[node name="RulesButton" parent="MarginContainer/HBoxButtons" instance=ExtResource("3_pqhkh")]
+[node name="RulesButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.53333336, 0.8, 1, 1)
 layout_mode = 2
 
-[node name="ButtonLabel" parent="MarginContainer/HBoxButtons/RulesButton" index="0"]
+[node name="ButtonLabel" parent="MarginButtons/HBoxButtons/RulesButton" index="0"]
 text = "RULES"
 
-[node name="MovesButton" parent="MarginContainer/HBoxButtons" instance=ExtResource("3_pqhkh")]
+[node name="MovesButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 0.8, 0.53333336, 1)
 layout_mode = 2
 
-[node name="ButtonLabel" parent="MarginContainer/HBoxButtons/MovesButton" index="0"]
+[node name="ButtonLabel" parent="MarginButtons/HBoxButtons/MovesButton" index="0"]
 text = "MOVES"
 
-[node name="QuitButton" parent="MarginContainer/HBoxButtons" instance=ExtResource("3_pqhkh")]
+[node name="QuitButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 0.53333336, 0.53333336, 1)
 layout_mode = 2
 
-[node name="ButtonLabel" parent="MarginContainer/HBoxButtons/QuitButton" index="0"]
+[node name="ButtonLabel" parent="MarginButtons/HBoxButtons/QuitButton" index="0"]
 text = "QUIT"
 
-[node name="CreditsButton" parent="MarginContainer/HBoxButtons" instance=ExtResource("3_pqhkh")]
+[node name="CreditsButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 1, 0.53333336, 1)
 layout_mode = 2
 
-[node name="ButtonLabel" parent="MarginContainer/HBoxButtons/CreditsButton" index="0"]
+[node name="ButtonLabel" parent="MarginButtons/HBoxButtons/CreditsButton" index="0"]
 text = "CREDITS"
-
-[node name="TitleTimer" type="Timer" parent="."]
-wait_time = 5.0
 
 [node name="MovesModal" parent="." instance=ExtResource("4_h6icy")]
 visible = false
@@ -254,11 +269,11 @@ text = "CREDITS"
 text = "This game was created as a student project and is an expansion upon an original game created by following the Udemy Course \"Learn 2D Game Development: Godot 4.5 & C# from Scratch\" by Richard Allbert and Martyna Olivares. Assets are sourced, royalty free, from Kenny Assets and Pexels.com. Recorded dialogue clips are original recordings by the game developer, \"Nicklefritz\", distributed under the alias: \"Fritzie Games\"."
 horizontal_alignment = 3
 
-[editable path="MarginContainer/HBoxButtons/PlayButton"]
-[editable path="MarginContainer/HBoxButtons/RulesButton"]
-[editable path="MarginContainer/HBoxButtons/MovesButton"]
-[editable path="MarginContainer/HBoxButtons/QuitButton"]
-[editable path="MarginContainer/HBoxButtons/CreditsButton"]
+[editable path="MarginButtons/HBoxButtons/PlayButton"]
+[editable path="MarginButtons/HBoxButtons/RulesButton"]
+[editable path="MarginButtons/HBoxButtons/MovesButton"]
+[editable path="MarginButtons/HBoxButtons/QuitButton"]
+[editable path="MarginButtons/HBoxButtons/CreditsButton"]
 [editable path="MovesModal"]
 [editable path="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
 [editable path="RulesModal"]
