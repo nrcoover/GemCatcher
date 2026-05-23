@@ -60,13 +60,17 @@ label_settings = ExtResource("1_sb0or")
 
 [node name="HBoxInstructions" type="HBoxContainer" parent="MarginOuter/Panel/MarginInner/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 4
 
 [node name="Instructions" type="Label" parent="MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions"]
+custom_minimum_size = Vector2(700, 150)
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Placeholder Instructions
 1. Do
 2. Stuff"
 label_settings = ExtResource("2_sxpnb")
+autowrap_mode = 3
 
 [node name="HBoxButtonWrapper" type="HBoxContainer" parent="MarginOuter/Panel/MarginInner/VBoxContainer"]
 layout_mode = 2

@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cubv40p7fxyh5"]
+[gd_scene load_steps=6 format=3 uid="uid://cubv40p7fxyh5"]
 
 [ext_resource type="Script" uid="uid://roupoeg0m343" path="res://scripts/MainMenuUi.cs" id="1_it30p"]
 [ext_resource type="PackedScene" uid="uid://dqthwsums7jjw" path="res://scenes/GemButton.tscn" id="3_pqhkh"]
 [ext_resource type="PackedScene" uid="uid://dvxadunjhuoll" path="res://scenes/MenuModal.tscn" id="4_h6icy"]
+[ext_resource type="LabelSettings" uid="uid://5mcorwbq3ffs" path="res://resources/fonts/play_white_24_font_normal.tres" id="5_7v7mi"]
 [ext_resource type="PackedScene" uid="uid://2sfkess71hko" path="res://scenes/MenuTitle.tscn" id="6_56fvm"]
 
 [node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_movesModal", "_rulesModal", "_creditsModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_titleTimer", "_titleContainer")]
@@ -172,12 +173,75 @@ layout_mode = 1
 [node name="Title" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
 text = "MOVES"
 
+[node name="HBoxInstructions" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer" index="1"]
+theme_override_constants/separation = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Moves" type="Label" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/VBoxContainer"]
+layout_mode = 2
+text = "Move Paddle
+
+Boost
+
+Exit To Main Menu"
+label_settings = ExtResource("5_7v7mi")
+horizontal_alignment = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="1"]
+layout_mode = 2
+
+[node name="Seperator" type="Label" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/VBoxContainer3"]
+layout_mode = 2
+text = "|
+
+|
+
+|
+"
+label_settings = ExtResource("5_7v7mi")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Keys" type="Label" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/VBoxContainer2"]
+layout_mode = 2
+text = "A-S-D-W Keys
+
+Shift Key
+
+Escape Key"
+label_settings = ExtResource("5_7v7mi")
+
+[node name="Instructions" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="3"]
+visible = false
+text = "Arrow Keys"
+
 [node name="RulesModal" parent="." instance=ExtResource("4_h6icy")]
 visible = false
 layout_mode = 1
 
+[node name="VBoxContainer" parent="RulesModal/MarginOuter/Panel/MarginInner" index="0"]
+size_flags_horizontal = 4
+
 [node name="Title" parent="RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
 text = "RULES"
+
+[node name="HBoxInstructions" parent="RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer" index="1"]
+size_flags_horizontal = 4
+
+[node name="Instructions" parent="RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
+size_flags_horizontal = 4
+text = "1. Catch as many gems as you can.
+
+2. Don't let your paddle's boosters overheat.
+
+3. Eat your vegetables. 
+    (...I mean actually, like in real life;
+    there are no vegetables in this game.)"
 
 [node name="CreditsModal" parent="." instance=ExtResource("4_h6icy")]
 visible = false
@@ -185,6 +249,10 @@ layout_mode = 1
 
 [node name="Title" parent="CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
 text = "CREDITS"
+
+[node name="Instructions" parent="CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
+text = "This game was created as a student project and is an expansion upon an original game created by following the Udemy Course \"Learn 2D Game Development: Godot 4.5 & C# from Scratch\" by Richard Allbert and Martyna Olivares. Assets are sourced, royalty free, from Kenny Assets and Pexels.com. Recorded dialogue clips are original recordings by the game developer, \"Nicklefritz\", distributed under the alias: \"Fritzie Games\"."
+horizontal_alignment = 3
 
 [editable path="MarginContainer/HBoxButtons/PlayButton"]
 [editable path="MarginContainer/HBoxButtons/RulesButton"]
