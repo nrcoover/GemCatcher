@@ -60,37 +60,10 @@ public partial class Game : Node2D
 		UnsubscribeFromSignals();
 	}
 
-	public async void OnInitiateDeathSequenceAsync()
-	{
-		if (_isDying)
-		{
-			return;
-		}
 
-		_isDying = true;
 
-		KillAllTweens();
-		StopMoveableObjectProcessing();
-		StopAllAudio();
-		
-		await DeathCameraShake();
-
-		if (!IsInsideTree())
-		{
-			return;
-		}
-
-		await HandleDeathSequenceAudio();
-
-		if (!IsInsideTree())
-		{
-			return;
-		}
-
-		GameManager.Instance.ResetGame();
-		LevelManager.Instance.LoadMainMenu();
-	}
-
+#region Signals
+	
 	private void SubscribeToSignals()
 	{
 		SignalManager.Instance.InitiateDeathSequence += OnInitiateDeathSequenceAsync;
@@ -106,12 +79,35 @@ public partial class Game : Node2D
 		SignalManager.Instance.PlayerHurt -= OnPlayerHurt;
 	}
 
-	private void HandleEscape()
+	public async void OnInitiateDeathSequenceAsync()
 	{
-		if (Input.IsKeyPressed(Key.Escape))
+		if (_isDying)
 		{
-			LevelManager.Instance.LoadMainMenu();
+			return;
 		}
+
+		_isDying = true;
+
+		KillAllTweens();
+		StopMoveableObjectProcessing();
+		StopAllAudio();
+		
+		await PlayDeathCameraShakeAsync();
+
+		if (!IsInsideTree())
+		{
+			return;
+		}
+
+		await HandleDeathSequenceAudioAsync();
+
+		if (!IsInsideTree())
+		{
+			return;
+		}
+
+		GameManager.Instance.ResetGame();
+		LevelManager.Instance.LoadMainMenu();
 	}
 
 	private void OnScored(Color color)
@@ -126,6 +122,32 @@ public partial class Game : Node2D
     IncurDamage();
   }
 
+	private void OnGemOffScreen()
+	{
+		GameManager.Instance.IncrementMissedGems();
+		SignalManager.Instance.EmitPlayerHurt();
+	}
+
+#endregion
+
+
+
+#region Input
+
+	private void HandleEscape()
+	{
+		if (Input.IsKeyPressed(Key.Escape))
+		{
+			LevelManager.Instance.LoadMainMenu();
+		}
+	}
+	
+#endregion
+	
+
+
+#region UI
+
 	private void UpdateScoreUi(Color color)
 	{
 		_scoreLabel.Text = $"Score: {_score:000}";
@@ -136,30 +158,6 @@ public partial class Game : Node2D
 
 		CreateColorScaleTween(color);
 	}
-
-  private void CreateColorScaleTween(Color color)
-  {
-    _colorScaleTween = CreateTween();
-		var tweenTime = 0.35f;
-
-		_colorScaleTween.SetParallel(true);
-
-		_colorScaleTween.TweenProperty(
-			_scoreLabel,
-			PropertyName.SelfModulate.ToString(),
-			color,
-			tweenTime
-		).SetTrans(Tween.TransitionType.Cubic)
-		.SetEase(Tween.EaseType.Out);
-
-		_colorScaleTween.TweenProperty(
-			_scoreLabel,
-			PropertyName.Scale.ToString(),
-			Vector2.One,
-			tweenTime
-		).SetTrans(Tween.TransitionType.Back)
-		.SetEase(Tween.EaseType.Out);
-  }
 
   private void UpdateHealthUi()
 	{
@@ -211,37 +209,12 @@ public partial class Game : Node2D
 				break;
 		}
 	}
+	
+#endregion
 
-	private void OnGemOffScreen()
-	{
-		GameManager.Instance.IncrementMissedGems();
-		SignalManager.Instance.EmitPlayerHurt();
-	}
 
-	private void IncurDamage()
-	{
-		_hurtSound.Play();
-		_camera.ScreenShake(_shakeIntensity, _shakeTime);
-		UpdateHealthUi();
-	}
 
-	private void IncrementScore(int points)
-	{
-		_score += points;
-	}
-
-	private void StopMoveableObjectProcessing()
-	{
-		var moveables = Helper.GetAllObjectsInGroup(
-			GetTree().Root,
-			Constants.GroupNames.MoveableObjects
-		);
-
-		foreach (Node2D moveable in moveables.Cast<Node2D>())
-		{
-			moveable.ProcessMode = ProcessModeEnum.Disabled;
-		}
-	}
+#region Audio
 
 	private void StopAllAudio()
 	{
@@ -267,6 +240,12 @@ public partial class Game : Node2D
 			}
 		}
 	}
+	
+#endregion
+
+
+
+#region Tweens
 
 	private void KillAllTweens()
 	{
@@ -275,6 +254,36 @@ public partial class Game : Node2D
 			_colorScaleTween.Kill();
 		}
 	}
+
+	private void CreateColorScaleTween(Color color)
+  {
+    _colorScaleTween = CreateTween();
+		var tweenTime = 0.35f;
+
+		_colorScaleTween.SetParallel(true);
+
+		_colorScaleTween.TweenProperty(
+			_scoreLabel,
+			PropertyName.SelfModulate.ToString(),
+			color,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Cubic)
+		.SetEase(Tween.EaseType.Out);
+
+		_colorScaleTween.TweenProperty(
+			_scoreLabel,
+			PropertyName.Scale.ToString(),
+			Vector2.One,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Back)
+		.SetEase(Tween.EaseType.Out);
+  }
+	
+#endregion
+
+
+
+#region Asynchronous Tasks
 
 	private async Task CreateTimerAsync(float timeInSeconds)
 	{
@@ -300,7 +309,7 @@ public partial class Game : Node2D
 		_audioCommanderEncouragement.Play();
   }
 
-	private async Task DeathCameraShake()
+	private async Task PlayDeathCameraShakeAsync()
 	{
 		var shakeTime = 2.0f;
 		var minShakeIntensity = _shakeIntensity * 0.1f;
@@ -311,7 +320,7 @@ public partial class Game : Node2D
 		await CreateTimerAsync(shakeTime);
 	}
 
-	private async Task HandleDeathSequenceAudio()
+	private async Task HandleDeathSequenceAudioAsync()
 	{
 		_audioExplosion.Play();
 
@@ -321,4 +330,38 @@ public partial class Game : Node2D
 
 		await CreateTimerAsync(2.5f);
 	}
+
+#endregion
+
+
+
+#region Other
+	
+	private void IncurDamage()
+	{
+		_hurtSound.Play();
+		_camera.ScreenShake(_shakeIntensity, _shakeTime);
+		UpdateHealthUi();
+	}
+
+	private void IncrementScore(int points)
+	{
+		_score += points;
+	}
+
+	private void StopMoveableObjectProcessing()
+	{
+		var moveables = Helper.GetAllObjectsInGroup(
+			GetTree().Root,
+			Constants.GroupNames.MoveableObjects
+		);
+
+		foreach (Node2D moveable in moveables.Cast<Node2D>())
+		{
+			moveable.ProcessMode = ProcessModeEnum.Disabled;
+		}
+	}
+
+#endregion
+
 }
