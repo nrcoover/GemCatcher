@@ -5,7 +5,7 @@ public partial class Paddle : Area2D
 
 	#region Variables - Debugging
 
-	const bool IS_DEBUGGING = true;
+	const bool IS_DEBUGGING = false;
 	[Export] Label _debugLogLabel;
 
 	#endregion
@@ -73,7 +73,7 @@ public partial class Paddle : Area2D
   private void HandleDebugLog()
   {
     _debugLogLabel.Text = "BEBUGGING: \n"
-			+ $"Fuel: {_boostFuel},\n" 
+			+ $"Fuel: {_boostFuel},\n"
 			+ $"BoostersReady: {_boostersReady},\n"
 			+ $"CanBoost: {_canBoost},\n"
 			+ $"CanRefuel: {_canRefuel},\n"
