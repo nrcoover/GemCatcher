@@ -205,6 +205,7 @@ theme_override_constants/separation = 32
 
 [node name="RetryButton" parent="VBoxButtons/HBoxContainer" instance=ExtResource("3_1tm0t")]
 self_modulate = Color(1, 1, 0.53333336, 1)
+z_index = 1
 layout_mode = 2
 
 [node name="ButtonLabel" parent="VBoxButtons/HBoxContainer/RetryButton" index="0"]
@@ -212,6 +213,7 @@ text = "RETRY"
 
 [node name="ExitButton" parent="VBoxButtons/HBoxContainer" instance=ExtResource("3_1tm0t")]
 self_modulate = Color(1, 0.8, 0.53333336, 1)
+z_index = 1
 layout_mode = 2
 
 [node name="ButtonLabel" parent="VBoxButtons/HBoxContainer/ExitButton" index="0"]
