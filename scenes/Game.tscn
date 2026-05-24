@@ -24,7 +24,7 @@
 [ext_resource type="AudioStream" uid="uid://thtaruqgrqt7" path="res://assets/audio/dialogue/commencing-mission.mp3" id="16_bneo8"]
 [ext_resource type="AudioStream" uid="uid://h63jsdluxsal" path="res://assets/audio/dialogue/cooldown-in-progress.mp3" id="17_attvq"]
 [ext_resource type="AudioStream" uid="uid://negotetnv5rh" path="res://assets/audio/dialogue/commander-encouragement.mp3" id="17_jbgew"]
-[ext_resource type="AudioStream" uid="uid://dvquwwx0ef4na" path="res://assets/audio/dialogue/mission-failure.mp3" id="17_ocgqw"]
+[ext_resource type="AudioStream" uid="uid://bejlx55reunkv" path="res://assets/audio/dialogue/mission-failure-v2.mp3" id="23_jbgew"]
 
 [sub_resource type="Animation" id="Animation_7ua8r"]
 length = 0.001
@@ -670,7 +670,7 @@ stream = ExtResource("17_jbgew")
 volume_db = -8.0
 
 [node name="MissionFailure" type="AudioStreamPlayer" parent="Audio/Voice" groups=["Audio Streams"]]
-stream = ExtResource("17_ocgqw")
+stream = ExtResource("23_jbgew")
 volume_db = -12.0
 
 [node name="BoostersReengaged" type="AudioStreamPlayer" parent="Audio/Voice" groups=["Audio Streams"]]
