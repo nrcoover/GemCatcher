@@ -490,7 +490,7 @@ _movementSpeed = 500.0
 _boundaryMargin = 35.0
 _boostLabel = NodePath("../CanvasLayer/MarginContainer/BoostDebugLabel")
 _boostPercentageLabel = NodePath("../CanvasLayer/MarginContainer/BoostPercentageLabel")
-_animator = NodePath("../AnimationPlayer")
+_animator = NodePath("../BoostFuelAnimator")
 _progressBarLeft = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft")
 _progressBarRight = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight")
 _audioDisengageBoosters = NodePath("../Audio/Voice/DisengageBoosters")
@@ -499,7 +499,7 @@ _audioCooldownInProgress = NodePath("../Audio/Voice/CoolDownInProgress")
 
 [node name="GemSpawner" parent="." instance=ExtResource("6_kyk2p")]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="BoostFuelAnimator" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_y5y3l")
 }
