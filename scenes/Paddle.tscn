@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://3kq5fr5oomem"]
+[gd_scene load_steps=10 format=3 uid="uid://3kq5fr5oomem"]
 
 [ext_resource type="Script" uid="uid://dls61awq12jhp" path="res://scripts/Paddle.cs" id="1_6kxou"]
 [ext_resource type="Texture2D" uid="uid://cnkl8lfb1hs81" path="res://assets/images/sprites/paddleBlu.png" id="1_ry5ju"]
 [ext_resource type="AudioStream" uid="uid://ca1sx4i73y6ck" path="res://assets/audio/sfx/774270__thelittlecrow__rocket-launch-boost-and-burning-version-b.wav" id="3_jlx5f"]
+[ext_resource type="AudioStream" uid="uid://dw8ladfm3gy58" path="res://assets/audio/sfx/475557__rannem__bip.wav" id="4_c7ra2"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6kxou"]
 radius = 12.0
@@ -22,12 +23,24 @@ tracks/0/keys = {
 "update": 0,
 "values": [Color(1.224127, 1.224127, 1.224127, 1)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WarningBlip:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_236v3"]
 resource_name = "flash-red-fast"
 length = 0.5
 loop_mode = 1
-step = 0.25
+step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -39,6 +52,18 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1.224127, 1.224127, 1.224127, 1), Color(0.87060624, 0, 0, 1), Color(1.224127, 1.224127, 1.224127, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("WarningBlip:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.099999994, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [true, true, true, true, true]
 }
 
 [sub_resource type="Animation" id="Animation_c7ra2"]
@@ -238,6 +263,11 @@ text = "DEGUGGING:"
 stream = ExtResource("3_jlx5f")
 volume_db = -12.0
 pitch_scale = 1.5
+
+[node name="WarningBlip" type="AudioStreamPlayer" parent="." groups=["Audio Streams"]]
+stream = ExtResource("4_c7ra2")
+volume_db = -12.0
+pitch_scale = 3.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
