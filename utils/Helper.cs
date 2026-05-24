@@ -67,8 +67,6 @@ public static partial class Helper
 				break;
 		}
 
-		GD.Print(randomNumber, " ", selectedColorhex);
-
 		return new Color(selectedColorhex);
 	}
 

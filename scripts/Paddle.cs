@@ -188,8 +188,6 @@ public partial class Paddle : Area2D
 			_animator.Play("flashing_warning");
 			_boostRefuelTimer.Start();
 
-			GD.Print("BOOST LOCK RELEASED");
-
 			_audioDisengageBoosters.Stop();
 			PlayAudioStream(_audioCooldownInProgress);
 		}
@@ -330,8 +328,6 @@ public partial class Paddle : Area2D
 				? DEFAULT_REFUEL_RATE * 0.5f
 				: DEFAULT_REFUEL_RATE;
 
-			// GD.Print($"DEFAULT: {DEFAULT_REFUEL_RATE} | RATE: {refuelRate}");
-
 			if (_canRefuel)
 			{
 				RefuelBoost(delta, refuelRate);
@@ -344,8 +340,6 @@ public partial class Paddle : Area2D
   private void BurnFuel(float delta)
 	{
 		_boostFuel -= _boostBurnRate * delta;
-
-		// GD.Print($"Is Burning: {_boostFuel}");
 	}
 
 	private void RefuelBoost(float delta, float refuelRate = DEFAULT_REFUEL_RATE)
@@ -357,8 +351,6 @@ public partial class Paddle : Area2D
 			_boostFuel = MAX_BOOST_FUEL;
 			_isFullyFueled = true;
 		}
-
-		// GD.Print($"Is Refueling: {_boostFuel}");
 	}
 	
 	private bool IsLowFuelAnimationPlaying()
@@ -398,7 +390,6 @@ public partial class Paddle : Area2D
 					if (_animator.CurrentAnimation != Constants.Animations.FuelWarningLevel3)
 					{
 						_animator.Play(Constants.Animations.FuelWarningLevel3);
-						// GD.Print("EMERGENCY! LOW FUEL!!!");
 					}
 					break;
 
@@ -406,7 +397,6 @@ public partial class Paddle : Area2D
 					if (_animator.CurrentAnimation != Constants.Animations.FuelWarningLevel2)
 					{
 						_animator.Play(Constants.Animations.FuelWarningLevel2);
-						// GD.Print("URGENT LOW FUEL");
 					}
 					break;
 
@@ -414,7 +404,6 @@ public partial class Paddle : Area2D
 					if (_animator.CurrentAnimation != Constants.Animations.FuelWarningLevel1)
 					{
 						_animator.Play(Constants.Animations.FuelWarningLevel1);
-						// GD.Print("WARNING LOW FUEL");
 					}
 					break;
 			}
@@ -423,7 +412,6 @@ public partial class Paddle : Area2D
 		{
 			if (_animator.CurrentAnimation != Constants.Animations.RefuelingYellow)
 			{
-				// GD.Print("REFILLING");
 				_animator.Play(Constants.Animations.RefuelingYellow);
 			}
 		}
@@ -486,19 +474,16 @@ public partial class Paddle : Area2D
 	{
 		if (!_canBoost)
 		{
-			// GD.Print("EARLY EXIT!!!!!!!!!!");
 			DisengageAllParticles();
 			return;
 		}
 
 		if (_canBoost && Input.IsActionPressed("move_right"))
 		{
-			// GD.Print("RIGHT PARTICLES");
 			EngageLeftParticles();
 		}
 		else if (_canBoost && Input.IsActionPressed("move_left"))
 		{
-			// GD.Print("LEFT PARTICLES");
 			EngageRightParticles();
 		}
 		else if (_isTryingToBoost && _canBoost)

@@ -71,7 +71,6 @@ public partial class GemSpawner : Node2D
 	{
 		if (_leftBoundary == null || _rightBoundary == null)
 		{
-			GD.Print("Marker Node Path Not Found!");
 			SetGemPosition(gem);
 			return;
 		}
