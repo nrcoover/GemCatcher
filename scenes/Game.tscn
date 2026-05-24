@@ -483,14 +483,14 @@ flip_v = true
 
 [node name="MotionBackdrop" parent="." instance=ExtResource("4_vjgi4")]
 
-[node name="Paddle" parent="." node_paths=PackedStringArray("_boostLabel", "_boostPercentageLabel", "_animator", "_progressBarLeft", "_progressBarRight", "_audioDisengageBoosters", "_audioBoostersReengaged", "_audioCooldownInProgress") instance=ExtResource("2_qbsmt")]
+[node name="Paddle" parent="." node_paths=PackedStringArray("_boostLabel", "_boostPercentageLabel", "_boostFuelAnimator", "_progressBarLeft", "_progressBarRight", "_audioDisengageBoosters", "_audioBoostersReengaged", "_audioCooldownInProgress") instance=ExtResource("2_qbsmt")]
 position = Vector2(561, 570)
 scale = Vector2(0.600926, 0.6009259)
 _movementSpeed = 500.0
 _boundaryMargin = 35.0
 _boostLabel = NodePath("../CanvasLayer/MarginContainer/BoostDebugLabel")
 _boostPercentageLabel = NodePath("../CanvasLayer/MarginContainer/BoostPercentageLabel")
-_animator = NodePath("../BoostFuelAnimator")
+_boostFuelAnimator = NodePath("../BoostFuelAnimator")
 _progressBarLeft = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft")
 _progressBarRight = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight")
 _audioDisengageBoosters = NodePath("../Audio/Voice/DisengageBoosters")

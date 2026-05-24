@@ -2,12 +2,24 @@ public static partial class Constants
 {
   public static class Animations
   {
-    public static readonly string Reset = "RESET";
-    public static readonly string FuelWarningLevel1 = "yellow_warning_level_1";
-    public static readonly string FuelWarningLevel2 = "yellow_warning_level_2";
-    public static readonly string FuelWarningLevel3 = "yellow_warning_level_3";
-    public static readonly string RefuelingYellow = "yellow_refueling";
-    public static readonly string EndLowFuelWarning = "end-low-fuel-warning";
+    public static class BoostFuel
+    {
+      public static readonly string Reset = "RESET";
+      public static readonly string FuelWarningLevel1 = "yellow_warning_level_1";
+      public static readonly string FuelWarningLevel2 = "yellow_warning_level_2";
+      public static readonly string FuelWarningLevel3 = "yellow_warning_level_3";
+      public static readonly string YellowRefueling = "yellow_refueling";
+      public static readonly string EndLowFuelWarning = "end-low-fuel-warning";
+      public static readonly string FlashingWarning = "flashing_warning";
+    }
+
+    public static class Paddle
+    {
+      public static readonly string Reset = "RESET";
+      public static readonly string FlashYellow = "flash-yellow";
+      public static readonly string FlashRedFast = "flash-red-fast";
+    }
+    
   }
 
   public static class CustomColors

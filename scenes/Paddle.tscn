@@ -90,14 +90,14 @@ _data = {
 &"flash-yellow": SubResource("Animation_c7ra2")
 }
 
-[node name="Paddle" type="Area2D" node_paths=PackedStringArray("_debugLogLabel", "_boostRefuelTimer", "_selfDestructWarningTimer", "_selfDestructTimer", "_selfAnimator", "_leftParticles", "_rightParticles", "_boostSound") groups=["Moveable Objects"]]
+[node name="Paddle" type="Area2D" node_paths=PackedStringArray("_debugLogLabel", "_boostRefuelTimer", "_selfDestructWarningTimer", "_selfDestructTimer", "_paddleAnimator", "_leftParticles", "_rightParticles", "_boostSound") groups=["Moveable Objects"]]
 modulate = Color(1.224127, 1.224127, 1.224127, 1)
 script = ExtResource("1_6kxou")
 _debugLogLabel = NodePath("DebugLog")
 _boostRefuelTimer = NodePath("BoostRefuelTimer")
 _selfDestructWarningTimer = NodePath("SelfDestructWarningTimer")
 _selfDestructTimer = NodePath("SelfDestructTimer")
-_selfAnimator = NodePath("AnimationPlayer")
+_paddleAnimator = NodePath("PaddleAnimator")
 _leftParticles = NodePath("LeftBoostParticles")
 _rightParticles = NodePath("RightBoostParticles")
 _boostSound = NodePath("BoostSound")
@@ -269,7 +269,7 @@ stream = ExtResource("4_c7ra2")
 volume_db = -12.0
 pitch_scale = 3.0
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="PaddleAnimator" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_s6nv3")
 }

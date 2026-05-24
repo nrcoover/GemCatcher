@@ -28,8 +28,8 @@ public partial class Paddle : Area2D
 	[Export] Timer _boostRefuelTimer;
 	[Export] Timer _selfDestructWarningTimer;
 	[Export] Timer _selfDestructTimer;
-	[Export] AnimationPlayer _animator;
-	[Export] AnimationPlayer _selfAnimator;
+	[Export] AnimationPlayer _boostFuelAnimator;
+	[Export] AnimationPlayer _paddleAnimator;
 	[Export] ProgressBar _progressBarLeft;
 	[Export] ProgressBar _progressBarRight;
 	[Export] Node2D _leftParticles;
@@ -87,7 +87,7 @@ public partial class Paddle : Area2D
 
 	public override void _Ready()
 	{
-		_animator.Play(Constants.Animations.Reset);
+		_boostFuelAnimator.Play(Constants.Animations.BoostFuel.Reset);
 		SubscribeToSignals();
 		InitializeVariables();
 		UpdateBoostUi();
@@ -185,7 +185,7 @@ public partial class Paddle : Area2D
 			_boostLockedUntilRelease = false;
 			_isInCooldown = true;
 
-			_animator.Play("flashing_warning");
+			_boostFuelAnimator.Play(Constants.Animations.BoostFuel.FlashingWarning);
 			_boostRefuelTimer.Start();
 
 			_audioDisengageBoosters.Stop();
@@ -230,7 +230,7 @@ public partial class Paddle : Area2D
 
 		PlayAudioStream(_audioDisengageBoosters);
 
-		_animator.Stop();
+		_boostFuelAnimator.Stop();
 
 		DisengageAllParticles();
 	}
@@ -355,17 +355,17 @@ public partial class Paddle : Area2D
 	
 	private bool IsLowFuelAnimationPlaying()
 	{
-		return _animator.CurrentAnimation == Constants.Animations.FuelWarningLevel1
-			|| _animator.CurrentAnimation == Constants.Animations.FuelWarningLevel2
-			|| _animator.CurrentAnimation == Constants.Animations.FuelWarningLevel3
-			|| _animator.CurrentAnimation == Constants.Animations.RefuelingYellow;
+		return _boostFuelAnimator.CurrentAnimation == Constants.Animations.BoostFuel.FuelWarningLevel1
+			|| _boostFuelAnimator.CurrentAnimation == Constants.Animations.BoostFuel.FuelWarningLevel2
+			|| _boostFuelAnimator.CurrentAnimation == Constants.Animations.BoostFuel.FuelWarningLevel3
+			|| _boostFuelAnimator.CurrentAnimation == Constants.Animations.BoostFuel.YellowRefueling;
 	}
 
 	private void HandleFuelConsumptionAnimation()
   {
 		HandlePaddleAnimation();
 
-		if (_animator.CurrentAnimation == "flashing_warning")
+		if (_boostFuelAnimator.CurrentAnimation == Constants.Animations.BoostFuel.FlashingWarning)
     {
         return;
     }
@@ -374,7 +374,7 @@ public partial class Paddle : Area2D
 
 		if (!isLowOnFuel && IsLowFuelAnimationPlaying())
 		{
-			_animator.Play(Constants.Animations.EndLowFuelWarning);
+			_boostFuelAnimator.Play(Constants.Animations.BoostFuel.EndLowFuelWarning);
 			return;
 		}
 		else if (!isLowOnFuel)
@@ -387,32 +387,32 @@ public partial class Paddle : Area2D
 			switch (true)
 			{
 				case true when _boostFuel < (int)FuelState.Emergency:
-					if (_animator.CurrentAnimation != Constants.Animations.FuelWarningLevel3)
+					if (_boostFuelAnimator.CurrentAnimation != Constants.Animations.BoostFuel.FuelWarningLevel3)
 					{
-						_animator.Play(Constants.Animations.FuelWarningLevel3);
+						_boostFuelAnimator.Play(Constants.Animations.BoostFuel.FuelWarningLevel3);
 					}
 					break;
 
 				case true when _boostFuel < (int)FuelState.Urgent:
-					if (_animator.CurrentAnimation != Constants.Animations.FuelWarningLevel2)
+					if (_boostFuelAnimator.CurrentAnimation != Constants.Animations.BoostFuel.FuelWarningLevel2)
 					{
-						_animator.Play(Constants.Animations.FuelWarningLevel2);
+						_boostFuelAnimator.Play(Constants.Animations.BoostFuel.FuelWarningLevel2);
 					}
 					break;
 
 				default:
-					if (_animator.CurrentAnimation != Constants.Animations.FuelWarningLevel1)
+					if (_boostFuelAnimator.CurrentAnimation != Constants.Animations.BoostFuel.FuelWarningLevel1)
 					{
-						_animator.Play(Constants.Animations.FuelWarningLevel1);
+						_boostFuelAnimator.Play(Constants.Animations.BoostFuel.FuelWarningLevel1);
 					}
 					break;
 			}
 		} 
 		else if (!_boostLockedUntilRelease && !_isTryingToBoost && isLowOnFuel)
 		{
-			if (_animator.CurrentAnimation != Constants.Animations.RefuelingYellow)
+			if (_boostFuelAnimator.CurrentAnimation != Constants.Animations.BoostFuel.YellowRefueling)
 			{
-				_animator.Play(Constants.Animations.RefuelingYellow);
+				_boostFuelAnimator.Play(Constants.Animations.BoostFuel.YellowRefueling);
 			}
 		}
   }
@@ -421,7 +421,7 @@ public partial class Paddle : Area2D
 	{
 		if (_isInCooldown)
     {
-			_selfAnimator.Play("flash-yellow");
+			_paddleAnimator.Play(Constants.Animations.Paddle.FlashYellow);
 			_selfDestructWarningTimer.Stop();
 			_selfDestructTimer.Stop();
 
@@ -429,15 +429,15 @@ public partial class Paddle : Area2D
     } 
 		else if (_isOverheating)
 		{
-			if (_selfAnimator.CurrentAnimation != "flash-red-fast")
+			if (_paddleAnimator.CurrentAnimation != Constants.Animations.Paddle.FlashRedFast)
 			{
 				_selfDestructWarningTimer.Start();
 			}
-			_selfAnimator.Play("flash-red-fast");
+			_paddleAnimator.Play(Constants.Animations.Paddle.FlashRedFast);
 		}
 		else
 		{
-			_selfAnimator.Play("RESET");
+			_paddleAnimator.Play(Constants.Animations.Paddle.Reset);
 		}
 	}
 
