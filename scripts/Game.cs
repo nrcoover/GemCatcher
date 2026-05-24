@@ -43,6 +43,7 @@ public partial class Game : Node2D
 	public override async void _Ready()
 	{
 		Input.MouseMode = Input.MouseModeEnum.Captured;
+		GameManager.Instance.ResetGame();
 		SubscribeToSignals();
 		await PlayGameStartSequenceAsync();
 	}
@@ -105,9 +106,6 @@ public partial class Game : Node2D
 		{
 			return;
 		}
-
-		GameManager.Instance.ResetGame();
-		LevelManager.Instance.LoadMainMenu();
 	}
 
 	private void OnScored(Color color)
@@ -323,7 +321,7 @@ public partial class Game : Node2D
 	private async Task HandleDeathSequenceAudioAsync()
 	{
 		SignalManager.Instance.EmitShowGameOverScreen();
-		
+
 		_audioExplosion.Play();
 
 		await CreateTimerAsync(1.5f);
@@ -333,6 +331,8 @@ public partial class Game : Node2D
 		_audioMissionFailure.Play();
 
 		await CreateTimerAsync(2.5f);
+
+		SignalManager.Instance.EmitShowGameOverButtons();
 	}
 
 #endregion

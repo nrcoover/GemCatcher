@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://0vd5n2cpnev8"]
+[gd_scene load_steps=10 format=3 uid="uid://0vd5n2cpnev8"]
 
 [ext_resource type="Script" uid="uid://d2qve15dpni7v" path="res://scripts/GameOverScreen.cs" id="1_jb1p3"]
 [ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/fonts/Play-Regular.ttf" id="1_wojlb"]
+[ext_resource type="PackedScene" uid="uid://dqthwsums7jjw" path="res://scenes/GemButton.tscn" id="3_1tm0t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ocgqw"]
 content_margin_left = 0.0
@@ -27,7 +28,98 @@ font_color = Color(1, 0.53333336, 0.53333336, 1)
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(1.25, 1.25)
 
-[node name="GameOverScreen" type="Control" node_paths=PackedStringArray("_gameOverPanel")]
+[sub_resource type="Animation" id="Animation_jb1p3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VBoxContainer/GameOverPanel:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("VBoxButtons/HBoxContainer:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("VBoxButtons:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_1tm0t"]
+resource_name = "flash"
+length = 3.0
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VBoxContainer/GameOverPanel:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [true, false, true, false, true]
+}
+
+[sub_resource type="Animation" id="Animation_qo38o"]
+resource_name = "show-buttons"
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("VBoxButtons/HBoxContainer:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("VBoxButtons:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.02),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qo38o"]
+_data = {
+&"RESET": SubResource("Animation_jb1p3"),
+&"flash": SubResource("Animation_1tm0t"),
+&"show-buttons": SubResource("Animation_qo38o")
+}
+
+[node name="GameOverScreen" type="Control" node_paths=PackedStringArray("_gameOverPanel", "_animator", "_retryButton", "_exitButton", "_buttonsContainer")]
 z_index = 20
 layout_mode = 3
 anchors_preset = 15
@@ -36,7 +128,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_jb1p3")
-_gameOverPanel = NodePath("GameOverPanel")
+_gameOverPanel = NodePath("VBoxContainer/GameOverPanel")
+_animator = NodePath("AnimationPlayer")
+_retryButton = NodePath("VBoxButtons/HBoxContainer/RetryButton")
+_exitButton = NodePath("VBoxButtons/HBoxContainer/ExitButton")
+_buttonsContainer = NodePath("VBoxButtons")
 
 [node name="BlackOverlay" type="ColorRect" parent="."]
 layout_mode = 1
@@ -47,10 +143,9 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-color = Color(0.0253638, 0.0253638, 0.025363795, 1)
+color = Color(0.08468992, 0.08468994, 0.08468989, 1)
 
-[node name="GameOverPanel" type="Panel" parent="."]
-custom_minimum_size = Vector2(500, 200)
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -58,14 +153,19 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -250.0
-offset_top = -100.0
+offset_top = -149.0
 offset_right = 250.0
-offset_bottom = 100.0
+offset_bottom = 55.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 32
+
+[node name="GameOverPanel" type="Panel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(500, 200)
+layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ocgqw")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="GameOverPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/GameOverPanel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -79,8 +179,48 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="GameOverText" type="Label" parent="GameOverPanel/VBoxContainer"]
+[node name="GameOverText" type="Label" parent="VBoxContainer/GameOverPanel/VBoxContainer"]
 layout_mode = 2
 text = "MISSION
 FAILURE"
 label_settings = SubResource("LabelSettings_ocgqw")
+
+[node name="VBoxButtons" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 450.0
+offset_right = -384.0
+offset_bottom = -150.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.5, 1.5)
+theme_override_constants/separation = 64
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxButtons"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 32
+
+[node name="RetryButton" parent="VBoxButtons/HBoxContainer" instance=ExtResource("3_1tm0t")]
+self_modulate = Color(1, 1, 0.53333336, 1)
+layout_mode = 2
+
+[node name="ButtonLabel" parent="VBoxButtons/HBoxContainer/RetryButton" index="0"]
+text = "RETRY"
+
+[node name="ExitButton" parent="VBoxButtons/HBoxContainer" instance=ExtResource("3_1tm0t")]
+self_modulate = Color(1, 0.8, 0.53333336, 1)
+layout_mode = 2
+
+[node name="ButtonLabel" parent="VBoxButtons/HBoxContainer/ExitButton" index="0"]
+text = "EXIT"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_qo38o")
+}
+
+[editable path="VBoxButtons/HBoxContainer/RetryButton"]
+[editable path="VBoxButtons/HBoxContainer/ExitButton"]

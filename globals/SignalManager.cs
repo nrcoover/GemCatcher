@@ -14,6 +14,7 @@ public partial class SignalManager : Node
 	[Signal] public delegate void PlayerHurtEventHandler();
 	[Signal] public delegate void ShowGameOverScreenEventHandler();
 	[Signal] public delegate void ShowMissionFailurePanelEventHandler();
+	[Signal] public delegate void ShowGameOverButtonsEventHandler();
 
 	public override void _Ready()
 	{
@@ -68,5 +69,10 @@ public partial class SignalManager : Node
 	public void EmitShowMissionFailurePanel()
 	{
 		EmitSignal(SignalName.ShowMissionFailurePanel);
+	}
+
+	public void EmitShowGameOverButtons()
+	{
+		EmitSignal(SignalName.ShowGameOverButtons);
 	}
 }
