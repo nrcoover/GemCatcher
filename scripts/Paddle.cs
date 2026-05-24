@@ -360,14 +360,27 @@ public partial class Paddle : Area2D
 
 		// GD.Print($"Is Refueling: {_boostFuel}");
 	}
+	
+	private bool IsLowFuelAnimationPlaying()
+	{
+		return _animator.CurrentAnimation == Constants.Animations.FuelWarningLevel1
+			|| _animator.CurrentAnimation == Constants.Animations.FuelWarningLevel2
+			|| _animator.CurrentAnimation == Constants.Animations.FuelWarningLevel3
+			|| _animator.CurrentAnimation == Constants.Animations.RefuelingYellow;
+	}
 
 	private void HandleFuelConsumptionAnimation()
   {
 		HandlePaddleAnimation();
 
+		if (_animator.CurrentAnimation == "flashing_warning")
+    {
+        return;
+    }
+
 		var isLowOnFuel = _boostFuel < (int)FuelState.Low;
 
-		if (!isLowOnFuel && _animator.IsPlaying())
+		if (!isLowOnFuel && IsLowFuelAnimationPlaying())
 		{
 			_animator.Play(Constants.Animations.EndLowFuelWarning);
 			return;
