@@ -156,7 +156,7 @@ public partial class MainMenuUi : Control
 			_marginHighScoreContainer.Visible = true;
 			_highScoreLabel.Text = $"High Score: {highScore}";
 
-			if (highScore == 0)
+			if (highScoreRestore == 0)
 			{
 				_restoreHighScoreButton.Visible = false;
 			}

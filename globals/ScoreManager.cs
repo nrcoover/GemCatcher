@@ -29,6 +29,14 @@ public partial class ScoreManager : Node
 		{
 			return _highScoreRestore;
 		}
+		set
+		{
+			if (value > _highScoreRestore)
+			{
+				_highScoreRestore = value;
+				SaveScoreToFile();
+			}
+		}
 	}
 
   public override void _Ready()
@@ -54,7 +62,8 @@ public partial class ScoreManager : Node
 	{
     var highScoreResource = new HighScoreResource
     {
-      HighScore = _highScore
+      HighScore = _highScore,
+			HighScoreRestore = _highScoreRestore
     };
 
     ResourceSaver.Save(highScoreResource, SCORE_FILE_PATH);
