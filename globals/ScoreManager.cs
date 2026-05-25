@@ -19,6 +19,12 @@ public partial class ScoreManager : Node
 		set
 		{
 			_highScore = Mathf.Max(0, value);
+
+			if (value > HighScoreRestore)
+			{
+				HighScoreRestore = value;
+			}
+			
 			SaveScoreToFile();
 		}
 	}
