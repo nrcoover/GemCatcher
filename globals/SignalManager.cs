@@ -16,6 +16,7 @@ public partial class SignalManager : Node
 	[Signal] public delegate void ShowMissionFailurePanelEventHandler();
 	[Signal] public delegate void ShowGameOverButtonsEventHandler();
 	[Signal] public delegate void HighScoreChangedEventHandler();
+	[Signal] public delegate void HealthRecoveredEventHandler();
 
 	public override void _Ready()
 	{
@@ -80,5 +81,10 @@ public partial class SignalManager : Node
 	public void EmitHighScoreChangedSignal()
 	{
 		EmitSignal(SignalName.HighScoreChanged);
+	}
+
+	public void EmitHealthRecovered()
+	{
+		EmitSignal(SignalName.HealthRecovered);
 	}
 }

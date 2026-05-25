@@ -25,6 +25,7 @@ public partial class Game : Node2D
 	[Export] private AudioStreamPlayer _audioMissionFailure;
 	[Export] private AudioStreamPlayer2D _scoreSound;
 	[Export] private AudioStreamPlayer2D _hurtSound;
+	[Export] private AudioStreamPlayer2D _healthIncreaseSound;
 
 	[Export] private Node2D _heart1;
 	[Export] private Node2D _heart2;
@@ -71,6 +72,7 @@ public partial class Game : Node2D
 		SignalManager.Instance.Scored += OnScored;
 		SignalManager.Instance.GemOffScreen += OnGemOffScreen;
 		SignalManager.Instance.PlayerHurt += OnPlayerHurt;
+		SignalManager.Instance.HealthRecovered += OnHealthRecovered;
 	}
 
   private void UnsubscribeFromSignals() {
@@ -78,9 +80,10 @@ public partial class Game : Node2D
 		SignalManager.Instance.Scored -= OnScored;
 		SignalManager.Instance.GemOffScreen -= OnGemOffScreen;
 		SignalManager.Instance.PlayerHurt -= OnPlayerHurt;
+		SignalManager.Instance.HealthRecovered -= OnHealthRecovered;
 	}
 
-	public async void OnInitiateDeathSequenceAsync()
+  public async void OnInitiateDeathSequenceAsync()
 	{
 		if (_isDying)
 		{
@@ -125,6 +128,12 @@ public partial class Game : Node2D
 		GameManager.Instance.IncrementMissedGems();
 		SignalManager.Instance.EmitPlayerHurt();
 	}
+	
+  private void OnHealthRecovered()
+  {
+		_healthIncreaseSound.Play();
+    UpdateHealthUi();
+  }
 
 #endregion
 

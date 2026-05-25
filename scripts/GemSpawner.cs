@@ -4,6 +4,7 @@ public partial class GemSpawner : Node2D
 {
 	[Export] private Timer _gemSpawnTimer;
 	[Export] private PackedScene _gemScene;
+	[Export] private PackedScene _gemHeartScene;
 	[Export] private Node _gemContainer;
 	[Export] private bool _isOnMainMenu;
 
@@ -33,7 +34,30 @@ public partial class GemSpawner : Node2D
 
   private void SubscribeToSignals()
 	{
-		_gemSpawnTimer.Timeout += SpawnGem;
+		_gemSpawnTimer.Timeout += SpawnGemType;
+	}
+
+	private void SpawnGemType()
+	{
+		if (_isOnMainMenu)
+		{
+			SpawnGem();
+			return;
+		}
+
+		var heartSpawnNumber = 10;
+		var randomNumber = Helper.GetRandomInt(1, heartSpawnNumber);
+		GD.Print($"Gem Spawn Number: {randomNumber}");
+
+		if (GameManager.Instance.GetHealth() < GameManager.Instance.MaxHealth
+				&& randomNumber >= heartSpawnNumber)
+		{
+			SpawnHeartGem();
+		}
+		else
+		{
+			SpawnGem();			
+		}
 	}
 
 	private void SpawnGem()
@@ -51,7 +75,20 @@ public partial class GemSpawner : Node2D
 		SetGemPosition(gem);
 	}
 
-	private void SetGemPosition(Gem gem)
+	private void SpawnHeartGem()
+	{
+		if (_isOnMainMenu)
+		{
+			return;
+		}
+
+		var heartGem = (GemHeart)_gemHeartScene.Instantiate();
+		_gemContainer.AddChild(heartGem);
+
+		SetGemPosition(heartGem);
+	}
+
+	private void SetGemPosition(Node2D gem)
 	{
 		var margin = 85;
 

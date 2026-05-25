@@ -9,11 +9,11 @@ public partial class Gem : Area2D
 	[Export] float _rotationSpeed = 15.0f;
 	[Export] float _minRotationVariation = -0.5f;
 	[Export] float _maxRotationVariation = 0.5f;
-	[Export] float _minScaleVariation = 0.5f;
-	[Export] float _maxScaleVariation = 0.75f;
+	[Export] protected float _minScaleVariation = 0.5f;
+	[Export] protected float _maxScaleVariation = 0.75f;
 
 	private Color _color;
-	private bool _isOffScreen = false;
+	protected bool _isOffScreen = false;
 	private float _speedVariation;
 	private float _rotationVariation;
 	private float _scaleVariation;
@@ -47,7 +47,7 @@ public partial class Gem : Area2D
 		}
 	}
 
-  private void HandleExitScreen()
+  protected virtual void HandleExitScreen()
 	{
 		if (Position.Y > GetViewportRect().End.Y)
 		{
@@ -99,14 +99,14 @@ public partial class Gem : Area2D
 		_particles.Emitting = true;
 	}
 
-	private void EndParticleEmission()
+	protected void EndParticleEmission()
 	{
 		_particles.Emitting = false;
 	}
 
 	#region Signals
 
-	public void OnAreaEntered(Area2D area)
+	public virtual void OnAreaEntered(Area2D area)
 	{
 		if (area is Paddle)
 		{

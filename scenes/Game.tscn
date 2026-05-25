@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=39 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/images/backgrounds/GameBg.png" id="1_ibkli"]
@@ -8,7 +8,7 @@
 [ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/fonts/Play-Regular.ttf" id="5_s0nni"]
 [ext_resource type="PackedScene" uid="uid://caewt57tbc7r5" path="res://scenes/HeartFaded.tscn" id="6_aug50"]
 [ext_resource type="PackedScene" uid="uid://bbrkr3etn88hu" path="res://scenes/GemSpawner.tscn" id="6_kyk2p"]
-[ext_resource type="PackedScene" uid="uid://ci18yyqg2giqu" path="res://scenes/Heart.tscn" id="7_kiw3p"]
+[ext_resource type="PackedScene" uid="uid://ci18yyqg2giqu" path="res://scenes/HeartRed.tscn" id="7_kiw3p"]
 [ext_resource type="StyleBox" uid="uid://7wqdduovmlnj" path="res://resources/ui/left_progress_bar.tres" id="8_2rd6h"]
 [ext_resource type="LabelSettings" uid="uid://bvp27oyhve2cn" path="res://resources/fonts/play_white_16_font_normal.tres" id="8_7ua8r"]
 [ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/audio/sfx/bgm_action_5.mp3" id="8_400sg"]
@@ -24,6 +24,7 @@
 [ext_resource type="AudioStream" uid="uid://thtaruqgrqt7" path="res://assets/audio/dialogue/commencing-mission.mp3" id="16_bneo8"]
 [ext_resource type="AudioStream" uid="uid://h63jsdluxsal" path="res://assets/audio/dialogue/cooldown-in-progress.mp3" id="17_attvq"]
 [ext_resource type="AudioStream" uid="uid://negotetnv5rh" path="res://assets/audio/dialogue/commander-encouragement.mp3" id="17_jbgew"]
+[ext_resource type="AudioStream" uid="uid://bacmsb461kopv" path="res://assets/audio/sfx/523650__lilmati__powerup-06.wav" id="20_a85ww"]
 [ext_resource type="AudioStream" uid="uid://bejlx55reunkv" path="res://assets/audio/dialogue/mission-failure-v2.mp3" id="23_jbgew"]
 
 [sub_resource type="Animation" id="Animation_7ua8r"]
@@ -437,7 +438,7 @@ shadow_offset = Vector2(1.25, 1.25)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2rd6h"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommencingMission", "_audioMissionFailure", "_scoreSound", "_hurtSound", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommencingMission", "_audioMissionFailure", "_scoreSound", "_hurtSound", "_healthIncreaseSound", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
 script = ExtResource("1_78awf")
 _camera = NodePath("Camera2D")
 _scoreLabel = NodePath("CanvasLayer/MarginContainer/ScoreLabel")
@@ -447,6 +448,7 @@ _audioCommencingMission = NodePath("Audio/Voice/CommencingMission")
 _audioMissionFailure = NodePath("Audio/Voice/MissionFailure")
 _scoreSound = NodePath("Audio/SFX/ScoreSound")
 _hurtSound = NodePath("Audio/SFX/HurtSound")
+_healthIncreaseSound = NodePath("Audio/SFX/HealthIncreaseSound")
 _heart1 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart1Faded/Heart1Full")
 _heart2 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart2Faded/Heart2Full")
 _heart3 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart3Faded/Heart3Full")
@@ -652,6 +654,10 @@ pitch_scale = 2.0
 stream = ExtResource("11_3xj3m")
 volume_db = -8.0
 pitch_scale = 0.75
+
+[node name="HealthIncreaseSound" type="AudioStreamPlayer2D" parent="Audio/SFX"]
+stream = ExtResource("20_a85ww")
+volume_db = -16.0
 
 [node name="Voice" type="Node" parent="Audio"]
 
