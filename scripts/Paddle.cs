@@ -72,6 +72,11 @@ public partial class Paddle : Area2D
 	
   private void HandleDebugLog()
   {
+		if (!IS_DEBUGGING)
+		{
+			_debugLogLabel.Visible = false;
+		}
+
     _debugLogLabel.Text = "BEBUGGING: \n"
 			+ $"Fuel: {_boostFuel},\n"
 			+ $"BoostersReady: {_boostersReady},\n"
@@ -101,10 +106,7 @@ public partial class Paddle : Area2D
 		UpdateBoostUi();
 		HandleParticles();
 
-		// if (IS_DEBUGGING)
-		// {
-		// 	HandleDebugLog();
-		// }
+		HandleDebugLog();
 	}
 
   public override void _UnhandledInput(InputEvent @event)
