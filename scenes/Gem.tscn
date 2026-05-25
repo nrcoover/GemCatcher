@@ -1,8 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://8m2y1u6noqq5"]
+[gd_scene load_steps=8 format=3 uid="uid://8m2y1u6noqq5"]
 
 [ext_resource type="Script" uid="uid://b4i4niwmui66q" path="res://scripts/Gem.cs" id="1_o8oug"]
 [ext_resource type="Texture2D" uid="uid://c2a4m3pjt6egg" path="res://assets/images/sprites/base_diamond.png" id="2_tx2gm"]
-[ext_resource type="AudioStream" uid="uid://di4fr2u86dhv8" path="res://assets/audio/sfx/545238__mr_fritz__item-sparkle.wav" id="3_tx2gm"]
 
 [sub_resource type="Curve" id="Curve_tx2gm"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5241379, 0.64245415), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -78,13 +77,6 @@ position = Vector2(0, -4.7683716e-07)
 rotation = 0.7853982
 scale = Vector2(0.9999999, 0.9999999)
 shape = SubResource("RectangleShape2D_o8oug")
-
-[node name="ScoreSound" type="AudioStreamPlayer2D" parent="." groups=["Audio Streams"]]
-position = Vector2(0, -4.7683716e-07)
-rotation = 0.7853982
-scale = Vector2(0.9999999, 0.9999999)
-stream = ExtResource("3_tx2gm")
-volume_db = -12.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 root_node = NodePath("../Sprite2D")
