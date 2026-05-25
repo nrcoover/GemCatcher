@@ -101,10 +101,10 @@ public partial class Paddle : Area2D
 		UpdateBoostUi();
 		HandleParticles();
 
-		if (IS_DEBUGGING)
-		{
-			HandleDebugLog();
-		}
+		// if (IS_DEBUGGING)
+		// {
+		// 	HandleDebugLog();
+		// }
 	}
 
   public override void _UnhandledInput(InputEvent @event)

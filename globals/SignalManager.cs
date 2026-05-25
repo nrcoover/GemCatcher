@@ -15,6 +15,7 @@ public partial class SignalManager : Node
 	[Signal] public delegate void ShowGameOverScreenEventHandler();
 	[Signal] public delegate void ShowMissionFailurePanelEventHandler();
 	[Signal] public delegate void ShowGameOverButtonsEventHandler();
+	[Signal] public delegate void HighScoreChangedEventHandler();
 
 	public override void _Ready()
 	{
@@ -74,5 +75,10 @@ public partial class SignalManager : Node
 	public void EmitShowGameOverButtons()
 	{
 		EmitSignal(SignalName.ShowGameOverButtons);
+	}
+
+	public void EmitHighScoreChangedSignal()
+	{
+		EmitSignal(SignalName.HighScoreChanged);
 	}
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -44,10 +45,16 @@ public partial class MainMenuUi : Control
 		SubscribeToSignals();
 	}
 
+  public override void _ExitTree()
+  {
+    UnsubscribeFromSignals();
+  }
+
   #region Signals
 
   public void SubscribeToSignals()
 	{
+		SignalManager.Instance.HighScoreChanged += OnHighScoreChanged;
 		_titleTimer.Timeout += OnTitleTimeout;
 		_playButton.Pressed += OnPlayClicked;
 		_rulesButton.Pressed += OnRulesClicked;
@@ -57,6 +64,16 @@ public partial class MainMenuUi : Control
 		_resetHighScoreButton.Pressed += OnResetHighScoreClicked;
 		_restoreHighScoreButton.Pressed += OnRestoreHighScoreClicked;
 	}
+
+	public void UnsubscribeFromSignals()
+	{
+		SignalManager.Instance.HighScoreChanged -= OnHighScoreChanged;
+	}
+
+  private void OnHighScoreChanged()
+  {
+    HandleHighScoreDisplay();
+  }
 
   private void OnTitleTimeout()
   {
@@ -85,23 +102,21 @@ public partial class MainMenuUi : Control
     LevelManager.Instance.QuitGame();
   }
 
-  private void OnResetHighScoreClicked()
-  {
-    ScoreManager.Instance.ResetHighScore();
-		GD.Print("RESET!");
-  }
-
-  private void OnRestoreHighScoreClicked()
-  {
-    ScoreManager.Instance.RestoreHighScore();
-		GD.Print("RESTORE!");
-  }
-
   private void OnCreditsClicked()
 	{
 		CloseAllModals();
 		_creditsModal.Visible = true;
 	}
+	
+  private void OnResetHighScoreClicked()
+  {
+    ScoreManager.Instance.ResetHighScore();
+  }
+
+  private void OnRestoreHighScoreClicked()
+  {
+    ScoreManager.Instance.RestoreHighScore();
+  }
 
 #endregion
 

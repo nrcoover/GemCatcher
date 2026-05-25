@@ -18,11 +18,8 @@ public partial class ScoreManager : Node
 		}
 		set
 		{
-			if (value > _highScore)
-			{
-				_highScore = value;
-				SaveScoreToFile();
-			}
+			_highScore = Mathf.Max(0, value);
+			SaveScoreToFile();
 		}
 	}
 
@@ -44,11 +41,13 @@ public partial class ScoreManager : Node
 	public void ResetHighScore()
 	{
 		HighScore = DEFAULT_SCORE;
+		SignalManager.Instance.EmitHighScoreChangedSignal();
 	}
 
 	public void RestoreHighScore()
 	{
 		HighScore = LoadRestoreHighScoreFromFile();
+		SignalManager.Instance.EmitHighScoreChangedSignal();
 	}
 
   private void SaveScoreToFile()
@@ -73,6 +72,7 @@ public partial class ScoreManager : Node
 		if (highScoreResource != null)
 		{
 			_highScore = highScoreResource.HighScore;
+			_highScoreRestore = highScoreResource.HighScoreRestore;
 		}
   }
 
