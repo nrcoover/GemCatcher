@@ -88,11 +88,13 @@ public partial class MainMenuUi : Control
   private void OnResetHighScoreClicked()
   {
     ScoreManager.Instance.ResetHighScore();
+		GD.Print("RESET!");
   }
 
   private void OnRestoreHighScoreClicked()
   {
     ScoreManager.Instance.RestoreHighScore();
+		GD.Print("RESTORE!");
   }
 
   private void OnCreditsClicked()
