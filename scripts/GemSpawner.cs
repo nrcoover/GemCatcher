@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 public partial class GemSpawner : Node2D
