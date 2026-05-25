@@ -3,24 +3,29 @@ using Godot;
 
 public partial class MainMenuUi : Control
 {
-	[Export] TextureButton _playButton;
-	[Export] TextureButton _rulesButton;
-	[Export] TextureButton _movesButton;
-	[Export] TextureButton _quitButton;
-	[Export] TextureButton _creditsButton;
+	[Export] private TextureButton _playButton;
+	[Export] private TextureButton _rulesButton;
+	[Export] private TextureButton _movesButton;
+	[Export] private TextureButton _quitButton;
+	[Export] private TextureButton _creditsButton;
+	[Export] private TextureButton _resetHighScoreButton;
+	[Export] private TextureButton _restoreHighScoreButton;
 
-	[Export] MenuModal _movesModal;
-	[Export] MenuModal _rulesModal;
-	[Export] MenuModal _creditsModal;
+	[Export] private MenuModal _movesModal;
+	[Export] private MenuModal _rulesModal;
+	[Export] private MenuModal _creditsModal;
 	
-	[Export] Label _titleLayer1;
-	[Export] Label _titleLayer2;
-	[Export] Label _titleLayer3;
-	[Export] Label _titleLayer4;
-	[Export] Label _titleLayer5;
-	[Export] Label _titleLayer6;
-	[Export] Timer _titleTimer;
-	[Export] Control _titleContainer;
+	[Export] private Label _titleLayer1;
+	[Export] private Label _titleLayer2;
+	[Export] private Label _titleLayer3;
+	[Export] private Label _titleLayer4;
+	[Export] private Label _titleLayer5;
+	[Export] private Label _titleLayer6;
+	[Export] private Label _highScoreLabel;
+
+	[Export] private Timer _titleTimer;
+	[Export] private Control _titleContainer;
+	[Export] private MarginContainer _marginHighScoreContainer;
 
 	private Dictionary<Label, Vector2> _baseScales = [];
 	private Dictionary<Label, Color> _baseColors = [];
@@ -32,15 +37,16 @@ public partial class MainMenuUi : Control
 	{
 		_isFirstAnimationRun = true;
 
+		HandleHighScoreDisplay();
 		CloseAllModals();
 		InitializeTitleColors();
 		HandleLabelTweeningAsync();
 		SubscribeToSignals();
 	}
 
-#region Signals
+  #region Signals
 
-	public void SubscribeToSignals()
+  public void SubscribeToSignals()
 	{
 		_titleTimer.Timeout += OnTitleTimeout;
 		_playButton.Pressed += OnPlayClicked;
@@ -48,9 +54,11 @@ public partial class MainMenuUi : Control
 		_movesButton.Pressed += OnMovesClicked;
 		_quitButton.Pressed += OnQuitClicked;
 		_creditsButton.Pressed += OnCreditsClicked;
+		_resetHighScoreButton.Pressed += OnResetHighScoreClicked;
+		_restoreHighScoreButton.Pressed += OnRestoreHighScoreClicked;
 	}
 
-	private void OnTitleTimeout()
+  private void OnTitleTimeout()
   {
     HandleLabelTweeningAsync();
   }
@@ -66,7 +74,6 @@ public partial class MainMenuUi : Control
 		_rulesModal.Visible = true;
 	}
 
-
   private void OnMovesClicked()
 	{
 		CloseAllModals();
@@ -76,6 +83,16 @@ public partial class MainMenuUi : Control
 	private void OnQuitClicked()
   {
     LevelManager.Instance.QuitGame();
+  }
+
+  private void OnResetHighScoreClicked()
+  {
+    ScoreManager.Instance.ResetHighScore();
+  }
+
+  private void OnRestoreHighScoreClicked()
+  {
+    ScoreManager.Instance.RestoreHighScore();
   }
 
   private void OnCreditsClicked()
@@ -110,6 +127,28 @@ public partial class MainMenuUi : Control
 		_baseScales[label] = label.Scale;
 		_baseColors[label] = label.Modulate;
 	}
+	
+  private void HandleHighScoreDisplay()
+  {
+		_marginHighScoreContainer.Visible = false;
+    var highScore = ScoreManager.Instance.HighScore;
+		var highScoreRestore = ScoreManager.Instance.HighScoreRestore;
+
+		if (highScore != 0 || highScoreRestore != 0)
+		{
+			_marginHighScoreContainer.Visible = true;
+			_highScoreLabel.Text = $"High Score: {highScore}";
+
+			if (highScore == 0)
+			{
+				_restoreHighScoreButton.Visible = false;
+			}
+			else
+			{
+				_restoreHighScoreButton.Visible = true;
+			}
+		}
+  }
 	
   private async void HandleLabelTweeningAsync()
 	{

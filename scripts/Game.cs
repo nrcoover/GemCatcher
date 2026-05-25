@@ -320,6 +320,8 @@ public partial class Game : Node2D
 
 	private async Task HandleDeathSequenceAudioAsync()
 	{
+		ScoreManager.Instance.HighScore = _score;
+
 		SignalManager.Instance.EmitShowGameOverScreen();
 
 		_audioExplosion.Play();

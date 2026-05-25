@@ -20,6 +20,7 @@ config/icon="uid://d1oy1mgl4kmo6"
 SignalManager="*res://globals/SignalManager.cs"
 GameManager="*res://globals/GameManager.cs"
 LevelManager="*res://globals/LevelManager.cs"
+ScoreManager="*res://globals/ScoreManager.cs"
 
 [display]
 
