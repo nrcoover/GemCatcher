@@ -5,10 +5,10 @@ public partial class ScoreManager : Node
 	private const string SCORE_FILE_PATH = "user://gemScore.tres";
 	private const int DEFAULT_SCORE = 0;
 
-	public static ScoreManager Instance { get; private set;}
+	public static ScoreManager Instance { get; private set; }
 
 	private int _highScore = DEFAULT_SCORE;
-	private int _highScoreRestore;
+	private int _highScoreRestore = DEFAULT_SCORE;
 
 	public int HighScore
 	{
@@ -18,14 +18,19 @@ public partial class ScoreManager : Node
 		}
 		set
 		{
-			_highScore = Mathf.Max(0, value);
+			value = Mathf.Max(0, value);
 
-			if (value > HighScoreRestore)
+			if (value > _highScore)
 			{
-				HighScoreRestore = value;
+				_highScore = value;
+
+				if (value > _highScoreRestore)
+				{
+					_highScoreRestore = value;
+				}
+
+				SaveScoreToFile();
 			}
-			
-			SaveScoreToFile();
 		}
 	}
 
@@ -37,6 +42,8 @@ public partial class ScoreManager : Node
 		}
 		set
 		{
+			value = Mathf.Max(0, value);
+
 			if (value > _highScoreRestore)
 			{
 				_highScoreRestore = value;
@@ -45,39 +52,44 @@ public partial class ScoreManager : Node
 		}
 	}
 
-  public override void _Ready()
-  {
-    Instance = this;
+	public override void _Ready()
+	{
+		Instance = this;
 		LoadScoreFromFile();
-		LoadRestoreHighScoreFromFile();
-  }
+	}
 
 	public void ResetHighScore()
 	{
-		HighScore = DEFAULT_SCORE;
+		_highScore = DEFAULT_SCORE;
+
+		SaveScoreToFile();
+
 		SignalManager.Instance.EmitHighScoreChangedSignal();
 	}
 
 	public void RestoreHighScore()
 	{
-		HighScore = LoadRestoreHighScoreFromFile();
+		_highScore = _highScoreRestore;
+
+		SaveScoreToFile();
+
 		SignalManager.Instance.EmitHighScoreChangedSignal();
 	}
 
-  private void SaveScoreToFile()
+	private void SaveScoreToFile()
 	{
-    var highScoreResource = new HighScoreResource
-    {
-      HighScore = _highScore,
+		var highScoreResource = new HighScoreResource
+		{
+			HighScore = _highScore,
 			HighScoreRestore = _highScoreRestore
-    };
+		};
 
-    ResourceSaver.Save(highScoreResource, SCORE_FILE_PATH);
+		ResourceSaver.Save(highScoreResource, SCORE_FILE_PATH);
 	}
-	
-  private void LoadScoreFromFile()
-  {
-    if (!ResourceLoader.Exists(SCORE_FILE_PATH))
+
+	private void LoadScoreFromFile()
+	{
+		if (!ResourceLoader.Exists(SCORE_FILE_PATH))
 		{
 			return;
 		}
@@ -89,22 +101,5 @@ public partial class ScoreManager : Node
 			_highScore = highScoreResource.HighScore;
 			_highScoreRestore = highScoreResource.HighScoreRestore;
 		}
-  }
-
-	private int LoadRestoreHighScoreFromFile()
-  {
-    if (!ResourceLoader.Exists(SCORE_FILE_PATH))
-		{
-			return DEFAULT_SCORE;
-		}
-
-		var highScoreResource = ResourceLoader.Load<HighScoreResource>(SCORE_FILE_PATH);
-
-		if (highScoreResource != null)
-		{
-			return highScoreResource.HighScoreRestore;
-		}
-
-		return DEFAULT_SCORE;
-  }
+	}
 }
