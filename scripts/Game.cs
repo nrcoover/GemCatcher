@@ -37,6 +37,7 @@ public partial class Game : Node2D
 	[Export] private float _shakeTime;
 
 	private Tween _colorScaleTween;
+	private Tween _heartScaleTween;
 
 	private int _score = 0;
 	private bool _isDying = false;
@@ -178,6 +179,8 @@ public partial class Game : Node2D
 				_heart3.Visible = true;
 				_heart4.Visible = true;
 				_heart5.Visible = true;
+				CreateHeartScaleTween(_heart1);
+				
 				break;
 			case (int)HealthStatus.FleshWound:
 				_heart1.Visible = false;
@@ -185,6 +188,8 @@ public partial class Game : Node2D
 				_heart3.Visible = true;
 				_heart4.Visible = true;
 				_heart5.Visible = true;
+				CreateHeartScaleTween(_heart2);
+
 				break;
 			case (int)HealthStatus.Injured:
 				_heart1.Visible = false;
@@ -192,6 +197,8 @@ public partial class Game : Node2D
 				_heart3.Visible = true;
 				_heart4.Visible = true;
 				_heart5.Visible = true;
+				CreateHeartScaleTween(_heart3);
+
 				break;
 			case (int)HealthStatus.Hurt:
 				_heart1.Visible = false;
@@ -199,6 +206,8 @@ public partial class Game : Node2D
 				_heart3.Visible = false;
 				_heart4.Visible = true;
 				_heart5.Visible = true;
+				CreateHeartScaleTween(_heart4);
+
 				break;
 			case (int)HealthStatus.MortallyWounded:
 				_heart1.Visible = false;
@@ -206,6 +215,8 @@ public partial class Game : Node2D
 				_heart3.Visible = false;
 				_heart4.Visible = false;
 				_heart5.Visible = true;
+				CreateHeartScaleTween(_heart5);
+
 				break;
 			default:
 				_heart1.Visible = false;
@@ -260,6 +271,11 @@ public partial class Game : Node2D
 		{
 			_colorScaleTween.Kill();
 		}
+
+		if (_heartScaleTween != null)
+		{
+			_heartScaleTween.Kill();
+		}
 	}
 
 	private void CreateColorScaleTween(Color color)
@@ -285,7 +301,49 @@ public partial class Game : Node2D
 		).SetTrans(Tween.TransitionType.Back)
 		.SetEase(Tween.EaseType.Out);
   }
-	
+
+	private void CreateHeartScaleTween(Node2D heart)
+  {
+		_heartScaleTween = CreateTween();
+
+    var scaleMultiplier = 3.25f;
+    var tweenTime = 0.35f;
+		var originalScale = heart.Scale;
+		var originalColor = heart.Modulate;
+
+    heart.Modulate = IncreaseColorIntensity(originalColor);
+    heart.Scale = Vector2.One * scaleMultiplier;
+
+		_heartScaleTween.SetParallel(true);
+
+		_heartScaleTween.TweenProperty(
+			heart,
+			PropertyName.Modulate.ToString(),
+			originalColor,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Cubic)
+		.SetEase(Tween.EaseType.Out);
+
+		_heartScaleTween.TweenProperty(
+			heart,
+			PropertyName.Scale.ToString(),
+			originalScale,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Back)
+		.SetEase(Tween.EaseType.Out);
+  }
+
+	private Color IncreaseColorIntensity(Color color)
+	{
+		float newIntensity = 3.25f;
+
+		return Color.FromHsv(
+				color.H,
+				color.S,
+				newIntensity,
+				color.A
+		);
+	}	
 #endregion
 
 

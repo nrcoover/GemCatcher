@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bnxpo7x26751g"]
 
 [ext_resource type="PackedScene" uid="uid://8m2y1u6noqq5" path="res://scenes/Gem.tscn" id="1_nthcx"]
-[ext_resource type="Script" uid="uid://bruhs6eo0ayun" path="res://scenes/GemHeart.cs" id="2_l0tgh"]
+[ext_resource type="Script" uid="uid://bruhs6eo0ayun" path="res://scripts/GemHeart.cs" id="2_l0tgh"]
 [ext_resource type="PackedScene" uid="uid://d1y4g2ys8ocfi" path="res://scenes/HeartWhite.tscn" id="3_qk74n"]
 
 [node name="GemHeart" node_paths=PackedStringArray("_heartSrpite") instance=ExtResource("1_nthcx")]
@@ -14,4 +14,4 @@ _maxSpeedVariation = 3.5
 [node name="CollisionShape2D" parent="." index="2"]
 visible = false
 
-[node name="HeartWhite" parent="." index="5" instance=ExtResource("3_qk74n")]
+[node name="HeartWhite" parent="." index="4" instance=ExtResource("3_qk74n")]

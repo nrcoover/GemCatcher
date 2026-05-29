@@ -1,37 +1,37 @@
 [gd_scene load_steps=2 format=3 uid="uid://ci18yyqg2giqu"]
 
-[ext_resource type="Texture2D" uid="uid://b5w75r40sc3p3" path="res://assets/images/sprites/element_red_diamond.png" id="1_v23yl"]
+[ext_resource type="Texture2D" uid="uid://d1oy1mgl4kmo6" path="res://icon.png" id="1_m1kfy"]
 
 [node name="HeartRed" type="Node2D"]
 scale = Vector2(0.25, 0.25)
 
 [node name="Heart" type="Sprite2D" parent="."]
-texture = ExtResource("1_v23yl")
+texture = ExtResource("1_m1kfy")
 
 [node name="Heart2" type="Sprite2D" parent="."]
 position = Vector2(24, 24)
-texture = ExtResource("1_v23yl")
+texture = ExtResource("1_m1kfy")
 
 [node name="Heart3" type="Sprite2D" parent="."]
 position = Vector2(48, 0)
-texture = ExtResource("1_v23yl")
+texture = ExtResource("1_m1kfy")
 
 [node name="Heart6" type="Sprite2D" parent="."]
 position = Vector2(-48, 0)
-texture = ExtResource("1_v23yl")
+texture = ExtResource("1_m1kfy")
 
 [node name="Heart7" type="Sprite2D" parent="."]
 position = Vector2(-24, -24)
-texture = ExtResource("1_v23yl")
+texture = ExtResource("1_m1kfy")
 
 [node name="Heart8" type="Sprite2D" parent="."]
 position = Vector2(24, -24)
-texture = ExtResource("1_v23yl")
+texture = ExtResource("1_m1kfy")
 
 [node name="Heart4" type="Sprite2D" parent="."]
 position = Vector2(-24, 24)
-texture = ExtResource("1_v23yl")
+texture = ExtResource("1_m1kfy")
 
 [node name="Heart5" type="Sprite2D" parent="."]
 position = Vector2(0, 48)
-texture = ExtResource("1_v23yl")
+texture = ExtResource("1_m1kfy")
