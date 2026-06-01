@@ -70,11 +70,12 @@ public partial class GemSpawner : Node2D
 
 			return;
 		}
-		
+
+		SetGemSpeedByDifficultyLevel(gem);
 		SetGemPosition(gem);
 	}
 
-	private void SpawnHeartGem()
+  private void SpawnHeartGem()
 	{
 		if (_isOnMainMenu)
 		{
@@ -120,4 +121,9 @@ public partial class GemSpawner : Node2D
 				_leftBoundary.GlobalPosition.Y
 			);
 	}
+
+  private void SetGemSpeedByDifficultyLevel(Gem gem)
+  {
+    gem.SpeedVariation *= GameManager.Instance.DifficultyLevel;
+  }
 }

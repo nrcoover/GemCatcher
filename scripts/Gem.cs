@@ -18,6 +18,18 @@ public partial class Gem : Area2D
 	private float _rotationVariation;
 	private float _scaleVariation;
 
+	public float SpeedVariation
+	{
+		get 
+		{
+			return _speedVariation; 
+		}
+		set
+		{
+			_speedVariation = value;
+		}
+	}
+
 	public override void _Ready()
 	{
 		SetVariations();
@@ -65,7 +77,10 @@ public partial class Gem : Area2D
 			QueueFree();
 		}
 
-		Position = new Vector2(Position.X, Position.Y + (_movementSpeed * _speedVariation * GameManager.Instance.DifficultyLevel * (float)delta));
+		Position = new Vector2(
+			Position.X,
+			Position.Y + (_movementSpeed * _speedVariation * (float)delta)
+		);
 	}
 
 	private void HandleRotation(float delta)
