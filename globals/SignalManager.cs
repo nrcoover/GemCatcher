@@ -18,6 +18,7 @@ public partial class SignalManager : Node
 	[Signal] public delegate void HighScoreChangedEventHandler();
 	[Signal] public delegate void HealthRecoveredEventHandler();
 	[Signal] public delegate void ScoreIncrementedEventHandler(int score);
+	[Signal] public delegate void DifficultyIncreasedEventHandler();
 
 	public override void _Ready()
 	{
@@ -92,5 +93,10 @@ public partial class SignalManager : Node
 	public void EmitScoreIncremented(int score)
 	{
 		EmitSignal(SignalName.ScoreIncremented, score);
+	}
+
+	public void EmitDifficultyIncreased()
+	{
+		EmitSignal(SignalName.DifficultyIncreased);
 	}
 }

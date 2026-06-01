@@ -185,6 +185,8 @@ public partial class GameManager : Node
 		GD.Print($"Updated Level: {DifficultyLevel}");
 		GD.Print($"DIFFICULTY LEVEL CHANGE COMPLETE!!!");
 		GD.Print("------------------------------------");
+
+		SignalManager.Instance.EmitDifficultyIncreased();
 	}
 
 #endregion

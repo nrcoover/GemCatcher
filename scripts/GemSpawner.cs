@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class GemSpawner : Node2D
@@ -25,19 +26,35 @@ public partial class GemSpawner : Node2D
 		SubscribeToSignals();
 	}
 
-  private void SetBoundaryMarkers()
+	public override void _ExitTree()
+	{
+		UnsubscribeFromSignals();
+	}
+
+  private void SubscribeToSignals()
+	{
+		SignalManager.Instance.DifficultyIncreased += OnDifficultyIncreased;
+		_gemSpawnTimer.Timeout += SpawnGemType;
+	}
+
+	private void UnsubscribeFromSignals()
+	{
+		SignalManager.Instance.DifficultyIncreased -= OnDifficultyIncreased;
+	}
+
+  private void OnDifficultyIncreased()
+  {
+    _gemSpawnTimer.WaitTime = _gemSpawnTimer.WaitTime / GameManager.Instance.DifficultyLevel;
+  }
+
+	private void SetBoundaryMarkers()
   {
     _leftBoundary = (Marker2D)GetNode("../../MainMenu/CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/LeftBoundary");
 
 		_rightBoundary = (Marker2D)GetNode("../../MainMenu/CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/RightBoundary");
   }
 
-  private void SubscribeToSignals()
-	{
-		_gemSpawnTimer.Timeout += SpawnGemType;
-	}
-
-	private void SpawnGemType()
+  private void SpawnGemType()
 	{
 		if (_isOnMainMenu)
 		{
