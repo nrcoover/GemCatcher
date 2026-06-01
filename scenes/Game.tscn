@@ -639,6 +639,7 @@ stream = ExtResource("9_g4kob")
 volume_db = -16.0
 
 [node name="WarningBlip" type="AudioStreamPlayer" parent="Audio/SFX" groups=["Audio Streams"]]
+volume_db = -12.0
 pitch_scale = 2.0
 
 [node name="PowerDown" type="AudioStreamPlayer" parent="Audio/SFX" groups=["Audio Streams"]]

@@ -47,4 +47,4 @@ process_material = SubResource("ParticleProcessMaterial_7v7mi")
 
 [node name="Sparkle" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_53y1h")
-volume_db = -16.0
+volume_db = -24.0
