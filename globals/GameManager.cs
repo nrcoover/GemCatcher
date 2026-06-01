@@ -102,6 +102,7 @@ public partial class GameManager : Node
 	{
 		SetMissedGemCount(0);
 		SetHealth(MAX_HEALTH);
+		DifficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
 	}
 
 #region Manage Health

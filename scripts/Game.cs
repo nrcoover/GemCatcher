@@ -61,6 +61,7 @@ public partial class Game : Node2D
 	public override void _ExitTree()
 	{
 		UnsubscribeFromSignals();
+		GameManager.Instance.ResetGame();
 	}
 
 

@@ -65,7 +65,7 @@ public partial class Gem : Area2D
 			QueueFree();
 		}
 
-		Position = new Vector2(Position.X, Position.Y + (_movementSpeed * _speedVariation * (float)delta));
+		Position = new Vector2(Position.X, Position.Y + (_movementSpeed * _speedVariation * GameManager.Instance.DifficultyLevel * (float)delta));
 	}
 
 	private void HandleRotation(float delta)
