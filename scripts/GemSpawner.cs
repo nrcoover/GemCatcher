@@ -47,7 +47,6 @@ public partial class GemSpawner : Node2D
 
 		var heartSpawnNumber = 10;
 		var randomNumber = Helper.GetRandomInt(1, heartSpawnNumber);
-		GD.Print($"Gem Spawn Number: {randomNumber}");
 
 		if (GameManager.Instance.GetHealth() < GameManager.Instance.MaxHealth
 				&& randomNumber >= heartSpawnNumber)
