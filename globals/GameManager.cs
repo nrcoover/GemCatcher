@@ -1,9 +1,27 @@
+using System;
 using Godot;
 
 public partial class GameManager : Node
 {
 	const int MAX_HEALTH = 5;
 	const int MIN_HEALTH = 0;
+
+	const int DEFAULT_DIFFICULTY_LEVEL = 1;
+	const int DIFFICULTY_MULTIPLIER = 10;
+
+	private int _difficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
+
+	public int DifficultyLevel
+	{
+		get
+		{
+			return _difficultyLevel;
+		}
+		private set
+		{
+			_difficultyLevel = value;
+		}
+	}
 
 	public static GameManager Instance {get; private set;}
 
@@ -45,12 +63,14 @@ public partial class GameManager : Node
 	{
 		SignalManager.Instance.GameOver += OnGameOver;
 		SignalManager.Instance.HealthRecovered += OnHealthRecovered;
+		SignalManager.Instance.ScoreIncremented += OnScoreIncremented;
 	}
 
-	private void UnsubscribeFromSignals()
+  private void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.GameOver -= OnGameOver;
 		SignalManager.Instance.HealthRecovered -= OnHealthRecovered;
+		SignalManager.Instance.ScoreIncremented -= OnScoreIncremented;
 	}
 
   public void OnGameOver()
@@ -61,6 +81,11 @@ public partial class GameManager : Node
   private void OnHealthRecovered()
   {
     IncrementHealth();
+  }
+	
+  private void OnScoreIncremented(int score)
+  {
+    HandleDifficultyLevel(score);
   }
 
 #endregion
@@ -130,6 +155,36 @@ public partial class GameManager : Node
 	{
 		SetMissedGemCount(GetMissedGemCount() + 1);
     DecrementHealth();
+	}
+
+#endregion
+
+#region Manage Difficulty Level
+
+	private void HandleDifficultyLevel(int currentScore)
+	{
+		// TODO: Change to finalized incrementor
+		var difficultyIncrementer = 3;
+		var isScoreDivisibleByTen = currentScore % difficultyIncrementer == 0;
+
+		if (!isScoreDivisibleByTen)
+		{
+			return;
+		}
+
+		IncreaseDifficulty(currentScore);
+	}
+
+	private void IncreaseDifficulty(int currentScore)
+	{
+		GD.Print("---------------NEW LOG--------------");
+		GD.Print("INCREASE DIFFICUTLY COMMENSING!!!");
+		GD.Print($"Current Level: {DifficultyLevel}");
+		GD.Print($"Current Score: {currentScore}");
+		DifficultyLevel = DifficultyLevel * DIFFICULTY_MULTIPLIER;
+		GD.Print($"Updated Level: {DifficultyLevel}");
+		GD.Print($"DIFFICULTY LEVEL CHANGE COMPLETE!!!");
+		GD.Print("------------------------------------");
 	}
 
 #endregion

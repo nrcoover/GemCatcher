@@ -417,9 +417,11 @@ public partial class Game : Node2D
 		UpdateHealthUi();
 	}
 
+	//TODO: Move to Score Manager
 	private void IncrementScore(int points)
 	{
 		_score += points;
+		SignalManager.Instance.EmitScoreIncremented(_score);
 	}
 
 	private void StopMoveableObjectProcessing()
