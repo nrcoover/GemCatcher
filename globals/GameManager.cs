@@ -129,13 +129,7 @@ public partial class GameManager : Node
 	public void IncrementMissedGems()
 	{
 		SetMissedGemCount(GetMissedGemCount() + 1);
-
-		DecrementHealth();
-
-		if (GetHealth() <= MIN_HEALTH)
-		{
-			SignalManager.Instance.EmitGameOver();
-		}
+    DecrementHealth();
 	}
 
 #endregion
