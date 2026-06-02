@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 public partial class GemSpawner : Node2D
@@ -44,7 +43,8 @@ public partial class GemSpawner : Node2D
 
   private void OnDifficultyIncreased()
   {
-    _gemSpawnTimer.WaitTime = _gemSpawnTimer.WaitTime / GameManager.Instance.DifficultyLevel;
+    _gemSpawnTimer.WaitTime /= GameManager.Instance.DifficultyLevel;
+		GD.Print($"NEW WAIT TIME: {_gemSpawnTimer.WaitTime}");
   }
 
 	private void SetBoundaryMarkers()

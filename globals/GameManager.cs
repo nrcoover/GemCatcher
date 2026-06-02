@@ -5,12 +5,12 @@ public partial class GameManager : Node
 	const int MAX_HEALTH = 5;
 	const int MIN_HEALTH = 0;
 
-	const int DEFAULT_DIFFICULTY_LEVEL = 1;
-	const int DIFFICULTY_MULTIPLIER = 10;
+	const float DEFAULT_DIFFICULTY_LEVEL = 1;
+	const float DIFFICULTY_MULTIPLIER = 1.01f;
 
-	private int _difficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
+	private float _difficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
 
-	public int DifficultyLevel
+	public float DifficultyLevel
 	{
 		get
 		{
@@ -164,7 +164,7 @@ public partial class GameManager : Node
 	private void HandleDifficultyLevel(int currentScore)
 	{
 		// TODO: Change to finalized incrementor
-		var difficultyIncrementer = 3;
+		var difficultyIncrementer = 1;
 		var isScoreDivisibleByTen = currentScore % difficultyIncrementer == 0;
 
 		if (!isScoreDivisibleByTen)
