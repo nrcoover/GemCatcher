@@ -43,7 +43,9 @@ public partial class GemSpawner : Node2D
 
   private void OnDifficultyIncreased()
   {
-    _gemSpawnTimer.WaitTime /= GameManager.Instance.DifficultyLevel;
+		var decrementalTime = 0.01;
+    _gemSpawnTimer.WaitTime -= decrementalTime;
+		// TODO: Clamp at .25 or .15 wait time?
 		GD.Print($"NEW WAIT TIME: {_gemSpawnTimer.WaitTime}");
   }
 

@@ -181,6 +181,7 @@ public partial class GameManager : Node
 		GD.Print("INCREASE DIFFICUTLY COMMENSING!!!");
 		GD.Print($"Current Level: {DifficultyLevel}");
 		GD.Print($"Current Score: {currentScore}");
+		// TODO: Clamp at 2.5 or 2.75 difficulty.
 		DifficultyLevel = DifficultyLevel * DIFFICULTY_MULTIPLIER;
 		GD.Print($"Updated Level: {DifficultyLevel}");
 		GD.Print($"DIFFICULTY LEVEL CHANGE COMPLETE!!!");
