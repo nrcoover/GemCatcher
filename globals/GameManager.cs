@@ -163,8 +163,8 @@ public partial class GameManager : Node
 
 	private void HandleDifficultyLevel(int currentScore)
 	{
-		// TODO: Change to finalized incrementor
-		var difficultyIncrementer = 1;
+		// TODO: Change to finalized incrementor (10)
+		var difficultyIncrementer = 10;
 		var isScoreDivisibleByTen = currentScore % difficultyIncrementer == 0;
 
 		if (!isScoreDivisibleByTen)
@@ -177,12 +177,17 @@ public partial class GameManager : Node
 
 	private void IncreaseDifficulty(int currentScore)
 	{
+		var maxDifficulty = 2.75; // Clamp at 2.5 or 2.75 difficulty
 		GD.Print("---------------NEW LOG--------------");
 		GD.Print("INCREASE DIFFICUTLY COMMENSING!!!");
 		GD.Print($"Current Level: {DifficultyLevel}");
 		GD.Print($"Current Score: {currentScore}");
-		// TODO: Clamp at 2.5 or 2.75 difficulty.
-		DifficultyLevel = DifficultyLevel * DIFFICULTY_MULTIPLIER;
+		
+		DifficultyLevel = (float)Mathf.Clamp(
+			DifficultyLevel * DIFFICULTY_MULTIPLIER
+			, DEFAULT_DIFFICULTY_LEVEL
+			, maxDifficulty
+		);
 		GD.Print($"Updated Level: {DifficultyLevel}");
 		GD.Print($"DIFFICULTY LEVEL CHANGE COMPLETE!!!");
 		GD.Print("------------------------------------");

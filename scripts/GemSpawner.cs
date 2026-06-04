@@ -10,9 +10,12 @@ public partial class GemSpawner : Node2D
 
 	private Marker2D _leftBoundary;
 	private Marker2D _rightBoundary;
+	private float _originalGemSpawnWaitTime;
 
 	public override void _Ready()
 	{
+		_originalGemSpawnWaitTime = (float)_gemSpawnTimer.WaitTime;
+
 		if (_isOnMainMenu)
 		{
 			SetBoundaryMarkers();
@@ -44,8 +47,15 @@ public partial class GemSpawner : Node2D
   private void OnDifficultyIncreased()
   {
 		var decrementalTime = 0.01;
-    _gemSpawnTimer.WaitTime -= decrementalTime;
-		// TODO: Clamp at .25 or .15 wait time?
+		var minWaitTime = 0.75f; // Clamp at .25 or .15 wait time; .75 when mixed with speed increase on difficulty level increase.
+
+    _gemSpawnTimer.WaitTime = (float)Mathf.Clamp(
+			_gemSpawnTimer.WaitTime -= decrementalTime
+			, minWaitTime
+			, _originalGemSpawnWaitTime
+		);
+		
+		
 		GD.Print($"NEW WAIT TIME: {_gemSpawnTimer.WaitTime}");
   }
 
