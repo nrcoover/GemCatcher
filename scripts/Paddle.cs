@@ -1,3 +1,4 @@
+using System;
 using Godot;
 
 public partial class Paddle : Area2D
@@ -19,6 +20,12 @@ public partial class Paddle : Area2D
 		Emergency = 15,
 	}
 
+	enum PowerUp
+	{
+		TripplePaddle,
+		BigPaddle
+	}
+
 	[Export] float _movementSpeed = 200.0f;
 	[Export] float _boundaryMargin = 25.0f;
 	[Export] float _boostMultiplier = 1.5f;
@@ -28,6 +35,7 @@ public partial class Paddle : Area2D
 	[Export] Timer _boostRefuelTimer;
 	[Export] Timer _selfDestructWarningTimer;
 	[Export] Timer _selfDestructTimer;
+	[Export] Timer _powerUpTimer;
 	[Export] AnimationPlayer _boostFuelAnimator;
 	[Export] AnimationPlayer _paddleAnimator;
 	[Export] ProgressBar _progressBarLeft;
@@ -41,11 +49,13 @@ public partial class Paddle : Area2D
 	[Export] AudioStreamPlayer _audioCooldownInProgress;
 	[Export] private float _boostBurnRate;
 	[Export] private float _boostRefuelRate = 12.5f;
+	
 	private float _boostFuel;
 	private bool _isFullyFueled;
 	private bool _boostLockedUntilRelease;
 	private bool _boostersReady;
 	private bool _isInCooldown;
+	private Vector2 _paddleOriginalScale;
 
 	private Tween _colorScaleTween;
 	
@@ -143,6 +153,7 @@ public partial class Paddle : Area2D
 		_boostersReady = true;
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
 		_isInCooldown = false;
+		_paddleOriginalScale = Scale;
   }
 
 	private void ResetParticleSystems()
@@ -160,11 +171,13 @@ public partial class Paddle : Area2D
 		_boostRefuelTimer.Timeout += OnRefuelTimeout;
 		_selfDestructWarningTimer.Timeout += OnSelfDestructWarningTimeout;
 		_selfDestructTimer.Timeout += OnSelfDestructTimeout;
+		_powerUpTimer.Timeout += OnPowerUpTimeout;
 		SignalManager.Instance.BoostFuelDepleted += OnBoostFuelDepleted;
 		SignalManager.Instance.BoostEngaged += OnBoostEngaged;
 		SignalManager.Instance.BoostDisengaged += OnBoostDisengaged;
 		SignalManager.Instance.Scored += OnScored;
 		SignalManager.Instance.GameOver += OnGameOver;
+		SignalManager.Instance.PowerUpCollected += OnPowerUpCollected;
 	}
 
   private void UnsubscribeFromSignals()
@@ -173,9 +186,10 @@ public partial class Paddle : Area2D
 		SignalManager.Instance.BoostEngaged -= OnBoostEngaged;
 		SignalManager.Instance.BoostDisengaged -= OnBoostDisengaged;
 		SignalManager.Instance.Scored -= OnScored;
+		SignalManager.Instance.PowerUpCollected -= OnPowerUpCollected;
 	}
 
-	private void OnBoostEngaged()
+  private void OnBoostEngaged()
   {
 		PlayBoostAudio();
   }
@@ -212,6 +226,10 @@ public partial class Paddle : Area2D
 		_selfDestructTimer.Start();
 	}
 
+	private void OnPowerUpTimeout()
+	{
+		DisableAllActivePowerUps();
+	}
 	
   private void OnSelfDestructTimeout()
 	{
@@ -251,12 +269,20 @@ public partial class Paddle : Area2D
 		
     _colorScaleTween.Kill();
   }
-
-#endregion
-  
-#region Paddle Movement
 	
-	private void HandlePaddleMovement(float delta)
+  private void OnPowerUpCollected()
+	{
+		DisableAllActivePowerUps();
+		StartPowerUpTimer();
+
+		SelectRandomPowerUp();
+	}
+
+  #endregion
+
+  #region Paddle Movement
+
+  private void HandlePaddleMovement(float delta)
 	{
 		HandleUserInput(delta);
 		RestrictPaddleToBoundary();
@@ -615,4 +641,66 @@ public partial class Paddle : Area2D
 			audio.Play();
 		}
 	}
+
+#region Power Ups
+	
+	private void DisableAllActivePowerUps()
+	{
+		StopPowerUpTimer();
+		EndTriplePaddlePowerUp();
+		EndLargePaddlePowerUp();
+
+		//TODO: ADD DISABLING OF POWER UPS
+	}
+
+  private void StartPowerUpTimer()
+	{
+		_powerUpTimer.Start();
+	}
+
+	private void StopPowerUpTimer()
+	{
+		_powerUpTimer.Stop();
+	}
+
+  private void SelectRandomPowerUp()
+  {
+		var randomNumber = Helper.GetRandomInt(0, 1);
+
+		switch (randomNumber)
+		{
+			case (int)PowerUp.BigPaddle:
+				BeginBigPaddlePowerUp();
+				break;
+
+			case (int)PowerUp.TripplePaddle:
+				BeginTripplePaddlePowerUp();
+				break;
+		}
+  }
+
+  private void BeginTripplePaddlePowerUp()
+	{
+		GD.Print("TRIPPLE PADDLES GO!!!");
+	}
+
+  private void BeginBigPaddlePowerUp()
+	{
+		GD.Print("BIG PADDLE POWER UP!");
+		var powerUpScaleSize = 3.0f;
+		Scale = _paddleOriginalScale * powerUpScaleSize;
+	}
+
+	private void EndLargePaddlePowerUp()
+  {
+    Scale = _paddleOriginalScale;
+  }
+
+  private void EndTriplePaddlePowerUp()
+  {
+    // TODO: Disable duplicate paddles
+  }
+	
+
+  #endregion
 }

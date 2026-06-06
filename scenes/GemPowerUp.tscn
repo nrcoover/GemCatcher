@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://dqo0w8yoly0x5"]
+
+[ext_resource type="PackedScene" uid="uid://8m2y1u6noqq5" path="res://scenes/Gem.tscn" id="1_vtl5t"]
+[ext_resource type="Script" uid="uid://dn72hwqjuygl6" path="res://scripts/GemPowerUp.cs" id="2_vtl5t"]
+[ext_resource type="PackedScene" uid="uid://6alp72gg783v" path="res://scenes/PlusWhite.tscn" id="4_uyoy1"]
+
+[sub_resource type="Curve" id="Curve_tx2gm"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5241379, 0.64245415), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[node name="GemPowerUp" node_paths=PackedStringArray("_powerUpSrpite") instance=ExtResource("1_vtl5t")]
+script = ExtResource("2_vtl5t")
+_powerUpMinScaleVariation = 0.85
+_powerUpMaxScaleVariation = 1.15
+_powerUpSrpite = NodePath("PlusWhite")
+
+[node name="Particles" parent="." index="0"]
+emitting = true
+
+[node name="ParticlesOrbiting" type="CPUParticles2D" parent="." index="1"]
+amount = 87
+lifetime = 0.7
+preprocess = 0.64
+randomness = 0.18
+lifetime_randomness = 0.07
+emission_shape = 2
+emission_sphere_radius = 34.12
+direction = Vector2(0, 0)
+gravity = Vector2(0, 0)
+orbit_velocity_min = 0.08
+orbit_velocity_max = 0.08
+scale_amount_min = 0.0
+scale_amount_max = 4.5
+scale_amount_curve = SubResource("Curve_tx2gm")
+
+[node name="CollisionShape2D" parent="." index="3"]
+visible = false
+
+[node name="PlusWhite" parent="." index="5" instance=ExtResource("4_uyoy1")]
+scale = Vector2(0.45, 0.45)

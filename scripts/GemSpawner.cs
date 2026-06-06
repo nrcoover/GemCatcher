@@ -5,6 +5,7 @@ public partial class GemSpawner : Node2D
 	[Export] private Timer _gemSpawnTimer;
 	[Export] private PackedScene _gemScene;
 	[Export] private PackedScene _gemHeartScene;
+	[Export] private PackedScene _gemPowerUpScene;
 	[Export] private Node _gemContainer;
 	[Export] private bool _isOnMainMenu;
 
@@ -74,18 +75,25 @@ public partial class GemSpawner : Node2D
 			return;
 		}
 
-		var heartSpawnNumber = 10;
-		var randomNumber = Helper.GetRandomInt(1, heartSpawnNumber);
+		SpawnPowerUpGem();
 
-		if (GameManager.Instance.GetHealth() < GameManager.Instance.MaxHealth
-				&& randomNumber >= heartSpawnNumber)
-		{
-			SpawnHeartGem();
-		}
-		else
-		{
-			SpawnGem();			
-		}
+		// var heartSpawnNumber = 10;
+		// var powerUpSpawnNumber = 8;
+		// var randomNumber = Helper.GetRandomInt(1, heartSpawnNumber);
+
+		// if (GameManager.Instance.GetHealth() < GameManager.Instance.MaxHealth
+		// 		&& randomNumber >= heartSpawnNumber)
+		// {
+		// 	SpawnHeartGem();
+		// }
+		// else if (randomNumber >= powerUpSpawnNumber)
+		// {
+		// 	SpawnPowerUpGem();
+		// }
+		// else
+		// {
+		// 	SpawnGem();			
+		// }
 	}
 
 	private void SpawnGem()
@@ -115,6 +123,19 @@ public partial class GemSpawner : Node2D
 		_gemContainer.AddChild(heartGem);
 
 		SetGemPosition(heartGem);
+	}
+
+	private void SpawnPowerUpGem()
+	{
+		if (_isOnMainMenu)
+		{
+			return;
+		}
+
+		var powerUpGem = (GemPowerUp)_gemPowerUpScene.Instantiate();
+		_gemContainer.AddChild(powerUpGem);
+
+		SetGemPosition(powerUpGem);
 	}
 
 	private void SetGemPosition(Node2D gem)
