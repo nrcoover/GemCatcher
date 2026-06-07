@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://dhhw5fku5bqvf"]
+
+[ext_resource type="Script" uid="uid://dwdhfbweg65r7" path="res://scripts/PaddleGhost.cs" id="1_dtdlc"]
+[ext_resource type="Texture2D" uid="uid://cnkl8lfb1hs81" path="res://assets/images/sprites/paddleBlu.png" id="2_d3amv"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6kxou"]
+radius = 12.0
+height = 104.0
+
+[node name="PaddleGhost" type="Area2D" groups=["Moveable Objects"]]
+script = ExtResource("1_dtdlc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.48, 0.48, 0.48, 0.5882353)
+texture = ExtResource("2_d3amv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_6kxou")

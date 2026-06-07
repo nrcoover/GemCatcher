@@ -1,15 +1,13 @@
-using System;
 using Godot;
 
 public partial class Paddle : Area2D
 {
-
-	#region Variables - Debugging
+#region Variables - Debugging
 
 	const bool IS_DEBUGGING = false;
 	[Export] Label _debugLogLabel;
 
-	#endregion
+#endregion
 
 	const float MAX_BOOST_FUEL = 100.0f;
 	const float DEFAULT_REFUEL_RATE = 12.5f;
@@ -42,6 +40,8 @@ public partial class Paddle : Area2D
 	[Export] ProgressBar _progressBarRight;
 	[Export] Node2D _leftParticles;
 	[Export] Node2D _rightParticles;
+	[Export] PaddleGhost _paddleGhostLeft;
+	[Export] PaddleGhost _paddleGhostRight;
 
 	[Export] AudioStreamPlayer2D _boostSound;
 	[Export] AudioStreamPlayer _audioDisengageBoosters;
@@ -107,6 +107,7 @@ public partial class Paddle : Area2D
 		InitializeVariables();
 		UpdateBoostUi();
 		ResetParticleSystems();
+		DisableAllActivePowerUps();
 	}
 
   public override void _Process(double delta)
@@ -186,6 +187,7 @@ public partial class Paddle : Area2D
 		SignalManager.Instance.BoostEngaged -= OnBoostEngaged;
 		SignalManager.Instance.BoostDisengaged -= OnBoostDisengaged;
 		SignalManager.Instance.Scored -= OnScored;
+		SignalManager.Instance.GameOver -= OnGameOver;
 		SignalManager.Instance.PowerUpCollected -= OnPowerUpCollected;
 	}
 
@@ -278,9 +280,9 @@ public partial class Paddle : Area2D
 		SelectRandomPowerUp();
 	}
 
-  #endregion
+#endregion
 
-  #region Paddle Movement
+#region Paddle Movement
 
   private void HandlePaddleMovement(float delta)
 	{
@@ -562,6 +564,8 @@ public partial class Paddle : Area2D
 
 #endregion
 
+#region Tweens
+
 	private async void CreateColorScaleTweenAsync(Color color)
 	{
 		if (_isOverheating)
@@ -616,6 +620,10 @@ public partial class Paddle : Area2D
 		.SetEase(Tween.EaseType.Out);
 	}
 
+#endregion
+
+#region Audio
+
 	private void PlayBoostAudio()
 	{
 		if (!_isTryingToBoost)
@@ -641,6 +649,8 @@ public partial class Paddle : Area2D
 			audio.Play();
 		}
 	}
+
+#endregion
 
 #region Power Ups
 	
@@ -682,6 +692,7 @@ public partial class Paddle : Area2D
   private void BeginTripplePaddlePowerUp()
 	{
 		GD.Print("TRIPPLE PADDLES GO!!!");
+		EnableGhostPaddles();
 	}
 
   private void BeginBigPaddlePowerUp()
@@ -698,9 +709,26 @@ public partial class Paddle : Area2D
 
   private void EndTriplePaddlePowerUp()
   {
-    // TODO: Disable duplicate paddles
+    DisableGhostPaddles();
   }
-	
 
-  #endregion
+	private void EnableGhostPaddles()
+	{
+		_paddleGhostLeft.Visible = true;
+		_paddleGhostRight.Visible = true;
+
+		SetDeferred(_paddleGhostLeft.Monitorable.ToString(), true);
+		SetDeferred(_paddleGhostRight.Monitorable.ToString(), true);
+	}
+
+	private void DisableGhostPaddles()
+	{
+		_paddleGhostLeft.Visible = false;
+		_paddleGhostRight.Visible = false;
+
+		SetDeferred(_paddleGhostLeft.Monitorable.ToString(), false);
+		SetDeferred(_paddleGhostRight.Monitorable.ToString(), false);
+	}
+	
+#endregion
 }

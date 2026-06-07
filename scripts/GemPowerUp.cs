@@ -18,7 +18,7 @@ public partial class GemPowerUp : Gem
 
 	public override void OnAreaEntered(Area2D area)
 	{
-		if (area is Paddle)
+		if (area is Paddle || area is PaddleGhost)
 		{
 			SignalManager.Instance.EmitPowerUpCollected();
 			EndParticleEmission();

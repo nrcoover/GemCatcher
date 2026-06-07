@@ -123,7 +123,7 @@ public partial class Gem : Area2D
 
 	public virtual void OnAreaEntered(Area2D area)
 	{
-		if (area is Paddle)
+		if (area is Paddle || area is PaddleGhost)
 		{
 			SignalManager.Instance.EmitScored(this.Modulate);
 			EndParticleEmission();
