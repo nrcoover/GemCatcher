@@ -717,10 +717,7 @@ public partial class Paddle : Area2D
 		_paddleGhostLeft.Visible = true;
 		_paddleGhostRight.Visible = true;
 
-		_paddleGhostLeft.SetDeferred(Area2D.PropertyName.Monitoring, true);
 		_paddleGhostLeft.SetDeferred(Area2D.PropertyName.Monitorable, true);
-
-		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitoring, true);
 		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitorable, true);
 	}
 
@@ -729,10 +726,7 @@ public partial class Paddle : Area2D
 		_paddleGhostLeft.Visible = false;
 		_paddleGhostRight.Visible = false;
 
-		_paddleGhostLeft.SetDeferred(Area2D.PropertyName.Monitoring, false);
 		_paddleGhostLeft.SetDeferred(Area2D.PropertyName.Monitorable, false);
-
-		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitoring, false);
 		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitorable, false);
 	}
 	
