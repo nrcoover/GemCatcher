@@ -75,25 +75,25 @@ public partial class GemSpawner : Node2D
 			return;
 		}
 
-		SpawnPowerUpGem();
+		// SpawnPowerUpGem();
 
-		// var heartSpawnNumber = 10;
-		// var powerUpSpawnNumber = 8;
-		// var randomNumber = Helper.GetRandomInt(1, heartSpawnNumber);
+		var heartSpawnNumber = 10;
+		var powerUpSpawnNumber = 8;
+		var randomNumber = Helper.GetRandomInt(1, heartSpawnNumber);
 
-		// if (GameManager.Instance.GetHealth() < GameManager.Instance.MaxHealth
-		// 		&& randomNumber >= heartSpawnNumber)
-		// {
-		// 	SpawnHeartGem();
-		// }
-		// else if (randomNumber >= powerUpSpawnNumber)
-		// {
-		// 	SpawnPowerUpGem();
-		// }
-		// else
-		// {
-		// 	SpawnGem();			
-		// }
+		if (GameManager.Instance.GetHealth() < GameManager.Instance.MaxHealth
+				&& randomNumber >= heartSpawnNumber)
+		{
+			SpawnHeartGem();
+		}
+		else if (randomNumber >= powerUpSpawnNumber)
+		{
+			SpawnPowerUpGem();
+		}
+		else
+		{
+			SpawnGem();			
+		}
 	}
 
 	private void SpawnGem()

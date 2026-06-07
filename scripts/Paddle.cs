@@ -717,8 +717,11 @@ public partial class Paddle : Area2D
 		_paddleGhostLeft.Visible = true;
 		_paddleGhostRight.Visible = true;
 
-		SetDeferred(_paddleGhostLeft.Monitorable.ToString(), true);
-		SetDeferred(_paddleGhostRight.Monitorable.ToString(), true);
+		_paddleGhostLeft.SetDeferred(Area2D.PropertyName.Monitoring, true);
+		_paddleGhostLeft.SetDeferred(Area2D.PropertyName.Monitorable, true);
+
+		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitoring, true);
+		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitorable, true);
 	}
 
 	private void DisableGhostPaddles()
@@ -726,8 +729,11 @@ public partial class Paddle : Area2D
 		_paddleGhostLeft.Visible = false;
 		_paddleGhostRight.Visible = false;
 
-		SetDeferred(_paddleGhostLeft.Monitorable.ToString(), false);
-		SetDeferred(_paddleGhostRight.Monitorable.ToString(), false);
+		_paddleGhostLeft.SetDeferred(Area2D.PropertyName.Monitoring, false);
+		_paddleGhostLeft.SetDeferred(Area2D.PropertyName.Monitorable, false);
+
+		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitoring, false);
+		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitorable, false);
 	}
 	
 #endregion
