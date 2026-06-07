@@ -94,9 +94,9 @@ _data = {
 modulate = Color(1.224127, 1.224127, 1.224127, 1)
 script = ExtResource("1_6kxou")
 _debugLogLabel = NodePath("DebugLog")
-_boostRefuelTimer = NodePath("BoostRefuelTimer")
-_selfDestructWarningTimer = NodePath("SelfDestructWarningTimer")
-_selfDestructTimer = NodePath("SelfDestructTimer")
+_boostRefuelTimer = NodePath("Timers/BoostRefuelTimer")
+_selfDestructWarningTimer = NodePath("Timers/SelfDestructWarningTimer")
+_selfDestructTimer = NodePath("Timers/SelfDestructTimer")
 _powerUpTimer = NodePath("Timers/PowerUpTimer")
 _paddleAnimator = NodePath("PaddleAnimator")
 _leftParticles = NodePath("LeftBoostParticles")
@@ -242,17 +242,6 @@ visible = false
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_6kxou")
 
-[node name="BoostRefuelTimer" type="Timer" parent="."]
-wait_time = 5.0
-one_shot = true
-
-[node name="SelfDestructWarningTimer" type="Timer" parent="."]
-wait_time = 1.5
-one_shot = true
-
-[node name="SelfDestructTimer" type="Timer" parent="."]
-one_shot = true
-
 [node name="DebugLog" type="Label" parent="."]
 offset_left = 57.0
 offset_top = -147.0
@@ -281,3 +270,14 @@ libraries = {
 wait_time = 7.0
 one_shot = true
 autostart = true
+
+[node name="BoostRefuelTimer" type="Timer" parent="Timers"]
+wait_time = 5.0
+one_shot = true
+
+[node name="SelfDestructWarningTimer" type="Timer" parent="Timers"]
+wait_time = 1.5
+one_shot = true
+
+[node name="SelfDestructTimer" type="Timer" parent="Timers"]
+one_shot = true
