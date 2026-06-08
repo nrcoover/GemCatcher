@@ -20,7 +20,7 @@ public partial class GemPowerUp : Gem
 	{
 		if (area is Paddle || area is PaddleGhost)
 		{
-			SignalManager.Instance.EmitPowerUpCollected();
+			SignalManager.Instance.EmitPowerUpCollected(this.Modulate);
 			EndParticleEmission();
 			QueueFree();
 		}

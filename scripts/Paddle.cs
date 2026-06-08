@@ -273,12 +273,12 @@ public partial class Paddle : Area2D
     _colorScaleTween.Kill();
   }
 	
-  private void OnPowerUpCollected()
+  private void OnPowerUpCollected(Color color)
 	{
 		DisableAllActivePowerUps();
 		StartPowerUpTimer();
 
-		SelectRandomPowerUp();
+		SelectRandomPowerUp(color);
 	}
 
 #endregion
@@ -623,45 +623,59 @@ public partial class Paddle : Area2D
 
 	private void PlayBigPaddleTransformationTween(float finalMultiplier)
 	{
-    _bigPaddleTween?.Kill();
+		_bigPaddleTween?.Kill();
 
-    Vector2 originalScale = _paddleOriginalScale;
+		Vector2 originalScale = _paddleOriginalScale;
+		var timeDuration = 0.05f;
 
-    Vector2 largeScale = originalScale * (finalMultiplier * 0.8f);
-    Vector2 mediumScale = originalScale * (finalMultiplier * 0.5f);
-    Vector2 almostFinalScale = originalScale * (finalMultiplier * 0.9f);
-    Vector2 finalScale = originalScale * finalMultiplier;
+		_bigPaddleTween = CreateTween();
 
-    _bigPaddleTween = CreateTween();
+		_bigPaddleTween.TweenProperty(this,
+			PropertyName.Scale.ToString(),
+			originalScale * finalMultiplier,
+			timeDuration
+		);
 
-    _bigPaddleTween.TweenProperty(
-        this,
-        PropertyName.Scale.ToString(),
-        largeScale,
-        0.08f
-    );
+		_bigPaddleTween.TweenProperty(this,
+			PropertyName.Scale.ToString(),
+			originalScale * (finalMultiplier * 0.5f),
+			timeDuration
+		);
 
-    _bigPaddleTween.TweenProperty(
-        this,
-        PropertyName.Scale.ToString(),
-        mediumScale,
-        0.08f
-    );
+		_bigPaddleTween.TweenProperty(this,
+			PropertyName.Scale.ToString(),
+			originalScale * (finalMultiplier * 0.85f),
+			timeDuration
+		);
 
-    _bigPaddleTween.TweenProperty(
-        this,
-        PropertyName.Scale.ToString(),
-        almostFinalScale,
-        0.08f
-    );
+		_bigPaddleTween.TweenProperty(this,
+			PropertyName.Scale.ToString(),
+			originalScale * (finalMultiplier * 0.65f),
+			timeDuration
+		);
 
-    _bigPaddleTween.TweenProperty(
-        this,
-        PropertyName.Scale.ToString(),
-        finalScale,
-        0.08f
-    );
-}
+		_bigPaddleTween.TweenProperty(this,
+			PropertyName.Scale.ToString(),
+			originalScale * finalMultiplier,
+			timeDuration
+		);
+
+		_bigPaddleTween.SetParallel(true);
+
+		_bigPaddleTween.TweenProperty(
+			this,
+			PropertyName.Modulate.ToString(),
+			Colors.White,
+			0.05f
+		);
+
+		_bigPaddleTween.TweenProperty(
+			this,
+			PropertyName.Modulate.ToString(),
+			new Color(1.5f, 1.5f, 1.5f),
+			0.05f
+		);
+	}
 
 #endregion
 
@@ -716,7 +730,7 @@ public partial class Paddle : Area2D
 		_powerUpTimer.Stop();
 	}
 
-  private void SelectRandomPowerUp()
+  private void SelectRandomPowerUp(Color color)
   {
 		var randomNumber = Helper.GetRandomInt(0, 1);
 
@@ -728,6 +742,7 @@ public partial class Paddle : Area2D
 
 			case (int)PowerUp.TripplePaddle:
 				BeginTripplePaddlePowerUp();
+				CreateColorScaleTweenAsync(color);
 				break;
 		}
   }
@@ -741,8 +756,10 @@ public partial class Paddle : Area2D
   private void BeginBigPaddlePowerUp()
 	{
 		GD.Print("BIG PADDLE POWER UP!");
-		var powerUpScaleSize = 3.0f;
-		PlayBigPaddleTransformationTween(powerUpScaleSize);
+		var powerUpMultiplier = 2.5f;
+
+		Scale = _paddleOriginalScale;
+		PlayBigPaddleTransformationTween(powerUpMultiplier);
 	}
 
 	private void EndLargePaddlePowerUp()
