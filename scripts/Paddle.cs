@@ -659,22 +659,6 @@ public partial class Paddle : Area2D
 			originalScale * finalMultiplier,
 			timeDuration
 		);
-
-		_bigPaddleTween.SetParallel(true);
-
-		_bigPaddleTween.TweenProperty(
-			this,
-			PropertyName.Modulate.ToString(),
-			Colors.White,
-			0.05f
-		);
-
-		_bigPaddleTween.TweenProperty(
-			this,
-			PropertyName.Modulate.ToString(),
-			new Color(1.5f, 1.5f, 1.5f),
-			0.05f
-		);
 	}
 
 #endregion
