@@ -56,6 +56,7 @@ public partial class Paddle : Area2D
 	private bool _boostersReady;
 	private bool _isInCooldown;
 	private Vector2 _paddleOriginalScale;
+	private float _originalSpeed;
 
 	private Tween _colorScaleTween;
 	private Tween _bigPaddleTween;
@@ -156,6 +157,7 @@ public partial class Paddle : Area2D
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
 		_isInCooldown = false;
 		_paddleOriginalScale = Scale;
+		_originalSpeed = _movementSpeed;
   }
 
 	private void ResetParticleSystems()
@@ -733,22 +735,25 @@ public partial class Paddle : Area2D
 
   private void BeginTripplePaddlePowerUp()
 	{
-		GD.Print("TRIPPLE PADDLES GO!!!");
 		EnableGhostPaddles();
 	}
 
   private void BeginBigPaddlePowerUp()
 	{
-		GD.Print("BIG PADDLE POWER UP!");
 		var powerUpMultiplier = 2.5f;
+		var speedMultiplier = powerUpMultiplier * 0.75f;
 
-		Scale = _paddleOriginalScale;
+		ResetScale();
+		ResetMovementSpeed();
+
+		_movementSpeed *= speedMultiplier;
 		PlayBigPaddleTransformationTween(powerUpMultiplier);
 	}
 
 	private void EndLargePaddlePowerUp()
   {
-    Scale = _paddleOriginalScale;
+    ResetScale();
+		ResetMovementSpeed();
   }
 
   private void EndTriplePaddlePowerUp()
@@ -774,5 +779,19 @@ public partial class Paddle : Area2D
 		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitorable, false);
 	}
 	
+#endregion
+
+#region Utility
+	
+	private void ResetMovementSpeed()
+	{
+		_movementSpeed = _originalSpeed;
+	}
+
+	private void ResetScale()
+	{
+		Scale = _paddleOriginalScale;
+	}
+
 #endregion
 }
