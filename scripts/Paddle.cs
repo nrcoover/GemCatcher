@@ -58,6 +58,7 @@ public partial class Paddle : Area2D
 	private Vector2 _paddleOriginalScale;
 
 	private Tween _colorScaleTween;
+	private Tween _bigPaddleTween;
 	
 	private bool _isTryingToBoost =>
 	Input.IsActionPressed("boost");
@@ -620,6 +621,48 @@ public partial class Paddle : Area2D
 		.SetEase(Tween.EaseType.Out);
 	}
 
+	private void PlayBigPaddleTransformationTween(float finalMultiplier)
+	{
+    _bigPaddleTween?.Kill();
+
+    Vector2 originalScale = _paddleOriginalScale;
+
+    Vector2 largeScale = originalScale * (finalMultiplier * 0.8f);
+    Vector2 mediumScale = originalScale * (finalMultiplier * 0.5f);
+    Vector2 almostFinalScale = originalScale * (finalMultiplier * 0.9f);
+    Vector2 finalScale = originalScale * finalMultiplier;
+
+    _bigPaddleTween = CreateTween();
+
+    _bigPaddleTween.TweenProperty(
+        this,
+        PropertyName.Scale.ToString(),
+        largeScale,
+        0.08f
+    );
+
+    _bigPaddleTween.TweenProperty(
+        this,
+        PropertyName.Scale.ToString(),
+        mediumScale,
+        0.08f
+    );
+
+    _bigPaddleTween.TweenProperty(
+        this,
+        PropertyName.Scale.ToString(),
+        almostFinalScale,
+        0.08f
+    );
+
+    _bigPaddleTween.TweenProperty(
+        this,
+        PropertyName.Scale.ToString(),
+        finalScale,
+        0.08f
+    );
+}
+
 #endregion
 
 #region Audio
@@ -699,7 +742,7 @@ public partial class Paddle : Area2D
 	{
 		GD.Print("BIG PADDLE POWER UP!");
 		var powerUpScaleSize = 3.0f;
-		Scale = _paddleOriginalScale * powerUpScaleSize;
+		PlayBigPaddleTransformationTween(powerUpScaleSize);
 	}
 
 	private void EndLargePaddlePowerUp()
