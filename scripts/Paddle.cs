@@ -58,9 +58,9 @@ public partial class Paddle : Area2D
 	private Vector2 _paddleOriginalScale;
 	private float _currentScaleMultiplier = 1.0f;
 	private float _originalSpeed;
-
 	private Tween _colorScaleTween;
 	private Tween _bigPaddleTween;
+	private bool _isPoweredUp;
 	
 	private bool _isTryingToBoost =>
 	Input.IsActionPressed("boost");
@@ -159,6 +159,7 @@ public partial class Paddle : Area2D
 		_isInCooldown = false;
 		_paddleOriginalScale = Scale;
 		_originalSpeed = _movementSpeed;
+		_isPoweredUp = false;
   }
 
 	private void ResetParticleSystems()
@@ -235,6 +236,7 @@ public partial class Paddle : Area2D
 	private void OnPowerUpTimeout()
 	{
 		DisableAllActivePowerUps();
+		SetIsPoweredUp(false);
 	}
 	
   private void OnSelfDestructTimeout()
@@ -581,6 +583,11 @@ public partial class Paddle : Area2D
 		var scaleMultiplier = 1.15f;
 		var intendedScale = _paddleOriginalScale * _currentScaleMultiplier;
 
+		if (!_isPoweredUp)
+		{
+			intendedScale = _paddleOriginalScale;
+		}
+
 		_colorScaleTween = CreateTween();
 
 		_colorScaleTween.SetParallel(true);
@@ -736,6 +743,7 @@ public partial class Paddle : Area2D
 
   private void BeginTripplePaddlePowerUp()
 	{
+		SetIsPoweredUp(true);
 		EnableGhostPaddles();
 	}
 
@@ -744,6 +752,7 @@ public partial class Paddle : Area2D
 		var powerUpMultiplier = 2.5f;
 		var speedMultiplier = powerUpMultiplier * 0.75f;
 
+		SetIsPoweredUp(true);
 		ResetScale();
 		ResetMovementSpeed();
 
@@ -757,12 +766,14 @@ public partial class Paddle : Area2D
   {
     _currentScaleMultiplier = 1.0f;
 
+		SetIsPoweredUp(false);
     ResetScale();
     ResetMovementSpeed();
   }
 
   private void EndTriplePaddlePowerUp()
   {
+		SetIsPoweredUp(false);
     DisableGhostPaddles();
   }
 
@@ -796,6 +807,11 @@ public partial class Paddle : Area2D
 	private void ResetScale()
 	{
 		Scale = _paddleOriginalScale * _currentScaleMultiplier;
+	}
+
+	private void SetIsPoweredUp(bool value)
+	{
+		_isPoweredUp = value;
 	}
 
 #endregion
