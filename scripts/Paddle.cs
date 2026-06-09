@@ -56,6 +56,7 @@ public partial class Paddle : Area2D
 	private bool _boostersReady;
 	private bool _isInCooldown;
 	private Vector2 _paddleOriginalScale;
+	private float _currentScaleMultiplier = 1.0f;
 	private float _originalSpeed;
 
 	private Tween _colorScaleTween;
@@ -577,8 +578,8 @@ public partial class Paddle : Area2D
 		}
 
 		var tweenTime = 0.25f;
-		var originalScale = Scale;
 		var scaleMultiplier = 1.15f;
+		var intendedScale = _paddleOriginalScale * _currentScaleMultiplier;
 
 		_colorScaleTween = CreateTween();
 
@@ -595,7 +596,7 @@ public partial class Paddle : Area2D
 		_colorScaleTween.TweenProperty(
 			this,
 			PropertyName.Scale.ToString(),
-			originalScale * scaleMultiplier,
+			intendedScale * scaleMultiplier,
 			tweenTime
 		).SetTrans(Tween.TransitionType.Back)
 		.SetEase(Tween.EaseType.Out);
@@ -617,7 +618,7 @@ public partial class Paddle : Area2D
 		_colorScaleTween.TweenProperty(
 			this,
 			PropertyName.Scale.ToString(),
-			originalScale,
+			intendedScale,
 			tweenTime
 		).SetTrans(Tween.TransitionType.Back)
 		.SetEase(Tween.EaseType.Out);
@@ -746,14 +747,18 @@ public partial class Paddle : Area2D
 		ResetScale();
 		ResetMovementSpeed();
 
+		_currentScaleMultiplier = powerUpMultiplier;
+
 		_movementSpeed *= speedMultiplier;
 		PlayBigPaddleTransformationTween(powerUpMultiplier);
 	}
 
 	private void EndLargePaddlePowerUp()
   {
+    _currentScaleMultiplier = 1.0f;
+
     ResetScale();
-		ResetMovementSpeed();
+    ResetMovementSpeed();
   }
 
   private void EndTriplePaddlePowerUp()
@@ -790,7 +795,7 @@ public partial class Paddle : Area2D
 
 	private void ResetScale()
 	{
-		Scale = _paddleOriginalScale;
+		Scale = _paddleOriginalScale * _currentScaleMultiplier;
 	}
 
 #endregion
