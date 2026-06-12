@@ -3,6 +3,7 @@ using Godot;
 public partial class GemSpawner : Node2D
 {
 	[Export] private Timer _gemSpawnTimer;
+	[Export] private Timer _powerUpSpawnTimer;
 	[Export] private PackedScene _gemScene;
 	[Export] private PackedScene _gemHeartScene;
 	[Export] private PackedScene _gemPowerUpScene;
@@ -12,10 +13,12 @@ public partial class GemSpawner : Node2D
 	private Marker2D _leftBoundary;
 	private Marker2D _rightBoundary;
 	private float _originalGemSpawnWaitTime;
+	private bool _canSpawnPowerUp;
 
 	public override void _Ready()
 	{
-		_originalGemSpawnWaitTime = (float)_gemSpawnTimer.WaitTime;
+		InitializeVariables();
+		StartPowerUpTimer();
 
 		if (_isOnMainMenu)
 		{
@@ -34,13 +37,31 @@ public partial class GemSpawner : Node2D
 		UnsubscribeFromSignals();
 	}
 
-  private void SubscribeToSignals()
+	private void InitializeVariables()
 	{
-		SignalManager.Instance.DifficultyIncreased += OnDifficultyIncreased;
-		_gemSpawnTimer.Timeout += SpawnGemType;
+		_originalGemSpawnWaitTime = (float)_gemSpawnTimer.WaitTime;
+		_canSpawnPowerUp = false;
 	}
 
-	private void UnsubscribeFromSignals()
+  private void SubscribeToSignals()
+	{
+		_gemSpawnTimer.Timeout += OnGemSpawnTimeout;
+		_powerUpSpawnTimer.Timeout += OnPowerUpSpawnTimeout;
+		SignalManager.Instance.DifficultyIncreased += OnDifficultyIncreased;
+	}
+
+	private void OnGemSpawnTimeout()
+	{
+		SpawnGemType();
+	}
+
+  private void OnPowerUpSpawnTimeout()
+  {
+    EnablePowerUpSpawning();
+		GD.Print("Wait Time ended. Can spawn power ups is: " + _canSpawnPowerUp);
+  }
+
+  private void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.DifficultyIncreased -= OnDifficultyIncreased;
 	}
@@ -55,7 +76,6 @@ public partial class GemSpawner : Node2D
 			, minWaitTime
 			, _originalGemSpawnWaitTime
 		);
-		
 		
 		GD.Print($"NEW WAIT TIME: {_gemSpawnTimer.WaitTime}");
   }
@@ -86,9 +106,10 @@ public partial class GemSpawner : Node2D
 		{
 			SpawnHeartGem();
 		}
-		else if (randomNumber >= powerUpSpawnNumber)
+		else if (randomNumber >= powerUpSpawnNumber && _canSpawnPowerUp)
 		{
 			SpawnPowerUpGem();
+			StartPowerUpTimer();
 		}
 		else
 		{
@@ -176,4 +197,38 @@ public partial class GemSpawner : Node2D
   {
     gem.SpeedVariation *= GameManager.Instance.DifficultyLevel;
   }
+
+	private void SetPowerUpTimerWaitTime()
+	{
+		// var minWaitTime = 10;
+		// var maxWaitTime = 15;
+
+		var minWaitTime = 1;
+		var maxWaitTime = 5;
+
+		var waitTime = Helper.GetRandomInt(minWaitTime, maxWaitTime);
+		_powerUpSpawnTimer.WaitTime = waitTime;
+
+		GD.Print("Power Up Wait Time Set: " + waitTime + " seconds. Can spawn power ups is: " + _canSpawnPowerUp);
+	}
+
+	private void StartPowerUpTimer()
+	{
+		DisablePowerUpSpawning();
+		SetPowerUpTimerWaitTime();
+
+		GD.Print("Power Up Timer Started! Wait time is: " + _powerUpSpawnTimer.WaitTime + "Can spawn power ups is: " + _canSpawnPowerUp);
+
+		_powerUpSpawnTimer.Start();
+	}
+
+	private void DisablePowerUpSpawning()
+	{
+		_canSpawnPowerUp = false;
+	}
+
+	private void EnablePowerUpSpawning()
+	{
+		_canSpawnPowerUp = true;
+	}
 }
