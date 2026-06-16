@@ -2,6 +2,10 @@ using Godot;
 
 public partial class GemSpawner : Node2D
 {
+	const float WAIT_TIME_WINDOW_BOTTOM_CONSTRAINT = 5.0f;
+	const float WAIT_TIME_WINDOW_CONSTRAINT = 3.0f;
+	const float WAIT_TIME_WINDOW_TOP_CONSTRAINT = WAIT_TIME_WINDOW_BOTTOM_CONSTRAINT + WAIT_TIME_WINDOW_CONSTRAINT;
+
 	[Export] private Timer _gemSpawnTimer;
 	[Export] private Timer _powerUpSpawnTimer;
 	[Export] private PackedScene _gemScene;
@@ -14,6 +18,7 @@ public partial class GemSpawner : Node2D
 	private Marker2D _rightBoundary;
 	private float _originalGemSpawnWaitTime;
 	private bool _canSpawnPowerUp;
+	private float _difficultyTimeBalancer = 0;
 
 	public override void _Ready()
 	{
@@ -76,6 +81,9 @@ public partial class GemSpawner : Node2D
 			, minWaitTime
 			, _originalGemSpawnWaitTime
 		);
+
+		var timeBalancerIncrementor = 0.05f;
+		_difficultyTimeBalancer += timeBalancerIncrementor;
 		
 		GD.Print($"NEW WAIT TIME: {_gemSpawnTimer.WaitTime}");
   }
@@ -200,13 +208,20 @@ public partial class GemSpawner : Node2D
 
 	private void SetPowerUpTimerWaitTime()
 	{
-		// var minWaitTime = 10;
-		// var maxWaitTime = 15;
+		var minWaitTime = 10.0f - _difficultyTimeBalancer;
+		var maxWaitTime = 15.0f - _difficultyTimeBalancer;
 
-		var minWaitTime = 1;
-		var maxWaitTime = 5;
+		if (minWaitTime < WAIT_TIME_WINDOW_BOTTOM_CONSTRAINT)
+		{
+			minWaitTime = WAIT_TIME_WINDOW_BOTTOM_CONSTRAINT;
+		}
 
-		var waitTime = Helper.GetRandomInt(minWaitTime, maxWaitTime);
+		if (maxWaitTime < WAIT_TIME_WINDOW_TOP_CONSTRAINT)
+		{
+			maxWaitTime = WAIT_TIME_WINDOW_TOP_CONSTRAINT;
+		}
+
+		var waitTime = Helper.GetRandomFloat(minWaitTime, maxWaitTime);
 		_powerUpSpawnTimer.WaitTime = waitTime;
 
 		GD.Print("Power Up Wait Time Set: " + waitTime + " seconds. Can spawn power ups is: " + _canSpawnPowerUp);
@@ -217,7 +232,7 @@ public partial class GemSpawner : Node2D
 		DisablePowerUpSpawning();
 		SetPowerUpTimerWaitTime();
 
-		GD.Print("Power Up Timer Started! Wait time is: " + _powerUpSpawnTimer.WaitTime + "Can spawn power ups is: " + _canSpawnPowerUp);
+		GD.Print("Power Up Timer Started! Wait time is: " + _powerUpSpawnTimer.WaitTime + " Can spawn power ups is: " + _canSpawnPowerUp);
 
 		_powerUpSpawnTimer.Start();
 	}
