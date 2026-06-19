@@ -163,7 +163,7 @@ public partial class GameManager : Node
 
 	private void HandleDifficultyLevel(int currentScore)
 	{
-		var difficultyIncrementer = 10;
+		var difficultyIncrementer = 5;
 		var isScoreDivisibleByTen = currentScore % difficultyIncrementer == 0;
 
 		if (!isScoreDivisibleByTen)

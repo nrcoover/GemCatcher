@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=41 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/images/backgrounds/GameBg.png" id="1_ibkli"]
@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://ci18yyqg2giqu" path="res://scenes/HeartRed.tscn" id="7_kiw3p"]
 [ext_resource type="StyleBox" uid="uid://7wqdduovmlnj" path="res://resources/ui/left_progress_bar.tres" id="8_2rd6h"]
 [ext_resource type="LabelSettings" uid="uid://bvp27oyhve2cn" path="res://resources/fonts/play_white_16_font_normal.tres" id="8_7ua8r"]
-[ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/audio/sfx/bgm_action_5.mp3" id="8_400sg"]
+[ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/audio/music/bgm_action_5.mp3" id="8_400sg"]
 [ext_resource type="StyleBox" uid="uid://bwo0qb8ps4fh6" path="res://resources/ui/right_progress_bar.tres" id="9_7ua8r"]
 [ext_resource type="AudioStream" uid="uid://dtfk07ryobxgf" path="res://assets/audio/sfx/explode.wav" id="9_g4kob"]
 [ext_resource type="AudioStream" uid="uid://boe377tli867s" path="res://assets/audio/sfx/spell1_0.wav" id="10_qy1jj"]
@@ -32,7 +32,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -44,7 +44,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -61,7 +61,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -73,7 +73,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -90,7 +90,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -102,7 +102,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -119,7 +119,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -131,7 +131,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -164,7 +164,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -176,7 +176,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -193,7 +193,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -205,7 +205,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -274,7 +274,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -286,7 +286,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -319,7 +319,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -331,7 +331,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -368,7 +368,7 @@ step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -380,7 +380,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -438,6 +438,24 @@ shadow_offset = Vector2(1.25, 1.25)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2rd6h"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a85ww"]
+bg_color = Color(1.1551381e-06, 0.7228854, 0.77388734, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 100
+corner_radius_bottom_left = 100
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jhsr3"]
+bg_color = Color(0, 0.72156864, 0.77254903, 1)
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+
 [node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommencingMission", "_audioMissionFailure", "_scoreSound", "_hurtSound", "_healthIncreaseSound", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
 script = ExtResource("1_78awf")
 _camera = NodePath("Camera2D")
@@ -485,16 +503,19 @@ flip_v = true
 
 [node name="MotionBackdrop" parent="." instance=ExtResource("4_vjgi4")]
 
-[node name="Paddle" parent="." node_paths=PackedStringArray("_boostLabel", "_boostPercentageLabel", "_boostFuelAnimator", "_progressBarLeft", "_progressBarRight", "_audioDisengageBoosters", "_audioBoostersReengaged", "_audioCooldownInProgress") instance=ExtResource("2_qbsmt")]
+[node name="Paddle" parent="." node_paths=PackedStringArray("_boostLabel", "_powerUpSecondsLabel", "_boostPercentageLabel", "_boostFuelAnimator", "_progressBoostLeft", "_progressBoostRight", "_progressPowerUpLeft", "_progressPowerUpRight", "_audioDisengageBoosters", "_audioBoostersReengaged", "_audioCooldownInProgress") instance=ExtResource("2_qbsmt")]
 position = Vector2(561, 570)
 scale = Vector2(0.600926, 0.6009259)
 _movementSpeed = 500.0
 _boundaryMargin = 35.0
 _boostLabel = NodePath("../CanvasLayer/MarginContainer/BoostDebugLabel")
-_boostPercentageLabel = NodePath("../CanvasLayer/MarginContainer/BoostPercentageLabel")
+_powerUpSecondsLabel = NodePath("../CanvasLayer/MarginContainer/VBoxContainer/PowerUpSecondsLabel")
+_boostPercentageLabel = NodePath("../CanvasLayer/MarginContainer/VBoxContainer/BoostPercentageLabel")
 _boostFuelAnimator = NodePath("../BoostFuelAnimator")
-_progressBarLeft = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarLeft")
-_progressBarRight = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBarRight")
+_progressBoostLeft = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft")
+_progressBoostRight = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight")
+_progressPowerUpLeft = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/ProgressPowerUpLeft")
+_progressPowerUpRight = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/ProgressPowerUpRight")
 _audioDisengageBoosters = NodePath("../Audio/Voice/DisengageBoosters")
 _audioBoostersReengaged = NodePath("../Audio/Voice/BoostersReengaged")
 _audioCooldownInProgress = NodePath("../Audio/Voice/CoolDownInProgress")
@@ -571,7 +592,20 @@ text = "boost:
 000"
 horizontal_alignment = 1
 
-[node name="BoostPercentageLabel" type="Label" parent="CanvasLayer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 2
+
+[node name="PowerUpSecondsLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "POWER UP VALUE"
+label_settings = ExtResource("8_7ua8r")
+
+[node name="BoostPercentageLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer"]
 z_index = 1
 layout_mode = 2
 size_flags_horizontal = 4
@@ -593,13 +627,42 @@ layout_mode = 2
 theme_override_constants/margin_left = 350
 theme_override_constants/margin_right = 350
 
+[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/separation = -1
+alignment = 1
+
+[node name="ProgressPowerUpLeft" type="ProgressBar" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.7607843, 0, 0, 0)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/background = SubResource("StyleBoxFlat_2rd6h")
+theme_override_styles/fill = SubResource("StyleBoxFlat_a85ww")
+value = 25.0
+rounded = true
+fill_mode = 1
+
+[node name="ProgressPowerUpRight" type="ProgressBar" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.7607843, 0, 0, 0)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/background = SubResource("StyleBoxFlat_2rd6h")
+theme_override_styles/fill = SubResource("StyleBoxFlat_jhsr3")
+value = 25.0
+rounded = true
+
 [node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_constants/separation = -1
 alignment = 1
 
-[node name="ProgressBarLeft" type="ProgressBar" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="ProgressBoostLeft" type="ProgressBar" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -611,7 +674,7 @@ value = 100.0
 rounded = true
 fill_mode = 1
 
-[node name="ProgressBarRight" type="ProgressBar" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="ProgressBoostRight" type="ProgressBar" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1

@@ -2,19 +2,28 @@ using Godot;
 
 public partial class GemSpawner : Node2D
 {
+	const float WAIT_TIME_WINDOW_BOTTOM_CONSTRAINT = 5.0f;
+	const float WAIT_TIME_WINDOW_CONSTRAINT = 3.0f;
+	const float WAIT_TIME_WINDOW_TOP_CONSTRAINT = WAIT_TIME_WINDOW_BOTTOM_CONSTRAINT + WAIT_TIME_WINDOW_CONSTRAINT;
+
 	[Export] private Timer _gemSpawnTimer;
+	[Export] private Timer _powerUpSpawnTimer;
 	[Export] private PackedScene _gemScene;
 	[Export] private PackedScene _gemHeartScene;
+	[Export] private PackedScene _gemPowerUpScene;
 	[Export] private Node _gemContainer;
 	[Export] private bool _isOnMainMenu;
 
 	private Marker2D _leftBoundary;
 	private Marker2D _rightBoundary;
 	private float _originalGemSpawnWaitTime;
+	private bool _canSpawnPowerUp;
+	private float _difficultyTimeBalancer = 0;
 
 	public override void _Ready()
 	{
-		_originalGemSpawnWaitTime = (float)_gemSpawnTimer.WaitTime;
+		InitializeVariables();
+		StartPowerUpTimer();
 
 		if (_isOnMainMenu)
 		{
@@ -33,13 +42,31 @@ public partial class GemSpawner : Node2D
 		UnsubscribeFromSignals();
 	}
 
-  private void SubscribeToSignals()
+	private void InitializeVariables()
 	{
-		SignalManager.Instance.DifficultyIncreased += OnDifficultyIncreased;
-		_gemSpawnTimer.Timeout += SpawnGemType;
+		_originalGemSpawnWaitTime = (float)_gemSpawnTimer.WaitTime;
+		_canSpawnPowerUp = false;
 	}
 
-	private void UnsubscribeFromSignals()
+  private void SubscribeToSignals()
+	{
+		_gemSpawnTimer.Timeout += OnGemSpawnTimeout;
+		_powerUpSpawnTimer.Timeout += OnPowerUpSpawnTimeout;
+		SignalManager.Instance.DifficultyIncreased += OnDifficultyIncreased;
+	}
+
+	private void OnGemSpawnTimeout()
+	{
+		SpawnGemType();
+	}
+
+  private void OnPowerUpSpawnTimeout()
+  {
+    EnablePowerUpSpawning();
+		GD.Print("Wait Time ended. Can spawn power ups is: " + _canSpawnPowerUp);
+  }
+
+  private void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.DifficultyIncreased -= OnDifficultyIncreased;
 	}
@@ -54,7 +81,9 @@ public partial class GemSpawner : Node2D
 			, minWaitTime
 			, _originalGemSpawnWaitTime
 		);
-		
+
+		var timeBalancerIncrementor = 0.05f;
+		_difficultyTimeBalancer += timeBalancerIncrementor;
 		
 		GD.Print($"NEW WAIT TIME: {_gemSpawnTimer.WaitTime}");
   }
@@ -74,13 +103,21 @@ public partial class GemSpawner : Node2D
 			return;
 		}
 
+		// SpawnPowerUpGem();
+
 		var heartSpawnNumber = 10;
+		var powerUpSpawnNumber = 8;
 		var randomNumber = Helper.GetRandomInt(1, heartSpawnNumber);
 
 		if (GameManager.Instance.GetHealth() < GameManager.Instance.MaxHealth
 				&& randomNumber >= heartSpawnNumber)
 		{
 			SpawnHeartGem();
+		}
+		else if (randomNumber >= powerUpSpawnNumber && _canSpawnPowerUp)
+		{
+			SpawnPowerUpGem();
+			StartPowerUpTimer();
 		}
 		else
 		{
@@ -115,6 +152,19 @@ public partial class GemSpawner : Node2D
 		_gemContainer.AddChild(heartGem);
 
 		SetGemPosition(heartGem);
+	}
+
+	private void SpawnPowerUpGem()
+	{
+		if (_isOnMainMenu)
+		{
+			return;
+		}
+
+		var powerUpGem = (GemPowerUp)_gemPowerUpScene.Instantiate();
+		_gemContainer.AddChild(powerUpGem);
+
+		SetGemPosition(powerUpGem);
 	}
 
 	private void SetGemPosition(Node2D gem)
@@ -155,4 +205,45 @@ public partial class GemSpawner : Node2D
   {
     gem.SpeedVariation *= GameManager.Instance.DifficultyLevel;
   }
+
+	private void SetPowerUpTimerWaitTime()
+	{
+		var minWaitTime = 10.0f - _difficultyTimeBalancer;
+		var maxWaitTime = 15.0f - _difficultyTimeBalancer;
+
+		if (minWaitTime < WAIT_TIME_WINDOW_BOTTOM_CONSTRAINT)
+		{
+			minWaitTime = WAIT_TIME_WINDOW_BOTTOM_CONSTRAINT;
+		}
+
+		if (maxWaitTime < WAIT_TIME_WINDOW_TOP_CONSTRAINT)
+		{
+			maxWaitTime = WAIT_TIME_WINDOW_TOP_CONSTRAINT;
+		}
+
+		var waitTime = Helper.GetRandomFloat(minWaitTime, maxWaitTime);
+		_powerUpSpawnTimer.WaitTime = waitTime;
+
+		GD.Print("Power Up Wait Time Set: " + waitTime + " seconds. Can spawn power ups is: " + _canSpawnPowerUp);
+	}
+
+	private void StartPowerUpTimer()
+	{
+		DisablePowerUpSpawning();
+		SetPowerUpTimerWaitTime();
+
+		GD.Print("Power Up Timer Started! Wait time is: " + _powerUpSpawnTimer.WaitTime + " Can spawn power ups is: " + _canSpawnPowerUp);
+
+		_powerUpSpawnTimer.Start();
+	}
+
+	private void DisablePowerUpSpawning()
+	{
+		_canSpawnPowerUp = false;
+	}
+
+	private void EnablePowerUpSpawning()
+	{
+		_canSpawnPowerUp = true;
+	}
 }

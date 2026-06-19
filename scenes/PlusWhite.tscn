@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://6alp72gg783v"]
+
+[ext_resource type="Texture2D" uid="uid://c2a4m3pjt6egg" path="res://assets/images/sprites/base_diamond.png" id="1_f4pkb"]
+
+[node name="PlusWhite" type="Node2D"]
+scale = Vector2(0.25, 0.25)
+
+[node name="Square" type="Sprite2D" parent="."]
+texture = ExtResource("1_f4pkb")
+
+[node name="Square2" type="Sprite2D" parent="."]
+position = Vector2(24, 24)
+texture = ExtResource("1_f4pkb")
+
+[node name="Square3" type="Sprite2D" parent="."]
+position = Vector2(-24, -24)
+texture = ExtResource("1_f4pkb")
+
+[node name="Square4" type="Sprite2D" parent="."]
+position = Vector2(24, -24)
+texture = ExtResource("1_f4pkb")
+
+[node name="Square5" type="Sprite2D" parent="."]
+position = Vector2(-24, 24)
+texture = ExtResource("1_f4pkb")

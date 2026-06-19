@@ -2,13 +2,12 @@ using Godot;
 
 public partial class Paddle : Area2D
 {
-
-	#region Variables - Debugging
+#region Variables - Debugging
 
 	const bool IS_DEBUGGING = false;
 	[Export] Label _debugLogLabel;
 
-	#endregion
+#endregion
 
 	const float MAX_BOOST_FUEL = 100.0f;
 	const float DEFAULT_REFUEL_RATE = 12.5f;
@@ -19,35 +18,59 @@ public partial class Paddle : Area2D
 		Emergency = 15,
 	}
 
+	enum PowerUp
+	{
+		TripplePaddle,
+		BigPaddle,
+		Disabled
+	}
+
 	[Export] float _movementSpeed = 200.0f;
 	[Export] float _boundaryMargin = 25.0f;
 	[Export] float _boostMultiplier = 1.5f;
 
 	[Export] Label _boostLabel;
+	[Export] Label _powerUpSecondsLabel;
 	[Export] Label _boostPercentageLabel;
 	[Export] Timer _boostRefuelTimer;
 	[Export] Timer _selfDestructWarningTimer;
 	[Export] Timer _selfDestructTimer;
+	[Export] Timer _powerUpTimer;
 	[Export] AnimationPlayer _boostFuelAnimator;
 	[Export] AnimationPlayer _paddleAnimator;
-	[Export] ProgressBar _progressBarLeft;
-	[Export] ProgressBar _progressBarRight;
+	[Export] ProgressBar _progressBoostLeft;
+	[Export] ProgressBar _progressBoostRight;
+	[Export] ProgressBar _progressPowerUpLeft;
+	[Export] ProgressBar _progressPowerUpRight;
 	[Export] Node2D _leftParticles;
 	[Export] Node2D _rightParticles;
+	[Export] PaddleGhost _paddleGhostLeft;
+	[Export] PaddleGhost _paddleGhostRight;
 
 	[Export] AudioStreamPlayer2D _boostSound;
+	[Export] AudioStreamPlayer2D _bigPaddleActivatedSound;
+	[Export] AudioStreamPlayer2D _bigPaddleDeactivatedSound;
+	[Export] AudioStreamPlayer2D _ghostPaddlesActivatedSound;
+	[Export] AudioStreamPlayer2D _ghostPaddlesDeactivatedSound;
 	[Export] AudioStreamPlayer _audioDisengageBoosters;
 	[Export] AudioStreamPlayer _audioBoostersReengaged;
 	[Export] AudioStreamPlayer _audioCooldownInProgress;
 	[Export] private float _boostBurnRate;
 	[Export] private float _boostRefuelRate = 12.5f;
+	
 	private float _boostFuel;
 	private bool _isFullyFueled;
 	private bool _boostLockedUntilRelease;
 	private bool _boostersReady;
 	private bool _isInCooldown;
-
+	private Vector2 _paddleOriginalScale;
+	private float _currentScaleMultiplier = 1.0f;
+	private float _originalSpeed;
 	private Tween _colorScaleTween;
+	private Tween _bigPaddleTween;
+	private bool _isPoweredUp;
+
+	private PowerUp _currentPowerUp;
 	
 	private bool _isTryingToBoost =>
 	Input.IsActionPressed("boost");
@@ -96,7 +119,9 @@ public partial class Paddle : Area2D
 		SubscribeToSignals();
 		InitializeVariables();
 		UpdateBoostUi();
+		ResetPowerUpUi();
 		ResetParticleSystems();
+		DisableAllActivePowerUps();
 	}
 
   public override void _Process(double delta)
@@ -104,6 +129,7 @@ public partial class Paddle : Area2D
 		HandlePaddleMovement((float)delta);
 		HandleFuelConsumption((float)delta);
 		UpdateBoostUi();
+		UpdatePowerUpUi();
 		HandleParticles();
 
 		HandleDebugLog();
@@ -143,6 +169,10 @@ public partial class Paddle : Area2D
 		_boostersReady = true;
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
 		_isInCooldown = false;
+		_paddleOriginalScale = Scale;
+		_originalSpeed = _movementSpeed;
+		_isPoweredUp = false;
+		_currentPowerUp = PowerUp.Disabled;
   }
 
 	private void ResetParticleSystems()
@@ -160,11 +190,13 @@ public partial class Paddle : Area2D
 		_boostRefuelTimer.Timeout += OnRefuelTimeout;
 		_selfDestructWarningTimer.Timeout += OnSelfDestructWarningTimeout;
 		_selfDestructTimer.Timeout += OnSelfDestructTimeout;
+		_powerUpTimer.Timeout += OnPowerUpTimeout;
 		SignalManager.Instance.BoostFuelDepleted += OnBoostFuelDepleted;
 		SignalManager.Instance.BoostEngaged += OnBoostEngaged;
 		SignalManager.Instance.BoostDisengaged += OnBoostDisengaged;
 		SignalManager.Instance.Scored += OnScored;
 		SignalManager.Instance.GameOver += OnGameOver;
+		SignalManager.Instance.PowerUpCollected += OnPowerUpCollected;
 	}
 
   private void UnsubscribeFromSignals()
@@ -173,9 +205,11 @@ public partial class Paddle : Area2D
 		SignalManager.Instance.BoostEngaged -= OnBoostEngaged;
 		SignalManager.Instance.BoostDisengaged -= OnBoostDisengaged;
 		SignalManager.Instance.Scored -= OnScored;
+		SignalManager.Instance.GameOver -= OnGameOver;
+		SignalManager.Instance.PowerUpCollected -= OnPowerUpCollected;
 	}
 
-	private void OnBoostEngaged()
+  private void OnBoostEngaged()
   {
 		PlayBoostAudio();
   }
@@ -212,6 +246,21 @@ public partial class Paddle : Area2D
 		_selfDestructTimer.Start();
 	}
 
+	private void OnPowerUpTimeout()
+	{
+		if (_currentPowerUp == PowerUp.BigPaddle)
+		{
+			_bigPaddleDeactivatedSound.Play();
+		}
+		else if (_currentPowerUp == PowerUp.TripplePaddle)
+		{
+			_ghostPaddlesDeactivatedSound.Play();
+		}
+
+		DisableAllActivePowerUps();
+		SetIsPoweredUp(false);
+		ResetPowerUpUi();
+	}
 	
   private void OnSelfDestructTimeout()
 	{
@@ -251,12 +300,20 @@ public partial class Paddle : Area2D
 		
     _colorScaleTween.Kill();
   }
+	
+  private void OnPowerUpCollected(Color color)
+	{
+		DisableAllActivePowerUps();
+		StartPowerUpTimer();
+
+		SelectRandomPowerUp(color);
+	}
 
 #endregion
-  
+
 #region Paddle Movement
-	
-	private void HandlePaddleMovement(float delta)
+
+  private void HandlePaddleMovement(float delta)
 	{
 		HandleUserInput(delta);
 		RestrictPaddleToBoundary();
@@ -525,16 +582,55 @@ public partial class Paddle : Area2D
 
 	private void UpdateBoostUi()
 	{
-		_boostLabel.Text = $"Boost:\n{_boostFuel}";
+		_boostLabel.Text = $"{_boostFuel}";
 		_boostPercentageLabel.Text = $"{Mathf.RoundToInt(_boostFuel)}";
 
 		// Dividing by 2 to have the two progress bars act as 1
 		// Each provides half of a full progress bar's value
-		_progressBarLeft.Value = _boostFuel / 2;
-		_progressBarRight.Value = _boostFuel / 2;
+		_progressBoostLeft.Value = _boostFuel / 2;
+		_progressBoostRight.Value = _boostFuel / 2;
+	}
+
+	private void UpdatePowerUpUi()
+	{
+		var secondOffset = 1;
+		_powerUpSecondsLabel.Text = $"{(int)_powerUpTimer.TimeLeft + secondOffset}";
+
+		var maximumPowerUpValue = 25;
+		var percentTimeRemaining = _powerUpTimer.TimeLeft / _powerUpTimer.WaitTime;
+
+		var powerUpRemaining = maximumPowerUpValue * percentTimeRemaining;
+
+		_progressPowerUpLeft.Value = powerUpRemaining;
+		_progressPowerUpRight.Value = powerUpRemaining;
+	}
+
+	private void ResetPowerUpUi()
+	{
+		var maximumPowerUpValue = 25;
+		_progressPowerUpLeft.Value = maximumPowerUpValue;
+		_progressPowerUpRight.Value = maximumPowerUpValue;
+
+		DisablePowerUpProgressBar();
+	}
+
+	private void EnablePowerUpProgressBar()
+	{
+		_powerUpSecondsLabel.Visible = true;
+		_progressPowerUpLeft.Visible = true;
+		_progressPowerUpRight.Visible = true;
+	}
+
+	private void DisablePowerUpProgressBar()
+	{
+		_powerUpSecondsLabel.Visible = false;
+		_progressPowerUpLeft.Visible = false;
+		_progressPowerUpRight.Visible = false;
 	}
 
 #endregion
+
+#region Tweens
 
 	private async void CreateColorScaleTweenAsync(Color color)
 	{
@@ -544,8 +640,13 @@ public partial class Paddle : Area2D
 		}
 
 		var tweenTime = 0.25f;
-		var originalScale = Scale;
 		var scaleMultiplier = 1.15f;
+		var intendedScale = _paddleOriginalScale * _currentScaleMultiplier;
+
+		if (!_isPoweredUp)
+		{
+			intendedScale = _paddleOriginalScale;
+		}
 
 		_colorScaleTween = CreateTween();
 
@@ -562,7 +663,7 @@ public partial class Paddle : Area2D
 		_colorScaleTween.TweenProperty(
 			this,
 			PropertyName.Scale.ToString(),
-			originalScale * scaleMultiplier,
+			intendedScale * scaleMultiplier,
 			tweenTime
 		).SetTrans(Tween.TransitionType.Back)
 		.SetEase(Tween.EaseType.Out);
@@ -584,11 +685,55 @@ public partial class Paddle : Area2D
 		_colorScaleTween.TweenProperty(
 			this,
 			PropertyName.Scale.ToString(),
-			originalScale,
+			intendedScale,
 			tweenTime
 		).SetTrans(Tween.TransitionType.Back)
 		.SetEase(Tween.EaseType.Out);
 	}
+
+	private void PlayBigPaddleTransformationTween(float finalMultiplier)
+	{
+		_bigPaddleTween?.Kill();
+
+		Vector2 originalScale = _paddleOriginalScale;
+		var timeDuration = 0.05f;
+
+		_bigPaddleTween = CreateTween();
+
+		_bigPaddleTween.TweenProperty(this,
+			PropertyName.Scale.ToString(),
+			originalScale * finalMultiplier,
+			timeDuration
+		);
+
+		_bigPaddleTween.TweenProperty(this,
+			PropertyName.Scale.ToString(),
+			originalScale * (finalMultiplier * 0.5f),
+			timeDuration
+		);
+
+		_bigPaddleTween.TweenProperty(this,
+			PropertyName.Scale.ToString(),
+			originalScale * (finalMultiplier * 0.85f),
+			timeDuration
+		);
+
+		_bigPaddleTween.TweenProperty(this,
+			PropertyName.Scale.ToString(),
+			originalScale * (finalMultiplier * 0.65f),
+			timeDuration
+		);
+
+		_bigPaddleTween.TweenProperty(this,
+			PropertyName.Scale.ToString(),
+			originalScale * finalMultiplier,
+			timeDuration
+		);
+	}
+
+#endregion
+
+#region Audio
 
 	private void PlayBoostAudio()
 	{
@@ -615,4 +760,127 @@ public partial class Paddle : Area2D
 			audio.Play();
 		}
 	}
+
+#endregion
+
+#region Power Ups
+	
+	private void DisableAllActivePowerUps()
+	{
+		StopPowerUpTimer();
+		EndTriplePaddlePowerUp();
+		EndLargePaddlePowerUp();
+	}
+
+  private void StartPowerUpTimer()
+	{
+		_powerUpTimer.Start();
+	}
+
+	private void StopPowerUpTimer()
+	{
+		_powerUpTimer.Stop();
+	}
+
+  private void SelectRandomPowerUp(Color color)
+  {
+		var randomNumber = Helper.GetRandomInt(0, 1);
+
+		switch (randomNumber)
+		{
+			case (int)PowerUp.BigPaddle:
+				BeginBigPaddlePowerUp();
+				break;
+
+			case (int)PowerUp.TripplePaddle:
+				BeginTripplePaddlePowerUp();
+				CreateColorScaleTweenAsync(color);
+				break;
+		}
+  }
+
+  private void BeginTripplePaddlePowerUp()
+	{
+		SetIsPoweredUp(true);
+		EnableGhostPaddles();
+		EnablePowerUpProgressBar();
+		_ghostPaddlesActivatedSound.Play();
+		_currentPowerUp = PowerUp.TripplePaddle;
+	}
+
+  private void BeginBigPaddlePowerUp()
+	{
+		var powerUpMultiplier = 2.5f;
+		var speedMultiplier = powerUpMultiplier * 0.75f;
+
+		SetIsPoweredUp(true);
+		ResetScale();
+		ResetMovementSpeed();
+		EnablePowerUpProgressBar();
+
+		_currentScaleMultiplier = powerUpMultiplier;
+		_movementSpeed *= speedMultiplier;
+		_bigPaddleActivatedSound.Play();
+		_currentPowerUp = PowerUp.BigPaddle;
+
+		PlayBigPaddleTransformationTween(powerUpMultiplier);
+	}
+
+	private void EndLargePaddlePowerUp()
+  {
+    _currentScaleMultiplier = 1.0f;
+
+		SetIsPoweredUp(false);
+    ResetScale();
+    ResetMovementSpeed();
+
+		_currentPowerUp = PowerUp.Disabled;
+  }
+
+  private void EndTriplePaddlePowerUp()
+  {
+		SetIsPoweredUp(false);
+    DisableGhostPaddles();
+
+		_currentPowerUp = PowerUp.Disabled;
+  }
+
+	private void EnableGhostPaddles()
+	{
+		_paddleGhostLeft.Visible = true;
+		_paddleGhostRight.Visible = true;
+
+		_paddleGhostLeft.SetDeferred(Area2D.PropertyName.Monitorable, true);
+		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitorable, true);
+	}
+
+	private void DisableGhostPaddles()
+	{
+		_paddleGhostLeft.Visible = false;
+		_paddleGhostRight.Visible = false;
+
+		_paddleGhostLeft.SetDeferred(Area2D.PropertyName.Monitorable, false);
+		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitorable, false);
+	}
+	
+#endregion
+
+#region Utility
+	
+	private void ResetMovementSpeed()
+	{
+		_movementSpeed = _originalSpeed;
+	}
+
+	private void ResetScale()
+	{
+		Scale = _paddleOriginalScale * _currentScaleMultiplier;
+	}
+
+	private void SetIsPoweredUp(bool value)
+	{
+		_isPoweredUp = value;
+	}
+
+#endregion
 }
