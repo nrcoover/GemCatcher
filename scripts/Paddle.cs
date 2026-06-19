@@ -30,6 +30,7 @@ public partial class Paddle : Area2D
 	[Export] float _boostMultiplier = 1.5f;
 
 	[Export] Label _boostLabel;
+	[Export] Label _powerUpSecondsLabel;
 	[Export] Label _boostPercentageLabel;
 	[Export] Timer _boostRefuelTimer;
 	[Export] Timer _selfDestructWarningTimer;
@@ -37,8 +38,10 @@ public partial class Paddle : Area2D
 	[Export] Timer _powerUpTimer;
 	[Export] AnimationPlayer _boostFuelAnimator;
 	[Export] AnimationPlayer _paddleAnimator;
-	[Export] ProgressBar _progressBarLeft;
-	[Export] ProgressBar _progressBarRight;
+	[Export] ProgressBar _progressBoostLeft;
+	[Export] ProgressBar _progressBoostRight;
+	[Export] ProgressBar _progressPowerUpLeft;
+	[Export] ProgressBar _progressPowerUpRight;
 	[Export] Node2D _leftParticles;
 	[Export] Node2D _rightParticles;
 	[Export] PaddleGhost _paddleGhostLeft;
@@ -116,6 +119,7 @@ public partial class Paddle : Area2D
 		SubscribeToSignals();
 		InitializeVariables();
 		UpdateBoostUi();
+		ResetPowerUpUi();
 		ResetParticleSystems();
 		DisableAllActivePowerUps();
 	}
@@ -125,6 +129,7 @@ public partial class Paddle : Area2D
 		HandlePaddleMovement((float)delta);
 		HandleFuelConsumption((float)delta);
 		UpdateBoostUi();
+		UpdatePowerUpUi();
 		HandleParticles();
 
 		HandleDebugLog();
@@ -254,6 +259,7 @@ public partial class Paddle : Area2D
 
 		DisableAllActivePowerUps();
 		SetIsPoweredUp(false);
+		ResetPowerUpUi();
 	}
 	
   private void OnSelfDestructTimeout()
@@ -576,13 +582,50 @@ public partial class Paddle : Area2D
 
 	private void UpdateBoostUi()
 	{
-		_boostLabel.Text = $"Boost:\n{_boostFuel}";
+		_boostLabel.Text = $"{_boostFuel}";
 		_boostPercentageLabel.Text = $"{Mathf.RoundToInt(_boostFuel)}";
 
 		// Dividing by 2 to have the two progress bars act as 1
 		// Each provides half of a full progress bar's value
-		_progressBarLeft.Value = _boostFuel / 2;
-		_progressBarRight.Value = _boostFuel / 2;
+		_progressBoostLeft.Value = _boostFuel / 2;
+		_progressBoostRight.Value = _boostFuel / 2;
+	}
+
+	private void UpdatePowerUpUi()
+	{
+		var secondOffset = 1;
+		_powerUpSecondsLabel.Text = $"{(int)_powerUpTimer.TimeLeft + secondOffset}";
+
+		var maximumPowerUpValue = 25;
+		var percentTimeRemaining = _powerUpTimer.TimeLeft / _powerUpTimer.WaitTime;
+
+		var powerUpRemaining = maximumPowerUpValue * percentTimeRemaining;
+
+		_progressPowerUpLeft.Value = powerUpRemaining;
+		_progressPowerUpRight.Value = powerUpRemaining;
+	}
+
+	private void ResetPowerUpUi()
+	{
+		var maximumPowerUpValue = 25;
+		_progressPowerUpLeft.Value = maximumPowerUpValue;
+		_progressPowerUpRight.Value = maximumPowerUpValue;
+
+		DisablePowerUpProgressBar();
+	}
+
+	private void EnablePowerUpProgressBar()
+	{
+		_powerUpSecondsLabel.Visible = true;
+		_progressPowerUpLeft.Visible = true;
+		_progressPowerUpRight.Visible = true;
+	}
+
+	private void DisablePowerUpProgressBar()
+	{
+		_powerUpSecondsLabel.Visible = false;
+		_progressPowerUpLeft.Visible = false;
+		_progressPowerUpRight.Visible = false;
 	}
 
 #endregion
@@ -760,6 +803,7 @@ public partial class Paddle : Area2D
 	{
 		SetIsPoweredUp(true);
 		EnableGhostPaddles();
+		EnablePowerUpProgressBar();
 		_ghostPaddlesActivatedSound.Play();
 		_currentPowerUp = PowerUp.TripplePaddle;
 	}
@@ -772,6 +816,7 @@ public partial class Paddle : Area2D
 		SetIsPoweredUp(true);
 		ResetScale();
 		ResetMovementSpeed();
+		EnablePowerUpProgressBar();
 
 		_currentScaleMultiplier = powerUpMultiplier;
 		_movementSpeed *= speedMultiplier;
