@@ -21,6 +21,20 @@ _isOnMainMenu = true
 
 [node name="MainMenuUi" parent="CanvasLayer" instance=ExtResource("4_ow34m")]
 
+[node name="Instructions" parent="CanvasLayer/MainMenuUi/RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
+text = "1. Catch as many gems as you can.
+2. Don't let your paddle's boosters overheat.
+3. Look out for special gems that grant extra abilities.
+4. Eat your vegetables. 
+    (...I mean actually, like in real life;
+    there are no vegetables in this game.)"
+
+[node name="CreditsModal" parent="CanvasLayer/MainMenuUi" index="7"]
+visible = true
+
+[node name="Instructions" parent="CanvasLayer/MainMenuUi/CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
+text = "This game was created as a student project and is an expansion upon an original game created by following the Udemy Course \"Learn 2D Game Development: Godot 4.5 & C# from Scratch\" by Richard Allbert and Martyna Olivares. Assets are sourced, royalty free, from Kenny Assets, freesounds.org, and Pexels.com. Recorded dialogue clips are original recordings by the game developer, \"Nicklefritz\", distributed under the alias: \"Fritzie Games\"."
+
 [node name="Music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_l72w3")
 volume_db = -24.0
