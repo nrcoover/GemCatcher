@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://ci18yyqg2giqu" path="res://scenes/HeartRed.tscn" id="7_kiw3p"]
 [ext_resource type="StyleBox" uid="uid://7wqdduovmlnj" path="res://resources/ui/left_progress_bar.tres" id="8_2rd6h"]
 [ext_resource type="LabelSettings" uid="uid://bvp27oyhve2cn" path="res://resources/fonts/play_white_16_font_normal.tres" id="8_7ua8r"]
-[ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/audio/sfx/bgm_action_5.mp3" id="8_400sg"]
+[ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/audio/music/bgm_action_5.mp3" id="8_400sg"]
 [ext_resource type="StyleBox" uid="uid://bwo0qb8ps4fh6" path="res://resources/ui/right_progress_bar.tres" id="9_7ua8r"]
 [ext_resource type="AudioStream" uid="uid://dtfk07ryobxgf" path="res://assets/audio/sfx/explode.wav" id="9_g4kob"]
 [ext_resource type="AudioStream" uid="uid://boe377tli867s" path="res://assets/audio/sfx/spell1_0.wav" id="10_qy1jj"]
