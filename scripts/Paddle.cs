@@ -727,8 +727,6 @@ public partial class Paddle : Area2D
 		StopPowerUpTimer();
 		EndTriplePaddlePowerUp();
 		EndLargePaddlePowerUp();
-
-		//TODO: ADD DISABLING OF POWER UPS
 	}
 
   private void StartPowerUpTimer()
