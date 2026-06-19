@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dqo0w8yoly0x5"]
+[gd_scene load_steps=6 format=3 uid="uid://dqo0w8yoly0x5"]
 
 [ext_resource type="PackedScene" uid="uid://8m2y1u6noqq5" path="res://scenes/Gem.tscn" id="1_vtl5t"]
 [ext_resource type="Script" uid="uid://dn72hwqjuygl6" path="res://scripts/GemPowerUp.cs" id="2_vtl5t"]
+[ext_resource type="AudioStream" uid="uid://dca7etlkxcl2d" path="res://assets/audio/sfx/MeteorAudio_v5.wav" id="4_cpoue"]
 [ext_resource type="PackedScene" uid="uid://6alp72gg783v" path="res://scenes/PlusWhite.tscn" id="4_uyoy1"]
 
 [sub_resource type="Curve" id="Curve_tx2gm"]
@@ -38,3 +39,8 @@ visible = false
 
 [node name="PlusWhite" parent="." index="5" instance=ExtResource("4_uyoy1")]
 scale = Vector2(0.45, 0.45)
+
+[node name="Audio" type="AudioStreamPlayer2D" parent="." index="6"]
+stream = ExtResource("4_cpoue")
+volume_db = -12.0
+autoplay = true
