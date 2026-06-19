@@ -1,10 +1,14 @@
-[gd_scene load_steps=11 format=3 uid="uid://3kq5fr5oomem"]
+[gd_scene load_steps=15 format=3 uid="uid://3kq5fr5oomem"]
 
 [ext_resource type="Script" uid="uid://dls61awq12jhp" path="res://scripts/Paddle.cs" id="1_6kxou"]
 [ext_resource type="Texture2D" uid="uid://cnkl8lfb1hs81" path="res://assets/images/sprites/paddleBlu.png" id="1_ry5ju"]
 [ext_resource type="AudioStream" uid="uid://ca1sx4i73y6ck" path="res://assets/audio/sfx/774270__thelittlecrow__rocket-launch-boost-and-burning-version-b.wav" id="3_jlx5f"]
 [ext_resource type="AudioStream" uid="uid://dw8ladfm3gy58" path="res://assets/audio/sfx/475557__rannem__bip.wav" id="4_c7ra2"]
 [ext_resource type="PackedScene" uid="uid://dhhw5fku5bqvf" path="res://scenes/PaddleGhost.tscn" id="5_s6nv3"]
+[ext_resource type="AudioStream" uid="uid://cic0snggiygcn" path="res://assets/audio/sfx/523648__lilmati__powerup-08.wav" id="6_om7xf"]
+[ext_resource type="AudioStream" uid="uid://q304ar7linjm" path="res://assets/audio/sfx/523648__lilmati__powerup-08_reversed.wav" id="7_gw2y4"]
+[ext_resource type="AudioStream" uid="uid://dvv1d5u1hxynp" path="res://assets/audio/sfx/503520__lilmati__powerup-04.wav" id="8_d3tdo"]
+[ext_resource type="AudioStream" uid="uid://cunxilvwv2m7j" path="res://assets/audio/sfx/344522__jeremysykes__powerup05.wav" id="9_b3lqm"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6kxou"]
 radius = 12.0
@@ -27,7 +31,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("WarningBlip:playing")
+tracks/1/path = NodePath("Audio/WarningBlip:playing")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -57,7 +61,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("WarningBlip:playing")
+tracks/1/path = NodePath("Audio/WarningBlip:playing")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -104,7 +108,7 @@ _leftParticles = NodePath("LeftBoostParticles")
 _rightParticles = NodePath("RightBoostParticles")
 _paddleGhostLeft = NodePath("GhostPaddles/PaddleGhostLeft")
 _paddleGhostRight = NodePath("GhostPaddles/PaddleGhostRight")
-_boostSound = NodePath("BoostSound")
+_boostSound = NodePath("Audio/BoostSound")
 _boostBurnRate = 25.0
 
 [node name="LeftBoostParticles" type="Node2D" parent="."]
@@ -260,20 +264,41 @@ offset_right = 222.0
 offset_bottom = 1.0
 text = "DEGUGGING:"
 
-[node name="BoostSound" type="AudioStreamPlayer2D" parent="." groups=["Audio Streams"]]
-stream = ExtResource("3_jlx5f")
-volume_db = -12.0
-pitch_scale = 1.5
-
-[node name="WarningBlip" type="AudioStreamPlayer" parent="." groups=["Audio Streams"]]
-stream = ExtResource("4_c7ra2")
-volume_db = -12.0
-pitch_scale = 3.0
-
 [node name="PaddleAnimator" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_s6nv3")
 }
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="BoostSound" type="AudioStreamPlayer2D" parent="Audio" groups=["Audio Streams"]]
+stream = ExtResource("3_jlx5f")
+volume_db = -12.0
+pitch_scale = 1.5
+
+[node name="WarningBlip" type="AudioStreamPlayer" parent="Audio" groups=["Audio Streams"]]
+stream = ExtResource("4_c7ra2")
+volume_db = -12.0
+pitch_scale = 3.0
+
+[node name="BigPaddleActivatedSound" type="AudioStreamPlayer2D" parent="Audio"]
+stream = ExtResource("6_om7xf")
+volume_db = -12.0
+pitch_scale = 1.75
+
+[node name="BigPaddleDeactivatedSound" type="AudioStreamPlayer2D" parent="Audio"]
+stream = ExtResource("7_gw2y4")
+volume_db = -12.0
+pitch_scale = 0.8
+
+[node name="GhostPaddlesActivatedSound" type="AudioStreamPlayer2D" parent="Audio"]
+stream = ExtResource("8_d3tdo")
+volume_db = -12.0
+
+[node name="GhostPaddlesDeactivatedSound" type="AudioStreamPlayer2D" parent="Audio"]
+stream = ExtResource("9_b3lqm")
+volume_db = -12.0
+pitch_scale = 0.8
 
 [node name="Timers" type="Node" parent="."]
 

@@ -21,7 +21,8 @@ public partial class Paddle : Area2D
 	enum PowerUp
 	{
 		TripplePaddle,
-		BigPaddle
+		BigPaddle,
+		Disabled
 	}
 
 	[Export] float _movementSpeed = 200.0f;
@@ -44,6 +45,10 @@ public partial class Paddle : Area2D
 	[Export] PaddleGhost _paddleGhostRight;
 
 	[Export] AudioStreamPlayer2D _boostSound;
+	[Export] AudioStreamPlayer2D _bigPaddleActivatedSound;
+	[Export] AudioStreamPlayer2D _bigPaddleDeactivatedSound;
+	[Export] AudioStreamPlayer2D _ghostPaddlesActivatedSound;
+	[Export] AudioStreamPlayer2D _ghostPaddlesDeactivatedSound;
 	[Export] AudioStreamPlayer _audioDisengageBoosters;
 	[Export] AudioStreamPlayer _audioBoostersReengaged;
 	[Export] AudioStreamPlayer _audioCooldownInProgress;
@@ -61,6 +66,8 @@ public partial class Paddle : Area2D
 	private Tween _colorScaleTween;
 	private Tween _bigPaddleTween;
 	private bool _isPoweredUp;
+
+	private PowerUp _currentPowerUp;
 	
 	private bool _isTryingToBoost =>
 	Input.IsActionPressed("boost");
@@ -160,6 +167,7 @@ public partial class Paddle : Area2D
 		_paddleOriginalScale = Scale;
 		_originalSpeed = _movementSpeed;
 		_isPoweredUp = false;
+		_currentPowerUp = PowerUp.Disabled;
   }
 
 	private void ResetParticleSystems()
@@ -235,6 +243,15 @@ public partial class Paddle : Area2D
 
 	private void OnPowerUpTimeout()
 	{
+		if (_currentPowerUp == PowerUp.BigPaddle)
+		{
+			_bigPaddleDeactivatedSound.Play();
+		}
+		else if (_currentPowerUp == PowerUp.TripplePaddle)
+		{
+			_ghostPaddlesDeactivatedSound.Play();
+		}
+
 		DisableAllActivePowerUps();
 		SetIsPoweredUp(false);
 	}
@@ -745,6 +762,8 @@ public partial class Paddle : Area2D
 	{
 		SetIsPoweredUp(true);
 		EnableGhostPaddles();
+		_ghostPaddlesActivatedSound.Play();
+		_currentPowerUp = PowerUp.TripplePaddle;
 	}
 
   private void BeginBigPaddlePowerUp()
@@ -757,8 +776,10 @@ public partial class Paddle : Area2D
 		ResetMovementSpeed();
 
 		_currentScaleMultiplier = powerUpMultiplier;
-
 		_movementSpeed *= speedMultiplier;
+		_bigPaddleActivatedSound.Play();
+		_currentPowerUp = PowerUp.BigPaddle;
+
 		PlayBigPaddleTransformationTween(powerUpMultiplier);
 	}
 
@@ -769,12 +790,16 @@ public partial class Paddle : Area2D
 		SetIsPoweredUp(false);
     ResetScale();
     ResetMovementSpeed();
+
+		_currentPowerUp = PowerUp.Disabled;
   }
 
   private void EndTriplePaddlePowerUp()
   {
 		SetIsPoweredUp(false);
     DisableGhostPaddles();
+
+		_currentPowerUp = PowerUp.Disabled;
   }
 
 	private void EnableGhostPaddles()
