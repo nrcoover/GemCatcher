@@ -9,11 +9,12 @@
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5241379, 0.64245415), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[node name="GemPowerUp" node_paths=PackedStringArray("_powerUpSrpite") instance=ExtResource("1_vtl5t")]
+[node name="GemPowerUp" node_paths=PackedStringArray("_powerUpSrpite", "_audio") instance=ExtResource("1_vtl5t")]
 script = ExtResource("2_vtl5t")
 _powerUpMinScaleVariation = 0.85
 _powerUpMaxScaleVariation = 1.15
 _powerUpSrpite = NodePath("PlusWhite")
+_audio = NodePath("Audio")
 
 [node name="Particles" parent="." index="0"]
 emitting = true

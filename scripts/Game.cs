@@ -40,6 +40,7 @@ public partial class Game : Node2D
 
 	private Tween _colorScaleTween;
 	private Tween _heartScaleTween;
+	private Tween _musicVolumeTween;
 
 	private int _score = 0;
 	private bool _isDying = false;
@@ -285,8 +286,7 @@ public partial class Game : Node2D
 
 	private void DuckMusicVolume()
 	{
-		var duckingPercentage = 1.35f;
-		_music.VolumeDb = _musicDefaultVolume * duckingPercentage;
+		CreateMusicVolumeTween();
 	}
 	
 	private void ResetMusicVolume()
@@ -302,15 +302,9 @@ public partial class Game : Node2D
 
 	private void KillAllTweens()
 	{
-		if (_colorScaleTween != null)
-		{
-			_colorScaleTween.Kill();
-		}
-
-		if (_heartScaleTween != null)
-		{
-			_heartScaleTween.Kill();
-		}
+		_colorScaleTween?.Kill();
+		_heartScaleTween?.Kill();
+		_musicVolumeTween?.Kill();
 	}
 
 	private void CreateColorScaleTween(Color color)
@@ -368,6 +362,23 @@ public partial class Game : Node2D
 		.SetEase(Tween.EaseType.Out);
   }
 
+	private void CreateMusicVolumeTween()
+	{
+		_musicVolumeTween = CreateTween();
+
+		var tweenTime = .75f;
+		var duckingPercentage = 1.35f;
+		var adjustedVolume = _musicDefaultVolume * duckingPercentage;
+
+		_musicVolumeTween.TweenProperty(
+			_music,
+			"volume_db",
+			adjustedVolume,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Cubic)
+		.SetEase(Tween.EaseType.Out);
+	}
+
 	private Color IncreaseColorIntensity(Color color)
 	{
 		float newIntensity = 3.25f;
@@ -378,7 +389,8 @@ public partial class Game : Node2D
 				newIntensity,
 				color.A
 		);
-	}	
+	}
+
 #endregion
 
 
