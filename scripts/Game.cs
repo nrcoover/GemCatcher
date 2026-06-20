@@ -24,8 +24,12 @@ public partial class Game : Node2D
 	[Export] private AudioStreamPlayer _music;
 	[Export] private AudioStreamPlayer _audioExplosion;
 	[Export] private AudioStreamPlayer2D _audioCommanderEncouragement;
+	[Export] private AudioStreamPlayer2D _audioCommanderAdvanceStage1;
+	[Export] private AudioStreamPlayer2D _audioCommanderAdvanceStage2;
+	[Export] private AudioStreamPlayer2D _audioCommanderAdvanceStage3;
 	[Export] private AudioStreamPlayer _audioCommencingMission;
 	[Export] private AudioStreamPlayer _audioMissionFailure;
+	[Export] private AudioStreamPlayer _audioStageAdvancement;
 	[Export] private AudioStreamPlayer2D _scoreSound;
 	[Export] private AudioStreamPlayer2D _hurtSound;
 	[Export] private AudioStreamPlayer2D _healthIncreaseSound;
@@ -88,7 +92,7 @@ public partial class Game : Node2D
 		SignalManager.Instance.HealthRecovered += OnHealthRecovered;
 		SignalManager.Instance.PowerUpSpawned += OnPowerUpSpawned;
 		SignalManager.Instance.PowerUpRemoved += OnPowerUpRemoved;
-		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
+		SignalManager.Instance.AdvanceStage += OnAdvanceStageAsync;
 	}
 
   private void UnsubscribeFromSignals() {
@@ -99,7 +103,7 @@ public partial class Game : Node2D
 		SignalManager.Instance.HealthRecovered -= OnHealthRecovered;
 		SignalManager.Instance.PowerUpSpawned -= OnPowerUpSpawned;
 		SignalManager.Instance.PowerUpRemoved -= OnPowerUpRemoved;
-		SignalManager.Instance.AdvanceStage -= OnAdvanceStage;
+		SignalManager.Instance.AdvanceStage -= OnAdvanceStageAsync;
 	}
 
   public async void OnInitiateDeathSequenceAsync()
@@ -164,8 +168,9 @@ public partial class Game : Node2D
 		ResetMusicVolume();
 	}
 	
-  private void OnAdvanceStage()
+  public async void OnAdvanceStageAsync()
   {
+		await PlayStageAdvancementSequenceAsync();
 		var additionalSpawnerTimeMultiplier = 7.0f;
     var spawner = (GemSpawner)_gemSpawner.Instantiate();
 		spawner.SpawnTime *= additionalSpawnerTimeMultiplier * GameManager.Instance.CurrentStage;
@@ -305,6 +310,24 @@ public partial class Game : Node2D
 	{
 		_music.VolumeDb = _musicDefaultVolume;
 	}
+
+	private void PlayStageAdvancementCommanderAudio()
+	{
+		var randomNumber = Helper.GetRandomInt(1, 3);
+
+		switch (randomNumber)
+		{
+			case 1:
+				_audioCommanderAdvanceStage1.Play();
+				break;
+			case 2:
+				_audioCommanderAdvanceStage2.Play();
+				break;
+			case 3:
+				_audioCommanderAdvanceStage3.Play();
+				break;
+		}
+	}
 	
 #endregion
 
@@ -442,6 +465,15 @@ public partial class Game : Node2D
 		_camera.RampScreenShake(shakeTime, minShakeIntensity, maxShakeIntensity);
 
 		await CreateTimerAsync(shakeTime);
+	}
+
+	private async Task PlayStageAdvancementSequenceAsync()
+	{
+		_audioStageAdvancement.Play();
+
+		await CreateTimerAsync(1.75f);
+
+		PlayStageAdvancementCommanderAudio();
 	}
 
 	private async Task HandleDeathSequenceAudioAsync()
