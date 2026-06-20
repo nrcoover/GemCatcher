@@ -22,6 +22,7 @@ public partial class SignalManager : Node
 	[Signal] public delegate void PowerUpCollectedEventHandler(Color color);
 	[Signal] public delegate void PowerUpSpawnedEventHandler();
 	[Signal] public delegate void PowerUpRemovedEventHandler();
+	[Signal] public delegate void AdvanceStageEventHandler();
 
 	public override void _Ready()
 	{
@@ -116,5 +117,10 @@ public partial class SignalManager : Node
 	public void EmitPowerUpRemoved()
 	{
 		EmitSignal(SignalName.PowerUpRemoved);
+	}
+
+	public void EmitAdvanceStage()
+	{
+		EmitSignal(SignalName.AdvanceStage);
 	}
 }

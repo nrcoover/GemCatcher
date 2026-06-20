@@ -458,6 +458,7 @@ corner_radius_bottom_right = 100
 
 [node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_music", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommencingMission", "_audioMissionFailure", "_scoreSound", "_hurtSound", "_healthIncreaseSound", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
 script = ExtResource("1_78awf")
+_gemSpawner = ExtResource("6_kyk2p")
 _camera = NodePath("Camera2D")
 _scoreLabel = NodePath("CanvasLayer/MarginContainer/ScoreLabel")
 _music = NodePath("Audio/Music")
@@ -507,7 +508,6 @@ flip_v = true
 [node name="Paddle" parent="." node_paths=PackedStringArray("_boostLabel", "_powerUpSecondsLabel", "_boostPercentageLabel", "_boostFuelAnimator", "_progressBoostLeft", "_progressBoostRight", "_progressPowerUpLeft", "_progressPowerUpRight", "_audioDisengageBoosters", "_audioBoostersReengaged", "_audioCooldownInProgress") instance=ExtResource("2_qbsmt")]
 position = Vector2(561, 570)
 scale = Vector2(0.600926, 0.6009259)
-_movementSpeed = 500.0
 _boundaryMargin = 35.0
 _boostLabel = NodePath("../CanvasLayer/MarginContainer/BoostDebugLabel")
 _powerUpSecondsLabel = NodePath("../CanvasLayer/MarginContainer/VBoxContainer/PowerUpSecondsLabel")

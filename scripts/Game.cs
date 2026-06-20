@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using System.Linq;
 using Godot;
-using System;
 
 public partial class Game : Node2D
 {
@@ -16,6 +15,8 @@ public partial class Game : Node2D
 		MortallyWounded = 1,
 		Dead = 0
 	}
+
+	[Export] private PackedScene _gemSpawner;
 
 	[Export] private Camera _camera;
 	[Export] private Label _scoreLabel;
@@ -87,6 +88,7 @@ public partial class Game : Node2D
 		SignalManager.Instance.HealthRecovered += OnHealthRecovered;
 		SignalManager.Instance.PowerUpSpawned += OnPowerUpSpawned;
 		SignalManager.Instance.PowerUpRemoved += OnPowerUpRemoved;
+		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
 	}
 
   private void UnsubscribeFromSignals() {
@@ -97,6 +99,7 @@ public partial class Game : Node2D
 		SignalManager.Instance.HealthRecovered -= OnHealthRecovered;
 		SignalManager.Instance.PowerUpSpawned -= OnPowerUpSpawned;
 		SignalManager.Instance.PowerUpRemoved -= OnPowerUpRemoved;
+		SignalManager.Instance.AdvanceStage -= OnAdvanceStage;
 	}
 
   public async void OnInitiateDeathSequenceAsync()
@@ -160,6 +163,15 @@ public partial class Game : Node2D
 	{
 		ResetMusicVolume();
 	}
+	
+  private void OnAdvanceStage()
+  {
+		var additionalSpawnerTimeMultiplier = 7.0f;
+    var spawner = (GemSpawner)_gemSpawner.Instantiate();
+		spawner.SpawnTime *= additionalSpawnerTimeMultiplier * GameManager.Instance.CurrentStage;
+		CallDeferred("add_child", spawner);
+		GD.Print("Spawner SpawnTime = " + spawner.SpawnTime);
+  }
 
   #endregion
 

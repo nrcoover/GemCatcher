@@ -11,6 +11,9 @@ public partial class Paddle : Area2D
 
 	const float MAX_BOOST_FUEL = 100.0f;
 	const float DEFAULT_REFUEL_RATE = 12.5f;
+	const float MOVEMENT_SPEED_MULTIPLIER = 1.15f;
+	const float DEFAULT_MOVEMENT_SPEED = 500.0f;
+	const float MAX_MOVEMENT_SPEED = 1200.0f;
 
 	enum FuelState {
 		Low = 50,
@@ -25,7 +28,7 @@ public partial class Paddle : Area2D
 		Disabled
 	}
 
-	[Export] float _movementSpeed = 200.0f;
+	[Export] float _movementSpeed = DEFAULT_MOVEMENT_SPEED;
 	[Export] float _boundaryMargin = 25.0f;
 	[Export] float _boostMultiplier = 1.5f;
 
@@ -121,6 +124,7 @@ public partial class Paddle : Area2D
 		UpdateBoostUi();
 		ResetPowerUpUi();
 		ResetParticleSystems();
+		ResetMovementSpeed();
 		DisableAllActivePowerUps();
 	}
 
@@ -197,6 +201,7 @@ public partial class Paddle : Area2D
 		SignalManager.Instance.Scored += OnScored;
 		SignalManager.Instance.GameOver += OnGameOver;
 		SignalManager.Instance.PowerUpCollected += OnPowerUpCollected;
+		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
 	}
 
   private void UnsubscribeFromSignals()
@@ -207,6 +212,7 @@ public partial class Paddle : Area2D
 		SignalManager.Instance.Scored -= OnScored;
 		SignalManager.Instance.GameOver -= OnGameOver;
 		SignalManager.Instance.PowerUpCollected -= OnPowerUpCollected;
+		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
 	}
 
   private void OnBoostEngaged()
@@ -308,6 +314,20 @@ public partial class Paddle : Area2D
 
 		SelectRandomPowerUp(color);
 	}
+	
+  private void OnAdvanceStage()
+  {
+    _movementSpeed *= MOVEMENT_SPEED_MULTIPLIER;
+
+		if (_movementSpeed > MAX_MOVEMENT_SPEED)
+		{
+			_movementSpeed = MAX_MOVEMENT_SPEED;
+			GD.Print("MAXIMUM SPEED ACHIEVED!!!");
+			return;
+		}
+
+		_originalSpeed *= MOVEMENT_SPEED_MULTIPLIER;
+  }
 
 #endregion
 

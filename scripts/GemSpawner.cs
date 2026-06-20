@@ -14,6 +14,8 @@ public partial class GemSpawner : Node2D
 	[Export] private Node _gemContainer;
 	[Export] private bool _isOnMainMenu;
 
+	public float SpawnTime = 1.75f;
+
 	private Marker2D _leftBoundary;
 	private Marker2D _rightBoundary;
 	private float _originalGemSpawnWaitTime;
@@ -46,6 +48,7 @@ public partial class GemSpawner : Node2D
 	{
 		_originalGemSpawnWaitTime = (float)_gemSpawnTimer.WaitTime;
 		_canSpawnPowerUp = false;
+		_gemSpawnTimer.WaitTime = SpawnTime;
 	}
 
   private void SubscribeToSignals()
