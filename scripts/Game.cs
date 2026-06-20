@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using System.Linq;
 using Godot;
+using System;
 
 public partial class Game : Node2D
 {
@@ -19,6 +20,7 @@ public partial class Game : Node2D
 	[Export] private Camera _camera;
 	[Export] private Label _scoreLabel;
 
+	[Export] private AudioStreamPlayer _music;
 	[Export] private AudioStreamPlayer _audioExplosion;
 	[Export] private AudioStreamPlayer2D _audioCommanderEncouragement;
 	[Export] private AudioStreamPlayer _audioCommencingMission;
@@ -41,12 +43,14 @@ public partial class Game : Node2D
 
 	private int _score = 0;
 	private bool _isDying = false;
+	private float _musicDefaultVolume;
 
 	public override async void _Ready()
 	{
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 		GameManager.Instance.ResetGame();
 		SubscribeToSignals();
+		InitializeVariables();
 		await PlayGameStartSequenceAsync();
 	}
 
@@ -64,6 +68,11 @@ public partial class Game : Node2D
 		GameManager.Instance.ResetGame();
 	}
 
+  private void InitializeVariables()
+  {
+    _musicDefaultVolume = _music.VolumeDb;
+  }
+
 
 
 #region Signals
@@ -75,6 +84,8 @@ public partial class Game : Node2D
 		SignalManager.Instance.GemOffScreen += OnGemOffScreen;
 		SignalManager.Instance.PlayerHurt += OnPlayerHurt;
 		SignalManager.Instance.HealthRecovered += OnHealthRecovered;
+		SignalManager.Instance.PowerUpSpawned += OnPowerUpSpawned;
+		SignalManager.Instance.PowerUpRemoved += OnPowerUpRemoved;
 	}
 
   private void UnsubscribeFromSignals() {
@@ -83,6 +94,8 @@ public partial class Game : Node2D
 		SignalManager.Instance.GemOffScreen -= OnGemOffScreen;
 		SignalManager.Instance.PlayerHurt -= OnPlayerHurt;
 		SignalManager.Instance.HealthRecovered -= OnHealthRecovered;
+		SignalManager.Instance.PowerUpSpawned -= OnPowerUpSpawned;
+		SignalManager.Instance.PowerUpRemoved -= OnPowerUpRemoved;
 	}
 
   public async void OnInitiateDeathSequenceAsync()
@@ -137,13 +150,23 @@ public partial class Game : Node2D
     UpdateHealthUi();
   }
 
-#endregion
+  private void OnPowerUpSpawned()
+	{
+		DuckMusicVolume();
+	}
+
+  private void OnPowerUpRemoved()
+	{
+		ResetMusicVolume();
+	}
+
+  #endregion
 
 
 
-#region Input
+  #region Input
 
-	private void HandleEscape()
+  private void HandleEscape()
 	{
 		if (Input.IsKeyPressed(Key.Escape))
 		{
@@ -258,6 +281,17 @@ public partial class Game : Node2D
 				player2D.Stop();
 			}
 		}
+	}
+
+	private void DuckMusicVolume()
+	{
+		var duckingPercentage = 1.35f;
+		_music.VolumeDb = _musicDefaultVolume * duckingPercentage;
+	}
+	
+	private void ResetMusicVolume()
+	{
+		_music.VolumeDb = _musicDefaultVolume;
 	}
 	
 #endregion

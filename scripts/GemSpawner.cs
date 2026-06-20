@@ -103,8 +103,6 @@ public partial class GemSpawner : Node2D
 			return;
 		}
 
-		// SpawnPowerUpGem();
-
 		var heartSpawnNumber = 10;
 		var powerUpSpawnNumber = 8;
 		var randomNumber = Helper.GetRandomInt(1, heartSpawnNumber);
@@ -117,6 +115,7 @@ public partial class GemSpawner : Node2D
 		else if (randomNumber >= powerUpSpawnNumber && _canSpawnPowerUp)
 		{
 			SpawnPowerUpGem();
+			SignalManager.Instance.EmitPowerUpSpawned();
 			StartPowerUpTimer();
 		}
 		else

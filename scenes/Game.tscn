@@ -456,10 +456,11 @@ border_color = Color(1, 1, 1, 1)
 corner_radius_top_right = 100
 corner_radius_bottom_right = 100
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommencingMission", "_audioMissionFailure", "_scoreSound", "_hurtSound", "_healthIncreaseSound", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_music", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommencingMission", "_audioMissionFailure", "_scoreSound", "_hurtSound", "_healthIncreaseSound", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
 script = ExtResource("1_78awf")
 _camera = NodePath("Camera2D")
 _scoreLabel = NodePath("CanvasLayer/MarginContainer/ScoreLabel")
+_music = NodePath("Audio/Music")
 _audioExplosion = NodePath("Audio/SFX/Explosion")
 _audioCommanderEncouragement = NodePath("Audio/Voice/CommanderEncouragement")
 _audioCommencingMission = NodePath("Audio/Voice/CommencingMission")

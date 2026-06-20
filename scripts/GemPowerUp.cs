@@ -21,6 +21,7 @@ public partial class GemPowerUp : Gem
 		if (area is Paddle || area is PaddleGhost)
 		{
 			SignalManager.Instance.EmitPowerUpCollected(this.Modulate);
+			SignalManager.Instance.EmitPowerUpRemoved();
 			EndParticleEmission();
 			QueueFree();
 		}
@@ -31,6 +32,7 @@ public partial class GemPowerUp : Gem
 		if (Position.Y > GetViewportRect().End.Y)
 		{
 			base._isOffScreen = true;
+			SignalManager.Instance.EmitPowerUpRemoved();
 		}
 	}
 

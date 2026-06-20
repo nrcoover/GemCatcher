@@ -20,6 +20,8 @@ public partial class SignalManager : Node
 	[Signal] public delegate void ScoreIncrementedEventHandler(int score);
 	[Signal] public delegate void DifficultyIncreasedEventHandler();
 	[Signal] public delegate void PowerUpCollectedEventHandler(Color color);
+	[Signal] public delegate void PowerUpSpawnedEventHandler();
+	[Signal] public delegate void PowerUpRemovedEventHandler();
 
 	public override void _Ready()
 	{
@@ -104,5 +106,15 @@ public partial class SignalManager : Node
 	public void EmitPowerUpCollected(Color color)
 	{
 		EmitSignal(SignalName.PowerUpCollected, color);
+	}
+
+	public void EmitPowerUpSpawned()
+	{
+		EmitSignal(SignalName.PowerUpSpawned);
+	}
+
+	public void EmitPowerUpRemoved()
+	{
+		EmitSignal(SignalName.PowerUpRemoved);
 	}
 }
