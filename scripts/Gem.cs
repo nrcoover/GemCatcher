@@ -12,6 +12,8 @@ public partial class Gem : Area2D
 	[Export] protected float _minScaleVariation = 0.5f;
 	[Export] protected float _maxScaleVariation = 0.75f;
 
+	protected int _viewportBoundaryMargin = 75;
+
 	private Color _color;
 	protected bool _isOffScreen = false;
 	private float _speedVariation;
@@ -68,11 +70,9 @@ public partial class Gem : Area2D
 		}
 	}
 
-  private void HandlePosition(float delta)
+  public virtual void HandlePosition(float delta)
 	{
-		var viewportBoundaryMargin = 75;
-
-		if (Position.Y > GetViewportRect().End.Y + viewportBoundaryMargin)
+		if (Position.Y > GetViewportRect().End.Y + _viewportBoundaryMargin)
 		{
 			QueueFree();
 		}

@@ -9,12 +9,13 @@
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5241379, 0.64245415), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[node name="GemPowerUp" node_paths=PackedStringArray("_powerUpSrpite", "_audio") instance=ExtResource("1_vtl5t")]
+[node name="GemPowerUp" node_paths=PackedStringArray("_powerUpSrpite", "_audio", "_queueFreeTimer") instance=ExtResource("1_vtl5t")]
 script = ExtResource("2_vtl5t")
 _powerUpMinScaleVariation = 0.85
 _powerUpMaxScaleVariation = 1.15
 _powerUpSrpite = NodePath("PlusWhite")
 _audio = NodePath("Audio")
+_queueFreeTimer = NodePath("QueueFreeTimer")
 
 [node name="Particles" parent="." index="0"]
 emitting = true
@@ -45,3 +46,7 @@ scale = Vector2(0.45, 0.45)
 stream = ExtResource("4_cpoue")
 volume_db = -16.0
 autoplay = true
+
+[node name="QueueFreeTimer" type="Timer" parent="." index="7"]
+wait_time = 6.0
+one_shot = true

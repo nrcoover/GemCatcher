@@ -1,28 +1,43 @@
-using System;
 using Godot;
 
 public partial class GemPowerUp : Gem
 {
+	const float MINIMUM_DECIBEL_LEVEL = -80;
+
 	[Export] float _powerUpMinScaleVariation = .85f;
 	[Export] float _powerUpMaxScaleVariation = 1.15f;
 
 	[Export] Node2D _powerUpSrpite;
 	[Export] AudioStreamPlayer2D _audio;
+	[Export] Timer _queueFreeTimer;
 
-	private Tween _audioVolumeTween;
-	private float _audioOriginalVolumne;
-	private float _fadeInVolumne = -80;
+	private Tween _audioVolumeFadeInTween;
+	private Tween _audioVolumeFadeOutTween;
+	private float _audioOriginalVolume;
+	private bool _isOffBottomScreen;
 
 	public override void _Ready()
 	{
 		base._minScaleVariation = _powerUpMinScaleVariation;
 		base._maxScaleVariation = _powerUpMaxScaleVariation;
+		base._viewportBoundaryMargin = 1000;
 		base._Ready();
 
 		InitalizeVariables();
 		SetPowerUpSpriteColor();
-		CreateAudioVolumeTween();
+		SubscribeToSignals();
+		CreateAudioVolumeFadeInTween();
 	}
+
+  private void SubscribeToSignals()
+  {
+    _queueFreeTimer.Timeout += OnQueueFreeTimerTimeout;
+  }
+
+  private void OnQueueFreeTimerTimeout()
+  {
+    QueueFree();
+  }
 
   public override void _ExitTree()
 	{
@@ -31,8 +46,9 @@ public partial class GemPowerUp : Gem
 
   private void InitalizeVariables()
   {
-    _audioOriginalVolumne = _audio.VolumeDb;
-		_audio.VolumeDb = _fadeInVolumne;
+    _audioOriginalVolume = _audio.VolumeDb;
+		_audio.VolumeDb = MINIMUM_DECIBEL_LEVEL;
+		_isOffBottomScreen = false;
   }
 
 	public override void OnAreaEntered(Area2D area)
@@ -48,10 +64,17 @@ public partial class GemPowerUp : Gem
 
 	protected override void HandleExitScreen()
 	{
-		if (Position.Y > GetViewportRect().End.Y)
+		if (!_isOffBottomScreen)
 		{
-			base._isOffScreen = true;
-			SignalManager.Instance.EmitPowerUpRemoved();
+			if (Position.Y > GetViewportRect().End.Y)
+			{
+				_isOffBottomScreen = true;
+				SignalManager.Instance.EmitPowerUpRemoved();
+			}
+		} else
+		{
+			_queueFreeTimer.Start();
+			CreateAudioVolumeFadeOutTween();
 		}
 	}
 
@@ -62,19 +85,34 @@ public partial class GemPowerUp : Gem
 
 	private void KillTweens()
 	{
-		_audioVolumeTween?.Kill();
+		_audioVolumeFadeInTween?.Kill();
 	}
 
-	private void CreateAudioVolumeTween()
+	private void CreateAudioVolumeFadeInTween()
 	{
-		_audioVolumeTween = CreateTween();
+		_audioVolumeFadeInTween = CreateTween();
 
-		var tweenTime = 0.25f;
+		double tweenTime = 0.25;
 
-		_audioVolumeTween.TweenProperty(
+		_audioVolumeFadeInTween.TweenProperty(
 			_audio,
 			"volume_db",
-			_audioOriginalVolumne,
+			_audioOriginalVolume,
+			tweenTime
+		).SetTrans(Tween.TransitionType.Cubic)
+		.SetEase(Tween.EaseType.Out);
+	}
+
+	private void CreateAudioVolumeFadeOutTween()
+	{
+		_audioVolumeFadeOutTween = CreateTween();
+
+		double tweenTime = 10;
+
+		_audioVolumeFadeOutTween.TweenProperty(
+			_audio,
+			"volume_db",
+			MINIMUM_DECIBEL_LEVEL,
 			tweenTime
 		).SetTrans(Tween.TransitionType.Cubic)
 		.SetEase(Tween.EaseType.Out);
