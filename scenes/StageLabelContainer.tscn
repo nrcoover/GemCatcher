@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://dfy630r6xnty0"]
+
+[ext_resource type="Script" uid="uid://bpfdq3gydklg5" path="res://scripts/StageLabelContainer.cs" id="1_umr4j"]
+[ext_resource type="LabelSettings" uid="uid://dnpolr7vcqj82" path="res://resources/fonts/play_white_56_font_normal.tres" id="1_vrkt1"]
+
+[node name="StageLabelContainer" type="VBoxContainer" node_paths=PackedStringArray("_stageLabel", "_fadeOutTimer")]
+size_flags_vertical = 4
+script = ExtResource("1_umr4j")
+_stageLabel = NodePath("StageNumberLable")
+_fadeOutTimer = NodePath("FadeOutTimer")
+
+[node name="StageNumberLable" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "STAGE 0"
+label_settings = ExtResource("1_vrkt1")
+
+[node name="ColorRect" type="ColorRect" parent="StageNumberLable"]
+z_index = -1
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.1060001
+offset_left = -506.0
+offset_top = -4.0
+offset_right = 506.0
+offset_bottom = 0.0039978027
+size_flags_vertical = 6
+color = Color(0, 0, 0, 0.49411765)
+
+[node name="HSeparator" type="HSeparator" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="FadeOutTimer" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true

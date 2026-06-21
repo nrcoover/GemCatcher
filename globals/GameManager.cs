@@ -51,7 +51,7 @@ public partial class GameManager : Node
 	private int _maxHealth = MAX_HEALTH;
 	private int _missedGemsCount = 0;
 	private int _health = MAX_HEALTH;
-	private int _currentStage = 0;
+	private int _currentStage = 1;
 
 	public override void _Ready()
 	{
