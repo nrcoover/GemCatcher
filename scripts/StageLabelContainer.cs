@@ -26,7 +26,8 @@ public partial class StageLabelContainer : VBoxContainer
 
   private void UnsubscribeFromSignals()
   {
-    SignalManager.Instance.AdvanceStage += OnAdvanceStage;
+		_fadeOutTimer.Timeout -= OnFadeOutTimerTimeout;
+    SignalManager.Instance.AdvanceStage -= OnAdvanceStage;
   }
 
   private void OnAdvanceStage()

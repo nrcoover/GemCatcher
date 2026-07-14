@@ -10,6 +10,11 @@ public partial class MenuModal : Control
 		CloseModal();
 	}
 
+	public override void _ExitTree()
+	{
+		_closeButton.Pressed -= OnCloseClicked;
+	}
+
   private void SubscribeToSignals()
 	{
 		_closeButton.Pressed += OnCloseClicked;

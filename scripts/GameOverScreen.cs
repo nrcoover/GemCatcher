@@ -35,6 +35,8 @@ public partial class GameOverScreen : Control
     SignalManager.Instance.ShowGameOverScreen -= OnShowGameOverScreen;
 		SignalManager.Instance.ShowMissionFailurePanel -= OnShowMissionFailurePanel;
 		SignalManager.Instance.ShowGameOverButtons -= OnShowGameOverButtons;
+		_retryButton.Pressed -= OnRetryButtonPressed;
+		_exitButton.Pressed -= OnExitButtonPressed;
   }
 
   private void OnShowMissionFailurePanel()

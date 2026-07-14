@@ -5,8 +5,10 @@ using Godot;
 public partial class MainMenuUi : Control
 {
 	[Export] private TextureButton _playButton;
+	[Export] private TextureButton _kidPlayButton;
 	[Export] private TextureButton _rulesButton;
 	[Export] private TextureButton _movesButton;
+	[Export] private TextureButton _guideButton;
 	[Export] private TextureButton _quitButton;
 	[Export] private TextureButton _creditsButton;
 	[Export] private TextureButton _resetHighScoreButton;
@@ -15,6 +17,7 @@ public partial class MainMenuUi : Control
 	[Export] private MenuModal _movesModal;
 	[Export] private MenuModal _rulesModal;
 	[Export] private MenuModal _creditsModal;
+	[Export] private MenuModal _guideModal;
 	
 	[Export] private Label _titleLayer1;
 	[Export] private Label _titleLayer2;
@@ -57,8 +60,10 @@ public partial class MainMenuUi : Control
 		SignalManager.Instance.HighScoreChanged += OnHighScoreChanged;
 		_titleTimer.Timeout += OnTitleTimeout;
 		_playButton.Pressed += OnPlayClicked;
+		_kidPlayButton.Pressed += OnKidPlayClicked;
 		_rulesButton.Pressed += OnRulesClicked;
 		_movesButton.Pressed += OnMovesClicked;
+		_guideButton.Pressed += OnGuideClicked;
 		_quitButton.Pressed += OnQuitClicked;
 		_creditsButton.Pressed += OnCreditsClicked;
 		_resetHighScoreButton.Pressed += OnResetHighScoreClicked;
@@ -68,6 +73,16 @@ public partial class MainMenuUi : Control
 	public void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.HighScoreChanged -= OnHighScoreChanged;
+		_titleTimer.Timeout -= OnTitleTimeout;
+		_playButton.Pressed -= OnPlayClicked;
+		_kidPlayButton.Pressed -= OnKidPlayClicked;
+		_rulesButton.Pressed -= OnRulesClicked;
+		_movesButton.Pressed -= OnMovesClicked;
+		_guideButton.Pressed -= OnGuideClicked;
+		_quitButton.Pressed -= OnQuitClicked;
+		_creditsButton.Pressed -= OnCreditsClicked;
+		_resetHighScoreButton.Pressed -= OnResetHighScoreClicked;
+		_restoreHighScoreButton.Pressed -= OnRestoreHighScoreClicked;
 	}
 
   private void OnHighScoreChanged()
@@ -82,8 +97,13 @@ public partial class MainMenuUi : Control
 
 	private void OnPlayClicked()
   {
-    LevelManager.Instance.LoadGame();
+		LevelManager.Instance.LoadGame(false);
   }
+
+	private void OnKidPlayClicked()
+	{
+		LevelManager.Instance.LoadGame(true);
+	}
 
   private void OnRulesClicked()
 	{
@@ -95,6 +115,12 @@ public partial class MainMenuUi : Control
 	{
 		CloseAllModals();
 		_movesModal.Visible = true;
+	}
+
+	private void OnGuideClicked()
+	{
+		CloseAllModals();
+		_guideModal.Visible = true;
 	}
 	
 	private void OnQuitClicked()
@@ -125,6 +151,7 @@ public partial class MainMenuUi : Control
 		_rulesModal.Visible = false;
 		_movesModal.Visible = false;
 		_creditsModal.Visible = false;
+		_guideModal.Visible = false;
 	}
 
 	private void InitializeTitleColors()
@@ -172,6 +199,12 @@ public partial class MainMenuUi : Control
 		if (_isFirstAnimationRun)
 		{
 			await ToSignal(GetTree().CreateTimer(2.0f), SceneTreeTimer.SignalName.Timeout);
+
+			if (!IsActiveInTree())
+			{
+				return;
+			}
+
 			_isFirstAnimationRun = false;
 			_titleTimer.Start();
 		}
@@ -194,6 +227,11 @@ public partial class MainMenuUi : Control
 					GetTree().CreateTimer(delayBetweenLabels),
 					SceneTreeTimer.SignalName.Timeout
 				);
+
+				if (!IsActiveInTree())
+				{
+					return;
+				}
 			}
 		}
 
@@ -211,10 +249,20 @@ public partial class MainMenuUi : Control
 					GetTree().CreateTimer(delayBetweenLabels),
 					SceneTreeTimer.SignalName.Timeout
 				);
+
+				if (!IsActiveInTree())
+				{
+					return;
+				}
 			}
 		}
 
 		_isAnimatingTitle = false;
+	}
+
+	private bool IsActiveInTree()
+	{
+		return GodotObject.IsInstanceValid(this) && IsInsideTree();
 	}
 
 	private void CreateColorScaleTween(Label label)

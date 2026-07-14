@@ -1,17 +1,29 @@
-[gd_scene load_steps=5 format=3 uid="uid://bbrkr3etn88hu"]
+[gd_scene load_steps=8 format=3 uid="uid://bbrkr3etn88hu"]
 
 [ext_resource type="Script" uid="uid://dh8dsybin7xf6" path="res://scripts/GemSpawner.cs" id="1_23civ"]
 [ext_resource type="PackedScene" uid="uid://bnxpo7x26751g" path="res://scenes/GemHeart.tscn" id="2_23civ"]
 [ext_resource type="PackedScene" uid="uid://8m2y1u6noqq5" path="res://scenes/Gem.tscn" id="2_inrc3"]
 [ext_resource type="PackedScene" uid="uid://dqo0w8yoly0x5" path="res://scenes/GemPowerUp.tscn" id="4_qlh1u"]
+[ext_resource type="PackedScene" path="res://scenes/Meteor.tscn" id="5_meteor"]
+[ext_resource type="PackedScene" path="res://scenes/BonusGem.tscn" id="6_stardust"]
+[ext_resource type="PackedScene" path="res://scenes/GemNuke.tscn" id="7_nuke"]
 
-[node name="GemSpawner" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_powerUpSpawnTimer", "_gemContainer") groups=["Moveable Objects"]]
+[node name="GemSpawner" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_powerUpSpawnTimer", "_meteorSpawnTimer", "_stardustEventTimer", "_stardustWaveTimer", "_meteorStormEventTimer", "_meteorStormSpawnTimer", "_meteorStormDurationTimer", "_gemContainer") groups=["Moveable Objects"]]
 script = ExtResource("1_23civ")
 _gemSpawnTimer = NodePath("GemSpawnTimer")
 _powerUpSpawnTimer = NodePath("PowerUpSpawnTimer")
+_meteorSpawnTimer = NodePath("MeteorSpawnTimer")
+_stardustEventTimer = NodePath("StardustEventTimer")
+_stardustWaveTimer = NodePath("StardustWaveTimer")
+_meteorStormEventTimer = NodePath("MeteorStormEventTimer")
+_meteorStormSpawnTimer = NodePath("MeteorStormSpawnTimer")
+_meteorStormDurationTimer = NodePath("MeteorStormDurationTimer")
 _gemScene = ExtResource("2_inrc3")
 _gemHeartScene = ExtResource("2_23civ")
 _gemPowerUpScene = ExtResource("4_qlh1u")
+_meteorScene = ExtResource("5_meteor")
+_bonusGemScene = ExtResource("6_stardust")
+_gemNukeScene = ExtResource("7_nuke")
 _gemContainer = NodePath("GemContainer")
 
 [node name="GemContainer" type="Node" parent="."]
@@ -22,4 +34,28 @@ autostart = true
 
 [node name="PowerUpSpawnTimer" type="Timer" parent="."]
 wait_time = 10.0
+one_shot = true
+
+[node name="MeteorSpawnTimer" type="Timer" parent="."]
+wait_time = 6.0
+one_shot = true
+
+[node name="StardustEventTimer" type="Timer" parent="."]
+wait_time = 22.0
+one_shot = true
+
+[node name="StardustWaveTimer" type="Timer" parent="."]
+wait_time = 0.55
+one_shot = true
+
+[node name="MeteorStormEventTimer" type="Timer" parent="."]
+wait_time = 38.0
+one_shot = true
+
+[node name="MeteorStormSpawnTimer" type="Timer" parent="."]
+wait_time = 0.95
+one_shot = true
+
+[node name="MeteorStormDurationTimer" type="Timer" parent="."]
+wait_time = 14.0
 one_shot = true

@@ -34,6 +34,8 @@ public partial class MenuPaddle : Area2D
 
   public override void _ExitTree()
   {
+		AreaEntered -= OnAreaEntered;
+
 		if (_colorScaleTween != null)
 		{
     	_colorScaleTween.Kill();

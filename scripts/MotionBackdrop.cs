@@ -18,9 +18,9 @@ public partial class MotionBackdrop : Node2D
 	private void SetVisibleBackground()
 	{
 		var randomMin = 0;
-		var randomMax = 4;
+		var randomMax = 3;
 
-		var randonInteger = Helper.GetRandomInt(randomMin, randomMax) % randomMax;
+		var randomInteger = Helper.GetRandomInt(randomMin, randomMax);
 
 		if (_useBackgroundOverride)
 		{
@@ -28,7 +28,7 @@ public partial class MotionBackdrop : Node2D
 		}
 		else
 		{
-			switch (randonInteger)
+			switch (randomInteger)
 			{
 				case 0:
 					ShowBackground1();

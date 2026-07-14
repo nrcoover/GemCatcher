@@ -2,22 +2,23 @@ using Godot;
 
 public static partial class Helper
 {
+	private static readonly RandomNumberGenerator RandomNumber = new();
+
+	static Helper()
+	{
+		RandomNumber.Randomize();
+	}
+
 	public static int GetRandomInt(int min, int max)
 	{
-		var randomNumber = new RandomNumberGenerator();
-		randomNumber.Randomize();
-
-		int randomInt = randomNumber.RandiRange(min, max);
+		int randomInt = RandomNumber.RandiRange(min, max);
 		
 		return randomInt;
 	}
 
 	public static float GetRandomFloat(float min, float max)
 	{
-		var randomNumber = new RandomNumberGenerator();
-		randomNumber.Randomize();
-
-		float randomFloat = randomNumber.RandfRange(min, max);
+		float randomFloat = RandomNumber.RandfRange(min, max);
 		
 		return randomFloat;
 	}
@@ -26,7 +27,7 @@ public static partial class Helper
 	{
 		string selectedColorhex = Constants.CustomColors.RedPastelle;
 
-		var randomNumber = GetRandomInt(0, 9) % 9;
+		var randomNumber = GetRandomInt(0, 8);
 
 		switch (randomNumber)
 		{

@@ -1,25 +1,29 @@
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
 using Godot;
 
 public partial class Game : Node2D
 {
 	const int DEFAULT_POINT_VALUE = 1;
-
-	enum HealthStatus
-	{
-		FullHealth = 5,
-		FleshWound = 4,
-		Injured = 3,
-		Hurt = 2,
-		MortallyWounded = 1,
-		Dead = 0
-	}
+	const int STREAK_BONUS_INTERVAL = 10;
+	const int STREAK_BONUS_POINTS = 5;
+	const int MIN_VISIBLE_STREAK = 2;
+	const int STAGE_CLEAR_BONUS_POINTS = 3;
+	const int METEOR_DODGE_POINTS = 2;
+	const int METEOR_UNLOCK_STAGE = 3;
+	const int STARDUST_POINT_VALUE = 3;
+	const float ADDITIONAL_SPAWNER_BASE_WAIT_TIME = 9.0f;
+	const float ADDITIONAL_SPAWNER_MINIMUM_WAIT_TIME = 4.0f;
+	const float ADDITIONAL_SPAWNER_STAGE_REDUCTION = 0.5f;
+	const int MAX_HEART_SLOTS = 10;
 
 	[Export] private PackedScene _gemSpawner;
 
 	[Export] private Camera _camera;
 	[Export] private Label _scoreLabel;
+	[Export] private Label _eventLabel;
+	[Export] private Label _meteorStormLabel;
 
 	[Export] private AudioStreamPlayer _music;
 	[Export] private AudioStreamPlayer _audioExplosion;
@@ -33,12 +37,13 @@ public partial class Game : Node2D
 	[Export] private AudioStreamPlayer2D _scoreSound;
 	[Export] private AudioStreamPlayer2D _hurtSound;
 	[Export] private AudioStreamPlayer2D _healthIncreaseSound;
+	[Export] private AudioStreamPlayer2D _stardustShowerSound;
 
-	[Export] private Node2D _heart1;
-	[Export] private Node2D _heart2;
-	[Export] private Node2D _heart3;
-	[Export] private Node2D _heart4;
-	[Export] private Node2D _heart5;
+	[Export] private Node _heartContainer;
+	[Export] private Control _actionSlot;
+	[Export] private TextureRect _actionIcon;
+	[Export] private Label _actionStatusLabel;
+	[Export] private ColorRect _nukeFlash;
 
 	[Export] private int _shakeIntensity;
 	[Export] private float _shakeTime;
@@ -46,10 +51,17 @@ public partial class Game : Node2D
 	private Tween _colorScaleTween;
 	private Tween _heartScaleTween;
 	private Tween _musicVolumeTween;
+	private Tween _eventLabelTween;
+	private Tween _actionSlotTween;
+	private Tween _nukeFlashTween;
 
 	private int _score = 0;
+	private int _catchStreak = 0;
 	private bool _isDying = false;
 	private float _musicDefaultVolume;
+	private float _meteorStormTimeRemaining;
+	private readonly List<Node2D> _heartSlots = [];
+	private readonly List<Node2D> _heartFills = [];
 
 	public override async void _Ready()
 	{
@@ -60,8 +72,29 @@ public partial class Game : Node2D
 		await PlayGameStartSequenceAsync();
 	}
 
+	public override void _Process(double delta)
+	{
+		if (!_meteorStormLabel.Visible)
+		{
+			return;
+		}
+
+		_meteorStormTimeRemaining = Mathf.Max(
+			0.0f,
+			_meteorStormTimeRemaining - (float)delta
+		);
+		UpdateMeteorStormCountdown();
+	}
+
   public override void _UnhandledInput(InputEvent @event)
 	{
+		if (@event.IsActionPressed("use_action"))
+		{
+			TryDetonateNuke();
+			GetViewport().SetInputAsHandled();
+			return;
+		}
+
 		if (@event.IsActionPressed("exit"))
 		{
 			HandleEscape();
@@ -77,6 +110,12 @@ public partial class Game : Node2D
   private void InitializeVariables()
   {
     _musicDefaultVolume = _music.VolumeDb;
+		_catchStreak = 0;
+		_eventLabel.Visible = false;
+		_meteorStormLabel.Visible = false;
+		InitializeHeartUi();
+		UpdateHealthUi(false);
+		UpdateActionSlotUi(GameManager.Instance.HasNuke, false);
   }
 
 
@@ -93,6 +132,13 @@ public partial class Game : Node2D
 		SignalManager.Instance.PowerUpSpawned += OnPowerUpSpawned;
 		SignalManager.Instance.PowerUpRemoved += OnPowerUpRemoved;
 		SignalManager.Instance.AdvanceStage += OnAdvanceStageAsync;
+		SignalManager.Instance.MeteorHit += OnMeteorHit;
+		SignalManager.Instance.MeteorDodged += OnMeteorDodged;
+		SignalManager.Instance.StardustShowerStarted += OnStardustShowerStarted;
+		SignalManager.Instance.StardustCollected += OnStardustCollected;
+		SignalManager.Instance.NukeSlotChanged += OnNukeSlotChanged;
+		SignalManager.Instance.MeteorStormStarted += OnMeteorStormStarted;
+		SignalManager.Instance.MeteorStormEnded += OnMeteorStormEnded;
 	}
 
   private void UnsubscribeFromSignals() {
@@ -104,6 +150,13 @@ public partial class Game : Node2D
 		SignalManager.Instance.PowerUpSpawned -= OnPowerUpSpawned;
 		SignalManager.Instance.PowerUpRemoved -= OnPowerUpRemoved;
 		SignalManager.Instance.AdvanceStage -= OnAdvanceStageAsync;
+		SignalManager.Instance.MeteorHit -= OnMeteorHit;
+		SignalManager.Instance.MeteorDodged -= OnMeteorDodged;
+		SignalManager.Instance.StardustShowerStarted -= OnStardustShowerStarted;
+		SignalManager.Instance.StardustCollected -= OnStardustCollected;
+		SignalManager.Instance.NukeSlotChanged -= OnNukeSlotChanged;
+		SignalManager.Instance.MeteorStormStarted -= OnMeteorStormStarted;
+		SignalManager.Instance.MeteorStormEnded -= OnMeteorStormEnded;
 	}
 
   public async void OnInitiateDeathSequenceAsync()
@@ -136,7 +189,8 @@ public partial class Game : Node2D
 
 	private void OnScored(Color color)
 	{
-		IncrementScore(DEFAULT_POINT_VALUE);
+		IncrementCatchStreak();
+		IncrementScore(GetCatchScoreValue());
 		_scoreSound.Play();
 		UpdateScoreUi(color);
 	}
@@ -148,6 +202,7 @@ public partial class Game : Node2D
 
 	private void OnGemOffScreen()
 	{
+		ResetCatchStreak();
 		GameManager.Instance.IncrementMissedGems();
 		SignalManager.Instance.EmitPlayerHurt();
 	}
@@ -170,13 +225,99 @@ public partial class Game : Node2D
 	
   public async void OnAdvanceStageAsync()
   {
+		ApplyStageClearReward();
+		ShowMeteorStageMessage();
+
 		await PlayStageAdvancementSequenceAsync();
-		var additionalSpawnerTimeMultiplier = 7.0f;
+
+		if (!IsActiveInTree())
+		{
+			return;
+		}
+
     var spawner = (GemSpawner)_gemSpawner.Instantiate();
-		spawner.SpawnTime *= additionalSpawnerTimeMultiplier * GameManager.Instance.CurrentStage;
+		spawner.SpawnTime = Mathf.Max(
+			ADDITIONAL_SPAWNER_MINIMUM_WAIT_TIME,
+			ADDITIONAL_SPAWNER_BASE_WAIT_TIME
+				- GameManager.Instance.CurrentStage * ADDITIONAL_SPAWNER_STAGE_REDUCTION
+		);
+		spawner.ConfigureAsAdditionalSpawner();
 		CallDeferred("add_child", spawner);
-		GD.Print("Spawner SpawnTime = " + spawner.SpawnTime);
+		GD.Print("Additional spawner wait time = " + spawner.SpawnTime);
   }
+
+	private void OnMeteorHit()
+	{
+		ResetCatchStreak();
+		GameManager.Instance.DecrementHealth();
+		ShowEventMessage("METEOR IMPACT", new Color(Constants.CustomColors.RedBright), 0.8f);
+		SignalManager.Instance.EmitPlayerHurt();
+	}
+
+	private void OnMeteorDodged()
+	{
+		var meteorColor = new Color(Constants.CustomColors.OrangeBright);
+
+		IncrementScore(METEOR_DODGE_POINTS);
+		UpdateScoreUi(meteorColor);
+		ShowEventMessage($"METEOR DODGED +{METEOR_DODGE_POINTS}", meteorColor, 0.8f);
+	}
+
+	private void OnStardustShowerStarted()
+	{
+		_stardustShowerSound.Play();
+		ShowEventMessage(
+			"STARDUST SHOWER",
+			new Color(Constants.CustomColors.YellowBright),
+			1.5f
+		);
+	}
+
+	private void OnStardustCollected(Color color)
+	{
+		IncrementScore(STARDUST_POINT_VALUE);
+		_scoreSound.Play();
+		UpdateScoreUi(color);
+		ShowEventMessage($"STARDUST +{STARDUST_POINT_VALUE}", color, 0.55f);
+	}
+
+	private void OnNukeSlotChanged(bool hasNuke)
+	{
+		UpdateActionSlotUi(hasNuke);
+
+		if (hasNuke)
+		{
+			ShowEventMessage(
+				"NUKE READY - PRESS SPACE",
+				new Color(Constants.CustomColors.PinkBright),
+				1.1f
+			);
+		}
+	}
+
+	private void OnMeteorStormStarted(float duration)
+	{
+		_meteorStormTimeRemaining = duration;
+		_meteorStormLabel.Visible = true;
+		UpdateMeteorStormCountdown();
+		ClearFallingObjects(Constants.GroupNames.CollectibleGems);
+		ShowEventMessage(
+			"METEOR STORM - DODGE!",
+			new Color(Constants.CustomColors.RedBright),
+			1.5f
+		);
+	}
+
+	private void OnMeteorStormEnded()
+	{
+		_meteorStormTimeRemaining = 0.0f;
+		_meteorStormLabel.Visible = false;
+		ShowEventMessage(
+			"METEOR STORM CLEARED",
+			new Color(Constants.CustomColors.GreenBright),
+			1.2f
+		);
+	}
 
   #endregion
 
@@ -200,7 +341,7 @@ public partial class Game : Node2D
 
 	private void UpdateScoreUi(Color color)
 	{
-		_scoreLabel.Text = $"Score: {_score:000}";
+		UpdateScoreText();
 
 		var scaleMultiplier = 1.10f;
 		_scoreLabel.SelfModulate = Colors.White;
@@ -209,65 +350,92 @@ public partial class Game : Node2D
 		CreateColorScaleTween(color);
 	}
 
-  private void UpdateHealthUi()
+	private void InitializeHeartUi()
 	{
-		var currentHealth = GameManager.Instance.GetHealth();
+		_heartSlots.Clear();
+		_heartFills.Clear();
 
-		switch (currentHealth)
+		for (var heartNumber = 1; heartNumber <= MAX_HEART_SLOTS; heartNumber++)
 		{
-			case (int)HealthStatus.FullHealth:
-				_heart1.Visible = true;
-				_heart2.Visible = true;
-				_heart3.Visible = true;
-				_heart4.Visible = true;
-				_heart5.Visible = true;
-				CreateHeartScaleTween(_heart1);
-				
-				break;
-			case (int)HealthStatus.FleshWound:
-				_heart1.Visible = false;
-				_heart2.Visible = true;
-				_heart3.Visible = true;
-				_heart4.Visible = true;
-				_heart5.Visible = true;
-				CreateHeartScaleTween(_heart2);
-
-				break;
-			case (int)HealthStatus.Injured:
-				_heart1.Visible = false;
-				_heart2.Visible = false;
-				_heart3.Visible = true;
-				_heart4.Visible = true;
-				_heart5.Visible = true;
-				CreateHeartScaleTween(_heart3);
-
-				break;
-			case (int)HealthStatus.Hurt:
-				_heart1.Visible = false;
-				_heart2.Visible = false;
-				_heart3.Visible = false;
-				_heart4.Visible = true;
-				_heart5.Visible = true;
-				CreateHeartScaleTween(_heart4);
-
-				break;
-			case (int)HealthStatus.MortallyWounded:
-				_heart1.Visible = false;
-				_heart2.Visible = false;
-				_heart3.Visible = false;
-				_heart4.Visible = false;
-				_heart5.Visible = true;
-				CreateHeartScaleTween(_heart5);
-
-				break;
-			default:
-				_heart1.Visible = false;
-				_heart2.Visible = false;
-				_heart3.Visible = false;
-				_heart4.Visible = false;
-				_heart5.Visible = false;
-				break;
+			var slot = _heartContainer.GetNode<Node2D>($"Heart{heartNumber}Faded");
+			var fill = slot.GetNode<Node2D>($"Heart{heartNumber}Full");
+			_heartSlots.Add(slot);
+			_heartFills.Add(fill);
 		}
+	}
+
+	private void UpdateHealthUi(bool animate = true)
+	{
+		var maximumHealth = Mathf.Clamp(GameManager.Instance.MaxHealth, 0, _heartSlots.Count);
+		var currentHealth = Mathf.Clamp(GameManager.Instance.GetHealth(), 0, maximumHealth);
+		var firstAvailableSlot = _heartSlots.Count - maximumHealth;
+		var firstFilledSlot = _heartSlots.Count - currentHealth;
+
+		for (var index = 0; index < _heartSlots.Count; index++)
+		{
+			_heartSlots[index].Visible = index >= firstAvailableSlot;
+			_heartFills[index].Visible = index >= firstFilledSlot;
+		}
+
+		if (animate && firstFilledSlot < _heartFills.Count)
+		{
+			CreateHeartScaleTween(_heartFills[firstFilledSlot]);
+		}
+	}
+
+	private void UpdateActionSlotUi(bool hasNuke, bool animate = true)
+	{
+		_actionSlotTween?.Kill();
+		_actionIcon.PivotOffset = _actionIcon.Size / 2.0f;
+		_actionIcon.Scale = Vector2.One;
+		_actionSlot.SelfModulate = hasNuke
+			? Colors.White
+			: new Color(1.0f, 1.0f, 1.0f, 0.78f);
+		_actionIcon.SelfModulate = hasNuke
+			? Colors.White
+			: new Color(0.55f, 0.62f, 0.7f, 0.18f);
+		_actionStatusLabel.Text = hasNuke ? "READY\nSPACE" : "EMPTY";
+		_actionStatusLabel.Modulate = hasNuke
+			? new Color(Constants.CustomColors.BlueLightBright)
+			: new Color(0.65f, 0.7f, 0.78f, 0.75f);
+
+		if (!animate || !hasNuke)
+		{
+			return;
+		}
+
+		_actionSlotTween = CreateTween();
+		_actionSlotTween.TweenProperty(
+			_actionIcon,
+			"scale",
+			Vector2.One * 1.22f,
+			0.14f
+		).SetTrans(Tween.TransitionType.Back)
+		.SetEase(Tween.EaseType.Out);
+		_actionSlotTween.TweenProperty(
+			_actionIcon,
+			"scale",
+			Vector2.One,
+			0.18f
+		).SetTrans(Tween.TransitionType.Back)
+		.SetEase(Tween.EaseType.Out);
+	}
+
+	private void PlayNukeFlash()
+	{
+		_nukeFlashTween?.Kill();
+		_nukeFlash.Visible = true;
+		_nukeFlash.SelfModulate = new Color(1.0f, 0.92f, 0.45f, 0.88f);
+
+		_nukeFlashTween = CreateTween();
+		_nukeFlashTween.TweenProperty(
+			_nukeFlash,
+			PropertyName.SelfModulate.ToString(),
+			Colors.Transparent,
+			0.48f
+		).SetTrans(Tween.TransitionType.Cubic)
+		.SetEase(Tween.EaseType.Out);
+		_nukeFlashTween.TweenCallback(Callable.From(() => _nukeFlash.Visible = false));
 	}
 	
 #endregion
@@ -340,6 +508,9 @@ public partial class Game : Node2D
 		_colorScaleTween?.Kill();
 		_heartScaleTween?.Kill();
 		_musicVolumeTween?.Kill();
+		_eventLabelTween?.Kill();
+		_actionSlotTween?.Kill();
+		_nukeFlashTween?.Kill();
 	}
 
 	private void CreateColorScaleTween(Color color)
@@ -442,7 +613,7 @@ public partial class Game : Node2D
 		}
 
 		await ToSignal(
-			tree.CreateTimer(timeInSeconds),
+			tree.CreateTimer(timeInSeconds, false),
 			SceneTreeTimer.SignalName.Timeout
 		);
 	}
@@ -452,6 +623,11 @@ public partial class Game : Node2D
 		_audioCommencingMission.Play();
 
 		await CreateTimerAsync(1.5f);
+
+		if (!IsActiveInTree())
+		{
+			return;
+		}
 
 		_audioCommanderEncouragement.Play();
   }
@@ -472,6 +648,11 @@ public partial class Game : Node2D
 		_audioStageAdvancement.Play();
 
 		await CreateTimerAsync(1.75f);
+
+		if (!IsActiveInTree())
+		{
+			return;
+		}
 
 		PlayStageAdvancementCommanderAudio();
 	}
@@ -500,6 +681,55 @@ public partial class Game : Node2D
 
 
 #region Other
+
+	private void TryDetonateNuke()
+	{
+		if (_isDying || !GameManager.Instance.TryUseNuke())
+		{
+			return;
+		}
+
+		var clearedTargets = ClearNukeTargets();
+		_audioExplosion.Play();
+		_camera.ScreenShake(_shakeIntensity + 15, _shakeTime + 0.15f);
+		PlayNukeFlash();
+		ShowEventMessage(
+			$"NUKE DETONATED - {clearedTargets} CLEARED",
+			new Color(Constants.CustomColors.YellowBright),
+			1.1f
+		);
+	}
+
+	private int ClearNukeTargets()
+	{
+		return ClearFallingObjects(Constants.GroupNames.NukeTargets);
+	}
+
+	private int ClearFallingObjects(string groupName)
+	{
+		var clearedTargets = 0;
+		var targets = GetTree().GetNodesInGroup(groupName);
+
+		foreach (var target in targets)
+		{
+			if (!GodotObject.IsInstanceValid(target)
+					|| target.IsQueuedForDeletion()
+					|| !IsAncestorOf(target))
+			{
+				continue;
+			}
+
+			if (target is GemPowerUp)
+			{
+				SignalManager.Instance.EmitPowerUpRemoved();
+			}
+
+			target.QueueFree();
+			clearedTargets++;
+		}
+
+		return clearedTargets;
+	}
 	
 	private void IncurDamage()
 	{
@@ -513,6 +743,105 @@ public partial class Game : Node2D
 	{
 		_score += points;
 		SignalManager.Instance.EmitScoreIncremented(_score);
+	}
+
+	private void IncrementScoreSilently(int points)
+	{
+		_score += points;
+	}
+
+	private void ApplyStageClearReward()
+	{
+		IncrementScoreSilently(STAGE_CLEAR_BONUS_POINTS);
+		UpdateScoreText();
+
+		if (GameManager.Instance.GetHealth() < GameManager.Instance.MaxHealth)
+		{
+			SignalManager.Instance.EmitHealthRecovered();
+		}
+	}
+
+	private void IncrementCatchStreak()
+	{
+		_catchStreak++;
+	}
+
+	private void ResetCatchStreak()
+	{
+		_catchStreak = 0;
+		UpdateScoreText();
+	}
+
+	private int GetCatchScoreValue()
+	{
+		if (_catchStreak > 0 && _catchStreak % STREAK_BONUS_INTERVAL == 0)
+		{
+			return DEFAULT_POINT_VALUE + STREAK_BONUS_POINTS;
+		}
+
+		return DEFAULT_POINT_VALUE;
+	}
+
+	private string GetScoreLabelText()
+	{
+		if (_catchStreak >= MIN_VISIBLE_STREAK)
+		{
+			return $"Score: {_score:000}  Streak: {_catchStreak}";
+		}
+
+		return $"Score: {_score:000}";
+	}
+
+	private void UpdateScoreText()
+	{
+		_scoreLabel.Text = GetScoreLabelText();
+	}
+
+	private void ShowMeteorStageMessage()
+	{
+		if (GameManager.Instance.CurrentStage < METEOR_UNLOCK_STAGE)
+		{
+			return;
+		}
+
+		var hazardLevel = GameManager.Instance.CurrentStage - METEOR_UNLOCK_STAGE + 1;
+		var message = hazardLevel == 1
+			? "METEORS INBOUND"
+			: $"METEOR THREAT x{hazardLevel}";
+
+		ShowEventMessage(message, new Color(Constants.CustomColors.OrangeBright), 1.5f);
+	}
+
+	private void UpdateMeteorStormCountdown()
+	{
+		_meteorStormLabel.Text = $"METEOR STORM  {_meteorStormTimeRemaining:0.0}s";
+	}
+
+	private void ShowEventMessage(string message, Color color, float displaySeconds)
+	{
+		_eventLabelTween?.Kill();
+		_eventLabel.Text = message;
+		_eventLabel.Modulate = color;
+		_eventLabel.Visible = true;
+
+		var transparentColor = color;
+		transparentColor.A = 0.0f;
+
+		_eventLabelTween = CreateTween();
+		_eventLabelTween.TweenInterval(displaySeconds);
+		_eventLabelTween.TweenProperty(
+			_eventLabel,
+			PropertyName.Modulate.ToString(),
+			transparentColor,
+			0.35f
+		).SetTrans(Tween.TransitionType.Cubic)
+		.SetEase(Tween.EaseType.In);
+		_eventLabelTween.TweenCallback(Callable.From(() => _eventLabel.Visible = false));
+	}
+
+	private bool IsActiveInTree()
+	{
+		return GodotObject.IsInstanceValid(this) && IsInsideTree();
 	}
 
 	private void StopMoveableObjectProcessing()

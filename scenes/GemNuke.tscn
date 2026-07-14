@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" uid="uid://8m2y1u6noqq5" path="res://scenes/Gem.tscn" id="1_nuke"]
+[ext_resource type="Script" path="res://scripts/GemNuke.cs" id="2_nuke"]
+[ext_resource type="Texture2D" path="res://assets/images/sprites/nuke_pickup.png" id="3_nuke"]
+[ext_resource type="AudioStream" uid="uid://di4fr2u86dhv8" path="res://assets/audio/sfx/545238__mr_fritz__item-sparkle.wav" id="4_nuke"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_nuke"]
+radius = 42.0
+
+[node name="GemNuke" node_paths=PackedStringArray("_nukeParticles") instance=ExtResource("1_nuke")]
+script = ExtResource("2_nuke")
+_nukeParticles = NodePath("Particles")
+_minSpeedVariation = 1.0
+_maxSpeedVariation = 1.9
+_rotationSpeed = 5.0
+
+[node name="Particles" parent="." index="0"]
+amount = 75
+lifetime = 0.85
+emission_sphere_radius = 32.0
+gravity = Vector2(0, -680)
+scale_amount_max = 4.5
+
+[node name="Sprite2D" parent="." index="1"]
+scale = Vector2(0.075, 0.075)
+texture = ExtResource("3_nuke")
+
+[node name="CollisionShape2D" parent="." index="2"]
+position = Vector2(0, 0)
+rotation = 0.0
+scale = Vector2(1, 1)
+shape = SubResource("CircleShape2D_nuke")
+
+[node name="OrbitParticles" type="CPUParticles2D" parent="." index="4"]
+amount = 24
+lifetime = 0.75
+preprocess = 0.75
+randomness = 0.2
+emission_shape = 1
+emission_sphere_radius = 46.0
+direction = Vector2(0, 0)
+gravity = Vector2(0, 0)
+orbit_velocity_min = 0.35
+orbit_velocity_max = 0.65
+scale_amount_min = 1.0
+scale_amount_max = 3.0
+color = Color(0, 1, 1, 0.85)
+
+[node name="Audio" type="AudioStreamPlayer2D" parent="." index="5"]
+stream = ExtResource("4_nuke")
+volume_db = -20.0
+pitch_scale = 0.8
+autoplay = true

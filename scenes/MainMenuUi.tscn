@@ -1,12 +1,13 @@
-[gd_scene load_steps=6 format=3 uid="uid://cubv40p7fxyh5"]
+[gd_scene load_steps=7 format=3 uid="uid://cubv40p7fxyh5"]
 
 [ext_resource type="Script" uid="uid://roupoeg0m343" path="res://scripts/MainMenuUi.cs" id="1_it30p"]
 [ext_resource type="PackedScene" uid="uid://dqthwsums7jjw" path="res://scenes/GemButton.tscn" id="3_pqhkh"]
 [ext_resource type="PackedScene" uid="uid://dvxadunjhuoll" path="res://scenes/MenuModal.tscn" id="4_h6icy"]
 [ext_resource type="LabelSettings" uid="uid://5mcorwbq3ffs" path="res://resources/fonts/play_white_24_font_normal.tres" id="5_7v7mi"]
 [ext_resource type="PackedScene" uid="uid://2sfkess71hko" path="res://scenes/MenuTitle.tscn" id="6_56fvm"]
+[ext_resource type="LabelSettings" uid="uid://bvp27oyhve2cn" path="res://resources/fonts/play_white_16_font_normal.tres" id="7_guide"]
 
-[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_movesModal", "_rulesModal", "_creditsModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_titleTimer", "_titleContainer", "_marginHighScoreContainer")]
+[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_kidPlayButton", "_rulesButton", "_movesButton", "_guideButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_movesModal", "_rulesModal", "_creditsModal", "_guideModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_titleTimer", "_titleContainer", "_marginHighScoreContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,8 +18,10 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_it30p")
 _playButton = NodePath("MarginButtons/HBoxButtons/PlayButton")
+_kidPlayButton = NodePath("MarginButtons/HBoxButtons/KidPlayButton")
 _rulesButton = NodePath("MarginButtons/HBoxButtons/RulesButton")
 _movesButton = NodePath("MarginButtons/HBoxButtons/MovesButton")
+_guideButton = NodePath("MarginButtons/HBoxButtons/GuideButton")
 _quitButton = NodePath("MarginButtons/HBoxButtons/QuitButton")
 _creditsButton = NodePath("MarginButtons/HBoxButtons/CreditsButton")
 _resetHighScoreButton = NodePath("MarginHighScore/VBoxContainer/HBoxContainer/ResetButton")
@@ -26,6 +29,7 @@ _restoreHighScoreButton = NodePath("MarginHighScore/VBoxContainer/HBoxContainer/
 _movesModal = NodePath("MovesModal")
 _rulesModal = NodePath("RulesModal")
 _creditsModal = NodePath("CreditsModal")
+_guideModal = NodePath("GuideModal")
 _titleLayer1 = NodePath("MarginContainer/TitleContainer/TitleAlpha")
 _titleLayer2 = NodePath("MarginContainer/TitleContainer/TitleAlpha2")
 _titleLayer3 = NodePath("MarginContainer/TitleContainer/TitleAlpha3")
@@ -157,6 +161,14 @@ layout_mode = 2
 [node name="ButtonLabel" parent="MarginButtons/HBoxButtons/PlayButton" index="0"]
 text = "PLAY"
 
+[node name="KidPlayButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.53333336, 1, 0.8, 1)
+layout_mode = 2
+
+[node name="ButtonLabel" parent="MarginButtons/HBoxButtons/KidPlayButton" index="0"]
+text = "KID
+PLAY"
+
 [node name="RulesButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.53333336, 0.8, 1, 1)
 layout_mode = 2
@@ -170,6 +182,13 @@ layout_mode = 2
 
 [node name="ButtonLabel" parent="MarginButtons/HBoxButtons/MovesButton" index="0"]
 text = "MOVES"
+
+[node name="GuideButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.8, 0.53333336, 1, 1)
+layout_mode = 2
+
+[node name="ButtonLabel" parent="MarginButtons/HBoxButtons/GuideButton" index="0"]
+text = "GUIDE"
 
 [node name="QuitButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 0.53333336, 0.53333336, 1)
@@ -252,7 +271,12 @@ size_flags_horizontal = 3
 layout_mode = 2
 text = "Move Paddle
 
+
 Boost
+
+Use Action
+
+Pause / Resume
 
 Exit To Main Menu"
 label_settings = ExtResource("5_7v7mi")
@@ -264,6 +288,11 @@ layout_mode = 2
 [node name="Seperator" type="Label" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/VBoxContainer3"]
 layout_mode = 2
 text = "|
+
+
+|
+
+|
 
 |
 
@@ -277,9 +306,14 @@ size_flags_horizontal = 3
 
 [node name="Keys" type="Label" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/VBoxContainer2"]
 layout_mode = 2
-text = "A-S-D-W Keys
+text = "W-A-S-D Keys
+(Arrow Keys as well)
 
-Shift Key
+Up Arrow
+
+Spacebar
+
+P Key
 
 Escape Key"
 label_settings = ExtResource("5_7v7mi")
@@ -322,9 +356,124 @@ text = "CREDITS"
 text = "This game was created as a student project and is an expansion upon an original game created by following the Udemy Course \"Learn 2D Game Development: Godot 4.5 & C# from Scratch\" by Richard Allbert and Martyna Olivares. Assets are sourced, royalty free, from Kenny Assets and Pexels.com. Recorded dialogue clips are original recordings by the game developer, \"Nicklefritz\", distributed under the alias: \"Fritzie Games\"."
 horizontal_alignment = 3
 
+[node name="GuideModal" parent="." instance=ExtResource("4_h6icy")]
+visible = false
+layout_mode = 1
+
+[node name="MarginOuter" parent="GuideModal" index="0"]
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 40
+
+[node name="MarginInner" parent="GuideModal/MarginOuter/Panel" index="0"]
+theme_override_constants/margin_left = 35
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 35
+theme_override_constants/margin_bottom = 30
+
+[node name="Title" parent="GuideModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
+text = "FIELD GUIDE"
+
+[node name="HBoxInstructions" parent="GuideModal/MarginOuter/Panel/MarginInner/VBoxContainer" index="1"]
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+
+[node name="Instructions" parent="GuideModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
+visible = false
+
+[node name="PowerUpsColumn" type="VBoxContainer" parent="GuideModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="1"]
+custom_minimum_size = Vector2(275, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="GuideModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/PowerUpsColumn"]
+modulate = Color(0.53333336, 1, 1, 1)
+layout_mode = 2
+text = "POWER-UPS"
+label_settings = ExtResource("5_7v7mi")
+
+[node name="Body" type="Label" parent="GuideModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/PowerUpsColumn"]
+custom_minimum_size = Vector2(260, 280)
+layout_mode = 2
+size_flags_vertical = 3
+text = "WIDE PADDLE
+Enlarges the paddle for 7 seconds.
+
+TRIPLE PADDLE
+Adds two ghost paddles for 7 seconds.
+
+GEM MAGNET
+Pulls collectible gems toward the paddle for 7 seconds."
+label_settings = ExtResource("7_guide")
+autowrap_mode = 3
+
+[node name="PickupsColumn" type="VBoxContainer" parent="GuideModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="2"]
+custom_minimum_size = Vector2(275, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="GuideModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/PickupsColumn"]
+modulate = Color(0.53333336, 1, 0.53333336, 1)
+layout_mode = 2
+text = "PICKUPS"
+label_settings = ExtResource("5_7v7mi")
+
+[node name="Body" type="Label" parent="GuideModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/PickupsColumn"]
+custom_minimum_size = Vector2(260, 280)
+layout_mode = 2
+size_flags_vertical = 3
+text = "POWER-UP GEM
+Grants one random power-up.
+
+HEART GEM
+Restores one health.
+
+STARDUST GEM
+Worth +3 points and safe to miss.
+
+NUKE PICKUP
+Fills an empty action slot. Spacebar clears the screen; duplicates do not stack."
+label_settings = ExtResource("7_guide")
+autowrap_mode = 3
+
+[node name="EventsColumn" type="VBoxContainer" parent="GuideModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="3"]
+custom_minimum_size = Vector2(275, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="GuideModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/EventsColumn"]
+modulate = Color(1, 0.8, 0.53333336, 1)
+layout_mode = 2
+text = "EVENTS / HAZARDS"
+label_settings = ExtResource("5_7v7mi")
+
+[node name="Body" type="Label" parent="GuideModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/EventsColumn"]
+custom_minimum_size = Vector2(260, 280)
+layout_mode = 2
+size_flags_vertical = 3
+text = "STARDUST SHOWER
+Stage 2+. A harmless bonus-gem wave.
+
+METEORS
+Stage 3+. Impact costs one health; dodging earns +2.
+
+METEOR STORM
+Stage 4+. Only meteors fall for 14 seconds.
+
+BOOSTER OVERHEAT
+Release boost during cooldown. Continued boosting can cost health."
+label_settings = ExtResource("7_guide")
+autowrap_mode = 3
+
 [editable path="MarginButtons/HBoxButtons/PlayButton"]
+[editable path="MarginButtons/HBoxButtons/KidPlayButton"]
 [editable path="MarginButtons/HBoxButtons/RulesButton"]
 [editable path="MarginButtons/HBoxButtons/MovesButton"]
+[editable path="MarginButtons/HBoxButtons/GuideButton"]
 [editable path="MarginButtons/HBoxButtons/QuitButton"]
 [editable path="MarginButtons/HBoxButtons/CreditsButton"]
 [editable path="MarginHighScore/VBoxContainer/HBoxContainer/ResetButton"]
@@ -335,3 +484,5 @@ horizontal_alignment = 3
 [editable path="RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
 [editable path="CreditsModal"]
 [editable path="CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
+[editable path="GuideModal"]
+[editable path="GuideModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]

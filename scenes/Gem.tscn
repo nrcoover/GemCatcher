@@ -49,7 +49,7 @@ _data = {
 &"sparkle": SubResource("Animation_xfm3s")
 }
 
-[node name="Gem" type="Area2D" node_paths=PackedStringArray("_particles") groups=["Moveable Objects"]]
+[node name="Gem" type="Area2D" node_paths=PackedStringArray("_particles") groups=["Collectible Gems", "Moveable Objects", "Nuke Targets"]]
 script = ExtResource("1_o8oug")
 _particles = NodePath("Particles")
 _maxSpeedVariation = 1.75

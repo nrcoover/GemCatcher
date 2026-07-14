@@ -1,0 +1,68 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/Meteor.cs" id="1_meteor"]
+[ext_resource type="Texture2D" path="res://assets/images/sprites/meteor_hazard.png" id="2_meteor"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/meteor-wha.wav" id="3_meteor"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/explode.wav" id="4_meteor"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_meteor"]
+radius = 44.0
+
+[node name="Meteor" type="Area2D" node_paths=PackedStringArray("_sprite", "_collisionShape", "_trailParticles", "_impactParticles", "_approachAudio", "_impactAudio") groups=["Moveable Objects", "Nuke Targets"]]
+z_index = 2
+collision_layer = 0
+script = ExtResource("1_meteor")
+_sprite = NodePath("Sprite2D")
+_collisionShape = NodePath("CollisionShape2D")
+_trailParticles = NodePath("TrailParticles")
+_impactParticles = NodePath("ImpactParticles")
+_approachAudio = NodePath("ApproachAudio")
+_impactAudio = NodePath("ImpactAudio")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.52, 0.52)
+texture = ExtResource("2_meteor")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(25, 24)
+shape = SubResource("CircleShape2D_meteor")
+
+[node name="TrailParticles" type="CPUParticles2D" parent="."]
+position = Vector2(-39, -40)
+emitting = false
+amount = 18
+lifetime = 0.55
+randomness = 0.35
+direction = Vector2(-1, -1)
+spread = 18.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 55.0
+initial_velocity_max = 105.0
+scale_amount_min = 2.0
+scale_amount_max = 6.0
+color = Color(1, 0.29, 0.02, 0.9)
+
+[node name="ImpactParticles" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 42
+lifetime = 0.7
+one_shot = true
+explosiveness = 1.0
+direction = Vector2(1, 0)
+spread = 180.0
+gravity = Vector2(0, 90)
+initial_velocity_min = 120.0
+initial_velocity_max = 270.0
+scale_amount_min = 2.0
+scale_amount_max = 8.0
+color = Color(1, 0.35, 0.03, 1)
+
+[node name="ApproachAudio" type="AudioStreamPlayer2D" parent="." groups=["Audio Streams"]]
+stream = ExtResource("3_meteor")
+volume_db = -15.0
+autoplay = true
+
+[node name="ImpactAudio" type="AudioStreamPlayer2D" parent="." groups=["Audio Streams"]]
+stream = ExtResource("4_meteor")
+volume_db = -10.0
+pitch_scale = 1.1
