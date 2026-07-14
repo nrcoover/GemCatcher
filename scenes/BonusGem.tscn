@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" uid="uid://8m2y1u6noqq5" path="res://scenes/Gem.tscn" id="1_bonus"]
+[ext_resource type="Script" path="res://scripts/BonusGem.cs" id="2_bonus"]
+
+[node name="BonusGem" node_paths=PackedStringArray("_sprite", "_bonusParticles", "_sparkleAnimation") instance=ExtResource("1_bonus")]
+script = ExtResource("2_bonus")
+_sprite = NodePath("Sprite2D")
+_bonusParticles = NodePath("Particles")
+_sparkleAnimation = NodePath("AnimationPlayer")
+_minSpeedVariation = 1.0
+_maxSpeedVariation = 2.15
+
+[node name="Particles" parent="." index="0"]
+amount = 90
+lifetime = 0.9
+emission_sphere_radius = 26.0
+gravity = Vector2(0, -520)
+scale_amount_min = 1.5
+scale_amount_max = 5.0
+
+[node name="OrbitParticles" type="CPUParticles2D" parent="." index="4"]
+amount = 28
+lifetime = 0.8
+preprocess = 0.8
+randomness = 0.25
+emission_shape = 1
+emission_sphere_radius = 48.0
+direction = Vector2(0, 0)
+gravity = Vector2(0, 0)
+orbit_velocity_min = 0.35
+orbit_velocity_max = 0.6
+scale_amount_min = 1.0
+scale_amount_max = 3.5
+color = Color(1, 0.88, 0.3, 0.85)

@@ -19,6 +19,13 @@ public partial class GemButton : TextureButton
 		_originalColor = SelfModulate;
 	}
 
+	public override void _ExitTree()
+	{
+		MouseEntered -= OnMouseEntered;
+		MouseExited -= OnMouseExited;
+		_spinTween?.Kill();
+	}
+
 	private void SubscribeToSignals()
 	{
 		MouseEntered += OnMouseEntered;

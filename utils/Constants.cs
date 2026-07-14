@@ -66,5 +66,7 @@ public static partial class Constants
   {
     public static readonly string MoveableObjects = "Moveable Objects";
     public static readonly string AudioStreams = "Audio Streams";
+    public static readonly string CollectibleGems = "Collectible Gems";
+		public static readonly string NukeTargets = "Nuke Targets";
   }
 }

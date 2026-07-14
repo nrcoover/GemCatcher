@@ -43,8 +43,10 @@ autoplay = true
 
 [editable path="CanvasLayer/MainMenuUi"]
 [editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/PlayButton"]
+[editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/KidPlayButton"]
 [editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/RulesButton"]
 [editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/MovesButton"]
+[editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/GuideButton"]
 [editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/QuitButton"]
 [editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/CreditsButton"]
 [editable path="CanvasLayer/MainMenuUi/MarginHighScore/VBoxContainer/HBoxContainer/ResetButton"]
@@ -55,3 +57,5 @@ autoplay = true
 [editable path="CanvasLayer/MainMenuUi/RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
 [editable path="CanvasLayer/MainMenuUi/CreditsModal"]
 [editable path="CanvasLayer/MainMenuUi/CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
+[editable path="CanvasLayer/MainMenuUi/GuideModal"]
+[editable path="CanvasLayer/MainMenuUi/GuideModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]

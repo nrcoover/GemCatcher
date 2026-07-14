@@ -15,6 +15,7 @@ public partial class GemPowerUp : Gem
 	private Tween _audioVolumeFadeOutTween;
 	private float _audioOriginalVolume;
 	private bool _isOffBottomScreen;
+	private bool _isFadingOut;
 
 	public override void _Ready()
 	{
@@ -41,6 +42,8 @@ public partial class GemPowerUp : Gem
 
   public override void _ExitTree()
 	{
+		base._ExitTree();
+		_queueFreeTimer.Timeout -= OnQueueFreeTimerTimeout;
 		KillTweens();
 	}
 
@@ -49,6 +52,7 @@ public partial class GemPowerUp : Gem
     _audioOriginalVolume = _audio.VolumeDb;
 		_audio.VolumeDb = MINIMUM_DECIBEL_LEVEL;
 		_isOffBottomScreen = false;
+		_isFadingOut = false;
   }
 
 	public override void OnAreaEntered(Area2D area)
@@ -64,18 +68,14 @@ public partial class GemPowerUp : Gem
 
 	protected override void HandleExitScreen()
 	{
-		if (!_isOffBottomScreen)
+		if (_isOffBottomScreen || Position.Y <= GetViewportRect().End.Y)
 		{
-			if (Position.Y > GetViewportRect().End.Y)
-			{
-				_isOffBottomScreen = true;
-				SignalManager.Instance.EmitPowerUpRemoved();
-			}
-		} else
-		{
-			_queueFreeTimer.Start();
-			CreateAudioVolumeFadeOutTween();
+			return;
 		}
+
+		_isOffBottomScreen = true;
+		SignalManager.Instance.EmitPowerUpRemoved();
+		StartOffScreenRemoval();
 	}
 
 	private void SetPowerUpSpriteColor()
@@ -86,6 +86,19 @@ public partial class GemPowerUp : Gem
 	private void KillTweens()
 	{
 		_audioVolumeFadeInTween?.Kill();
+		_audioVolumeFadeOutTween?.Kill();
+	}
+
+	private void StartOffScreenRemoval()
+	{
+		if (_isFadingOut)
+		{
+			return;
+		}
+
+		_isFadingOut = true;
+		_queueFreeTimer.Start();
+		CreateAudioVolumeFadeOutTween();
 	}
 
 	private void CreateAudioVolumeFadeInTween()

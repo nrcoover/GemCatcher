@@ -23,6 +23,13 @@ public partial class SignalManager : Node
 	[Signal] public delegate void PowerUpSpawnedEventHandler();
 	[Signal] public delegate void PowerUpRemovedEventHandler();
 	[Signal] public delegate void AdvanceStageEventHandler();
+	[Signal] public delegate void MeteorHitEventHandler();
+	[Signal] public delegate void MeteorDodgedEventHandler();
+	[Signal] public delegate void StardustShowerStartedEventHandler();
+	[Signal] public delegate void StardustCollectedEventHandler(Color color);
+	[Signal] public delegate void NukeSlotChangedEventHandler(bool hasNuke);
+	[Signal] public delegate void MeteorStormStartedEventHandler(float duration);
+	[Signal] public delegate void MeteorStormEndedEventHandler();
 
 	public override void _Ready()
 	{
@@ -122,5 +129,40 @@ public partial class SignalManager : Node
 	public void EmitAdvanceStage()
 	{
 		EmitSignal(SignalName.AdvanceStage);
+	}
+
+	public void EmitMeteorHit()
+	{
+		EmitSignal(SignalName.MeteorHit);
+	}
+
+	public void EmitMeteorDodged()
+	{
+		EmitSignal(SignalName.MeteorDodged);
+	}
+
+	public void EmitStardustShowerStarted()
+	{
+		EmitSignal(SignalName.StardustShowerStarted);
+	}
+
+	public void EmitStardustCollected(Color color)
+	{
+		EmitSignal(SignalName.StardustCollected, color);
+	}
+
+	public void EmitNukeSlotChanged(bool hasNuke)
+	{
+		EmitSignal(SignalName.NukeSlotChanged, hasNuke);
+	}
+
+	public void EmitMeteorStormStarted(float duration)
+	{
+		EmitSignal(SignalName.MeteorStormStarted, duration);
+	}
+
+	public void EmitMeteorStormEnded()
+	{
+		EmitSignal(SignalName.MeteorStormEnded);
 	}
 }

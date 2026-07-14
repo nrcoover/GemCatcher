@@ -14,6 +14,8 @@ public partial class Paddle : Area2D
 	const float MOVEMENT_SPEED_MULTIPLIER = 1.15f;
 	const float DEFAULT_MOVEMENT_SPEED = 500.0f;
 	const float MAX_MOVEMENT_SPEED = 1200.0f;
+	const float GEM_MAGNET_RADIUS = 430.0f;
+	const float GEM_MAGNET_PULL_SPEED = 520.0f;
 
 	enum FuelState {
 		Low = 50,
@@ -25,6 +27,7 @@ public partial class Paddle : Area2D
 	{
 		TripplePaddle,
 		BigPaddle,
+		GemMagnet,
 		Disabled
 	}
 
@@ -49,12 +52,15 @@ public partial class Paddle : Area2D
 	[Export] Node2D _rightParticles;
 	[Export] PaddleGhost _paddleGhostLeft;
 	[Export] PaddleGhost _paddleGhostRight;
+	[Export] GemMagnetField _gemMagnetField;
 
 	[Export] AudioStreamPlayer2D _boostSound;
 	[Export] AudioStreamPlayer2D _bigPaddleActivatedSound;
 	[Export] AudioStreamPlayer2D _bigPaddleDeactivatedSound;
 	[Export] AudioStreamPlayer2D _ghostPaddlesActivatedSound;
 	[Export] AudioStreamPlayer2D _ghostPaddlesDeactivatedSound;
+	[Export] AudioStreamPlayer2D _gemMagnetActivatedSound;
+	[Export] AudioStreamPlayer2D _gemMagnetDeactivatedSound;
 	[Export] AudioStreamPlayer _audioDisengageBoosters;
 	[Export] AudioStreamPlayer _audioBoostersReengaged;
 	[Export] AudioStreamPlayer _audioCooldownInProgress;
@@ -132,6 +138,7 @@ public partial class Paddle : Area2D
 	{
 		HandlePaddleMovement((float)delta);
 		HandleFuelConsumption((float)delta);
+		HandleGemMagnet((float)delta);
 		UpdateBoostUi();
 		UpdatePowerUpUi();
 		HandleParticles();
@@ -173,7 +180,9 @@ public partial class Paddle : Area2D
 		_boostersReady = true;
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
 		_isInCooldown = false;
-		_paddleOriginalScale = Scale;
+		var modeScaleMultiplier = GameManager.Instance?.FriendlyScaleMultiplier ?? 1.0f;
+		_paddleOriginalScale = Scale * modeScaleMultiplier;
+		Scale = _paddleOriginalScale;
 		_originalSpeed = _movementSpeed;
 		_isPoweredUp = false;
 		_currentPowerUp = PowerUp.Disabled;
@@ -206,13 +215,17 @@ public partial class Paddle : Area2D
 
   private void UnsubscribeFromSignals()
 	{
+		_boostRefuelTimer.Timeout -= OnRefuelTimeout;
+		_selfDestructWarningTimer.Timeout -= OnSelfDestructWarningTimeout;
+		_selfDestructTimer.Timeout -= OnSelfDestructTimeout;
+		_powerUpTimer.Timeout -= OnPowerUpTimeout;
 		SignalManager.Instance.BoostFuelDepleted -= OnBoostFuelDepleted;
 		SignalManager.Instance.BoostEngaged -= OnBoostEngaged;
 		SignalManager.Instance.BoostDisengaged -= OnBoostDisengaged;
 		SignalManager.Instance.Scored -= OnScored;
 		SignalManager.Instance.GameOver -= OnGameOver;
 		SignalManager.Instance.PowerUpCollected -= OnPowerUpCollected;
-		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
+		SignalManager.Instance.AdvanceStage -= OnAdvanceStage;
 	}
 
   private void OnBoostEngaged()
@@ -261,6 +274,10 @@ public partial class Paddle : Area2D
 		else if (_currentPowerUp == PowerUp.TripplePaddle)
 		{
 			_ghostPaddlesDeactivatedSound.Play();
+		}
+		else if (_currentPowerUp == PowerUp.GemMagnet)
+		{
+			_gemMagnetDeactivatedSound.Play();
 		}
 
 		DisableAllActivePowerUps();
@@ -404,8 +421,8 @@ public partial class Paddle : Area2D
 		else
 		{
 			float refuelRate = _isInCooldown
-				? DEFAULT_REFUEL_RATE * 0.5f
-				: DEFAULT_REFUEL_RATE;
+				? _boostRefuelRate * 0.5f
+				: _boostRefuelRate;
 
 			if (_canRefuel)
 			{
@@ -614,7 +631,7 @@ public partial class Paddle : Area2D
 	private void UpdatePowerUpUi()
 	{
 		var secondOffset = 1;
-		_powerUpSecondsLabel.Text = $"{(int)_powerUpTimer.TimeLeft + secondOffset}";
+		_powerUpSecondsLabel.Text = $"{GetPowerUpDisplayName()} {(int)_powerUpTimer.TimeLeft + secondOffset}";
 
 		var maximumPowerUpValue = 25;
 		var percentTimeRemaining = _powerUpTimer.TimeLeft / _powerUpTimer.WaitTime;
@@ -790,6 +807,7 @@ public partial class Paddle : Area2D
 		StopPowerUpTimer();
 		EndTriplePaddlePowerUp();
 		EndLargePaddlePowerUp();
+		EndGemMagnetPowerUp();
 	}
 
   private void StartPowerUpTimer()
@@ -804,7 +822,7 @@ public partial class Paddle : Area2D
 
   private void SelectRandomPowerUp(Color color)
   {
-		var randomNumber = Helper.GetRandomInt(0, 1);
+		var randomNumber = Helper.GetRandomInt(0, 2);
 
 		switch (randomNumber)
 		{
@@ -815,6 +833,11 @@ public partial class Paddle : Area2D
 			case (int)PowerUp.TripplePaddle:
 				BeginTripplePaddlePowerUp();
 				CreateColorScaleTweenAsync(color);
+				break;
+
+			case (int)PowerUp.GemMagnet:
+				BeginGemMagnetPowerUp();
+				CreateColorScaleTweenAsync(new Color(Constants.CustomColors.BlueLightBright));
 				break;
 		}
   }
@@ -846,6 +869,15 @@ public partial class Paddle : Area2D
 		PlayBigPaddleTransformationTween(powerUpMultiplier);
 	}
 
+	private void BeginGemMagnetPowerUp()
+	{
+		SetIsPoweredUp(true);
+		EnablePowerUpProgressBar();
+		_gemMagnetField.Activate();
+		_gemMagnetActivatedSound.Play();
+		_currentPowerUp = PowerUp.GemMagnet;
+	}
+
 	private void EndLargePaddlePowerUp()
   {
     _currentScaleMultiplier = 1.0f;
@@ -865,6 +897,12 @@ public partial class Paddle : Area2D
 		_currentPowerUp = PowerUp.Disabled;
   }
 
+	private void EndGemMagnetPowerUp()
+	{
+		_gemMagnetField.Deactivate();
+		_currentPowerUp = PowerUp.Disabled;
+	}
+
 	private void EnableGhostPaddles()
 	{
 		_paddleGhostLeft.Visible = true;
@@ -881,6 +919,55 @@ public partial class Paddle : Area2D
 
 		_paddleGhostLeft.SetDeferred(Area2D.PropertyName.Monitorable, false);
 		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitorable, false);
+	}
+
+	private void HandleGemMagnet(float delta)
+	{
+		if (_currentPowerUp != PowerUp.GemMagnet)
+		{
+			return;
+		}
+
+		var collectibleGems = GetTree().GetNodesInGroup(Constants.GroupNames.CollectibleGems);
+
+		foreach (var node in collectibleGems)
+		{
+			if (node is not Gem gem
+					|| !GodotObject.IsInstanceValid(gem)
+					|| gem.IsQueuedForDeletion())
+			{
+				continue;
+			}
+
+			var offsetToPaddle = GlobalPosition - gem.GlobalPosition;
+			var distance = offsetToPaddle.Length();
+
+			if (offsetToPaddle.Y <= 0.0f || distance > GEM_MAGNET_RADIUS)
+			{
+				continue;
+			}
+
+			var pullStrength = 1.0f - distance / GEM_MAGNET_RADIUS;
+			var pullSpeed = GEM_MAGNET_PULL_SPEED * Mathf.Lerp(0.35f, 1.0f, pullStrength);
+			var newXPosition = Mathf.MoveToward(
+				gem.GlobalPosition.X,
+				GlobalPosition.X,
+				pullSpeed * delta
+			);
+
+			gem.GlobalPosition = new Vector2(newXPosition, gem.GlobalPosition.Y);
+		}
+	}
+
+	private string GetPowerUpDisplayName()
+	{
+		return _currentPowerUp switch
+		{
+			PowerUp.BigPaddle => "WIDE",
+			PowerUp.TripplePaddle => "TRIPLE",
+			PowerUp.GemMagnet => "MAGNET",
+			_ => "POWER"
+		};
 	}
 	
 #endregion

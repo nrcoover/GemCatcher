@@ -1,6 +1,7 @@
-[gd_scene load_steps=46 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=52 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
+[ext_resource type="Script" uid="uid://duxqt614rlilt" path="res://scripts/PauseController.cs" id="1_pause"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/images/backgrounds/GameBg.png" id="1_ibkli"]
 [ext_resource type="PackedScene" uid="uid://3kq5fr5oomem" path="res://scenes/Paddle.tscn" id="2_qbsmt"]
 [ext_resource type="PackedScene" uid="uid://d2eah2eim18xg" path="res://scenes/Camera.tscn" id="3_kyk2p"]
@@ -31,6 +32,8 @@
 [ext_resource type="AudioStream" uid="uid://d34kix1itjhir" path="res://assets/audio/dialogue/commander/commander_wilder-this-way.mp3" id="25_i4jil"]
 [ext_resource type="AudioStream" uid="uid://dh2s6gs783tlu" path="res://assets/audio/dialogue/commander/commander_dont-get-lost-in-space.mp3" id="26_jai3c"]
 [ext_resource type="AudioStream" uid="uid://bgbb3uxipmv2k" path="res://assets/audio/dialogue/commander/commander_final-frontier.mp3" id="27_1gdd5"]
+[ext_resource type="AudioStream" uid="uid://di4fr2u86dhv8" path="res://assets/audio/sfx/545238__mr_fritz__item-sparkle.wav" id="28_stardust"]
+[ext_resource type="Texture2D" path="res://assets/images/sprites/nuke_pickup.png" id="29_nuke"]
 
 [sub_resource type="Animation" id="Animation_7ua8r"]
 length = 0.001
@@ -440,6 +443,26 @@ shadow_size = 6
 shadow_color = Color(0.6677593, 0.6677593, 0.6677593, 1)
 shadow_offset = Vector2(1.25, 1.25)
 
+[sub_resource type="LabelSettings" id="LabelSettings_meteor_storm"]
+font = ExtResource("5_s0nni")
+font_size = 24
+font_color = Color(1, 0.65, 0.1, 1)
+outline_size = 6
+outline_color = Color(0.18, 0.015, 0, 1)
+shadow_size = 4
+shadow_color = Color(0, 0, 0, 0.7)
+shadow_offset = Vector2(1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_pause_title"]
+font = ExtResource("5_s0nni")
+font_size = 52
+font_color = Color(0.35, 0.95, 1, 1)
+outline_size = 9
+outline_color = Color(0.005, 0.02, 0.06, 1)
+shadow_size = 7
+shadow_color = Color(0, 0, 0, 0.8)
+shadow_offset = Vector2(2, 2)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2rd6h"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
@@ -461,11 +484,27 @@ border_color = Color(1, 1, 1, 1)
 corner_radius_top_right = 100
 corner_radius_bottom_right = 100
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_music", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommanderAdvanceStage1", "_audioCommanderAdvanceStage2", "_audioCommanderAdvanceStage3", "_audioCommencingMission", "_audioMissionFailure", "_audioStageAdvancement", "_scoreSound", "_hurtSound", "_healthIncreaseSound", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_action_slot"]
+bg_color = Color(0.015, 0.025, 0.06, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.9, 1, 0.85)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 4
+
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_eventLabel", "_meteorStormLabel", "_music", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommanderAdvanceStage1", "_audioCommanderAdvanceStage2", "_audioCommanderAdvanceStage3", "_audioCommencingMission", "_audioMissionFailure", "_audioStageAdvancement", "_scoreSound", "_hurtSound", "_healthIncreaseSound", "_stardustShowerSound", "_heartContainer", "_actionSlot", "_actionIcon", "_actionStatusLabel", "_nukeFlash")]
 script = ExtResource("1_78awf")
 _gemSpawner = ExtResource("6_kyk2p")
 _camera = NodePath("Camera2D")
 _scoreLabel = NodePath("CanvasLayer/MarginContainer/ScoreLabel")
+_eventLabel = NodePath("CanvasLayer/EventLabel")
+_meteorStormLabel = NodePath("CanvasLayer/MeteorStormLabel")
 _music = NodePath("Audio/Music")
 _audioExplosion = NodePath("Audio/SFX/Explosion")
 _audioCommanderEncouragement = NodePath("Audio/Voice/CommanderEncouragement")
@@ -478,11 +517,12 @@ _audioStageAdvancement = NodePath("Audio/Voice/StageAdvancement")
 _scoreSound = NodePath("Audio/SFX/ScoreSound")
 _hurtSound = NodePath("Audio/SFX/HurtSound")
 _healthIncreaseSound = NodePath("Audio/SFX/HealthIncreaseSound")
-_heart1 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart1Faded/Heart1Full")
-_heart2 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart2Faded/Heart2Full")
-_heart3 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart3Faded/Heart3Full")
-_heart4 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart4Faded/Heart4Full")
-_heart5 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart5Faded/Heart5Full")
+_stardustShowerSound = NodePath("Audio/SFX/StardustShowerSound")
+_heartContainer = NodePath("CanvasLayer/MarginContainer/HeartContainer")
+_actionSlot = NodePath("CanvasLayer/ActionSlot")
+_actionIcon = NodePath("CanvasLayer/ActionSlot/Margin/VBox/Content/Icon")
+_actionStatusLabel = NodePath("CanvasLayer/ActionSlot/Margin/VBox/Content/Status")
+_nukeFlash = NodePath("CanvasLayer/NukeFlash")
 _shakeIntensity = 30
 _shakeTime = 0.25
 
@@ -539,6 +579,181 @@ libraries = {
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
+[node name="PauseController" type="Node" parent="." node_paths=PackedStringArray("_pauseOverlay")]
+process_mode = 3
+script = ExtResource("1_pause")
+_pauseOverlay = NodePath("../CanvasLayer/PauseOverlay")
+
+[node name="PauseOverlay" type="Control" parent="CanvasLayer"]
+visible = false
+process_mode = 3
+z_index = 100
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Backdrop" type="ColorRect" parent="CanvasLayer/PauseOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.005, 0.012, 0.035, 0.86)
+
+[node name="FocusBand" type="ColorRect" parent="CanvasLayer/PauseOverlay"]
+layout_mode = 1
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -112.0
+offset_bottom = 112.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.004, 0.018, 0.045, 1)
+
+[node name="Center" type="CenterContainer" parent="CanvasLayer/PauseOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Content" type="VBoxContainer" parent="CanvasLayer/PauseOverlay/Center"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="PauseGlyph" type="HBoxContainer" parent="CanvasLayer/PauseOverlay/Center/Content"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="BarLeft" type="ColorRect" parent="CanvasLayer/PauseOverlay/Center/Content/PauseGlyph"]
+custom_minimum_size = Vector2(15, 56)
+layout_mode = 2
+mouse_filter = 2
+color = Color(1, 0.45, 0.12, 1)
+
+[node name="BarRight" type="ColorRect" parent="CanvasLayer/PauseOverlay/Center/Content/PauseGlyph"]
+custom_minimum_size = Vector2(15, 56)
+layout_mode = 2
+mouse_filter = 2
+color = Color(1, 0.45, 0.12, 1)
+
+[node name="Title" type="Label" parent="CanvasLayer/PauseOverlay/Center/Content"]
+layout_mode = 2
+text = "PAUSED"
+label_settings = SubResource("LabelSettings_pause_title")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EventLabel" type="Label" parent="CanvasLayer"]
+visible = false
+z_index = 10
+anchors_preset = 10
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -310.0
+offset_top = 82.0
+offset_right = 310.0
+offset_bottom = 132.0
+grow_horizontal = 2
+text = "METEORS INBOUND"
+label_settings = SubResource("LabelSettings_aug50")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MeteorStormLabel" type="Label" parent="CanvasLayer"]
+visible = false
+z_index = 10
+anchors_preset = 10
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -250.0
+offset_top = 136.0
+offset_right = 250.0
+offset_bottom = 174.0
+grow_horizontal = 2
+text = "METEOR STORM  14.0s"
+label_settings = SubResource("LabelSettings_meteor_storm")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ActionSlot" type="PanelContainer" parent="CanvasLayer"]
+z_index = 12
+custom_minimum_size = Vector2(162, 84)
+layout_mode = 1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -108.0
+offset_right = 186.0
+offset_bottom = -24.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_action_slot")
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/ActionSlot"]
+layout_mode = 2
+theme_override_constants/margin_left = 9
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 9
+theme_override_constants/margin_bottom = 6
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/ActionSlot/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Title" type="Label" parent="CanvasLayer/ActionSlot/Margin/VBox"]
+layout_mode = 2
+text = "ACTION SLOT"
+label_settings = ExtResource("8_7ua8r")
+horizontal_alignment = 1
+
+[node name="Content" type="HBoxContainer" parent="CanvasLayer/ActionSlot/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="CanvasLayer/ActionSlot/Margin/VBox/Content"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("29_nuke")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Status" type="Label" parent="CanvasLayer/ActionSlot/Margin/VBox/Content"]
+custom_minimum_size = Vector2(68, 48)
+layout_mode = 2
+text = "EMPTY"
+label_settings = ExtResource("8_7ua8r")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NukeFlash" type="ColorRect" parent="CanvasLayer"]
+visible = false
+z_index = 50
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
 anchors_preset = 15
 anchor_right = 1.0
@@ -564,33 +779,63 @@ size_flags_vertical = 0
 alignment = 2
 
 [node name="Heart5Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
-position = Vector2(-12, 15)
+position = Vector2(-282, 15)
 
 [node name="Heart5Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart5Faded" instance=ExtResource("7_kiw3p")]
 scale = Vector2(1, 1)
 
 [node name="Heart4Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
-position = Vector2(-66, 15)
+position = Vector2(-336, 15)
 
 [node name="Heart4Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart4Faded" instance=ExtResource("7_kiw3p")]
 scale = Vector2(1, 1)
 
 [node name="Heart3Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
-position = Vector2(-120, 15)
+position = Vector2(-390, 15)
 
 [node name="Heart3Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart3Faded" instance=ExtResource("7_kiw3p")]
 scale = Vector2(1, 1)
 
 [node name="Heart2Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
-position = Vector2(-174, 15)
+position = Vector2(-444, 15)
 
 [node name="Heart2Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart2Faded" instance=ExtResource("7_kiw3p")]
 scale = Vector2(1, 1)
 
 [node name="Heart1Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
-position = Vector2(-228, 15)
+position = Vector2(-498, 15)
 
 [node name="Heart1Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart1Faded" instance=ExtResource("7_kiw3p")]
+scale = Vector2(1, 1)
+
+[node name="Heart10Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
+position = Vector2(-12, 15)
+
+[node name="Heart10Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart10Faded" instance=ExtResource("7_kiw3p")]
+scale = Vector2(1, 1)
+
+[node name="Heart9Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
+position = Vector2(-66, 15)
+
+[node name="Heart9Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart9Faded" instance=ExtResource("7_kiw3p")]
+scale = Vector2(1, 1)
+
+[node name="Heart8Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
+position = Vector2(-120, 15)
+
+[node name="Heart8Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart8Faded" instance=ExtResource("7_kiw3p")]
+scale = Vector2(1, 1)
+
+[node name="Heart7Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
+position = Vector2(-174, 15)
+
+[node name="Heart7Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart7Faded" instance=ExtResource("7_kiw3p")]
+scale = Vector2(1, 1)
+
+[node name="Heart6Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
+position = Vector2(-228, 15)
+
+[node name="Heart6Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart6Faded" instance=ExtResource("7_kiw3p")]
 scale = Vector2(1, 1)
 
 [node name="BoostDebugLabel" type="Label" parent="CanvasLayer/MarginContainer"]
@@ -735,6 +980,11 @@ pitch_scale = 0.75
 [node name="HealthIncreaseSound" type="AudioStreamPlayer2D" parent="Audio/SFX"]
 stream = ExtResource("20_a85ww")
 volume_db = -16.0
+
+[node name="StardustShowerSound" type="AudioStreamPlayer2D" parent="Audio/SFX" groups=["Audio Streams"]]
+stream = ExtResource("28_stardust")
+volume_db = -14.0
+pitch_scale = 1.15
 
 [node name="Voice" type="Node" parent="Audio"]
 

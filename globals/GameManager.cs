@@ -2,13 +2,20 @@ using Godot;
 
 public partial class GameManager : Node
 {
-	const int MAX_HEALTH = 5;
+	const int DEFAULT_MAX_HEALTH = 5;
+	const int KID_MODE_MAX_HEALTH = DEFAULT_MAX_HEALTH * 2;
 	const int MIN_HEALTH = 0;
 
 	const float DEFAULT_DIFFICULTY_LEVEL = 1;
 	const float DIFFICULTY_MULTIPLIER = 1.01f;
+	const int DEFAULT_STAGE = 1;
+	const int DIFFICULTY_SCORE_INCREMENT = 10;
+	const int STAGE_SCORE_INCREMENT = 10;
+	const float KID_MODE_FRIENDLY_SCALE_MULTIPLIER = 2.0f;
+	const float KID_MODE_HAZARD_SCALE_MULTIPLIER = 0.5f;
 
 	private float _difficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
+	private bool _isGameOver = false;
 
 	public float DifficultyLevel
 	{
@@ -35,23 +42,26 @@ public partial class GameManager : Node
 	}
 
 	public static GameManager Instance {get; private set;}
+	public bool IsKidMode { get; private set; }
+	public float FriendlyScaleMultiplier => IsKidMode
+		? KID_MODE_FRIENDLY_SCALE_MULTIPLIER
+		: 1.0f;
+	public float HazardScaleMultiplier => IsKidMode
+		? KID_MODE_HAZARD_SCALE_MULTIPLIER
+		: 1.0f;
 
-	public int MaxHealth {
-		get
-		{
-			return _maxHealth;
-		}
-		private set
-		{
-			_maxHealth = MAX_HEALTH;	
-		}
-	}
+	public int MaxHealth => IsKidMode ? KID_MODE_MAX_HEALTH : DEFAULT_MAX_HEALTH;
 
 	private int _highScore = 0;
-	private int _maxHealth = MAX_HEALTH;
 	private int _missedGemsCount = 0;
-	private int _health = MAX_HEALTH;
-	private int _currentStage = 1;
+	private int _health = DEFAULT_MAX_HEALTH;
+	private int _currentStage = DEFAULT_STAGE;
+	private int _nextDifficultyScore = DIFFICULTY_SCORE_INCREMENT;
+	private int _nextStageScore = STAGE_SCORE_INCREMENT;
+	private bool _hasNuke;
+
+	public bool HasNuke => _hasNuke;
+	public bool IsMeteorStormActive { get; private set; }
 
 	public override void _Ready()
 	{
@@ -105,8 +115,9 @@ public partial class GameManager : Node
 	
   private void CheckForGameOver()
   {
-    if (GetHealth() <= 0)
+    if (!_isGameOver && GetHealth() <= 0)
 		{
+			_isGameOver = true;
 			SignalManager.Instance.EmitGameOver();
 		}
   }
@@ -114,8 +125,53 @@ public partial class GameManager : Node
 	public void ResetGame()
 	{
 		SetMissedGemCount(0);
-		SetHealth(MAX_HEALTH);
+		SetHealth(MaxHealth);
 		DifficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
+		_isGameOver = false;
+		CurrentStage = DEFAULT_STAGE;
+		_nextDifficultyScore = DIFFICULTY_SCORE_INCREMENT;
+		_nextStageScore = STAGE_SCORE_INCREMENT;
+		_hasNuke = false;
+		IsMeteorStormActive = false;
+	}
+
+	public void SetKidMode(bool isEnabled)
+	{
+		IsKidMode = isEnabled;
+	}
+
+	public bool TryStoreNuke()
+	{
+		if (_hasNuke)
+		{
+			return false;
+		}
+
+		_hasNuke = true;
+		SignalManager.Instance.EmitNukeSlotChanged(true);
+		return true;
+	}
+
+	public bool TryUseNuke()
+	{
+		if (!_hasNuke)
+		{
+			return false;
+		}
+
+		_hasNuke = false;
+		SignalManager.Instance.EmitNukeSlotChanged(false);
+		return true;
+	}
+
+	public void BeginMeteorStorm()
+	{
+		IsMeteorStormActive = true;
+	}
+
+	public void EndMeteorStorm()
+	{
+		IsMeteorStormActive = false;
 	}
 
 #region Manage Health
@@ -127,9 +183,9 @@ public partial class GameManager : Node
 
 	private void SetHealth(int value)
 	{
-		if (value > MAX_HEALTH)
+		if (value > MaxHealth)
 		{
-			_health = MAX_HEALTH;
+			_health = MaxHealth;
 		} 
 		else if (value < MIN_HEALTH) 
 		{
@@ -177,15 +233,11 @@ public partial class GameManager : Node
 
 	private void HandleDifficultyLevel(int currentScore)
 	{
-		var difficultyIncrementer = 10;
-		var isScoreDivisibleByTen = currentScore % difficultyIncrementer == 0;
-
-		if (!isScoreDivisibleByTen)
+		while (currentScore >= _nextDifficultyScore)
 		{
-			return;
+			IncreaseDifficulty(currentScore);
+			_nextDifficultyScore += DIFFICULTY_SCORE_INCREMENT;
 		}
-
-		IncreaseDifficulty(currentScore);
 	}
 
 	private void IncreaseDifficulty(int currentScore)
@@ -210,18 +262,17 @@ public partial class GameManager : Node
 
 	private void HandleStageAdvancement(int score)
 	{
-		var advancementIncrementer = 10;
-
-		if (score % advancementIncrementer == 0)
+		while (score >= _nextStageScore)
 		{
 			IncrementStage();
 			SignalManager.Instance.EmitAdvanceStage();
+			_nextStageScore += STAGE_SCORE_INCREMENT;
 		}
 	}
 
 	private void IncrementStage()
 	{
-		CurrentStage ++;
+		CurrentStage++;
 	}
 
 #endregion

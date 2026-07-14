@@ -18,8 +18,15 @@ public partial class LevelManager : Node
 		GetTree().ChangeSceneToPacked(Game);
 	}
 
+	public void LoadGame(bool isKidMode)
+	{
+		GameManager.Instance.SetKidMode(isKidMode);
+		LoadGame();
+	}
+
 	public void LoadMainMenu()
 	{
+		GameManager.Instance.SetKidMode(false);
 		GetTree().ChangeSceneToPacked(MainMenu);
 		GetTree().Paused = false;
 	}

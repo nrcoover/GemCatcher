@@ -45,6 +45,11 @@ public partial class Gem : Area2D
 	{
 		HandleMovement((float)delta);
 	}
+
+	public override void _ExitTree()
+	{
+		AreaEntered -= OnAreaEntered;
+	}
 	
 	private void SubscribeToSignals()
 	{
@@ -99,7 +104,8 @@ public partial class Gem : Area2D
 
 	private void SetScale()
 	{
-		Scale = new Vector2(_scaleVariation, _scaleVariation);
+		var modeScaleMultiplier = GameManager.Instance?.FriendlyScaleMultiplier ?? 1.0f;
+		Scale = Vector2.One * _scaleVariation * modeScaleMultiplier;
 	}
 
 	private void SetColor()
