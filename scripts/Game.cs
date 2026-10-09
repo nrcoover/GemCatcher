@@ -193,8 +193,12 @@ public partial class Game : Node2D
 			return;
 		}
 
-		// TODO: Only add new spawner when entering every other stage. (so odd numbered stages... when % 2 != 0)
-		InstantiateAdditionalGemSpawner();
+		var isOddNumberedStage = GameManager.Instance.CurrentStage % 2 != 0;
+		var isFirstStage = GameManager.Instance.CurrentStage == 1;
+		if (isOddNumberedStage && !isFirstStage) 
+		{
+			InstantiateAdditionalGemSpawner();
+		}
 	}
 
 #endregion
