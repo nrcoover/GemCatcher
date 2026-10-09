@@ -136,6 +136,11 @@ public partial class Game : Node2D
 
 	private void OnScored(Color color)
 	{
+		if (_isDying)
+		{
+			return;
+		}
+
 		IncrementScore(DEFAULT_POINT_VALUE);
 		_scoreSound.Play();
 		UpdateScoreUi(color);
@@ -154,6 +159,11 @@ public partial class Game : Node2D
 	
   private void OnHealthRecovered()
   {
+		if (_isDying)
+		{
+			return;
+		}
+
 		_healthIncreaseSound.Play();
     UpdateHealthUi();
   }
@@ -168,21 +178,39 @@ public partial class Game : Node2D
 		ResetMusicVolume();
 	}
 	
-  public async void OnAdvanceStageAsync()
-  {
+	public async void OnAdvanceStageAsync()
+	{
+		if (_isDying || !IsInsideTree())
+		{
+			return;
+		}
+
 		await PlayStageAdvancementSequenceAsync();
+
+		// The player may have died while the sequence was awaiting.
+		if (_isDying || !IsInsideTree())
+		{
+			return;
+		}
+
+		// TODO: Move to separate function "InstantiateAdditionalGemSpawner"
+		// TODO: Only add new spawner when entering every other stage. (so odd numbered stages... when % 2 != 0)
 		var additionalSpawnerTimeMultiplier = 7.0f;
-    var spawner = (GemSpawner)_gemSpawner.Instantiate();
-		spawner.SpawnTime *= additionalSpawnerTimeMultiplier * GameManager.Instance.CurrentStage;
+		var spawner = (GemSpawner)_gemSpawner.Instantiate();
+
+		spawner.SpawnTime *= additionalSpawnerTimeMultiplier
+			* GameManager.Instance.CurrentStage;
+
 		CallDeferred("add_child", spawner);
+
 		GD.Print("Spawner SpawnTime = " + spawner.SpawnTime);
-  }
+	}
 
-  #endregion
+#endregion
 
 
 
-  #region Input
+#region Input
 
   private void HandleEscape()
 	{
@@ -469,9 +497,19 @@ public partial class Game : Node2D
 
 	private async Task PlayStageAdvancementSequenceAsync()
 	{
-		_audioStageAdvancement.Play();
+    if (_isDying)
+    {
+			return;
+    }
 
-		await CreateTimerAsync(1.75f);
+    _audioStageAdvancement.Play();
+
+    await CreateTimerAsync(1.75f);
+
+    if (_isDying || !IsInsideTree())
+    {
+			return;
+    }
 
 		PlayStageAdvancementCommanderAudio();
 	}

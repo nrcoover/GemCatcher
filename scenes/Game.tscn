@@ -732,7 +732,7 @@ stream = ExtResource("11_3xj3m")
 volume_db = -8.0
 pitch_scale = 0.75
 
-[node name="HealthIncreaseSound" type="AudioStreamPlayer2D" parent="Audio/SFX"]
+[node name="HealthIncreaseSound" type="AudioStreamPlayer2D" parent="Audio/SFX" groups=["Audio Streams"]]
 stream = ExtResource("20_a85ww")
 volume_db = -16.0
 
