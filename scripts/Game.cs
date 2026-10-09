@@ -193,17 +193,8 @@ public partial class Game : Node2D
 			return;
 		}
 
-		// TODO: Move to separate function "InstantiateAdditionalGemSpawner"
 		// TODO: Only add new spawner when entering every other stage. (so odd numbered stages... when % 2 != 0)
-		var additionalSpawnerTimeMultiplier = 7.0f;
-		var spawner = (GemSpawner)_gemSpawner.Instantiate();
-
-		spawner.SpawnTime *= additionalSpawnerTimeMultiplier
-			* GameManager.Instance.CurrentStage;
-
-		CallDeferred("add_child", spawner);
-
-		GD.Print("Spawner SpawnTime = " + spawner.SpawnTime);
+		InstantiateAdditionalGemSpawner();
 	}
 
 #endregion
@@ -564,6 +555,19 @@ public partial class Game : Node2D
 		{
 			moveable.ProcessMode = ProcessModeEnum.Disabled;
 		}
+	}
+
+	private void InstantiateAdditionalGemSpawner()
+	{
+		var additionalSpawnerTimeMultiplier = 7.0f;
+		var spawner = (GemSpawner)_gemSpawner.Instantiate();
+
+		spawner.SpawnTime *= additionalSpawnerTimeMultiplier
+			* GameManager.Instance.CurrentStage;
+
+		CallDeferred("add_child", spawner);
+
+		GD.Print("Spawner SpawnTime = " + spawner.SpawnTime);
 	}
 
 #endregion
