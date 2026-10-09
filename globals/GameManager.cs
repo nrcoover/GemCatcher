@@ -76,6 +76,7 @@ public partial class GameManager : Node
 		SignalManager.Instance.GameOver += OnGameOver;
 		SignalManager.Instance.HealthRecovered += OnHealthRecovered;
 		SignalManager.Instance.ScoreIncremented += OnScoreIncremented;
+		SignalManager.Instance.ResetGame += OnResetGame;
 	}
 
   private void UnsubscribeFromSignals()
@@ -83,6 +84,7 @@ public partial class GameManager : Node
 		SignalManager.Instance.GameOver -= OnGameOver;
 		SignalManager.Instance.HealthRecovered -= OnHealthRecovered;
 		SignalManager.Instance.ScoreIncremented -= OnScoreIncremented;
+		SignalManager.Instance.ResetGame -= OnResetGame;
 	}
 
   public void OnGameOver()
@@ -101,6 +103,11 @@ public partial class GameManager : Node
 		HandleStageAdvancement(score);
   }
 
+	private void OnResetGame()
+	{
+		ResetGame();
+	}
+
 #endregion
 	
   private void CheckForGameOver()
@@ -115,6 +122,7 @@ public partial class GameManager : Node
 	{
 		SetMissedGemCount(0);
 		SetHealth(MAX_HEALTH);
+		ResetStageCount();
 		DifficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
 	}
 
@@ -222,6 +230,11 @@ public partial class GameManager : Node
 	private void IncrementStage()
 	{
 		CurrentStage ++;
+	}
+
+	private void ResetStageCount()
+	{
+		_currentStage = 1;
 	}
 
 #endregion

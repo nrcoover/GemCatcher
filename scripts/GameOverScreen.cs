@@ -56,11 +56,13 @@ public partial class GameOverScreen : Control
 	
   private void OnRetryButtonPressed()
   {
+		SignalManager.Instance.EmitResetGame();
     LevelManager.Instance.LoadGame();
   }
 
   private void OnExitButtonPressed()
   {
+		SignalManager.Instance.EmitResetGame();
     LevelManager.Instance.LoadMainMenu();
   }
 }

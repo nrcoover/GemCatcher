@@ -212,7 +212,7 @@ public partial class Paddle : Area2D
 		SignalManager.Instance.Scored -= OnScored;
 		SignalManager.Instance.GameOver -= OnGameOver;
 		SignalManager.Instance.PowerUpCollected -= OnPowerUpCollected;
-		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
+		SignalManager.Instance.AdvanceStage -= OnAdvanceStage;
 	}
 
   private void OnBoostEngaged()

@@ -8,8 +8,8 @@ public partial class StageLabelContainer : VBoxContainer
 
 	public override void _Ready()
 	{
-		UpdateUi();
 		SubscribeToSignals();
+		UpdateUi();
 	}
 
   public override void _ExitTree()
@@ -26,7 +26,7 @@ public partial class StageLabelContainer : VBoxContainer
 
   private void UnsubscribeFromSignals()
   {
-    SignalManager.Instance.AdvanceStage += OnAdvanceStage;
+    SignalManager.Instance.AdvanceStage -= OnAdvanceStage;
   }
 
   private void OnAdvanceStage()
