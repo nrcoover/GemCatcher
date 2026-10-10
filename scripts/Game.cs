@@ -134,7 +134,7 @@ public partial class Game : Node2D
 			return;
 		}
 
-		GameManager.Instance.IncrementScore(DEFAULT_POINT_VALUE);
+		GameManager.Instance.IncrementScore(DEFAULT_POINT_VALUE, color);
 		_scoreSound.Play();
 	}
 	

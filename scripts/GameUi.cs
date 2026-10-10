@@ -28,6 +28,7 @@ public partial class GameUi : Control
 	public override void _Ready()
 	{
 		SubscribeToSignals();
+		InitializeScoreUi();
 	}
 
   public override void _ExitTree()
@@ -43,7 +44,7 @@ public partial class GameUi : Control
 	{
 		SignalManager.Instance.InitiateDeathSequence += OnInitiateDeathSequenceAsync;
 		SignalManager.Instance.HealthRecovered += OnHealthRecovered;
-		SignalManager.Instance.Scored += OnScored;
+		SignalManager.Instance.ScoreUpdated += OnScoreUpdated;
 		SignalManager.Instance.PlayerHurt += OnPlayerHurt;
 	}
 
@@ -51,8 +52,13 @@ public partial class GameUi : Control
 	{
 		SignalManager.Instance.InitiateDeathSequence -= OnInitiateDeathSequenceAsync;
 		SignalManager.Instance.HealthRecovered -= OnHealthRecovered;
-		SignalManager.Instance.Scored -= OnScored;
+		SignalManager.Instance.ScoreUpdated -= OnScoreUpdated;
 		SignalManager.Instance.PlayerHurt -= OnPlayerHurt;
+	}
+
+	private void InitializeScoreUi()
+	{
+			_scoreLabel.Text = $"Score: {GameManager.Instance.CurrentScore:000}";
 	}
 
 	private async void OnInitiateDeathSequenceAsync()
@@ -78,7 +84,7 @@ public partial class GameUi : Control
     UpdateHealthUi();
   }
 
-	private void OnScored(Color color)
+	private void OnScoreUpdated(Color color)
 	{
 		if (_isDying)
 		{

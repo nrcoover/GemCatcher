@@ -21,7 +21,8 @@ public partial class SignalManager : Node
 	[Signal] public delegate void ShowGameSuccessButtonsEventHandler();
 	[Signal] public delegate void HighScoreChangedEventHandler();
 	[Signal] public delegate void HealthRecoveredEventHandler();
-	[Signal] public delegate void ScoreIncrementedEventHandler(int score);
+	[Signal] public delegate void ScoreIncrementedEventHandler(int score, Color color);
+	[Signal] public delegate void ScoreUpdatedEventHandler(Color color);
 	[Signal] public delegate void DifficultyIncreasedEventHandler();
 	[Signal] public delegate void PowerUpCollectedEventHandler(Color color);
 	[Signal] public delegate void PowerUpSpawnedEventHandler();
@@ -119,9 +120,14 @@ public partial class SignalManager : Node
 		EmitSignal(SignalName.HealthRecovered);
 	}
 
-	public void EmitScoreIncremented(int score)
+	public void EmitScoreIncremented(int score, Color color)
 	{
-		EmitSignal(SignalName.ScoreIncremented, score);
+		EmitSignal(SignalName.ScoreIncremented, score, color);
+	}
+
+	public void EmitScoreUpdated(Color color)
+	{
+		EmitSignal(SignalName.ScoreUpdated, color);
 	}
 
 	public void EmitDifficultyIncreased()

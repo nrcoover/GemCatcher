@@ -150,10 +150,11 @@ public partial class GameManager : Node
     IncrementHealth();
   }
 	
-  private void OnScoreIncremented(int score)
+  private void OnScoreIncremented(int score, Color color)
   {
     HandleDifficultyLevel(score);
 		HandleStageAdvancement(score);
+		SignalManager.Instance.EmitScoreUpdated(color);
   }
 
 	private void OnResetGame()
@@ -327,10 +328,13 @@ public partial class GameManager : Node
 #endregion
 
 	//TODO: Move to Score Manager
-	public void IncrementScore(int points)
+	public void IncrementScore(int points, Color color)
 	{
+		GD.Print($"Current Score: {CurrentScore}");
+		GD.Print($"Add points: {points}");
 		CurrentScore += points;
-		SignalManager.Instance.EmitScoreIncremented(CurrentScore);
+		GD.Print($"Current Score: {CurrentScore}");
+		SignalManager.Instance.EmitScoreIncremented(CurrentScore, color);
 	}
 
 	public void ResetScore()
