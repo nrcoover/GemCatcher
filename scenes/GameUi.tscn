@@ -1,0 +1,217 @@
+[gd_scene load_steps=13 format=3 uid="uid://i3lu0mgmm0lf"]
+
+[ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/fonts/Play-Regular.ttf" id="1_hu4fi"]
+[ext_resource type="Script" uid="uid://lj7jln1sjp4v" path="res://scripts/GameUi.cs" id="1_rdnis"]
+[ext_resource type="PackedScene" uid="uid://caewt57tbc7r5" path="res://scenes/HeartFaded.tscn" id="2_rdnis"]
+[ext_resource type="PackedScene" uid="uid://ci18yyqg2giqu" path="res://scenes/HeartRed.tscn" id="3_ypacd"]
+[ext_resource type="LabelSettings" uid="uid://bvp27oyhve2cn" path="res://resources/fonts/play_white_16_font_normal.tres" id="4_vauqd"]
+[ext_resource type="StyleBox" uid="uid://7wqdduovmlnj" path="res://resources/ui/left_progress_bar.tres" id="5_3s2qq"]
+[ext_resource type="StyleBox" uid="uid://bwo0qb8ps4fh6" path="res://resources/ui/right_progress_bar.tres" id="6_0ux1r"]
+[ext_resource type="PackedScene" uid="uid://dfy630r6xnty0" path="res://scenes/StageLabelContainer.tscn" id="7_gwayj"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_aug50"]
+font = ExtResource("1_hu4fi")
+font_size = 32
+outline_size = 7
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 6
+shadow_color = Color(0.6677593, 0.6677593, 0.6677593, 1)
+shadow_offset = Vector2(1.25, 1.25)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2rd6h"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a85ww"]
+bg_color = Color(1.1551381e-06, 0.7228854, 0.77388734, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 100
+corner_radius_bottom_left = 100
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jhsr3"]
+bg_color = Color(0, 0.72156864, 0.77254903, 1)
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+
+[node name="GameUi" type="Control" node_paths=PackedStringArray("_scoreLabel", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_rdnis")
+_scoreLabel = NodePath("MarginContainer/ScoreLabel")
+_heart1 = NodePath("MarginContainer/HeartContainer/Heart1Faded/Heart1Full")
+_heart2 = NodePath("MarginContainer/HeartContainer/Heart2Faded/Heart2Full")
+_heart3 = NodePath("MarginContainer/HeartContainer/Heart3Faded/Heart3Full")
+_heart4 = NodePath("MarginContainer/HeartContainer/Heart4Faded/Heart4Full")
+_heart5 = NodePath("MarginContainer/HeartContainer/Heart5Faded/Heart5Full")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 16
+
+[node name="ScoreLabel" type="Label" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "Score: 000"
+label_settings = SubResource("LabelSettings_aug50")
+
+[node name="HeartContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+alignment = 2
+
+[node name="Heart5Faded" parent="MarginContainer/HeartContainer" instance=ExtResource("2_rdnis")]
+position = Vector2(-12, 15)
+
+[node name="Heart5Full" parent="MarginContainer/HeartContainer/Heart5Faded" instance=ExtResource("3_ypacd")]
+scale = Vector2(1, 1)
+
+[node name="Heart4Faded" parent="MarginContainer/HeartContainer" instance=ExtResource("2_rdnis")]
+position = Vector2(-66, 15)
+
+[node name="Heart4Full" parent="MarginContainer/HeartContainer/Heart4Faded" instance=ExtResource("3_ypacd")]
+scale = Vector2(1, 1)
+
+[node name="Heart3Faded" parent="MarginContainer/HeartContainer" instance=ExtResource("2_rdnis")]
+position = Vector2(-120, 15)
+
+[node name="Heart3Full" parent="MarginContainer/HeartContainer/Heart3Faded" instance=ExtResource("3_ypacd")]
+scale = Vector2(1, 1)
+
+[node name="Heart2Faded" parent="MarginContainer/HeartContainer" instance=ExtResource("2_rdnis")]
+position = Vector2(-174, 15)
+
+[node name="Heart2Full" parent="MarginContainer/HeartContainer/Heart2Faded" instance=ExtResource("3_ypacd")]
+scale = Vector2(1, 1)
+
+[node name="Heart1Faded" parent="MarginContainer/HeartContainer" instance=ExtResource("2_rdnis")]
+position = Vector2(-228, 15)
+
+[node name="Heart1Full" parent="MarginContainer/HeartContainer/Heart1Faded" instance=ExtResource("3_ypacd")]
+scale = Vector2(1, 1)
+
+[node name="BoostDebugLabel" type="Label" parent="MarginContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "boost: 
+000"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 2
+
+[node name="PowerUpSecondsLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "POWER UP VALUE"
+label_settings = ExtResource("4_vauqd")
+
+[node name="BoostPercentageLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+z_index = 1
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "BOOST VALUE"
+label_settings = ExtResource("4_vauqd")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 350
+theme_override_constants/margin_right = 350
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/separation = -1
+alignment = 1
+
+[node name="ProgressPowerUpLeft" type="ProgressBar" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.7607843, 0, 0, 0)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/background = SubResource("StyleBoxFlat_2rd6h")
+theme_override_styles/fill = SubResource("StyleBoxFlat_a85ww")
+value = 25.0
+rounded = true
+fill_mode = 1
+
+[node name="ProgressPowerUpRight" type="ProgressBar" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.7607843, 0, 0, 0)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/background = SubResource("StyleBoxFlat_2rd6h")
+theme_override_styles/fill = SubResource("StyleBoxFlat_jhsr3")
+value = 25.0
+rounded = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/separation = -1
+alignment = 1
+
+[node name="ProgressBoostLeft" type="ProgressBar" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.7607843, 0, 0, 0)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/background = SubResource("StyleBoxFlat_2rd6h")
+theme_override_styles/fill = ExtResource("5_3s2qq")
+value = 100.0
+rounded = true
+fill_mode = 1
+
+[node name="ProgressBoostRight" type="ProgressBar" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.7607843, 0, 0, 0)
+theme_override_font_sizes/font_size = 12
+theme_override_styles/background = SubResource("StyleBoxFlat_2rd6h")
+theme_override_styles/fill = ExtResource("6_0ux1r")
+value = 100.0
+rounded = true
+
+[node name="StageLabelContainer" parent="MarginContainer" instance=ExtResource("7_gwayj")]
+layout_mode = 2

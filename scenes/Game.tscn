@@ -1,25 +1,19 @@
-[gd_scene load_steps=47 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=37 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/images/backgrounds/GameBg.png" id="1_ibkli"]
 [ext_resource type="PackedScene" uid="uid://3kq5fr5oomem" path="res://scenes/Paddle.tscn" id="2_qbsmt"]
 [ext_resource type="PackedScene" uid="uid://d2eah2eim18xg" path="res://scenes/Camera.tscn" id="3_kyk2p"]
 [ext_resource type="PackedScene" uid="uid://cq8skradygbr0" path="res://scenes/MotionBackdrop.tscn" id="4_vjgi4"]
-[ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/fonts/Play-Regular.ttf" id="5_s0nni"]
-[ext_resource type="PackedScene" uid="uid://caewt57tbc7r5" path="res://scenes/HeartFaded.tscn" id="6_aug50"]
 [ext_resource type="PackedScene" uid="uid://bbrkr3etn88hu" path="res://scenes/GemSpawner.tscn" id="6_kyk2p"]
-[ext_resource type="PackedScene" uid="uid://ci18yyqg2giqu" path="res://scenes/HeartRed.tscn" id="7_kiw3p"]
-[ext_resource type="StyleBox" uid="uid://7wqdduovmlnj" path="res://resources/ui/left_progress_bar.tres" id="8_2rd6h"]
-[ext_resource type="LabelSettings" uid="uid://bvp27oyhve2cn" path="res://resources/fonts/play_white_16_font_normal.tres" id="8_7ua8r"]
 [ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/audio/music/bgm_action_5.mp3" id="8_400sg"]
-[ext_resource type="StyleBox" uid="uid://bwo0qb8ps4fh6" path="res://resources/ui/right_progress_bar.tres" id="9_7ua8r"]
+[ext_resource type="PackedScene" uid="uid://i3lu0mgmm0lf" path="res://scenes/GameUi.tscn" id="9_a85ww"]
 [ext_resource type="AudioStream" uid="uid://dtfk07ryobxgf" path="res://assets/audio/sfx/explode.wav" id="9_g4kob"]
 [ext_resource type="AudioStream" uid="uid://boe377tli867s" path="res://assets/audio/sfx/spell1_0.wav" id="10_qy1jj"]
 [ext_resource type="AudioStream" uid="uid://dfdhu6sspy4it" path="res://assets/audio/sfx/404766__owlstorm__retro-video-game-sfx-punch-2.wav" id="11_3xj3m"]
 [ext_resource type="AudioStream" uid="uid://dw8ladfm3gy58" path="res://assets/audio/sfx/475557__rannem__bip.wav" id="13_r7sob"]
 [ext_resource type="AudioStream" uid="uid://ogfnhm87ce0t" path="res://assets/audio/sfx/492651__rvgerxini__power-down.mp3" id="13_y5y3l"]
 [ext_resource type="AudioStream" uid="uid://bhkxrv2ytglu8" path="res://assets/audio/dialogue/computer/disengage-boosters.mp3" id="15_45i86"]
-[ext_resource type="PackedScene" uid="uid://dfy630r6xnty0" path="res://scenes/StageLabelContainer.tscn" id="15_jai3c"]
 [ext_resource type="PackedScene" uid="uid://0vd5n2cpnev8" path="res://scenes/GameOverScreen.tscn" id="15_jbgew"]
 [ext_resource type="AudioStream" uid="uid://dgkejar3yrf6q" path="res://assets/audio/dialogue/computer/boosters-reengaged.mp3" id="16_a8wo8"]
 [ext_resource type="AudioStream" uid="uid://thtaruqgrqt7" path="res://assets/audio/dialogue/computer/commencing-mission.mp3" id="16_bneo8"]
@@ -38,7 +32,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -50,7 +44,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -67,7 +61,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -79,7 +73,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -96,7 +90,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -108,7 +102,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -125,7 +119,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -137,7 +131,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -170,7 +164,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -182,7 +176,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -199,7 +193,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -211,7 +205,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -280,7 +274,7 @@ step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -292,7 +286,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -325,7 +319,7 @@ step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -337,7 +331,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -374,7 +368,7 @@ step = 0.025
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
+tracks/0/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft:theme_override_styles/fill:bg_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -386,7 +380,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
+tracks/1/path = NodePath("CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight:theme_override_styles/fill:bg_color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -432,41 +426,10 @@ _data = {
 &"yellow_warning_level_3": SubResource("Animation_sv1m6")
 }
 
-[sub_resource type="LabelSettings" id="LabelSettings_aug50"]
-font = ExtResource("5_s0nni")
-font_size = 32
-outline_size = 7
-outline_color = Color(0, 0, 0, 1)
-shadow_size = 6
-shadow_color = Color(0.6677593, 0.6677593, 0.6677593, 1)
-shadow_offset = Vector2(1.25, 1.25)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2rd6h"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a85ww"]
-bg_color = Color(1.1551381e-06, 0.7228854, 0.77388734, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_bottom = 4
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 100
-corner_radius_bottom_left = 100
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jhsr3"]
-bg_color = Color(0, 0.72156864, 0.77254903, 1)
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_right = 100
-corner_radius_bottom_right = 100
-
-[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_scoreLabel", "_music", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommanderAdvanceStage1", "_audioCommanderAdvanceStage2", "_audioCommanderAdvanceStage3", "_audioCommencingMission", "_audioMissionFailure", "_audioStageAdvancement", "_scoreSound", "_hurtSound", "_healthIncreaseSound", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_music", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommanderAdvanceStage1", "_audioCommanderAdvanceStage2", "_audioCommanderAdvanceStage3", "_audioCommencingMission", "_audioMissionFailure", "_audioStageAdvancement", "_scoreSound", "_hurtSound", "_healthIncreaseSound")]
 script = ExtResource("1_78awf")
 _gemSpawner = ExtResource("6_kyk2p")
 _camera = NodePath("Camera2D")
-_scoreLabel = NodePath("CanvasLayer/MarginContainer/ScoreLabel")
 _music = NodePath("Audio/Music")
 _audioExplosion = NodePath("Audio/SFX/Explosion")
 _audioCommanderEncouragement = NodePath("Audio/Voice/CommanderEncouragement")
@@ -479,11 +442,6 @@ _audioStageAdvancement = NodePath("Audio/Voice/StageAdvancement")
 _scoreSound = NodePath("Audio/SFX/ScoreSound")
 _hurtSound = NodePath("Audio/SFX/HurtSound")
 _healthIncreaseSound = NodePath("Audio/SFX/HealthIncreaseSound")
-_heart1 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart1Faded/Heart1Full")
-_heart2 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart2Faded/Heart2Full")
-_heart3 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart3Faded/Heart3Full")
-_heart4 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart4Faded/Heart4Full")
-_heart5 = NodePath("CanvasLayer/MarginContainer/HeartContainer/Heart5Faded/Heart5Full")
 _shakeIntensity = 30
 _shakeTime = 0.25
 
@@ -519,14 +477,14 @@ flip_v = true
 position = Vector2(561, 570)
 scale = Vector2(0.600926, 0.6009259)
 _boundaryMargin = 35.0
-_boostLabel = NodePath("../CanvasLayer/MarginContainer/BoostDebugLabel")
-_powerUpSecondsLabel = NodePath("../CanvasLayer/MarginContainer/VBoxContainer/PowerUpSecondsLabel")
-_boostPercentageLabel = NodePath("../CanvasLayer/MarginContainer/VBoxContainer/BoostPercentageLabel")
+_boostLabel = NodePath("../CanvasLayer/GameUi/MarginContainer/BoostDebugLabel")
+_powerUpSecondsLabel = NodePath("../CanvasLayer/GameUi/MarginContainer/VBoxContainer/PowerUpSecondsLabel")
+_boostPercentageLabel = NodePath("../CanvasLayer/GameUi/MarginContainer/VBoxContainer/BoostPercentageLabel")
 _boostFuelAnimator = NodePath("../BoostFuelAnimator")
-_progressBoostLeft = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft")
-_progressBoostRight = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight")
-_progressPowerUpLeft = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/ProgressPowerUpLeft")
-_progressPowerUpRight = NodePath("../CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/ProgressPowerUpRight")
+_progressBoostLeft = NodePath("../CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft")
+_progressBoostRight = NodePath("../CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight")
+_progressPowerUpLeft = NodePath("../CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/ProgressPowerUpLeft")
+_progressPowerUpRight = NodePath("../CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/ProgressPowerUpRight")
 _audioDisengageBoosters = NodePath("../Audio/Voice/DisengageBoosters")
 _audioBoostersReengaged = NodePath("../Audio/Voice/BoostersReengaged")
 _audioCooldownInProgress = NodePath("../Audio/Voice/CoolDownInProgress")
@@ -540,164 +498,7 @@ libraries = {
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 16
-
-[node name="ScoreLabel" type="Label" parent="CanvasLayer/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-text = "Score: 000"
-label_settings = SubResource("LabelSettings_aug50")
-
-[node name="HeartContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 0
-alignment = 2
-
-[node name="Heart5Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
-position = Vector2(-12, 15)
-
-[node name="Heart5Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart5Faded" instance=ExtResource("7_kiw3p")]
-scale = Vector2(1, 1)
-
-[node name="Heart4Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
-position = Vector2(-66, 15)
-
-[node name="Heart4Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart4Faded" instance=ExtResource("7_kiw3p")]
-scale = Vector2(1, 1)
-
-[node name="Heart3Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
-position = Vector2(-120, 15)
-
-[node name="Heart3Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart3Faded" instance=ExtResource("7_kiw3p")]
-scale = Vector2(1, 1)
-
-[node name="Heart2Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
-position = Vector2(-174, 15)
-
-[node name="Heart2Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart2Faded" instance=ExtResource("7_kiw3p")]
-scale = Vector2(1, 1)
-
-[node name="Heart1Faded" parent="CanvasLayer/MarginContainer/HeartContainer" instance=ExtResource("6_aug50")]
-position = Vector2(-228, 15)
-
-[node name="Heart1Full" parent="CanvasLayer/MarginContainer/HeartContainer/Heart1Faded" instance=ExtResource("7_kiw3p")]
-scale = Vector2(1, 1)
-
-[node name="BoostDebugLabel" type="Label" parent="CanvasLayer/MarginContainer"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 8
-text = "boost: 
-000"
-horizontal_alignment = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
-layout_mode = 2
-theme_override_constants/separation = 2
-alignment = 2
-
-[node name="PowerUpSecondsLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer"]
-z_index = 1
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 8
-text = "POWER UP VALUE"
-label_settings = ExtResource("8_7ua8r")
-
-[node name="BoostPercentageLabel" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer"]
-z_index = 1
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 8
-text = "BOOST VALUE"
-label_settings = ExtResource("8_7ua8r")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/MarginContainer"]
-layout_mode = 2
-size_flags_vertical = 8
-alignment = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 8
-
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 350
-theme_override_constants/margin_right = 350
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_constants/separation = -1
-alignment = 1
-
-[node name="ProgressPowerUpLeft" type="ProgressBar" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-theme_override_colors/font_color = Color(0.7607843, 0, 0, 0)
-theme_override_font_sizes/font_size = 12
-theme_override_styles/background = SubResource("StyleBoxFlat_2rd6h")
-theme_override_styles/fill = SubResource("StyleBoxFlat_a85ww")
-value = 25.0
-rounded = true
-fill_mode = 1
-
-[node name="ProgressPowerUpRight" type="ProgressBar" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-theme_override_colors/font_color = Color(0.7607843, 0, 0, 0)
-theme_override_font_sizes/font_size = 12
-theme_override_styles/background = SubResource("StyleBoxFlat_2rd6h")
-theme_override_styles/fill = SubResource("StyleBoxFlat_jhsr3")
-value = 25.0
-rounded = true
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 8
-theme_override_constants/separation = -1
-alignment = 1
-
-[node name="ProgressBoostLeft" type="ProgressBar" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-theme_override_colors/font_color = Color(0.7607843, 0, 0, 0)
-theme_override_font_sizes/font_size = 12
-theme_override_styles/background = SubResource("StyleBoxFlat_2rd6h")
-theme_override_styles/fill = ExtResource("8_2rd6h")
-value = 100.0
-rounded = true
-fill_mode = 1
-
-[node name="ProgressBoostRight" type="ProgressBar" parent="CanvasLayer/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 1
-theme_override_colors/font_color = Color(0.7607843, 0, 0, 0)
-theme_override_font_sizes/font_size = 12
-theme_override_styles/background = SubResource("StyleBoxFlat_2rd6h")
-theme_override_styles/fill = ExtResource("9_7ua8r")
-value = 100.0
-rounded = true
-
-[node name="StageLabelContainer" parent="CanvasLayer/MarginContainer" instance=ExtResource("15_jai3c")]
-layout_mode = 2
+[node name="GameUi" parent="CanvasLayer" instance=ExtResource("9_a85ww")]
 
 [node name="GameOverScreen" parent="CanvasLayer" instance=ExtResource("15_jbgew")]
 visible = false
@@ -786,3 +587,5 @@ volume_db = -12.0
 [node name="CoolDownInProgress" type="AudioStreamPlayer" parent="Audio/Voice" groups=["Audio Streams"]]
 stream = ExtResource("17_attvq")
 volume_db = -12.0
+
+[editable path="CanvasLayer/GameUi"]

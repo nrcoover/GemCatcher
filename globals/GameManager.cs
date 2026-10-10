@@ -2,20 +2,28 @@ using Godot;
 
 public partial class GameManager : Node
 {
-	enum GameMode
+	public static GameManager Instance {get; private set;}
+	
+	const int MAX_HEALTH = 5;
+	const int MIN_HEALTH = 0;
+	const float DEFAULT_DIFFICULTY_LEVEL = 1;
+	const float DIFFICULTY_MULTIPLIER = 1.01f;
+	const int DEFAULT_GAME_MODE = (int)GameMode.NORMAL;
+	const int DEFAULT_GAME_STATE = (int)GameState.PLAYING;
+	const int DEFAULT_SCORE = 0;
+
+	public enum GameState
+	{
+		PLAYING = 0,
+		DEAD = 1,
+		VICTORY = 2
+	}
+
+	public enum GameMode
 	{
 		NORMAL = 0,
 		INFINITE = 1
 	}
-
-	const int MAX_HEALTH = 5;
-	const int MIN_HEALTH = 0;
-
-	const float DEFAULT_DIFFICULTY_LEVEL = 1;
-	const float DIFFICULTY_MULTIPLIER = 1.01f;
-	const int DEFAULT_GAMEMODE = (int)GameMode.NORMAL;
-
-	private float _difficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
 
 	public float DifficultyLevel
 	{
@@ -26,6 +34,18 @@ public partial class GameManager : Node
 		private set
 		{
 			_difficultyLevel = value;
+		}
+	}
+
+	public int CurrentScore
+	{
+		get
+		{
+			return _currentScore;
+		}
+		private set
+		{
+			_currentScore = value;
 		}
 	}
 
@@ -53,7 +73,17 @@ public partial class GameManager : Node
 		}
 	}
 
-	public static GameManager Instance {get; private set;}
+	public int CurrentGameState
+	{
+		get
+		{
+			return _currentGameState;
+		}
+		private set
+		{
+			_currentGameState = value;
+		}
+	}
 
 	public int MaxHealth {
 		get
@@ -66,12 +96,15 @@ public partial class GameManager : Node
 		}
 	}
 
-	private int _highScore = 0;
+	private float _difficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
+	private int _highScore = DEFAULT_SCORE;
 	private int _maxHealth = MAX_HEALTH;
 	private int _missedGemsCount = 0;
 	private int _health = MAX_HEALTH;
+	private int _currentScore = DEFAULT_SCORE;
 	private int _currentStage = 1;
-	private int _currentGameMode = DEFAULT_GAMEMODE;
+	private int _currentGameMode = DEFAULT_GAME_MODE;
+	private int _currentGameState = DEFAULT_GAME_STATE;
 
 	public override void _Ready()
 	{
@@ -142,23 +175,39 @@ public partial class GameManager : Node
 	public void SetGameModeInfinite()
 	{
 		CurrentGameMode = (int)GameMode.INFINITE;
-	} 
+	}
 
-  private void CheckForGameOver()
-  {
-    if (GetHealth() <= 0)
-		{
-			SignalManager.Instance.EmitGameOver();
-		}
-  }
+	public void SetGameStatePlaying()
+	{
+		CurrentGameState = (int)GameState.PLAYING;
+	}
+
+	public void SetGameStateDead()
+	{
+		CurrentGameState = (int)GameState.DEAD;
+	}
+
+	public void SetGameStateVictory()
+	{
+		CurrentGameState = (int)GameState.VICTORY;
+	}
 
 	public void ResetGame()
 	{
 		SetMissedGemCount(0);
 		SetHealth(MAX_HEALTH);
 		ResetStageCount();
+		ResetScore();
 		DifficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
 	}
+
+	private void CheckForGameOver()
+  {
+    if (GetHealth() <= 0)
+		{
+			SignalManager.Instance.EmitGameOver();
+		}
+  }
 
 #endregion
 
@@ -276,5 +325,17 @@ public partial class GameManager : Node
 	}
 
 #endregion
+
+	//TODO: Move to Score Manager
+	public void IncrementScore(int points)
+	{
+		CurrentScore += points;
+		SignalManager.Instance.EmitScoreIncremented(CurrentScore);
+	}
+
+	public void ResetScore()
+	{
+		CurrentScore = DEFAULT_SCORE;
+	}
 
 }
