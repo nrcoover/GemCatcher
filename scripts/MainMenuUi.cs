@@ -82,6 +82,8 @@ public partial class MainMenuUi : Control
 
 	private void OnPlayClicked()
   {
+		// TODO: Set Game mode Infinite when choosing to play infinite mode after unlocking it.
+		// TODO: Create save detail about unlocked "infinite mode" - isInfiniteModeUnlocked
 		GameManager.Instance.SetGameModeNormal();
     LevelManager.Instance.LoadGame();
   }

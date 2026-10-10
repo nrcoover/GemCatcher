@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=47 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/images/backgrounds/GameBg.png" id="1_ibkli"]
@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://0vd5n2cpnev8" path="res://scenes/GameOverScreen.tscn" id="15_jbgew"]
 [ext_resource type="AudioStream" uid="uid://dgkejar3yrf6q" path="res://assets/audio/dialogue/computer/boosters-reengaged.mp3" id="16_a8wo8"]
 [ext_resource type="AudioStream" uid="uid://thtaruqgrqt7" path="res://assets/audio/dialogue/computer/commencing-mission.mp3" id="16_bneo8"]
+[ext_resource type="PackedScene" uid="uid://balc6807ri8ip" path="res://scenes/GameSuccessScreen.tscn" id="17_1gdd5"]
 [ext_resource type="AudioStream" uid="uid://h63jsdluxsal" path="res://assets/audio/dialogue/computer/cooldown-in-progress.mp3" id="17_attvq"]
 [ext_resource type="AudioStream" uid="uid://negotetnv5rh" path="res://assets/audio/dialogue/commander/commander-encouragement.mp3" id="17_jbgew"]
 [ext_resource type="AudioStream" uid="uid://bacmsb461kopv" path="res://assets/audio/sfx/523650__lilmati__powerup-06.wav" id="20_a85ww"]
@@ -699,6 +700,9 @@ rounded = true
 layout_mode = 2
 
 [node name="GameOverScreen" parent="CanvasLayer" instance=ExtResource("15_jbgew")]
+visible = false
+
+[node name="GameSuccessScreen" parent="CanvasLayer" instance=ExtResource("17_1gdd5")]
 visible = false
 
 [node name="Audio" type="Node" parent="."]
