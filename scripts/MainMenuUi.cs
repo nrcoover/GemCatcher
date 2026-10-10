@@ -82,6 +82,7 @@ public partial class MainMenuUi : Control
 
 	private void OnPlayClicked()
   {
+		GameManager.Instance.SetGameModeNormal();
     LevelManager.Instance.LoadGame();
   }
 

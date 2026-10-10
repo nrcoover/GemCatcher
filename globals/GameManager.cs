@@ -2,11 +2,18 @@ using Godot;
 
 public partial class GameManager : Node
 {
+	enum GameMode
+	{
+		NORMAL = 0,
+		INFINITE = 1
+	}
+
 	const int MAX_HEALTH = 5;
 	const int MIN_HEALTH = 0;
 
 	const float DEFAULT_DIFFICULTY_LEVEL = 1;
 	const float DIFFICULTY_MULTIPLIER = 1.01f;
+	const int DEFAULT_GAMEMODE = (int)GameMode.NORMAL;
 
 	private float _difficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
 
@@ -34,6 +41,18 @@ public partial class GameManager : Node
 		}
 	}
 
+	public int CurrentGameMode
+	{
+		get
+		{
+			return _currentGameMode;
+		}
+		private set
+		{
+			_currentGameMode = value;
+		}
+	}
+
 	public static GameManager Instance {get; private set;}
 
 	public int MaxHealth {
@@ -52,6 +71,7 @@ public partial class GameManager : Node
 	private int _missedGemsCount = 0;
 	private int _health = MAX_HEALTH;
 	private int _currentStage = 1;
+	private int _currentGameMode = DEFAULT_GAMEMODE;
 
 	public override void _Ready()
 	{
@@ -109,7 +129,21 @@ public partial class GameManager : Node
 	}
 
 #endregion
-	
+
+
+
+#region Manage Game
+
+	public void SetGameModeNormal()
+	{
+		CurrentGameMode = (int)GameMode.NORMAL;
+	}
+
+	public void SetGameModeInfinite()
+	{
+		CurrentGameMode = (int)GameMode.INFINITE;
+	} 
+
   private void CheckForGameOver()
   {
     if (GetHealth() <= 0)
@@ -125,6 +159,10 @@ public partial class GameManager : Node
 		ResetStageCount();
 		DifficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
 	}
+
+#endregion
+
+
 
 #region Manage Health
 
@@ -168,15 +206,15 @@ public partial class GameManager : Node
 		return _missedGemsCount; 
 	}
 
-	private void SetMissedGemCount(int value)
-	{
-		_missedGemsCount = Mathf.Abs(value);
-	}
-
 	public void IncrementMissedGems()
 	{
 		SetMissedGemCount(GetMissedGemCount() + 1);
     DecrementHealth();
+	}
+
+	private void SetMissedGemCount(int value)
+	{
+		_missedGemsCount = Mathf.Abs(value);
 	}
 
 #endregion
@@ -238,4 +276,5 @@ public partial class GameManager : Node
 	}
 
 #endregion
+
 }
