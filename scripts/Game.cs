@@ -49,6 +49,7 @@ public partial class Game : Node2D
 
 	private int _score = 0;
 	private bool _isDying = false;
+	private bool _isVictorious = false;
 	private float _musicDefaultVolume;
 
 	public override async void _Ready()
@@ -86,6 +87,7 @@ public partial class Game : Node2D
 	private void SubscribeToSignals()
 	{
 		SignalManager.Instance.InitiateDeathSequence += OnInitiateDeathSequenceAsync;
+		SignalManager.Instance.InitiateVictorySequence += OnInitiateVictorySequenceAsync;
 		SignalManager.Instance.Scored += OnScored;
 		SignalManager.Instance.GemOffScreen += OnGemOffScreen;
 		SignalManager.Instance.PlayerHurt += OnPlayerHurt;
@@ -97,6 +99,7 @@ public partial class Game : Node2D
 
   private void UnsubscribeFromSignals() {
 		SignalManager.Instance.InitiateDeathSequence -= OnInitiateDeathSequenceAsync;
+		SignalManager.Instance.InitiateVictorySequence -= OnInitiateVictorySequenceAsync;
 		SignalManager.Instance.Scored -= OnScored;
 		SignalManager.Instance.GemOffScreen -= OnGemOffScreen;
 		SignalManager.Instance.PlayerHurt -= OnPlayerHurt;
@@ -106,7 +109,7 @@ public partial class Game : Node2D
 		SignalManager.Instance.AdvanceStage -= OnAdvanceStageAsync;
 	}
 
-  public async void OnInitiateDeathSequenceAsync()
+  private async void OnInitiateDeathSequenceAsync()
 	{
 		if (_isDying)
 		{
@@ -132,6 +135,16 @@ public partial class Game : Node2D
 		{
 			return;
 		}
+	}
+
+	private async void OnInitiateVictorySequenceAsync()
+	{
+		if (_isVictorious)
+		{
+			return;
+		}
+
+		_isVictorious = true;
 	}
 
 	private void OnScored(Color color)

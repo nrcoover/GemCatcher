@@ -6,6 +6,7 @@ public partial class SignalManager : Node
 
 	[Signal] public delegate void GameOverEventHandler();
 	[Signal] public delegate void InitiateDeathSequenceEventHandler();
+	[Signal] public delegate void InitiateVictorySequenceEventHandler();
 	[Signal] public delegate void BoostFuelDepletedEventHandler();
 	[Signal] public delegate void BoostEngagedEventHandler();
 	[Signal] public delegate void BoostDisengagedEventHandler();
@@ -41,6 +42,11 @@ public partial class SignalManager : Node
 	public void EmitInitiateDeathSequence() 
 	{
 		EmitSignal(SignalName.InitiateDeathSequence);
+	}
+
+	public void EmitInitiateVictorySequence() 
+	{
+		EmitSignal(SignalName.InitiateVictorySequence);
 	}
 
 	public void EmitBoostFuelDepleted()
