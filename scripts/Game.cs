@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using System.Linq;
 using Godot;
-using System;
 
 public partial class Game : Node2D
 {
@@ -17,14 +16,20 @@ public partial class Game : Node2D
 		Dead = 0
 	}
 
+	[Export] private PackedScene _gemSpawner;
+
 	[Export] private Camera _camera;
 	[Export] private Label _scoreLabel;
 
 	[Export] private AudioStreamPlayer _music;
 	[Export] private AudioStreamPlayer _audioExplosion;
 	[Export] private AudioStreamPlayer2D _audioCommanderEncouragement;
+	[Export] private AudioStreamPlayer2D _audioCommanderAdvanceStage1;
+	[Export] private AudioStreamPlayer2D _audioCommanderAdvanceStage2;
+	[Export] private AudioStreamPlayer2D _audioCommanderAdvanceStage3;
 	[Export] private AudioStreamPlayer _audioCommencingMission;
 	[Export] private AudioStreamPlayer _audioMissionFailure;
+	[Export] private AudioStreamPlayer _audioStageAdvancement;
 	[Export] private AudioStreamPlayer2D _scoreSound;
 	[Export] private AudioStreamPlayer2D _hurtSound;
 	[Export] private AudioStreamPlayer2D _healthIncreaseSound;
@@ -87,6 +92,7 @@ public partial class Game : Node2D
 		SignalManager.Instance.HealthRecovered += OnHealthRecovered;
 		SignalManager.Instance.PowerUpSpawned += OnPowerUpSpawned;
 		SignalManager.Instance.PowerUpRemoved += OnPowerUpRemoved;
+		SignalManager.Instance.AdvanceStage += OnAdvanceStageAsync;
 	}
 
   private void UnsubscribeFromSignals() {
@@ -97,6 +103,7 @@ public partial class Game : Node2D
 		SignalManager.Instance.HealthRecovered -= OnHealthRecovered;
 		SignalManager.Instance.PowerUpSpawned -= OnPowerUpSpawned;
 		SignalManager.Instance.PowerUpRemoved -= OnPowerUpRemoved;
+		SignalManager.Instance.AdvanceStage -= OnAdvanceStageAsync;
 	}
 
   public async void OnInitiateDeathSequenceAsync()
@@ -129,6 +136,11 @@ public partial class Game : Node2D
 
 	private void OnScored(Color color)
 	{
+		if (_isDying)
+		{
+			return;
+		}
+
 		IncrementScore(DEFAULT_POINT_VALUE);
 		_scoreSound.Play();
 		UpdateScoreUi(color);
@@ -147,6 +159,11 @@ public partial class Game : Node2D
 	
   private void OnHealthRecovered()
   {
+		if (_isDying)
+		{
+			return;
+		}
+
 		_healthIncreaseSound.Play();
     UpdateHealthUi();
   }
@@ -160,12 +177,35 @@ public partial class Game : Node2D
 	{
 		ResetMusicVolume();
 	}
+	
+	public async void OnAdvanceStageAsync()
+	{
+		if (_isDying || !IsInsideTree())
+		{
+			return;
+		}
 
-  #endregion
+		await PlayStageAdvancementSequenceAsync();
+
+		// The player may have died while the sequence was awaiting.
+		if (_isDying || !IsInsideTree())
+		{
+			return;
+		}
+
+		var isOddNumberedStage = GameManager.Instance.CurrentStage % 2 != 0;
+		var isFirstStage = GameManager.Instance.CurrentStage == 1;
+		if (isOddNumberedStage && !isFirstStage) 
+		{
+			InstantiateAdditionalGemSpawner();
+		}
+	}
+
+#endregion
 
 
 
-  #region Input
+#region Input
 
   private void HandleEscape()
 	{
@@ -292,6 +332,24 @@ public partial class Game : Node2D
 	private void ResetMusicVolume()
 	{
 		_music.VolumeDb = _musicDefaultVolume;
+	}
+
+	private void PlayStageAdvancementCommanderAudio()
+	{
+		var randomNumber = Helper.GetRandomInt(1, 3);
+
+		switch (randomNumber)
+		{
+			case 1:
+				_audioCommanderAdvanceStage1.Play();
+				break;
+			case 2:
+				_audioCommanderAdvanceStage2.Play();
+				break;
+			case 3:
+				_audioCommanderAdvanceStage3.Play();
+				break;
+		}
 	}
 	
 #endregion
@@ -432,6 +490,25 @@ public partial class Game : Node2D
 		await CreateTimerAsync(shakeTime);
 	}
 
+	private async Task PlayStageAdvancementSequenceAsync()
+	{
+    if (_isDying)
+    {
+			return;
+    }
+
+    _audioStageAdvancement.Play();
+
+    await CreateTimerAsync(1.75f);
+
+    if (_isDying || !IsInsideTree())
+    {
+			return;
+    }
+
+		PlayStageAdvancementCommanderAudio();
+	}
+
 	private async Task HandleDeathSequenceAudioAsync()
 	{
 		ScoreManager.Instance.HighScore = _score;
@@ -482,6 +559,19 @@ public partial class Game : Node2D
 		{
 			moveable.ProcessMode = ProcessModeEnum.Disabled;
 		}
+	}
+
+	private void InstantiateAdditionalGemSpawner()
+	{
+		var additionalSpawnerTimeMultiplier = 7.0f;
+		var spawner = (GemSpawner)_gemSpawner.Instantiate();
+
+		spawner.SpawnTime *= additionalSpawnerTimeMultiplier
+			* GameManager.Instance.CurrentStage;
+
+		CallDeferred("add_child", spawner);
+
+		GD.Print("Spawner SpawnTime = " + spawner.SpawnTime);
 	}
 
 #endregion

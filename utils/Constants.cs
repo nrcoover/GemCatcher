@@ -26,6 +26,7 @@ public static partial class Constants
   {
     // Basic Colors
     public static readonly string White = "FFFFFF";
+    public static readonly string AplhaInvisible = "FFFFFF00";
 
     // Pastelle Colors
     public static readonly string RedPastelle = "FF8888";

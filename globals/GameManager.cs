@@ -22,6 +22,18 @@ public partial class GameManager : Node
 		}
 	}
 
+	public int CurrentStage
+	{
+		get
+		{
+			return _currentStage;
+		}
+		private set
+		{
+			_currentStage = value;
+		}
+	}
+
 	public static GameManager Instance {get; private set;}
 
 	public int MaxHealth {
@@ -39,6 +51,7 @@ public partial class GameManager : Node
 	private int _maxHealth = MAX_HEALTH;
 	private int _missedGemsCount = 0;
 	private int _health = MAX_HEALTH;
+	private int _currentStage = 1;
 
 	public override void _Ready()
 	{
@@ -63,6 +76,7 @@ public partial class GameManager : Node
 		SignalManager.Instance.GameOver += OnGameOver;
 		SignalManager.Instance.HealthRecovered += OnHealthRecovered;
 		SignalManager.Instance.ScoreIncremented += OnScoreIncremented;
+		SignalManager.Instance.ResetGame += OnResetGame;
 	}
 
   private void UnsubscribeFromSignals()
@@ -70,6 +84,7 @@ public partial class GameManager : Node
 		SignalManager.Instance.GameOver -= OnGameOver;
 		SignalManager.Instance.HealthRecovered -= OnHealthRecovered;
 		SignalManager.Instance.ScoreIncremented -= OnScoreIncremented;
+		SignalManager.Instance.ResetGame -= OnResetGame;
 	}
 
   public void OnGameOver()
@@ -85,7 +100,13 @@ public partial class GameManager : Node
   private void OnScoreIncremented(int score)
   {
     HandleDifficultyLevel(score);
+		HandleStageAdvancement(score);
   }
+
+	private void OnResetGame()
+	{
+		ResetGame();
+	}
 
 #endregion
 	
@@ -101,6 +122,7 @@ public partial class GameManager : Node
 	{
 		SetMissedGemCount(0);
 		SetHealth(MAX_HEALTH);
+		ResetStageCount();
 		DifficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
 	}
 
@@ -163,7 +185,7 @@ public partial class GameManager : Node
 
 	private void HandleDifficultyLevel(int currentScore)
 	{
-		var difficultyIncrementer = 5;
+		var difficultyIncrementer = 10;
 		var isScoreDivisibleByTen = currentScore % difficultyIncrementer == 0;
 
 		if (!isScoreDivisibleByTen)
@@ -192,6 +214,27 @@ public partial class GameManager : Node
 		GD.Print("------------------------------------");
 
 		SignalManager.Instance.EmitDifficultyIncreased();
+	}
+
+	private void HandleStageAdvancement(int score)
+	{
+		var advancementIncrementer = 10;
+
+		if (score % advancementIncrementer == 0)
+		{
+			IncrementStage();
+			SignalManager.Instance.EmitAdvanceStage();
+		}
+	}
+
+	private void IncrementStage()
+	{
+		CurrentStage ++;
+	}
+
+	private void ResetStageCount()
+	{
+		_currentStage = 1;
 	}
 
 #endregion
