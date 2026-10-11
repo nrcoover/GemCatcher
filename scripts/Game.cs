@@ -202,6 +202,7 @@ public partial class Game : Node2D
 	{
 		if (Input.IsKeyPressed(Key.Escape))
 		{
+			GameManager.Instance.ResetGame();
 			LevelManager.Instance.LoadMainMenu();
 		}
 	}
