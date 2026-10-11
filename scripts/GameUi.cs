@@ -1,3 +1,4 @@
+using GemCatcher.utils;
 using Godot;
 
 public partial class GameUi : Control
@@ -13,6 +14,7 @@ public partial class GameUi : Control
 	}
 
 	[Export] private Label _scoreLabel;
+	[Export] private Label _customDebugLabel;
 	
 	[Export] private Node2D _heart1;
 	[Export] private Node2D _heart2;
@@ -27,8 +29,22 @@ public partial class GameUi : Control
 
 	public override void _Ready()
 	{
+		if (CustomDebug.IsDebugging)
+		{
+			_customDebugLabel.Visible = CustomDebug.IsDebugging;
+			UpdateDebugLabel();
+		}
+
 		SubscribeToSignals();
 		InitializeScoreUi();
+	}
+
+	public override void _Process(double delta)
+	{
+		if (CustomDebug.IsDebugging)
+		{
+			UpdateDebugLabel();
+		}
 	}
 
   public override void _ExitTree()
@@ -258,4 +274,8 @@ public partial class GameUi : Control
 
 #endregion
 
+	private void UpdateDebugLabel()
+	{
+		_customDebugLabel.Text = $"Difficulty Level: {GameManager.Instance.DifficultyLevel}";
+	}
 }

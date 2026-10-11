@@ -39,7 +39,7 @@ border_color = Color(1, 1, 1, 1)
 corner_radius_top_right = 100
 corner_radius_bottom_right = 100
 
-[node name="GameUi" type="Control" node_paths=PackedStringArray("_scoreLabel", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
+[node name="GameUi" type="Control" node_paths=PackedStringArray("_scoreLabel", "_customDebugLabel", "_heart1", "_heart2", "_heart3", "_heart4", "_heart5")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -50,6 +50,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_rdnis")
 _scoreLabel = NodePath("MarginContainer/ScoreLabel")
+_customDebugLabel = NodePath("CustomDebugLabel")
 _heart1 = NodePath("MarginContainer/HeartContainer/Heart1Faded/Heart1Full")
 _heart2 = NodePath("MarginContainer/HeartContainer/Heart2Faded/Heart2Full")
 _heart3 = NodePath("MarginContainer/HeartContainer/Heart3Faded/Heart3Full")
@@ -215,3 +216,14 @@ rounded = true
 
 [node name="StageLabelContainer" parent="MarginContainer" instance=ExtResource("7_gwayj")]
 layout_mode = 2
+
+[node name="CustomDebugLabel" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+offset_right = 40.0
+grow_vertical = 0
+text = "Difficulty Level: 000"
