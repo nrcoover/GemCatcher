@@ -211,6 +211,7 @@ public partial class GameManager : Node
 		ResetStageCount();
 		ResetScore();
 		DifficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
+		SetGameStatePlaying();
 	}
 
 	private void CheckForGameOver()
