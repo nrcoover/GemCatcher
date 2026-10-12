@@ -9,6 +9,7 @@ public partial class GemSpawner : Node2D
 	[Export] private Timer _gemSpawnTimer;
 	[Export] private Timer _powerUpSpawnTimer;
 	[Export] private PackedScene _gemScene;
+	[Export] private PackedScene _falseGemScene;
 	[Export] private PackedScene _gemHeartScene;
 	[Export] private PackedScene _gemPowerUpScene;
 	[Export] private Node _gemContainer;
@@ -51,30 +52,23 @@ public partial class GemSpawner : Node2D
 		_gemSpawnTimer.WaitTime = SpawnTime;
 	}
 
+
+
+#region Signals
+
   private void SubscribeToSignals()
 	{
+		SignalManager.Instance.DifficultyIncreased += OnDifficultyIncreased;
 		_gemSpawnTimer.Timeout += OnGemSpawnTimeout;
 		_powerUpSpawnTimer.Timeout += OnPowerUpSpawnTimeout;
-		SignalManager.Instance.DifficultyIncreased += OnDifficultyIncreased;
 	}
 
-	private void OnGemSpawnTimeout()
-	{
-		SpawnGemType();
-	}
-
-  private void OnPowerUpSpawnTimeout()
-  {
-    EnablePowerUpSpawning();
-		GD.Print("Wait Time ended. Can spawn power ups is: " + _canSpawnPowerUp);
-  }
-
-  private void UnsubscribeFromSignals()
+	private void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.DifficultyIncreased -= OnDifficultyIncreased;
 	}
 
-  private void OnDifficultyIncreased()
+	private void OnDifficultyIncreased()
   {
 		var decrementalTime = 0.01;
 		var minWaitTime = 0.75f; // Clamp at .25 or .15 wait time; .75 when mixed with speed increase on difficulty level increase.
@@ -91,6 +85,21 @@ public partial class GemSpawner : Node2D
 		GD.Print($"NEW WAIT TIME: {_gemSpawnTimer.WaitTime}");
   }
 
+	private void OnGemSpawnTimeout()
+	{
+		SpawnGemType();
+	}
+
+  private void OnPowerUpSpawnTimeout()
+  {
+    EnablePowerUpSpawning();
+		GD.Print("Wait Time ended. Can spawn power ups is: " + _canSpawnPowerUp);
+  }
+
+#endregion
+
+
+
 	private void SetBoundaryMarkers()
   {
     _leftBoundary = (Marker2D)GetNode("../../MainMenu/CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/LeftBoundary");
@@ -103,6 +112,12 @@ public partial class GemSpawner : Node2D
 		if (_isOnMainMenu)
 		{
 			SpawnGem();
+			return;
+		}
+
+		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			SpawnFalseGem();
 			return;
 		}
 
@@ -167,6 +182,15 @@ public partial class GemSpawner : Node2D
 		_gemContainer.AddChild(powerUpGem);
 
 		SetGemPosition(powerUpGem);
+	}
+
+	private void SpawnFalseGem()
+	{
+		var falseGem = (FalseGem)_falseGemScene.Instantiate();
+		_gemContainer.AddChild(falseGem);
+
+		SetGemSpeedByDifficultyLevel(falseGem);
+		SetGemPosition(falseGem);
 	}
 
 	private void SetGemPosition(Node2D gem)
