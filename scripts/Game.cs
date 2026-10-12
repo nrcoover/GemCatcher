@@ -155,6 +155,11 @@ public partial class Game : Node2D
 
 	private void OnGemOffScreen()
 	{
+		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			return;
+		}
+
 		GameManager.Instance.IncrementMissedGems();
 		SignalManager.Instance.EmitPlayerHurt();
 	}
