@@ -191,10 +191,6 @@ public partial class Paddle : Area2D
 
 	private void SubscribeToSignals()
 	{
-		_boostRefuelTimer.Timeout += OnRefuelTimeout;
-		_selfDestructWarningTimer.Timeout += OnSelfDestructWarningTimeout;
-		_selfDestructTimer.Timeout += OnSelfDestructTimeout;
-		_powerUpTimer.Timeout += OnPowerUpTimeout;
 		SignalManager.Instance.BoostFuelDepleted += OnBoostFuelDepleted;
 		SignalManager.Instance.BoostEngaged += OnBoostEngaged;
 		SignalManager.Instance.BoostDisengaged += OnBoostDisengaged;
@@ -202,6 +198,11 @@ public partial class Paddle : Area2D
 		SignalManager.Instance.GameOver += OnGameOver;
 		SignalManager.Instance.PowerUpCollected += OnPowerUpCollected;
 		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
+		_boostRefuelTimer.Timeout += OnRefuelTimeout;
+		_selfDestructWarningTimer.Timeout += OnSelfDestructWarningTimeout;
+		_selfDestructTimer.Timeout += OnSelfDestructTimeout;
+		_powerUpTimer.Timeout += OnPowerUpTimeout;
+		AreaEntered += OnAreaEntered;
 	}
 
   private void UnsubscribeFromSignals()
@@ -328,6 +329,14 @@ public partial class Paddle : Area2D
 
 		_originalSpeed *= MOVEMENT_SPEED_MULTIPLIER;
   }
+
+	private void OnAreaEntered(Area2D area)
+	{
+		if (area is FalseGem falseGem)
+		{
+			CreateColorScaleTweenAsync(falseGem.Modulate);
+		}
+	}
 
 #endregion
 
