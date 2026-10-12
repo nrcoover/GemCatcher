@@ -6,11 +6,20 @@ public partial class GameManager : Node
 	
 	const int MAX_HEALTH = 5;
 	const int MIN_HEALTH = 0;
+
+	const int DEFAULT_SCORE = 0;
+
 	const float DEFAULT_DIFFICULTY_LEVEL = 1;
 	const float DIFFICULTY_MULTIPLIER = 1.01f;
+	const float MAXIMUM_DIFFICULTY = 2.75f; // Clamp at 2.5 or 2.75 difficulty
+
 	const int DEFAULT_GAME_MODE = (int)GameMode.NORMAL;
 	const int DEFAULT_GAME_STATE = (int)GameState.PLAYING;
-	const int DEFAULT_SCORE = 0;
+	
+	const int STARTING_STAGE = 1; // TODO: set to 1 after debugging
+	const int VICTORY_STAGE = 3;
+	const int STAGE_ADVANCEMENT_INCREMENTOR = 10;
+
 
 	public enum GameState
 	{
@@ -102,7 +111,7 @@ public partial class GameManager : Node
 	private int _missedGemsCount = 0;
 	private int _health = MAX_HEALTH;
 	private int _currentScore = DEFAULT_SCORE;
-	private int _currentStage = 1;
+	private int _currentStage = STARTING_STAGE;
 	private int _currentGameMode = DEFAULT_GAME_MODE;
 	private int _currentGameState = DEFAULT_GAME_STATE;
 
@@ -115,6 +124,7 @@ public partial class GameManager : Node
 	public override void _Process(double _delta)
 	{
 		CheckForGameOver();
+		CheckForGameVictory();
 	}
 
   public override void _ExitTree()
@@ -191,6 +201,7 @@ public partial class GameManager : Node
 	public void SetGameStateVictory()
 	{
 		CurrentGameState = (int)GameState.VICTORY;
+		SignalManager.Instance.EmitGameVictory();
 	}
 
 	public void ResetGame()
@@ -209,6 +220,14 @@ public partial class GameManager : Node
 			SignalManager.Instance.EmitGameOver();
 		}
   }
+
+	private void CheckForGameVictory()
+	{
+		if (CurrentGameMode == (int)GameMode.NORMAL && CurrentStage > VICTORY_STAGE)
+		{
+			SetGameStateVictory();
+		}
+	}
 
 #endregion
 
@@ -286,7 +305,6 @@ public partial class GameManager : Node
 
 	private void IncreaseDifficulty(int currentScore)
 	{
-		var maxDifficulty = 2.75; // Clamp at 2.5 or 2.75 difficulty
 		GD.Print("---------------NEW LOG--------------");
 		GD.Print("INCREASE DIFFICUTLY COMMENSING!!!");
 		GD.Print($"Current Level: {DifficultyLevel}");
@@ -295,7 +313,7 @@ public partial class GameManager : Node
 		DifficultyLevel = (float)Mathf.Clamp(
 			DifficultyLevel * DIFFICULTY_MULTIPLIER
 			, DEFAULT_DIFFICULTY_LEVEL
-			, maxDifficulty
+			, MAXIMUM_DIFFICULTY
 		);
 		GD.Print($"Updated Level: {DifficultyLevel}");
 		GD.Print($"DIFFICULTY LEVEL CHANGE COMPLETE!!!");
@@ -306,11 +324,17 @@ public partial class GameManager : Node
 
 	private void HandleStageAdvancement(int score)
 	{
-		var advancementIncrementer = 10;
-
-		if (score % advancementIncrementer == 0)
+		if (score % STAGE_ADVANCEMENT_INCREMENTOR == 0)
 		{
 			IncrementStage();
+
+			if (!(CurrentGameMode == (int)GameMode.INFINITE) && CurrentStage >= VICTORY_STAGE)
+			{
+				SetGameStateVictory();
+
+				return;	
+			}
+
 			SignalManager.Instance.EmitAdvanceStage();
 		}
 	}
@@ -322,7 +346,7 @@ public partial class GameManager : Node
 
 	private void ResetStageCount()
 	{
-		_currentStage = 1;
+		CurrentStage = 1;
 	}
 
 #endregion

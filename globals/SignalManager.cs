@@ -5,6 +5,7 @@ public partial class SignalManager : Node
 	public static SignalManager Instance { get; private set;}
 
 	[Signal] public delegate void GameOverEventHandler();
+	[Signal] public delegate void GameVictoryEventHandler();
 	[Signal] public delegate void InitiateDeathSequenceEventHandler();
 	[Signal] public delegate void InitiateVictorySequenceEventHandler();
 	[Signal] public delegate void BoostFuelDepletedEventHandler();
@@ -38,6 +39,11 @@ public partial class SignalManager : Node
 	public void EmitGameOver()
 	{
 		EmitSignal(SignalName.GameOver);
+	}
+
+	public void EmitGameVictory()
+	{
+		EmitSignal(SignalName.GameVictory);
 	}
 
 	public void EmitInitiateDeathSequence() 
