@@ -1,3 +1,4 @@
+using System;
 using GemCatcher.utils;
 using Godot;
 
@@ -22,6 +23,8 @@ public partial class GameUi : Control
 	[Export] private Node2D _heart4;
 	[Export] private Node2D _heart5;
 
+	[Export] private AnimationPlayer _animator;
+
 	private Tween _colorScaleTween;
 	private Tween _heartScaleTween;
 	private bool _isDying = false;
@@ -36,6 +39,7 @@ public partial class GameUi : Control
 		}
 
 		SubscribeToSignals();
+		ResetUi();
 		InitializeScoreUi();
 	}
 
@@ -62,6 +66,8 @@ public partial class GameUi : Control
 		SignalManager.Instance.HealthRecovered += OnHealthRecovered;
 		SignalManager.Instance.ScoreUpdated += OnScoreUpdated;
 		SignalManager.Instance.PlayerHurt += OnPlayerHurt;
+		SignalManager.Instance.GameVictory += OnGameVictory;
+		SignalManager.Instance.ResetGame += OnGameReset;
 	}
 
   private void UnsubscribeFromSignals()
@@ -70,14 +76,11 @@ public partial class GameUi : Control
 		SignalManager.Instance.HealthRecovered -= OnHealthRecovered;
 		SignalManager.Instance.ScoreUpdated -= OnScoreUpdated;
 		SignalManager.Instance.PlayerHurt -= OnPlayerHurt;
+		SignalManager.Instance.GameVictory -= OnGameVictory;
+		SignalManager.Instance.ResetGame -= OnGameReset;
 	}
 
-	private void InitializeScoreUi()
-	{
-			_scoreLabel.Text = $"Score: {GameManager.Instance.CurrentScore:000}";
-	}
-
-	private async void OnInitiateDeathSequenceAsync()
+  private async void OnInitiateDeathSequenceAsync()
 	{
 		// TODO: Consider refactoring _isDying into GameManager enum GameState
 		if (_isDying)
@@ -114,6 +117,16 @@ public partial class GameUi : Control
   {
 		UpdateHealthUi();
   }
+	
+  private void OnGameVictory()
+  {
+    _animator.Play(Constants.Animations.GameUi.Fadeout);
+  }
+
+	private void OnGameReset()
+	{
+		ResetUi();
+	}
 
 #endregion
 
@@ -121,8 +134,23 @@ public partial class GameUi : Control
 
 #region UI
 
+	private void ResetUi()
+	{
+		_animator.Play(Constants.Animations.GameUi.Reset);
+	}
+
+	private void InitializeScoreUi()
+	{
+		_scoreLabel.Text = $"Score: {GameManager.Instance.CurrentScore:000}";
+	}
+	
 	private void UpdateScoreUi(Color color)
 	{
+		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			return;
+		}
+
 		_scoreLabel.Text = $"Score: {GameManager.Instance.CurrentScore:000}";
 
 		var scaleMultiplier = 1.10f;
@@ -134,6 +162,11 @@ public partial class GameUi : Control
 
   private void UpdateHealthUi()
 	{
+		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			return;
+		}
+
 		var currentHealth = GameManager.Instance.GetHealth();
 
 		switch (currentHealth)
@@ -276,6 +309,10 @@ public partial class GameUi : Control
 
 	private void UpdateDebugLabel()
 	{
-		_customDebugLabel.Text = $"Difficulty Level: {GameManager.Instance.DifficultyLevel}";
+		_customDebugLabel.Text = 
+			$"Game State: {CustomDebug.GetGameStateString()}"
+			+ $"\nGame Mode: {CustomDebug.GetGameModeString()}"
+			+ $"\nCurrent Stage: {GameManager.Instance.CurrentStage}"
+			+ $"\nDifficulty Level: {GameManager.Instance.DifficultyLevel}";
 	}
 }
