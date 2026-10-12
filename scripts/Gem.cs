@@ -51,7 +51,7 @@ public partial class Gem : Area2D
 		AreaEntered += OnAreaEntered;
 	}
 
-		private void HandleMovement(float delta)
+	private void HandleMovement(float delta)
 	{
 		HandlePosition(delta);
 		HandleRotation(delta);
@@ -119,7 +119,7 @@ public partial class Gem : Area2D
 		_particles.Emitting = false;
 	}
 
-	#region Signals
+#region Signals
 
 	public virtual void OnAreaEntered(Area2D area)
 	{
@@ -135,5 +135,6 @@ public partial class Gem : Area2D
 		}
 	}
 
-	#endregion
+#endregion
+
 }
