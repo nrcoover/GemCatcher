@@ -22,6 +22,9 @@ public partial class Game : Node2D
 	[Export] private AudioStreamPlayer2D _hurtSound;
 	[Export] private AudioStreamPlayer2D _healthIncreaseSound;
 
+	[Export] private Node2D _normalSpawnerContainer;
+	[Export] private Node2D _victorySpawnerContainer;
+
 	[Export] private int _shakeIntensity;
 	[Export] private float _shakeTime;
 
@@ -411,7 +414,7 @@ public partial class Game : Node2D
 		spawner.SpawnTime *= additionalSpawnerTimeMultiplier
 			* GameManager.Instance.CurrentStage;
 
-		CallDeferred("add_child", spawner);
+		_normalSpawnerContainer.CallDeferred("add_child", spawner);
 
 		GD.Print("Spawner SpawnTime = " + spawner.SpawnTime);
 	}

@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://bgk1gf8kovaqj"]
+
+[ext_resource type="Script" uid="uid://dew5vnvnsm6r4" path="res://scripts/VictorySpawnerContainer.cs" id="1_50cg4"]
+[ext_resource type="PackedScene" uid="uid://bbrkr3etn88hu" path="res://scenes/GemSpawner.tscn" id="2_r0j3s"]
+
+[node name="VictorySpawnerContainer" type="Node2D"]
+script = ExtResource("1_50cg4")
+
+[node name="GemSpawner" parent="." instance=ExtResource("2_r0j3s")]
+
+[node name="GemSpawner2" parent="." instance=ExtResource("2_r0j3s")]
+
+[node name="GemSpawner3" parent="." instance=ExtResource("2_r0j3s")]
+
+[node name="GemSpawner4" parent="." instance=ExtResource("2_r0j3s")]
+
+[node name="GemSpawner5" parent="." instance=ExtResource("2_r0j3s")]
+
+[node name="GemSpawner6" parent="." instance=ExtResource("2_r0j3s")]
+
+[node name="GemSpawner7" parent="." instance=ExtResource("2_r0j3s")]
+
+[node name="GemSpawner8" parent="." instance=ExtResource("2_r0j3s")]
+
+[node name="GemSpawner9" parent="." instance=ExtResource("2_r0j3s")]
+
+[node name="GemSpawner10" parent="." instance=ExtResource("2_r0j3s")]

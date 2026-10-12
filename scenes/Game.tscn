@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=38 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/images/backgrounds/GameBg.png" id="1_ibkli"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://d2eah2eim18xg" path="res://scenes/Camera.tscn" id="3_kyk2p"]
 [ext_resource type="PackedScene" uid="uid://cq8skradygbr0" path="res://scenes/MotionBackdrop.tscn" id="4_vjgi4"]
 [ext_resource type="PackedScene" uid="uid://bbrkr3etn88hu" path="res://scenes/GemSpawner.tscn" id="6_kyk2p"]
+[ext_resource type="PackedScene" uid="uid://bgk1gf8kovaqj" path="res://scenes/VictorySpawnerContainer.tscn" id="7_jhsr3"]
 [ext_resource type="AudioStream" uid="uid://df347gxeph5km" path="res://assets/audio/music/bgm_action_5.mp3" id="8_400sg"]
 [ext_resource type="PackedScene" uid="uid://i3lu0mgmm0lf" path="res://scenes/GameUi.tscn" id="9_a85ww"]
 [ext_resource type="AudioStream" uid="uid://dtfk07ryobxgf" path="res://assets/audio/sfx/explode.wav" id="9_g4kob"]
@@ -426,7 +427,7 @@ _data = {
 &"yellow_warning_level_3": SubResource("Animation_sv1m6")
 }
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_music", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommanderAdvanceStage1", "_audioCommanderAdvanceStage2", "_audioCommanderAdvanceStage3", "_audioCommencingMission", "_audioMissionFailure", "_audioStageAdvancement", "_scoreSound", "_hurtSound", "_healthIncreaseSound")]
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_music", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommanderAdvanceStage1", "_audioCommanderAdvanceStage2", "_audioCommanderAdvanceStage3", "_audioCommencingMission", "_audioMissionFailure", "_audioStageAdvancement", "_scoreSound", "_hurtSound", "_healthIncreaseSound", "_normalSpawnerContainer")]
 script = ExtResource("1_78awf")
 _gemSpawner = ExtResource("6_kyk2p")
 _camera = NodePath("Camera2D")
@@ -442,6 +443,7 @@ _audioStageAdvancement = NodePath("Audio/Voice/StageAdvancement")
 _scoreSound = NodePath("Audio/SFX/ScoreSound")
 _hurtSound = NodePath("Audio/SFX/HurtSound")
 _healthIncreaseSound = NodePath("Audio/SFX/HealthIncreaseSound")
+_normalSpawnerContainer = NodePath("NormalSpawnerContainer")
 _shakeIntensity = 30
 _shakeTime = 0.25
 
@@ -489,7 +491,11 @@ _audioDisengageBoosters = NodePath("../Audio/Voice/DisengageBoosters")
 _audioBoostersReengaged = NodePath("../Audio/Voice/BoostersReengaged")
 _audioCooldownInProgress = NodePath("../Audio/Voice/CoolDownInProgress")
 
-[node name="GemSpawner" parent="." instance=ExtResource("6_kyk2p")]
+[node name="NormalSpawnerContainer" type="Node2D" parent="."]
+
+[node name="GemSpawner" parent="NormalSpawnerContainer" instance=ExtResource("6_kyk2p")]
+
+[node name="VictorySpawnerContainer" parent="." instance=ExtResource("7_jhsr3")]
 
 [node name="BoostFuelAnimator" type="AnimationPlayer" parent="."]
 libraries = {
@@ -588,4 +594,5 @@ volume_db = -12.0
 stream = ExtResource("17_attvq")
 volume_db = -12.0
 
+[editable path="VictorySpawnerContainer"]
 [editable path="CanvasLayer/GameUi"]
