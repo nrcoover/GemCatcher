@@ -1,4 +1,3 @@
-using System;
 using GemCatcher.utils;
 using Godot;
 
