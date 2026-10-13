@@ -77,7 +77,7 @@ public partial class GemSpawner : Node2D
 	private void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.DifficultyIncreased -= OnDifficultyIncreased;
-		SignalManager.Instance.GameVictory += OnGameVictory;
+		SignalManager.Instance.GameVictory -= OnGameVictory;
 	}
 
 	private void OnGameVictory()
