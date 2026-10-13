@@ -94,6 +94,11 @@ public partial class Gem : Area2D
 
 		_rotationVariation = Helper.GetRandomFloat(_minRotationVariation, _maxRotationVariation);
 
+		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			_maxScaleVariation = 1.15f;
+		}
+
 		_scaleVariation = Helper.GetRandomFloat(_minScaleVariation, _maxScaleVariation);
 	}
 
