@@ -28,12 +28,7 @@ public partial class GemSpawner : Node2D
 	{
 		SubscribeToSignals();
 
-		if (_isVictorySpawner && GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
-		{
-			InitializeVictoryVariables();
-			// SpawnFalseGem();
-		}
-		else if (_isOnMainMenu)
+		if (_isOnMainMenu)
 		{
 			SetBoundaryMarkers();
 		}
