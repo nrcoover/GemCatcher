@@ -17,7 +17,7 @@ public partial class GameManager : Node
 	const int DEFAULT_GAME_STATE = (int)GameState.PLAYING;
 	
 	const int STARTING_STAGE = 1; // TODO: set to 1 after debugging
-	const int VICTORY_STAGE = 3;
+	const int VICTORY_STAGE = 2;
 	const int STAGE_ADVANCEMENT_INCREMENTOR = 10;
 
 

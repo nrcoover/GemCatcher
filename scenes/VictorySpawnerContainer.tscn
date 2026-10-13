@@ -7,21 +7,23 @@
 script = ExtResource("1_50cg4")
 
 [node name="GemSpawner" parent="." instance=ExtResource("2_r0j3s")]
+_isVictorySpawner = true
+
+[node name="GemSpawnTimer" parent="GemSpawner" index="1"]
+autostart = false
 
 [node name="GemSpawner2" parent="." instance=ExtResource("2_r0j3s")]
+_isVictorySpawner = true
+
+[node name="GemSpawnTimer" parent="GemSpawner2" index="1"]
+autostart = false
 
 [node name="GemSpawner3" parent="." instance=ExtResource("2_r0j3s")]
+_isVictorySpawner = true
 
-[node name="GemSpawner4" parent="." instance=ExtResource("2_r0j3s")]
+[node name="GemSpawnTimer" parent="GemSpawner3" index="1"]
+autostart = false
 
-[node name="GemSpawner5" parent="." instance=ExtResource("2_r0j3s")]
-
-[node name="GemSpawner6" parent="." instance=ExtResource("2_r0j3s")]
-
-[node name="GemSpawner7" parent="." instance=ExtResource("2_r0j3s")]
-
-[node name="GemSpawner8" parent="." instance=ExtResource("2_r0j3s")]
-
-[node name="GemSpawner9" parent="." instance=ExtResource("2_r0j3s")]
-
-[node name="GemSpawner10" parent="." instance=ExtResource("2_r0j3s")]
+[editable path="GemSpawner"]
+[editable path="GemSpawner2"]
+[editable path="GemSpawner3"]

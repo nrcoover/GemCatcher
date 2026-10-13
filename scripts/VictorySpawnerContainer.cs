@@ -19,7 +19,6 @@ public partial class VictorySpawnerContainer : Node2D
 		UnsubscribeFromSignals();
 	}
 
-
 	private void SubscribeToSignals()
 	{
 		SignalManager.Instance.GameVictory += OnGameVictory;
@@ -32,12 +31,21 @@ public partial class VictorySpawnerContainer : Node2D
 
 	private void OnGameVictory()
 	{
+		InitializeSpawnerData();
 		EnableAllSpawners();
+	}
+
+	private void InitializeSpawnerData()
+	{
+		foreach (GemSpawner spawner in victorySpawners)
+		{
+			spawner.InitializeVictoryVariables();
+		}
 	}
 
 	private void DisableAllSpawners()
 	{
-		foreach (Node spawner in victorySpawners)
+		foreach (GemSpawner spawner in victorySpawners)
 		{
 			spawner.ProcessMode = ProcessModeEnum.Disabled;
 		}
@@ -45,9 +53,10 @@ public partial class VictorySpawnerContainer : Node2D
 
 	private void EnableAllSpawners()
 	{
-		foreach (Node spawner in victorySpawners)
+		foreach (GemSpawner spawner in victorySpawners)
 		{
 			spawner.ProcessMode = ProcessModeEnum.Inherit;
+			GD.Print($"Spawner Spawn Time: {spawner.SpawnTime}");
 		}
 	}
 }

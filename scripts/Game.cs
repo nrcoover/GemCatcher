@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using System.Linq;
 using Godot;
+using GemCatcher.utils;
 
 public partial class Game : Node2D
 {
@@ -48,6 +49,11 @@ public partial class Game : Node2D
 		if (@event.IsActionPressed("exit"))
 		{
 			HandleEscape();
+		}
+
+		if (@event.IsActionPressed("test") && CustomDebug.IsDebugging)
+		{
+			GameManager.Instance.SetGameStateVictory();
 		}
 	}
 

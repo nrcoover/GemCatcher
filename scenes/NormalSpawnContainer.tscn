@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://ejfvyw78locs"]
+
+[ext_resource type="Script" uid="uid://eelmrso11fpb" path="res://scripts/NormalSpawnContainer.cs" id="1_dsk05"]
+[ext_resource type="PackedScene" uid="uid://bbrkr3etn88hu" path="res://scenes/GemSpawner.tscn" id="1_j7jw5"]
+
+[node name="NormalSpawnerContainer" type="Node2D"]
+script = ExtResource("1_dsk05")
+
+[node name="GemSpawner" parent="." instance=ExtResource("1_j7jw5")]

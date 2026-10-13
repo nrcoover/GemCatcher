@@ -14,6 +14,7 @@ public partial class GemSpawner : Node2D
 	[Export] private PackedScene _gemPowerUpScene;
 	[Export] private Node _gemContainer;
 	[Export] private bool _isOnMainMenu;
+	[Export] private bool _isVictorySpawner;
 
 	public float SpawnTime = 1.75f;
 
@@ -25,24 +26,38 @@ public partial class GemSpawner : Node2D
 
 	public override void _Ready()
 	{
-		InitializeVariables();
-		StartPowerUpTimer();
+		SubscribeToSignals();
 
-		if (_isOnMainMenu)
+		if (_isVictorySpawner && GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			InitializeVictoryVariables();
+			// SpawnFalseGem();
+		}
+		else if (_isOnMainMenu)
 		{
 			SetBoundaryMarkers();
 		}
 		else
 		{
+			InitializeVariables();
 			SpawnGem();
 		}
 
-		SubscribeToSignals();
+		StartPowerUpTimer();
 	}
 
 	public override void _ExitTree()
 	{
 		UnsubscribeFromSignals();
+	}
+
+	public void InitializeVictoryVariables()
+	{
+		var minTime = 0.01f;
+		var maxTime = 0.1f;
+
+		SpawnTime = Helper.GetRandomFloat(minTime, maxTime);
+		_gemSpawnTimer.WaitTime = SpawnTime;
 	}
 
 	private void InitializeVariables()
@@ -59,6 +74,7 @@ public partial class GemSpawner : Node2D
   private void SubscribeToSignals()
 	{
 		SignalManager.Instance.DifficultyIncreased += OnDifficultyIncreased;
+		SignalManager.Instance.GameVictory += OnGameVictory;
 		_gemSpawnTimer.Timeout += OnGemSpawnTimeout;
 		_powerUpSpawnTimer.Timeout += OnPowerUpSpawnTimeout;
 	}
@@ -66,10 +82,25 @@ public partial class GemSpawner : Node2D
 	private void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.DifficultyIncreased -= OnDifficultyIncreased;
+		SignalManager.Instance.GameVictory += OnGameVictory;
+	}
+
+	private void OnGameVictory()
+	{
+		if (_isVictorySpawner)
+		{
+			InitializeVictoryVariables();
+			_gemSpawnTimer.Start();
+		}
 	}
 
 	private void OnDifficultyIncreased()
   {
+		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			return;
+		}
+
 		var decrementalTime = 0.01;
 		var minWaitTime = 0.75f; // Clamp at .25 or .15 wait time; .75 when mixed with speed increase on difficulty level increase.
 
@@ -92,6 +123,11 @@ public partial class GemSpawner : Node2D
 
   private void OnPowerUpSpawnTimeout()
   {
+		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			return;
+		}
+
     EnablePowerUpSpawning();
 		GD.Print("Wait Time ended. Can spawn power ups is: " + _canSpawnPowerUp);
   }
@@ -115,7 +151,7 @@ public partial class GemSpawner : Node2D
 			return;
 		}
 
-		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		if (_isVictorySpawner && GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
 		{
 			SpawnFalseGem();
 			return;
