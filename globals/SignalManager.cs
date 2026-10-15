@@ -17,9 +17,6 @@ public partial class SignalManager : Node
 	[Signal] public delegate void ShowGameOverScreenEventHandler();
 	[Signal] public delegate void ShowMissionFailurePanelEventHandler();
 	[Signal] public delegate void ShowGameOverButtonsEventHandler();
-	[Signal] public delegate void ShowGameSuccessScreenEventHandler();
-	[Signal] public delegate void ShowMissionSuccessPanelEventHandler();
-	[Signal] public delegate void ShowGameSuccessButtonsEventHandler();
 	[Signal] public delegate void HighScoreChangedEventHandler();
 	[Signal] public delegate void HealthRecoveredEventHandler();
 	[Signal] public delegate void ScoreIncrementedEventHandler(int score, Color color);
@@ -99,21 +96,6 @@ public partial class SignalManager : Node
 	public void EmitShowGameOverButtons()
 	{
 		EmitSignal(SignalName.ShowGameOverButtons);
-	}
-
-	public void EmitShowGameSuccessScreen()
-	{
-		EmitSignal(SignalName.ShowGameSuccessScreen);
-	}
-
-	public void EmitShowMissionSuccessPanel()
-	{
-		EmitSignal(SignalName.ShowMissionSuccessPanel);
-	}
-
-	public void EmitShowGameSuccessButtons()
-	{
-		EmitSignal(SignalName.ShowGameSuccessButtons);
 	}
 
 	public void EmitHighScoreChangedSignal()

@@ -428,7 +428,7 @@ _data = {
 &"yellow_warning_level_3": SubResource("Animation_sv1m6")
 }
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_music", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommanderAdvanceStage1", "_audioCommanderAdvanceStage2", "_audioCommanderAdvanceStage3", "_audioCommencingMission", "_audioMissionFailure", "_audioStageAdvancement", "_scoreSound", "_hurtSound", "_healthIncreaseSound", "_normalSpawnerContainer", "_victorySpawnerContainer")]
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_music", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommanderAdvanceStage1", "_audioCommanderAdvanceStage2", "_audioCommanderAdvanceStage3", "_audioCommencingMission", "_audioMissionFailure", "_audioStageAdvancement", "_scoreSound", "_hurtSound", "_healthIncreaseSound", "_normalSpawnerContainer", "_victorySpawnerContainer", "_gameVictoryScreen")]
 script = ExtResource("1_78awf")
 _gemSpawner = ExtResource("6_kyk2p")
 _camera = NodePath("Camera2D")
@@ -446,6 +446,7 @@ _hurtSound = NodePath("Audio/SFX/HurtSound")
 _healthIncreaseSound = NodePath("Audio/SFX/HealthIncreaseSound")
 _normalSpawnerContainer = NodePath("NormalSpawnerContainer")
 _victorySpawnerContainer = NodePath("VictorySpawnerContainer")
+_gameVictoryScreen = NodePath("CanvasLayer/GameSuccessScreen")
 _shakeIntensity = 30
 _shakeTime = 0.25
 
@@ -596,4 +597,7 @@ volume_db = -12.0
 
 [editable path="NormalSpawnerContainer"]
 [editable path="VictorySpawnerContainer"]
+[editable path="VictorySpawnerContainer/GemSpawner"]
+[editable path="VictorySpawnerContainer/GemSpawner2"]
+[editable path="VictorySpawnerContainer/GemSpawner3"]
 [editable path="CanvasLayer/GameUi"]

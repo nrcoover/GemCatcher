@@ -25,6 +25,14 @@ public static partial class Constants
       public static readonly string Reset = "RESET";
       public static readonly string Fadeout = "fade-out";
     }
+
+    public static class GameSuccessScreen
+    {
+      public static readonly string Reset = "RESET";
+      public static readonly string FadeIn = "fade-in";
+      public static readonly string ShowButtons = "show-buttons";
+      public static readonly string ShowSuccessPanel = "show-success-panel";
+    }
   }
 
   public static class CustomColors

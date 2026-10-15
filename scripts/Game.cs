@@ -26,6 +26,8 @@ public partial class Game : Node2D
 	[Export] private Node2D _normalSpawnerContainer;
 	[Export] private Node2D _victorySpawnerContainer;
 
+	[Export] private GameSuccessScreen _gameVictoryScreen;
+
 	[Export] private int _shakeIntensity;
 	[Export] private float _shakeTime;
 
@@ -75,7 +77,6 @@ public partial class Game : Node2D
 	private void SubscribeToSignals()
 	{
 		SignalManager.Instance.InitiateDeathSequence += OnInitiateDeathSequenceAsync;
-		SignalManager.Instance.InitiateVictorySequence += OnInitiateVictorySequenceAsync;
 		SignalManager.Instance.Scored += OnScored;
 		SignalManager.Instance.GemOffScreen += OnGemOffScreen;
 		SignalManager.Instance.PlayerHurt += OnPlayerHurt;
@@ -83,11 +84,11 @@ public partial class Game : Node2D
 		SignalManager.Instance.PowerUpSpawned += OnPowerUpSpawned;
 		SignalManager.Instance.PowerUpRemoved += OnPowerUpRemoved;
 		SignalManager.Instance.AdvanceStage += OnAdvanceStageAsync;
+		SignalManager.Instance.GameVictory += OnGameVictory;
 	}
 
   private void UnsubscribeFromSignals() {
 		SignalManager.Instance.InitiateDeathSequence -= OnInitiateDeathSequenceAsync;
-		SignalManager.Instance.InitiateVictorySequence -= OnInitiateVictorySequenceAsync;
 		SignalManager.Instance.Scored -= OnScored;
 		SignalManager.Instance.GemOffScreen -= OnGemOffScreen;
 		SignalManager.Instance.PlayerHurt -= OnPlayerHurt;
@@ -95,6 +96,7 @@ public partial class Game : Node2D
 		SignalManager.Instance.PowerUpSpawned -= OnPowerUpSpawned;
 		SignalManager.Instance.PowerUpRemoved -= OnPowerUpRemoved;
 		SignalManager.Instance.AdvanceStage -= OnAdvanceStageAsync;
+		SignalManager.Instance.GameVictory -= OnGameVictory;
 	}
 
   private async void OnInitiateDeathSequenceAsync()
@@ -126,7 +128,7 @@ public partial class Game : Node2D
 		}
 	}
 
-	private async void OnInitiateVictorySequenceAsync()
+	private async void InitiateVictorySequenceAsync()
 	{
 		if (_isVictorious)
 		{
@@ -134,6 +136,21 @@ public partial class Game : Node2D
 		}
 
 		_isVictorious = true;
+
+		// Disable most paddle functionality, except for movement
+
+		// Play winning celebration sound
+
+		await CreateTimerAsync(4.0f);
+
+		_gameVictoryScreen.Visible = true;
+
+		SignalManager.Instance.EmitInitiateVictorySequence();
+
+		// After a couple seconds, fade in Victory Canvas Scene
+
+		// Stop processing of paddle
+
 	}
 
 	private void OnScored(Color color)
@@ -206,6 +223,11 @@ public partial class Game : Node2D
 		}
 	}
 
+	private void OnGameVictory()
+	{
+		InitiateVictorySequenceAsync();
+	}
+
 #endregion
 
 
@@ -264,6 +286,7 @@ public partial class Game : Node2D
 
 	private void PlayStageAdvancementCommanderAudio()
 	{
+		// TODO: Prevent same audio twice in a row by storing previous random number in variable and re-roll if same as previous.
 		var randomNumber = Helper.GetRandomInt(1, 3);
 
 		switch (randomNumber)

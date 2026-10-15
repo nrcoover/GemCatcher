@@ -219,6 +219,7 @@ public partial class GameManager : Node
     if (GetHealth() <= 0)
 		{
 			SignalManager.Instance.EmitGameOver();
+			SignalManager.Instance.EmitInitiateVictorySequence();
 		}
   }
 

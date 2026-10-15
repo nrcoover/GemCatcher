@@ -398,6 +398,13 @@ public partial class Paddle : Area2D
 	
 	private void HandleFuelConsumption(float delta)
 	{
+		// TODO: Double check fuel management in Victory State
+		// TODO: Handle edge case of player winning during fuel depleted audio and animation (fade out audio and reset animation)
+		// if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		// {
+		// 	return;
+		// }
+
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
 
 		if (_canBoost)

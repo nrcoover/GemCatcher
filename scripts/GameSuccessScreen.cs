@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Godot;
 
 public partial class GameSuccessScreen : Control
@@ -10,8 +11,10 @@ public partial class GameSuccessScreen : Control
 
 	public override void _Ready()
 	{
-		_gameSuccessPanel.Visible = false;
 		_buttonsContainer.Visible = false;
+		_gameSuccessPanel.Visible = false;
+		_gameSuccessPanel.Modulate = new Color(Constants.CustomColors.AplhaInvisible);
+		Modulate = new Color(Constants.CustomColors.AplhaInvisible);
 
 		SubscribeToSignals();
 	}
@@ -23,34 +26,31 @@ public partial class GameSuccessScreen : Control
 
   private void SubscribeToSignals()
   {
-    SignalManager.Instance.ShowGameSuccessScreen += OnShowGameSuccessScreen;
-		SignalManager.Instance.ShowMissionSuccessPanel += OnShowMissionSuccessPanel;
-		SignalManager.Instance.ShowGameSuccessButtons += OnShowGameSuccessButtons;
+		SignalManager.Instance.InitiateVictorySequence += OnInitiateVictorySequenceAsync;
 		_replayButton.Pressed += OnRetryButtonPressed;
 		_exitButton.Pressed += OnExitButtonPressed;
   }
 
   private void UnsubscribeToSignals()
   {
-    SignalManager.Instance.ShowGameSuccessScreen -= OnShowGameSuccessScreen;
-		SignalManager.Instance.ShowMissionSuccessPanel -= OnShowMissionSuccessPanel;
-		SignalManager.Instance.ShowGameSuccessButtons -= OnShowGameSuccessButtons;
+		SignalManager.Instance.InitiateVictorySequence -= OnInitiateVictorySequenceAsync;
   }
 
-  private void OnShowMissionSuccessPanel()
+  private void ShowMissionSuccessPanel()
   {
     _gameSuccessPanel.Visible = true;
-		_animator.Play("show-success-panel");
+		PlayShowSuccessPanelAnimation();
   }
 
-  private void OnShowGameSuccessScreen()
+  private void ShowGameSuccessScreen()
   {
     Visible = true;
+		PlayScreenFadeInAnimation();
   }
 
-	private void OnShowGameSuccessButtons()
+	private void ShowGameSuccessButtons()
 	{
-		_animator.Play("show-buttons");
+		PlayShowButtonsAnimation();
 		Input.MouseMode = Input.MouseModeEnum.Visible;
 	}
 	
@@ -65,4 +65,51 @@ public partial class GameSuccessScreen : Control
 		SignalManager.Instance.EmitResetGame();
     LevelManager.Instance.LoadMainMenu();
   }
+
+	private async void OnInitiateVictorySequenceAsync()
+	{
+		ShowGameSuccessScreen();
+		
+		await CreateTimerAsync(3.5f); // Above animation is 4 seconds; does this leaves a transparency by ending the animation early
+
+		ShowMissionSuccessPanel();
+
+		await CreateTimerAsync(4.0f);
+
+		ShowGameSuccessButtons();
+	}
+
+	private void PlayScreenFadeInAnimation()
+	{
+		_animator.Play(Constants.Animations.GameSuccessScreen.FadeIn);
+	}
+	
+	private void PlayShowSuccessPanelAnimation()
+	{
+		_animator.Play(Constants.Animations.GameSuccessScreen.ShowSuccessPanel);
+	}
+
+	private void PlayShowButtonsAnimation()
+	{
+		_animator.Play(Constants.Animations.GameSuccessScreen.ShowButtons);
+	}
+
+	#region Asynchronous Tasks
+
+	private async Task CreateTimerAsync(float timeInSeconds)
+	{
+		var tree = GetTree();
+
+		if (tree == null)
+		{
+			return;
+		}
+
+		await ToSignal(
+			tree.CreateTimer(timeInSeconds),
+			SceneTreeTimer.SignalName.Timeout
+		);
+	}
+
+#endregion
 }
