@@ -275,31 +275,31 @@ libraries = {
 
 [node name="Audio" type="Node" parent="."]
 
-[node name="BoostSound" type="AudioStreamPlayer2D" parent="Audio" groups=["Audio Streams"]]
+[node name="BoostSound" type="AudioStreamPlayer2D" parent="Audio" groups=["Audio Streams", "Paddle Audio"]]
 stream = ExtResource("3_jlx5f")
 volume_db = -9.5
 pitch_scale = 1.5
 
-[node name="WarningBlip" type="AudioStreamPlayer" parent="Audio" groups=["Audio Streams"]]
+[node name="WarningBlip" type="AudioStreamPlayer" parent="Audio" groups=["Audio Streams", "Paddle Audio"]]
 stream = ExtResource("4_c7ra2")
 volume_db = -12.0
 pitch_scale = 3.0
 
-[node name="BigPaddleActivatedSound" type="AudioStreamPlayer2D" parent="Audio"]
+[node name="BigPaddleActivatedSound" type="AudioStreamPlayer2D" parent="Audio" groups=["Audio Streams", "Paddle Audio"]]
 stream = ExtResource("6_om7xf")
 volume_db = -20.0
 pitch_scale = 1.75
 
-[node name="BigPaddleDeactivatedSound" type="AudioStreamPlayer2D" parent="Audio"]
+[node name="BigPaddleDeactivatedSound" type="AudioStreamPlayer2D" parent="Audio" groups=["Audio Streams", "Paddle Audio"]]
 stream = ExtResource("7_gw2y4")
 volume_db = -20.0
 pitch_scale = 0.8
 
-[node name="GhostPaddlesActivatedSound" type="AudioStreamPlayer2D" parent="Audio"]
+[node name="GhostPaddlesActivatedSound" type="AudioStreamPlayer2D" parent="Audio" groups=["Audio Streams", "Paddle Audio"]]
 stream = ExtResource("8_d3tdo")
 volume_db = -22.0
 
-[node name="GhostPaddlesDeactivatedSound" type="AudioStreamPlayer2D" parent="Audio"]
+[node name="GhostPaddlesDeactivatedSound" type="AudioStreamPlayer2D" parent="Audio" groups=["Audio Streams", "Paddle Audio"]]
 stream = ExtResource("9_b3lqm")
 volume_db = -20.0
 pitch_scale = 0.8

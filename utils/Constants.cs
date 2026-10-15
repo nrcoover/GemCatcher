@@ -79,6 +79,7 @@ public static partial class Constants
   {
     public static readonly string MoveableObjects = "Moveable Objects";
     public static readonly string AudioStreams = "Audio Streams";
+    public static readonly string PaddleAudio = "Paddle Audio";
   }
 
   public static class GameState
