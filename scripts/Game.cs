@@ -396,7 +396,14 @@ public partial class Game : Node2D
 			return;
     }
 
-    _audioStageAdvancement.Play();
+		if (GameManager.Instance.CurrentStage == GameManager.VICTORY_STAGE)
+		{
+			_audioFinalStageAdvancement.Play();
+		}
+		else
+		{
+    	_audioStageAdvancement.Play();
+		}
 
     await CreateTimerAsync(1.75f);
 

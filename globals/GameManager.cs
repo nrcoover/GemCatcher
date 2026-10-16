@@ -17,7 +17,7 @@ public partial class GameManager : Node
 	const int DEFAULT_GAME_STATE = (int)GameState.PLAYING;
 	
 	const int STARTING_STAGE = 1; // TODO: set to 1 after debugging
-	const int VICTORY_STAGE = 3;
+	public const int VICTORY_STAGE = 3;
 	const int STAGE_ADVANCEMENT_INCREMENTOR = 10;
 
 
@@ -225,7 +225,7 @@ public partial class GameManager : Node
 
 	private void CheckForGameVictory()
 	{
-		if (CurrentGameMode == (int)GameMode.NORMAL && CurrentStage > VICTORY_STAGE)
+		if ((CurrentGameMode == (int)GameMode.NORMAL) && (CurrentStage > VICTORY_STAGE))
 		{
 			SetGameStateVictory();
 		}
@@ -330,7 +330,7 @@ public partial class GameManager : Node
 		{
 			IncrementStage();
 
-			if (!(CurrentGameMode == (int)GameMode.INFINITE) && CurrentStage >= VICTORY_STAGE)
+			if (!(CurrentGameMode == (int)GameMode.INFINITE) && CurrentStage > VICTORY_STAGE)
 			{
 				SetGameStateVictory();
 
