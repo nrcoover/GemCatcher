@@ -10,18 +10,30 @@ public partial class Game : Node2D
 	[Export] private PackedScene _gemSpawner;
 	[Export] private Camera _camera;
 
+	// Music
 	[Export] private AudioStreamPlayer _music;
+	[Export] private AudioStreamPlayer _musicReversed;
+
+	// SFX
 	[Export] private AudioStreamPlayer _audioExplosion;
+	[Export] private AudioStreamPlayer2D _scoreSound;
+	[Export] private AudioStreamPlayer2D _hurtSound;
+	[Export] private AudioStreamPlayer2D _healthIncreaseSound;
+
+	// Commander Dialogue
 	[Export] private AudioStreamPlayer2D _audioCommanderEncouragement;
 	[Export] private AudioStreamPlayer2D _audioCommanderAdvanceStage1;
 	[Export] private AudioStreamPlayer2D _audioCommanderAdvanceStage2;
 	[Export] private AudioStreamPlayer2D _audioCommanderAdvanceStage3;
+	[Export] private AudioStreamPlayer2D _audioCommanderCongratulations;
+
+	// Computer Dialogue
 	[Export] private AudioStreamPlayer _audioCommencingMission;
 	[Export] private AudioStreamPlayer _audioMissionFailure;
 	[Export] private AudioStreamPlayer _audioStageAdvancement;
-	[Export] private AudioStreamPlayer2D _scoreSound;
-	[Export] private AudioStreamPlayer2D _hurtSound;
-	[Export] private AudioStreamPlayer2D _healthIncreaseSound;
+	[Export] private AudioStreamPlayer _audioFinalStageAdvancement;
+	[Export] private AudioStreamPlayer _audioMissionComplete;
+
 
 	[Export] private Node2D _normalSpawnerContainer;
 	[Export] private Node2D _victorySpawnerContainer;
@@ -137,20 +149,25 @@ public partial class Game : Node2D
 
 		_isVictorious = true;
 
-		// Disable most paddle functionality, except for movement
-
 		// Play winning celebration sound
+		_music.Stop();
+		_audioExplosion.Play(); // TODO: Replace with special gem explosion sound
+		_musicReversed.Play();
 
-		await CreateTimerAsync(4.0f);
+		await CreateTimerAsync(0.75f);
 
+		_audioMissionComplete.Play();
+
+		await CreateTimerAsync(2.5f);
+
+		_audioCommanderCongratulations.Play();
+
+		await CreateTimerAsync(2.0f);
+
+		// Victory screen initates with fade-in animation
 		_gameVictoryScreen.Visible = true;
 
 		SignalManager.Instance.EmitInitiateVictorySequence();
-
-		// After a couple seconds, fade in Victory Canvas Scene
-
-		// Stop processing of paddle
-
 	}
 
 	private void OnScored(Color color)

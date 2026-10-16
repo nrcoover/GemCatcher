@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=43 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/images/backgrounds/GameBg.png" id="1_ibkli"]
@@ -15,6 +15,7 @@
 [ext_resource type="AudioStream" uid="uid://dfdhu6sspy4it" path="res://assets/audio/sfx/404766__owlstorm__retro-video-game-sfx-punch-2.wav" id="11_3xj3m"]
 [ext_resource type="AudioStream" uid="uid://dw8ladfm3gy58" path="res://assets/audio/sfx/475557__rannem__bip.wav" id="13_r7sob"]
 [ext_resource type="AudioStream" uid="uid://ogfnhm87ce0t" path="res://assets/audio/sfx/492651__rvgerxini__power-down.mp3" id="13_y5y3l"]
+[ext_resource type="AudioStream" uid="uid://dauw3imvw8kya" path="res://assets/audio/music/bgm_action_5-reversed-edit.mp3" id="15_1gdd5"]
 [ext_resource type="AudioStream" uid="uid://bhkxrv2ytglu8" path="res://assets/audio/dialogue/computer/disengage-boosters.mp3" id="15_45i86"]
 [ext_resource type="PackedScene" uid="uid://0vd5n2cpnev8" path="res://scenes/GameOverScreen.tscn" id="15_jbgew"]
 [ext_resource type="AudioStream" uid="uid://dgkejar3yrf6q" path="res://assets/audio/dialogue/computer/boosters-reengaged.mp3" id="16_a8wo8"]
@@ -23,9 +24,12 @@
 [ext_resource type="AudioStream" uid="uid://h63jsdluxsal" path="res://assets/audio/dialogue/computer/cooldown-in-progress.mp3" id="17_attvq"]
 [ext_resource type="AudioStream" uid="uid://negotetnv5rh" path="res://assets/audio/dialogue/commander/commander-encouragement.mp3" id="17_jbgew"]
 [ext_resource type="AudioStream" uid="uid://bacmsb461kopv" path="res://assets/audio/sfx/523650__lilmati__powerup-06.wav" id="20_a85ww"]
+[ext_resource type="AudioStream" uid="uid://c08o0y5j5oi18" path="res://assets/audio/dialogue/computer/computer_mission-complete.mp3" id="21_jai3c"]
+[ext_resource type="AudioStream" uid="uid://b25bhfgkdjk40" path="res://assets/audio/dialogue/computer/computer_initiating-final-stage.mp3" id="23_1gdd5"]
 [ext_resource type="AudioStream" uid="uid://bejlx55reunkv" path="res://assets/audio/dialogue/computer/mission-failure-v2.mp3" id="23_jbgew"]
 [ext_resource type="AudioStream" uid="uid://chqdwmchavair" path="res://assets/audio/dialogue/computer/computer_advance-to-next-stage.mp3" id="23_jhsr3"]
 [ext_resource type="AudioStream" uid="uid://d34kix1itjhir" path="res://assets/audio/dialogue/commander/commander_wilder-this-way.mp3" id="25_i4jil"]
+[ext_resource type="AudioStream" uid="uid://ce4lato72wuqf" path="res://assets/audio/dialogue/commander/commander_congratulations-cadet.mp3" id="26_754j2"]
 [ext_resource type="AudioStream" uid="uid://dh2s6gs783tlu" path="res://assets/audio/dialogue/commander/commander_dont-get-lost-in-space.mp3" id="26_jai3c"]
 [ext_resource type="AudioStream" uid="uid://bgbb3uxipmv2k" path="res://assets/audio/dialogue/commander/commander_final-frontier.mp3" id="27_1gdd5"]
 
@@ -428,22 +432,26 @@ _data = {
 &"yellow_warning_level_3": SubResource("Animation_sv1m6")
 }
 
-[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_music", "_audioExplosion", "_audioCommanderEncouragement", "_audioCommanderAdvanceStage1", "_audioCommanderAdvanceStage2", "_audioCommanderAdvanceStage3", "_audioCommencingMission", "_audioMissionFailure", "_audioStageAdvancement", "_scoreSound", "_hurtSound", "_healthIncreaseSound", "_normalSpawnerContainer", "_victorySpawnerContainer", "_gameVictoryScreen")]
+[node name="Game" type="Node2D" node_paths=PackedStringArray("_camera", "_music", "_musicReversed", "_audioExplosion", "_scoreSound", "_hurtSound", "_healthIncreaseSound", "_audioCommanderEncouragement", "_audioCommanderAdvanceStage1", "_audioCommanderAdvanceStage2", "_audioCommanderAdvanceStage3", "_audioCommanderCongratulations", "_audioCommencingMission", "_audioMissionFailure", "_audioStageAdvancement", "_audioFinalStageAdvancement", "_audioMissionComplete", "_normalSpawnerContainer", "_victorySpawnerContainer", "_gameVictoryScreen")]
 script = ExtResource("1_78awf")
 _gemSpawner = ExtResource("6_kyk2p")
 _camera = NodePath("Camera2D")
 _music = NodePath("Audio/Music")
+_musicReversed = NodePath("Audio/MusicReversed")
 _audioExplosion = NodePath("Audio/SFX/Explosion")
+_scoreSound = NodePath("Audio/SFX/ScoreSound")
+_hurtSound = NodePath("Audio/SFX/HurtSound")
+_healthIncreaseSound = NodePath("Audio/SFX/HealthIncreaseSound")
 _audioCommanderEncouragement = NodePath("Audio/Voice/CommanderEncouragement")
 _audioCommanderAdvanceStage1 = NodePath("Audio/Voice/CommanderStageAdvance1")
 _audioCommanderAdvanceStage2 = NodePath("Audio/Voice/CommanderStageAdvance2")
 _audioCommanderAdvanceStage3 = NodePath("Audio/Voice/CommanderStageAdvance3")
+_audioCommanderCongratulations = NodePath("Audio/Voice/CommanderCongratulations")
 _audioCommencingMission = NodePath("Audio/Voice/CommencingMission")
 _audioMissionFailure = NodePath("Audio/Voice/MissionFailure")
 _audioStageAdvancement = NodePath("Audio/Voice/StageAdvancement")
-_scoreSound = NodePath("Audio/SFX/ScoreSound")
-_hurtSound = NodePath("Audio/SFX/HurtSound")
-_healthIncreaseSound = NodePath("Audio/SFX/HealthIncreaseSound")
+_audioFinalStageAdvancement = NodePath("Audio/Voice/FinalStageAdvancement")
+_audioMissionComplete = NodePath("Audio/Voice/MissionComplete")
 _normalSpawnerContainer = NodePath("NormalSpawnerContainer")
 _victorySpawnerContainer = NodePath("VictorySpawnerContainer")
 _gameVictoryScreen = NodePath("CanvasLayer/GameSuccessScreen")
@@ -520,6 +528,10 @@ stream = ExtResource("8_400sg")
 volume_db = -24.0
 autoplay = true
 
+[node name="MusicReversed" type="AudioStreamPlayer" parent="Audio" groups=["Audio Streams"]]
+stream = ExtResource("15_1gdd5")
+volume_db = -24.0
+
 [node name="SFX" type="Node" parent="Audio"]
 
 [node name="Explosion" type="AudioStreamPlayer" parent="Audio/SFX" groups=["Audio Streams"]]
@@ -559,8 +571,16 @@ parameters/looping = true
 stream = ExtResource("16_bneo8")
 volume_db = -12.0
 
+[node name="MissionComplete" type="AudioStreamPlayer" parent="Audio/Voice" groups=["Audio Streams"]]
+stream = ExtResource("21_jai3c")
+volume_db = -12.0
+
 [node name="StageAdvancement" type="AudioStreamPlayer" parent="Audio/Voice" groups=["Audio Streams"]]
 stream = ExtResource("23_jhsr3")
+volume_db = -12.0
+
+[node name="FinalStageAdvancement" type="AudioStreamPlayer" parent="Audio/Voice" groups=["Audio Streams"]]
+stream = ExtResource("23_1gdd5")
 volume_db = -12.0
 
 [node name="CommanderEncouragement" type="AudioStreamPlayer2D" parent="Audio/Voice" groups=["Audio Streams"]]
@@ -581,6 +601,11 @@ volume_db = -8.0
 [node name="CommanderStageAdvance3" type="AudioStreamPlayer2D" parent="Audio/Voice" groups=["Audio Streams"]]
 position = Vector2(1045, 591)
 stream = ExtResource("27_1gdd5")
+volume_db = -8.0
+
+[node name="CommanderCongratulations" type="AudioStreamPlayer2D" parent="Audio/Voice" groups=["Audio Streams"]]
+position = Vector2(1045, 591)
+stream = ExtResource("26_754j2")
 volume_db = -8.0
 
 [node name="MissionFailure" type="AudioStreamPlayer" parent="Audio/Voice" groups=["Audio Streams"]]
