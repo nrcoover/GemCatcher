@@ -6,7 +6,7 @@
 [ext_resource type="LabelSettings" uid="uid://5mcorwbq3ffs" path="res://resources/fonts/play_white_24_font_normal.tres" id="5_7v7mi"]
 [ext_resource type="PackedScene" uid="uid://2sfkess71hko" path="res://scenes/MenuTitle.tscn" id="6_56fvm"]
 
-[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_movesModal", "_rulesModal", "_creditsModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_titleTimer", "_titleContainer", "_marginHighScoreContainer")]
+[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_infiniteModeButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_movesModal", "_rulesModal", "_creditsModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_titleTimer", "_titleContainer", "_marginHighScoreContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,6 +17,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_it30p")
 _playButton = NodePath("MarginButtons/HBoxButtons/PlayButton")
+_infiniteModeButton = NodePath("MarginButtons/HBoxButtons/InfiniteModeButton")
 _rulesButton = NodePath("MarginButtons/HBoxButtons/RulesButton")
 _movesButton = NodePath("MarginButtons/HBoxButtons/MovesButton")
 _quitButton = NodePath("MarginButtons/HBoxButtons/QuitButton")
@@ -156,6 +157,14 @@ layout_mode = 2
 
 [node name="ButtonLabel" parent="MarginButtons/HBoxButtons/PlayButton" index="0"]
 text = "PLAY"
+
+[node name="InfiniteModeButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.8, 0.53333336, 1, 1)
+layout_mode = 2
+
+[node name="ButtonLabel" parent="MarginButtons/HBoxButtons/InfiniteModeButton" index="0"]
+text = "INFINITE
+MODE"
 
 [node name="RulesButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.53333336, 0.8, 1, 1)
@@ -323,6 +332,7 @@ text = "This game was created as a student project and is an expansion upon an o
 horizontal_alignment = 3
 
 [editable path="MarginButtons/HBoxButtons/PlayButton"]
+[editable path="MarginButtons/HBoxButtons/InfiniteModeButton"]
 [editable path="MarginButtons/HBoxButtons/RulesButton"]
 [editable path="MarginButtons/HBoxButtons/MovesButton"]
 [editable path="MarginButtons/HBoxButtons/QuitButton"]

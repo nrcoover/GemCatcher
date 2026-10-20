@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using Godot;
 
 public partial class MainMenuUi : Control
 {
 	[Export] private TextureButton _playButton;
+	[Export] private TextureButton _infiniteModeButton;
 	[Export] private TextureButton _rulesButton;
 	[Export] private TextureButton _movesButton;
 	[Export] private TextureButton _quitButton;
@@ -37,6 +37,15 @@ public partial class MainMenuUi : Control
 	public override void _Ready()
 	{
 		_isFirstAnimationRun = true;
+
+		if (ScoreManager.Instance.IsInfiniteModeUnlocked)
+		{
+			ShowInfiniteModeButton();
+		}
+		else
+		{
+			HideInfiniteModeButton();
+		}
 
 		HandleHighScoreDisplay();
 		CloseAllModals();
@@ -169,6 +178,16 @@ public partial class MainMenuUi : Control
 			}
 		}
   }
+
+	private void HideInfiniteModeButton()
+	{
+		_infiniteModeButton.Hide();
+	}
+
+	private void ShowInfiniteModeButton()
+	{
+		_infiniteModeButton.Show();
+	}
 	
   private async void HandleLabelTweeningAsync()
 	{

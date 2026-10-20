@@ -9,7 +9,8 @@ public partial class HighScoreResource : Resource
 	[Export]
 	public int HighScore
 	{
-		get {
+		get
+		{
 			return _highScore;
 		}
 		set
@@ -26,7 +27,8 @@ public partial class HighScoreResource : Resource
 	[Export]
 	public int HighScoreRestore
 	{
-		get {
+		get
+		{
 			return _highScoreRestore;
 		}
 		set

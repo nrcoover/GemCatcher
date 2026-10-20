@@ -139,6 +139,7 @@ public partial class GameManager : Node
 		SignalManager.Instance.HealthRecovered += OnHealthRecovered;
 		SignalManager.Instance.ScoreIncremented += OnScoreIncremented;
 		SignalManager.Instance.ResetGame += OnResetGame;
+		SignalManager.Instance.GameVictory += OnGameVictory;
 	}
 
   private void UnsubscribeFromSignals()
@@ -147,6 +148,7 @@ public partial class GameManager : Node
 		SignalManager.Instance.HealthRecovered -= OnHealthRecovered;
 		SignalManager.Instance.ScoreIncremented -= OnScoreIncremented;
 		SignalManager.Instance.ResetGame -= OnResetGame;
+		SignalManager.Instance.GameVictory -= OnGameVictory;
 	}
 
   public void OnGameOver()
@@ -170,6 +172,11 @@ public partial class GameManager : Node
 	private void OnResetGame()
 	{
 		ResetGame();
+	}
+
+	private void OnGameVictory()
+	{
+		UnlockInfiniteMode();
 	}
 
 #endregion
@@ -229,6 +236,11 @@ public partial class GameManager : Node
 		{
 			SetGameStateVictory();
 		}
+	}
+
+	private void UnlockInfiniteMode()
+	{
+		ScoreManager.Instance.IsInfiniteModeUnlocked = true;
 	}
 
 #endregion

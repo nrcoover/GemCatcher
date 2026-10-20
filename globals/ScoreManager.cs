@@ -2,13 +2,15 @@ using Godot;
 
 public partial class ScoreManager : Node
 {
-	private const string SCORE_FILE_PATH = "user://gemScore.tres";
+	private const string SCORE_FILE_PATH = "user://gemSaveData.tres";
 	private const int DEFAULT_SCORE = 0;
 
 	public static ScoreManager Instance { get; private set; }
 
 	private int _highScore = DEFAULT_SCORE;
 	private int _highScoreRestore = DEFAULT_SCORE;
+
+	private bool _isInfiniteModeUnlocked = false;
 
 	public int HighScore
 	{
@@ -52,6 +54,21 @@ public partial class ScoreManager : Node
 		}
 	}
 
+	public bool IsInfiniteModeUnlocked
+	{
+		get
+		{
+			return _isInfiniteModeUnlocked;
+		}
+		set
+		{
+			{
+				_isInfiniteModeUnlocked = value;
+				SaveScoreToFile();
+			}
+		}
+	}
+
 	public override void _Ready()
 	{
 		Instance = this;
@@ -61,6 +78,7 @@ public partial class ScoreManager : Node
 	public void ResetHighScore()
 	{
 		_highScore = DEFAULT_SCORE;
+		_isInfiniteModeUnlocked = false;
 
 		SaveScoreToFile();
 
@@ -84,7 +102,18 @@ public partial class ScoreManager : Node
 			HighScoreRestore = _highScoreRestore
 		};
 
-		ResourceSaver.Save(highScoreResource, SCORE_FILE_PATH);
+		var isInfiniteModeUnlockedResource = new InfiniteModeResource
+		{
+			IsInfiniteModeUnlocked = _isInfiniteModeUnlocked
+		};
+
+		var containerResource = new SaveGameContainerResource
+		{
+			InfiniteMode = isInfiniteModeUnlockedResource,
+			HighScore = highScoreResource
+		};
+
+		ResourceSaver.Save(containerResource, SCORE_FILE_PATH);
 	}
 
 	private void LoadScoreFromFile()
@@ -94,12 +123,28 @@ public partial class ScoreManager : Node
 			return;
 		}
 
-		var highScoreResource = ResourceLoader.Load<HighScoreResource>(SCORE_FILE_PATH);
+		var saveData = ResourceLoader.Load<SaveGameContainerResource>(SCORE_FILE_PATH);
+
+		if (saveData == null)
+		{
+			return;
+		}
+
+		var highScoreResource = new HighScoreResource();
+		var isInfiniteModeUnlockedResource = new InfiniteModeResource();
+
+		highScoreResource = saveData.HighScore;
+		isInfiniteModeUnlockedResource = saveData.InfiniteMode;
 
 		if (highScoreResource != null)
 		{
 			_highScore = highScoreResource.HighScore;
 			_highScoreRestore = highScoreResource.HighScoreRestore;
+		}
+
+		if (isInfiniteModeUnlockedResource != null)
+		{
+			_isInfiniteModeUnlocked = isInfiniteModeUnlockedResource.IsInfiniteModeUnlocked;
 		}
 	}
 }

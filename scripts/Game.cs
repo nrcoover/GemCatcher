@@ -69,6 +69,11 @@ public partial class Game : Node2D
 		{
 			GameManager.Instance.SetGameStateVictory();
 		}
+
+		if (@event.IsActionPressed("toggle-test") && CustomDebug.IsDebugging)
+		{
+			ScoreManager.Instance.IsInfiniteModeUnlocked = !ScoreManager.Instance.IsInfiniteModeUnlocked;
+		}
 	}
 
 	public override void _ExitTree()

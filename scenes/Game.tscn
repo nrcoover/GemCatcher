@@ -515,10 +515,10 @@ libraries = {
 
 [node name="GameUi" parent="CanvasLayer" instance=ExtResource("9_a85ww")]
 
-[node name="GameOverScreen" parent="CanvasLayer" instance=ExtResource("15_jbgew")]
+[node name="GameSuccessScreen" parent="CanvasLayer" instance=ExtResource("17_1gdd5")]
 visible = false
 
-[node name="GameSuccessScreen" parent="CanvasLayer" instance=ExtResource("17_1gdd5")]
+[node name="GameOverScreen" parent="CanvasLayer" instance=ExtResource("15_jbgew")]
 visible = false
 
 [node name="Audio" type="Node" parent="."]
