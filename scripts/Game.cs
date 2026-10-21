@@ -72,7 +72,7 @@ public partial class Game : Node2D
 
 		if (@event.IsActionPressed("toggle-test") && CustomDebug.IsDebugging)
 		{
-			ScoreManager.Instance.IsInfiniteModeUnlocked = !ScoreManager.Instance.IsInfiniteModeUnlocked;
+			SaveDataManager.Instance.IsInfiniteModeUnlocked = !SaveDataManager.Instance.IsInfiniteModeUnlocked;
 		}
 	}
 
@@ -422,7 +422,7 @@ public partial class Game : Node2D
 
 	private async Task HandleDeathSequenceAudioAsync()
 	{
-		ScoreManager.Instance.HighScore = GameManager.Instance.CurrentScore;
+		SaveDataManager.Instance.HighScore = GameManager.Instance.CurrentScore;
 
 		SignalManager.Instance.EmitShowGameOverScreen();
 

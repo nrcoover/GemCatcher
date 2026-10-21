@@ -240,7 +240,7 @@ public partial class GameManager : Node
 
 	private void UnlockInfiniteMode()
 	{
-		ScoreManager.Instance.IsInfiniteModeUnlocked = true;
+		SaveDataManager.Instance.IsInfiniteModeUnlocked = true;
 	}
 
 #endregion

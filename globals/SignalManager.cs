@@ -17,7 +17,7 @@ public partial class SignalManager : Node
 	[Signal] public delegate void ShowGameOverScreenEventHandler();
 	[Signal] public delegate void ShowMissionFailurePanelEventHandler();
 	[Signal] public delegate void ShowGameOverButtonsEventHandler();
-	[Signal] public delegate void HighScoreChangedEventHandler();
+	[Signal] public delegate void SaveDataResetEventHandler();
 	[Signal] public delegate void HealthRecoveredEventHandler();
 	[Signal] public delegate void ScoreIncrementedEventHandler(int score, Color color);
 	[Signal] public delegate void ScoreUpdatedEventHandler(Color color);
@@ -98,9 +98,9 @@ public partial class SignalManager : Node
 		EmitSignal(SignalName.ShowGameOverButtons);
 	}
 
-	public void EmitHighScoreChangedSignal()
+	public void EmitSaveDataResetSignal()
 	{
-		EmitSignal(SignalName.HighScoreChanged);
+		EmitSignal(SignalName.SaveDataReset);
 	}
 
 	public void EmitHealthRecovered()

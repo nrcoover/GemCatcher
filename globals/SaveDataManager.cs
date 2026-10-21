@@ -1,15 +1,14 @@
 using Godot;
 
-public partial class ScoreManager : Node
+public partial class SaveDataManager : Node
 {
-	private const string SCORE_FILE_PATH = "user://gemSaveData.tres";
+	private const string SAVE_DATA_FILE_PATH = "user://gemSaveData.tres";
 	private const int DEFAULT_SCORE = 0;
 
-	public static ScoreManager Instance { get; private set; }
+	public static SaveDataManager Instance { get; private set; }
 
 	private int _highScore = DEFAULT_SCORE;
 	private int _highScoreRestore = DEFAULT_SCORE;
-
 	private bool _isInfiniteModeUnlocked = false;
 
 	public int HighScore
@@ -31,7 +30,7 @@ public partial class ScoreManager : Node
 					_highScoreRestore = value;
 				}
 
-				SaveScoreToFile();
+				SaveDataToFile();
 			}
 		}
 	}
@@ -49,7 +48,7 @@ public partial class ScoreManager : Node
 			if (value > _highScoreRestore)
 			{
 				_highScoreRestore = value;
-				SaveScoreToFile();
+				SaveDataToFile();
 			}
 		}
 	}
@@ -64,7 +63,7 @@ public partial class ScoreManager : Node
 		{
 			{
 				_isInfiniteModeUnlocked = value;
-				SaveScoreToFile();
+				SaveDataToFile();
 			}
 		}
 	}
@@ -72,29 +71,29 @@ public partial class ScoreManager : Node
 	public override void _Ready()
 	{
 		Instance = this;
-		LoadScoreFromFile();
+		LoadDataFromFile();
 	}
 
-	public void ResetHighScore()
+	public void ResetSaveData()
 	{
 		_highScore = DEFAULT_SCORE;
 		_isInfiniteModeUnlocked = false;
 
-		SaveScoreToFile();
+		SaveDataToFile();
 
-		SignalManager.Instance.EmitHighScoreChangedSignal();
+		SignalManager.Instance.EmitSaveDataResetSignal();
 	}
 
 	public void RestoreHighScore()
 	{
 		_highScore = _highScoreRestore;
 
-		SaveScoreToFile();
+		SaveDataToFile();
 
-		SignalManager.Instance.EmitHighScoreChangedSignal();
+		SignalManager.Instance.EmitSaveDataResetSignal();
 	}
 
-	private void SaveScoreToFile()
+	private void SaveDataToFile()
 	{
 		var highScoreResource = new HighScoreResource
 		{
@@ -113,28 +112,25 @@ public partial class ScoreManager : Node
 			HighScore = highScoreResource
 		};
 
-		ResourceSaver.Save(containerResource, SCORE_FILE_PATH);
+		ResourceSaver.Save(containerResource, SAVE_DATA_FILE_PATH);
 	}
 
-	private void LoadScoreFromFile()
+	private void LoadDataFromFile()
 	{
-		if (!ResourceLoader.Exists(SCORE_FILE_PATH))
+		if (!ResourceLoader.Exists(SAVE_DATA_FILE_PATH))
 		{
 			return;
 		}
 
-		var saveData = ResourceLoader.Load<SaveGameContainerResource>(SCORE_FILE_PATH);
+		var saveData = ResourceLoader.Load<SaveGameContainerResource>(SAVE_DATA_FILE_PATH);
 
 		if (saveData == null)
 		{
 			return;
 		}
 
-		var highScoreResource = new HighScoreResource();
-		var isInfiniteModeUnlockedResource = new InfiniteModeResource();
-
-		highScoreResource = saveData.HighScore;
-		isInfiniteModeUnlockedResource = saveData.InfiniteMode;
+		var highScoreResource = saveData.HighScore;
+		var isInfiniteModeUnlockedResource = saveData.InfiniteMode;
 
 		if (highScoreResource != null)
 		{

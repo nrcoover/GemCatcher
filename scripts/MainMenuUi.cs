@@ -38,7 +38,7 @@ public partial class MainMenuUi : Control
 	{
 		_isFirstAnimationRun = true;
 
-		if (ScoreManager.Instance.IsInfiniteModeUnlocked)
+		if (SaveDataManager.Instance.IsInfiniteModeUnlocked)
 		{
 			ShowInfiniteModeButton();
 		}
@@ -63,7 +63,7 @@ public partial class MainMenuUi : Control
 
   public void SubscribeToSignals()
 	{
-		SignalManager.Instance.HighScoreChanged += OnHighScoreChanged;
+		SignalManager.Instance.SaveDataReset += OnSaveDataReset;
 		_titleTimer.Timeout += OnTitleTimeout;
 		_playButton.Pressed += OnPlayClicked;
 		_rulesButton.Pressed += OnRulesClicked;
@@ -76,12 +76,13 @@ public partial class MainMenuUi : Control
 
 	public void UnsubscribeFromSignals()
 	{
-		SignalManager.Instance.HighScoreChanged -= OnHighScoreChanged;
+		SignalManager.Instance.SaveDataReset -= OnSaveDataReset;
 	}
 
-  private void OnHighScoreChanged()
+  private void OnSaveDataReset()
   {
     HandleHighScoreDisplay();
+		HandleInfiniteModeButtonDisplay();
   }
 
   private void OnTitleTimeout()
@@ -122,12 +123,12 @@ public partial class MainMenuUi : Control
 	
   private void OnResetHighScoreClicked()
   {
-    ScoreManager.Instance.ResetHighScore();
+    SaveDataManager.Instance.ResetSaveData();
   }
 
   private void OnRestoreHighScoreClicked()
   {
-    ScoreManager.Instance.RestoreHighScore();
+    SaveDataManager.Instance.RestoreHighScore();
   }
 
 #endregion
@@ -160,8 +161,8 @@ public partial class MainMenuUi : Control
   private void HandleHighScoreDisplay()
   {
 		_marginHighScoreContainer.Visible = false;
-    var highScore = ScoreManager.Instance.HighScore;
-		var highScoreRestore = ScoreManager.Instance.HighScoreRestore;
+    var highScore = SaveDataManager.Instance.HighScore;
+		var highScoreRestore = SaveDataManager.Instance.HighScoreRestore;
 
 		if (highScore != 0 || highScoreRestore != 0)
 		{
@@ -178,6 +179,16 @@ public partial class MainMenuUi : Control
 			}
 		}
   }
+
+	private void HandleInfiniteModeButtonDisplay()
+	{
+		if(SaveDataManager.Instance.IsInfiniteModeUnlocked)
+		{
+			return;
+		}
+
+		HideInfiniteModeButton();
+	}
 
 	private void HideInfiniteModeButton()
 	{
