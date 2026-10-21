@@ -72,6 +72,7 @@ public partial class MainMenuUi : Control
 		_creditsButton.Pressed += OnCreditsClicked;
 		_resetHighScoreButton.Pressed += OnResetHighScoreClicked;
 		_restoreHighScoreButton.Pressed += OnRestoreHighScoreClicked;
+		_infiniteModeButton.Pressed += OnInfiniteModeClicked;
 	}
 
 	public void UnsubscribeFromSignals()
@@ -92,10 +93,8 @@ public partial class MainMenuUi : Control
 
 	private void OnPlayClicked()
   {
-		// TODO: Set Game mode Infinite when choosing to play infinite mode after unlocking it.
-		// TODO: Create save detail about unlocked "infinite mode" - isInfiniteModeUnlocked
 		GameManager.Instance.SetGameModeNormal();
-    LevelManager.Instance.LoadGame();
+		LevelManager.Instance.LoadGame();
   }
 
   private void OnRulesClicked()
@@ -123,13 +122,20 @@ public partial class MainMenuUi : Control
 	
   private void OnResetHighScoreClicked()
   {
-    SaveDataManager.Instance.ResetSaveData();
+		GameManager.Instance.SetGameModeNormal();
+		SaveDataManager.Instance.ResetSaveData();
   }
 
   private void OnRestoreHighScoreClicked()
   {
     SaveDataManager.Instance.RestoreHighScore();
   }
+
+	private void OnInfiniteModeClicked()
+	{
+		GameManager.Instance.SetGameModeInfinite();
+		LevelManager.Instance.LoadGame();
+	}
 
 #endregion
 

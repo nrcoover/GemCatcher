@@ -16,10 +16,11 @@ public partial class GameManager : Node
 	const int DEFAULT_GAME_MODE = (int)GameMode.NORMAL;
 	const int DEFAULT_GAME_STATE = (int)GameState.PLAYING;
 	
-	const int STARTING_STAGE = 1; // TODO: set to 1 after debugging
-	public const int VICTORY_STAGE = 3;
-	const int STAGE_ADVANCEMENT_INCREMENTOR = 10;
+	const int STARTING_STAGE = 1;
+	public const int VICTORY_STAGE = 3; // TODO set to 12 after debugging
+	const int STAGE_ADVANCEMENT_INCREMENTOR = 3; // TODO set to 10 after debugging
 
+	// TODO: Bug Fix: Infinite mode needs to NOT use the "final stage" audio.
 
 	public enum GameState
 	{
