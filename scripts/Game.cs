@@ -401,7 +401,8 @@ public partial class Game : Node2D
 			return;
     }
 
-		if (GameManager.Instance.CurrentStage == GameManager.VICTORY_STAGE)
+		if (GameManager.Instance.CurrentStage == GameManager.VICTORY_STAGE 
+				&& !(GameManager.Instance.CurrentGameMode == (int)GameManager.GameMode.INFINITE))
 		{
 			_audioFinalStageAdvancement.Play();
 		}
