@@ -27,6 +27,7 @@ public partial class SignalManager : Node
 	[Signal] public delegate void PowerUpRemovedEventHandler();
 	[Signal] public delegate void AdvanceStageEventHandler();
 	[Signal] public delegate void ResetGameEventHandler();
+	[Signal] public delegate void SpawnPoolObjectEventHandler(Vector2 position, PackedScene scene);
 
 	public override void _Ready()
 	{
@@ -146,5 +147,10 @@ public partial class SignalManager : Node
 	public void EmitResetGame()
 	{
 		EmitSignal(SignalName.ResetGame);
+	}
+
+	public static void EmitSpawnPoolObject(Vector2 position, PackedScene scene)
+	{
+		Instance.EmitSignal(SignalName.SpawnPoolObject, position, scene);
 	}
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://ddw7l2oan3t5h"]
+[gd_scene load_steps=44 format=3 uid="uid://ddw7l2oan3t5h"]
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/images/backgrounds/GameBg.png" id="1_ibkli"]
@@ -13,6 +13,7 @@
 [ext_resource type="AudioStream" uid="uid://dtfk07ryobxgf" path="res://assets/audio/sfx/explode.wav" id="9_g4kob"]
 [ext_resource type="AudioStream" uid="uid://boe377tli867s" path="res://assets/audio/sfx/spell1_0.wav" id="10_qy1jj"]
 [ext_resource type="AudioStream" uid="uid://dfdhu6sspy4it" path="res://assets/audio/sfx/404766__owlstorm__retro-video-game-sfx-punch-2.wav" id="11_3xj3m"]
+[ext_resource type="PackedScene" uid="uid://ctuupd64oulc5" path="res://scenes/ObjectContainer.tscn" id="11_426vi"]
 [ext_resource type="AudioStream" uid="uid://dw8ladfm3gy58" path="res://assets/audio/sfx/475557__rannem__bip.wav" id="13_r7sob"]
 [ext_resource type="AudioStream" uid="uid://ogfnhm87ce0t" path="res://assets/audio/sfx/492651__rvgerxini__power-down.mp3" id="13_y5y3l"]
 [ext_resource type="AudioStream" uid="uid://dauw3imvw8kya" path="res://assets/audio/music/bgm_action_5-reversed-edit.mp3" id="15_1gdd5"]
@@ -510,6 +511,8 @@ _audioCooldownInProgress = NodePath("../Audio/Voice/CoolDownInProgress")
 libraries = {
 &"": SubResource("AnimationLibrary_y5y3l")
 }
+
+[node name="ObjectContainer" parent="." instance=ExtResource("11_426vi")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
