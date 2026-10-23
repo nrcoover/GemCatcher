@@ -185,7 +185,6 @@ public partial class GemSpawner : Node2D
 			return;
 		}
 
-		SetGemSpeedByDifficultyLevel(gem);
 		SetGemPosition(gem);
 	}
 
@@ -220,7 +219,6 @@ public partial class GemSpawner : Node2D
 		var falseGem = (FalseGem)_falseGemScene.Instantiate();
 		_gemContainer.AddChild(falseGem);
 
-		SetGemSpeedByDifficultyLevel(falseGem);
 		SetGemPosition(falseGem);
 	}
 
@@ -258,10 +256,7 @@ public partial class GemSpawner : Node2D
 			);
 	}
 
-  private void SetGemSpeedByDifficultyLevel(Gem gem)
-  {
-    gem.SpeedVariation *= GameManager.Instance.DifficultyLevel;
-  }
+
 
 	private void SetPowerUpTimerWaitTime()
 	{

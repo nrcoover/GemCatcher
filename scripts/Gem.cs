@@ -37,6 +37,7 @@ public partial class Gem : Area2D
 		SetVariations();
 		SetScale();
 		SetColor();
+		SetGemSpeedByDifficultyLevel();
 		BeginParticleEmission();
 		SubscribeToSignals();
 	}
@@ -113,6 +114,11 @@ public partial class Gem : Area2D
 		this.Modulate = _color;
 		_particles.Modulate = _color;
 	}
+
+  private void SetGemSpeedByDifficultyLevel()
+  {
+    SpeedVariation *= GameManager.Instance.DifficultyLevel;
+  }	
 
 	private void BeginParticleEmission()
 	{
