@@ -18,10 +18,12 @@ public partial class FalseGem : Gem
 	{
 		if (area is Paddle || area is PaddleGhost)
 		{
-			Deactivate();
+			EndParticleEmission();
+			QueueFree();
 		} else if (area is MenuPaddle)
 		{
-			Deactivate();
+			EndParticleEmission();
+			QueueFree();
 		}
 	}
 
