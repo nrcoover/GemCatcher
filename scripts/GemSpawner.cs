@@ -227,14 +227,14 @@ public partial class GemSpawner : Node2D
 		var margin = 85;
 
 		var xBoundaryCoordinate = Helper.GetRandomFloat(
-				GetViewportRect().Position.X + margin, 
-				GetViewportRect().End.X - margin
-			);
+			GetViewportRect().Position.X + margin, 
+			GetViewportRect().End.X - margin
+		);
 
 		gem.Position = new Vector2(
-				xBoundaryCoordinate,
-				-margin
-			);
+			xBoundaryCoordinate,
+			-margin
+		);
 	}
 
 	private void SetGemPositionOnMainMenu(Gem gem)
@@ -246,14 +246,14 @@ public partial class GemSpawner : Node2D
 		}
 
 		var xBoundaryCoordinate = Helper.GetRandomFloat(
-				_rightBoundary.GlobalPosition.X,
-				_leftBoundary.GlobalPosition.X 
-			);
+			_rightBoundary.GlobalPosition.X,
+			_leftBoundary.GlobalPosition.X 
+		);
 
 		gem.Position = new Vector2(
-				xBoundaryCoordinate,
-				_leftBoundary.GlobalPosition.Y
-			);
+			xBoundaryCoordinate,
+			_leftBoundary.GlobalPosition.Y
+		);
 	}
 
 
