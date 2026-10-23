@@ -21,8 +21,7 @@ public partial class GemHeart : Gem
 		if (area is Paddle || area is PaddleGhost)
 		{
 			SignalManager.Instance.EmitHealthRecovered();
-			EndParticleEmission();
-			QueueFree();
+			Deactivate();
 		}
 	}
 

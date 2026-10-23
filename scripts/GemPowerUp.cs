@@ -36,7 +36,7 @@ public partial class GemPowerUp : Gem
 
   private void OnQueueFreeTimerTimeout()
   {
-    QueueFree();
+    Deactivate();
   }
 
   public override void _ExitTree()
@@ -57,13 +57,17 @@ public partial class GemPowerUp : Gem
 		{
 			SignalManager.Instance.EmitPowerUpCollected(this.Modulate);
 			SignalManager.Instance.EmitPowerUpRemoved();
-			EndParticleEmission();
-			QueueFree();
+			Deactivate();
 		}
 	}
 
 	protected override void HandleExitScreen()
 	{
+		if (!_isActive)
+		{
+			return;
+		}
+
 		if (!_isOffBottomScreen)
 		{
 			if (Position.Y > GetViewportRect().End.Y)
@@ -71,7 +75,8 @@ public partial class GemPowerUp : Gem
 				_isOffBottomScreen = true;
 				SignalManager.Instance.EmitPowerUpRemoved();
 			}
-		} else
+		}
+		else
 		{
 			_queueFreeTimer.Start();
 			CreateAudioVolumeFadeOutTween();

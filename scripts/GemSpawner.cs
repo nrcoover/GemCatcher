@@ -138,6 +138,9 @@ public partial class GemSpawner : Node2D
 		_rightBoundary = (Marker2D)GetNode("../../MainMenu/CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/RightBoundary");
   }
 
+
+#region Spawn Gems
+
   private void SpawnGemType()
 	{
 		if (_isOnMainMenu)
@@ -175,17 +178,18 @@ public partial class GemSpawner : Node2D
 
 	private void SpawnGem()
 	{
-		var gem = (Gem)_gemScene.Instantiate();
-		_gemContainer.AddChild(gem);
+		Vector2 spawnPosition;
 
 		if (_isOnMainMenu)
 		{
-			SetGemPositionOnMainMenu(gem);
+			spawnPosition = GetGemSpawnPositionForMainMenu();
+			SignalManager.EmitSpawnPoolObject(spawnPosition, _gemScene);
 
 			return;
 		}
 
-		SetGemPosition(gem);
+		spawnPosition = GetGemSpawnPosition();
+		SignalManager.EmitSpawnPoolObject(spawnPosition, _gemScene);
 	}
 
   private void SpawnHeartGem()
@@ -195,10 +199,8 @@ public partial class GemSpawner : Node2D
 			return;
 		}
 
-		var heartGem = (GemHeart)_gemHeartScene.Instantiate();
-		_gemContainer.AddChild(heartGem);
-
-		SetGemPosition(heartGem);
+		var spawnPosition = GetGemSpawnPosition();
+		SignalManager.EmitSpawnPoolObject(spawnPosition, _gemHeartScene);
 	}
 
 	private void SpawnPowerUpGem()
@@ -208,21 +210,17 @@ public partial class GemSpawner : Node2D
 			return;
 		}
 
-		var powerUpGem = (GemPowerUp)_gemPowerUpScene.Instantiate();
-		_gemContainer.AddChild(powerUpGem);
-
-		SetGemPosition(powerUpGem);
+		var spawnPosition = GetGemSpawnPosition();
+		SignalManager.EmitSpawnPoolObject(spawnPosition, _gemPowerUpScene);
 	}
 
 	private void SpawnFalseGem()
 	{
-		var falseGem = (FalseGem)_falseGemScene.Instantiate();
-		_gemContainer.AddChild(falseGem);
-
-		SetGemPosition(falseGem);
+		var spawnPosition = GetGemSpawnPosition();
+		SignalManager.EmitSpawnPoolObject(spawnPosition, _falseGemScene);
 	}
 
-	private void SetGemPosition(Node2D gem)
+	private Vector2 GetGemSpawnPosition()
 	{
 		var margin = 85;
 
@@ -231,18 +229,17 @@ public partial class GemSpawner : Node2D
 			GetViewportRect().End.X - margin
 		);
 
-		gem.Position = new Vector2(
+		return new Vector2(
 			xBoundaryCoordinate,
 			-margin
 		);
 	}
 
-	private void SetGemPositionOnMainMenu(Gem gem)
+	private Vector2 GetGemSpawnPositionForMainMenu()
 	{
 		if (_leftBoundary == null || _rightBoundary == null)
 		{
-			SetGemPosition(gem);
-			return;
+			return GetGemSpawnPosition();
 		}
 
 		var xBoundaryCoordinate = Helper.GetRandomFloat(
@@ -250,11 +247,13 @@ public partial class GemSpawner : Node2D
 			_leftBoundary.GlobalPosition.X 
 		);
 
-		gem.Position = new Vector2(
+		return new Vector2(
 			xBoundaryCoordinate,
 			_leftBoundary.GlobalPosition.Y
 		);
 	}
+
+#endregion
 
 
 

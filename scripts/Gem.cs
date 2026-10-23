@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class Gem : Area2D
+public partial class Gem : Area2D, IPoolItem
 {
 	[Export] CpuParticles2D _particles;
 	[Export] float _movementSpeed = 100;
@@ -15,6 +15,7 @@ public partial class Gem : Area2D
 	protected int _viewportBoundaryMargin = 75;
 
 	private Color _color;
+	protected bool _isActive = false;
 	protected bool _isOffScreen = false;
 	private float _speedVariation;
 	private float _rotationVariation;
@@ -44,13 +45,36 @@ public partial class Gem : Area2D
 
 	public override void _Process(double delta)
 	{
-		HandleMovement((float)delta);
+		if (_isActive)
+		{
+			HandleMovement((float)delta);
+		}
 	}
 	
 	private void SubscribeToSignals()
 	{
 		AreaEntered += OnAreaEntered;
 	}
+
+#region IPoolItem Interface
+
+	public void Activate()
+	{
+		SetActive();
+		CustomUtils.ActivateArea2D(this);
+		BeginParticleEmission();
+		Show();
+	}
+
+	public void Deactivate()
+	{
+		SetInactive();
+		CustomUtils.DeactivateArea2D(this);
+		EndParticleEmission();
+		Hide();
+	}
+
+#endregion
 
 	private void HandleMovement(float delta)
 	{
@@ -75,7 +99,7 @@ public partial class Gem : Area2D
 	{
 		if (Position.Y > GetViewportRect().End.Y + _viewportBoundaryMargin)
 		{
-			QueueFree();
+			Deactivate();
 		}
 
 		Position = new Vector2(
@@ -115,6 +139,16 @@ public partial class Gem : Area2D
 		_particles.Modulate = _color;
 	}
 
+	private void SetActive()
+	{
+		_isActive = true;
+	}
+
+	private void SetInactive()
+	{
+		_isActive = false;
+	}
+
   private void SetGemSpeedByDifficultyLevel()
   {
     SpeedVariation *= GameManager.Instance.DifficultyLevel;
@@ -137,15 +171,33 @@ public partial class Gem : Area2D
 		if (area is Paddle || area is PaddleGhost)
 		{
 			SignalManager.Instance.EmitScored(this.Modulate);
-			EndParticleEmission();
-			QueueFree();
-		} else if (area is MenuPaddle)
+			Deactivate();
+		}
+		else if (area is MenuPaddle)
 		{
-			EndParticleEmission();
-			QueueFree();
+			Deactivate();
 		}
 	}
 
 #endregion
+
+	// TODO: Customize function to create explosion when gem is removed during stage advancement
+	// private void CreateExplosion(Area2D area) {
+	// 	GD.Print($"{Name} OnAreaEntered!");
+
+	// 	var explosionPosition = _explosionMarker.GlobalPosition;
+
+	// 	if (!_usesMarker)
+	// 	{
+	// 		Vector2 direction = GlobalPosition.DirectionTo(area.GlobalPosition).Normalized();
+	// 		explosionPosition = GlobalPosition + direction * _explosionMargin;
+	// 	}
+
+	// 	SignalManager.EmitSpawnPoolObject(
+	// 		_explosionMarker.GlobalPosition, _explosionScene
+	// 	);
+
+	// 	DeActivate();
+	// }
 
 }
