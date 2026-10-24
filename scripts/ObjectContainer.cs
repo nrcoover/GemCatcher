@@ -14,7 +14,8 @@ public partial class ObjectContainer : Node
 					GD.Randf() * 800,
 					GD.Randf() * 300
 				),
-				_testScene
+				_testScene,
+				Helper.GetHexCodeFromColor(Helper.GetColorFromRainbow())
 			);
 		}
 	}
@@ -43,20 +44,20 @@ public partial class ObjectContainer : Node
 		SignalManager.Instance.SpawnPoolObject -= OnSpawnPoolObject;
 	}
 
-	private void OnSpawnPoolObject(Vector2 position, PackedScene scene)
+	private void OnSpawnPoolObject(Vector2 position, PackedScene scene, string colorHex = null)
 	{
-		CallDeferred(MethodName.SpawnDeffered, position, scene);
+		CallDeferred(MethodName.SpawnDeffered, position, scene, colorHex);
 	}
 
-	private void SpawnDeffered(Vector2 position, PackedScene scene)
+	private void SpawnDeffered(Vector2 position, PackedScene scene, string colorHex)
 	{
 		if (!_pools.TryGetValue(scene, out var pool))
 		{
 			int scenePoolSize = 5;
-			pool = new ScenePool(scenePoolSize, scene, this);
+			pool = new ScenePool(scenePoolSize, scene, this, colorHex);
 			_pools.Add(scene, pool);
 		}
 
-		pool.ActivateNext(position);
+		pool.ActivateNext(position, colorHex);
 	}
 }

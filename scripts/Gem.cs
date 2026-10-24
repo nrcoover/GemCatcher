@@ -3,7 +3,7 @@ using Godot;
 public partial class Gem : Area2D
 {
 	[Export] CpuParticles2D _particles;
-	[Export] PackedScene _explosionScene;
+	[Export] protected PackedScene _explosionScene;
 	[Export] protected float _movementSpeed = 100;
 	[Export] float _minSpeedVariation = 1.0f;
 	[Export] float _maxSpeedVariation = 3.5f;
@@ -181,11 +181,19 @@ public partial class Gem : Area2D
 		_particles.Emitting = false;
 	}
 
-	private void CreateExplosion() {
+	protected virtual void CreateExplosion() {
+		var colorHex = Helper.GetHexCodeFromColor(Modulate);
+
+		GD.PrintErr(colorHex);
+
 		SignalManager.EmitSpawnPoolObject(
-			GlobalPosition, _explosionScene
+			GlobalPosition, _explosionScene, colorHex
 		);
 
 		CallDeferred(MethodName.HandleObjectRemoval);
 	}
+
+	// TODO: Fix bug in which last gem captured before stage advancement also explodes
+
+	// TODO: Refactor Object pool to allow for an optional parameter of color so gems can colorize the shards on explosions
 }

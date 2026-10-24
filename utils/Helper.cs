@@ -67,7 +67,7 @@ public static partial class Helper
 				break;
 		}
 
-		return new Color(selectedColorhex);
+		return GetColorFromHexCode(selectedColorhex);
 	}
 
 	public static Godot.Collections.Array<Node> GetAllObjectsInGroup(Node rootScene, string groupName)
@@ -75,5 +75,15 @@ public static partial class Helper
 		var objects = rootScene.GetTree().GetNodesInGroup(groupName);
 
 		return objects;
+	}
+
+	public static Color GetColorFromHexCode(string colorHex)
+	{
+		return new Color(colorHex);
+	}
+
+	public static string GetHexCodeFromColor(Color color)
+	{
+		return color.ToHtml(includeAlpha: true);
 	}
 }
