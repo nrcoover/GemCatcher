@@ -87,6 +87,7 @@ public partial class GemPowerUp : Gem
 	private void KillTweens()
 	{
 		_audioVolumeFadeInTween?.Kill();
+		_audioVolumeFadeOutTween?.Kill();
 	}
 
 	private void CreateAudioVolumeFadeInTween()
