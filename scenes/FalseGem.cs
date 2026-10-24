@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class FalseGem : Gem
+public partial class FalseGem : Gem, IPoolItem
 {
 	public override void _Ready()
 	{
@@ -12,22 +12,57 @@ public partial class FalseGem : Gem
 		base._Process(delta);
 	}
 
+
+
 #region Signals
 
 	public override void OnAreaEntered(Area2D area)
 	{
 		if (area is Paddle || area is PaddleGhost)
 		{
-			EndParticleEmission();
-			QueueFree();
-		} else if (area is MenuPaddle)
+			Deactivate();
+		}
+		else if (area is MenuPaddle)
 		{
-			EndParticleEmission();
-			QueueFree();
+			Deactivate();
 		}
 	}
 
 #endregion
+
+
+
+#region IPoolItem Interface
+
+	public void Activate()
+	{
+		CustomUtils.ActivateArea2D(this);
+		BeginParticleEmission();
+		Show();
+	}
+
+	public void Deactivate()
+	{
+		Hide();
+		CustomUtils.DeactivateArea2D(this);
+		EndParticleEmission();
+	}
+
+#endregion
+
+
+	public override void HandlePosition(float delta)
+	{
+		if (Position.Y > GetViewportRect().End.Y + _viewportBoundaryMargin)
+		{
+			Deactivate();
+		}
+
+		Position = new Vector2(
+			Position.X,
+			Position.Y + (_movementSpeed * _speedVariation * (float)delta)
+		);
+	}
 
 	protected override void HandleExitScreen()
 	{

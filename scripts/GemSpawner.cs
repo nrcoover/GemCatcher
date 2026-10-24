@@ -138,6 +138,10 @@ public partial class GemSpawner : Node2D
 		_rightBoundary = (Marker2D)GetNode("../../MainMenu/CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/RightBoundary");
   }
 
+
+
+#region Spawn Gems
+
   private void SpawnGemType()
 	{
 		if (_isOnMainMenu)
@@ -216,11 +220,42 @@ public partial class GemSpawner : Node2D
 
 	private void SpawnFalseGem()
 	{
-		var falseGem = (FalseGem)_falseGemScene.Instantiate();
-		_gemContainer.AddChild(falseGem);
-
-		SetGemPosition(falseGem);
+		var spawnPosition = GetGemSpawnPosition();
+		SignalManager.EmitSpawnPoolObject(spawnPosition, _falseGemScene);
 	}
+
+	private Vector2 GetGemSpawnPosition()
+	{
+		var margin = 85;
+
+		var xBoundaryCoordinate = Helper.GetRandomFloat(
+			GetViewportRect().Position.X + margin, 
+			GetViewportRect().End.X - margin
+		);
+
+		return new Vector2(
+			xBoundaryCoordinate,
+			-margin
+		);
+	}
+
+	// private Vector2 GetGemSpawnPositionForMainMenu()
+	// {
+	// 	if (_leftBoundary == null || _rightBoundary == null)
+	// 	{
+	// 		return GetGemSpawnPosition();
+	// 	}
+
+	// 	var xBoundaryCoordinate = Helper.GetRandomFloat(
+	// 		_rightBoundary.GlobalPosition.X,
+	// 		_leftBoundary.GlobalPosition.X 
+	// 	);
+
+	// 	return new Vector2(
+	// 		xBoundaryCoordinate,
+	// 		_leftBoundary.GlobalPosition.Y
+	// 	);
+	// }
 
 	private void SetGemPosition(Node2D gem)
 	{
@@ -255,6 +290,9 @@ public partial class GemSpawner : Node2D
 			_leftBoundary.GlobalPosition.Y
 		);
 	}
+
+
+#endregion
 
 
 
