@@ -239,24 +239,6 @@ public partial class GemSpawner : Node2D
 		);
 	}
 
-	// private Vector2 GetGemSpawnPositionForMainMenu()
-	// {
-	// 	if (_leftBoundary == null || _rightBoundary == null)
-	// 	{
-	// 		return GetGemSpawnPosition();
-	// 	}
-
-	// 	var xBoundaryCoordinate = Helper.GetRandomFloat(
-	// 		_rightBoundary.GlobalPosition.X,
-	// 		_leftBoundary.GlobalPosition.X 
-	// 	);
-
-	// 	return new Vector2(
-	// 		xBoundaryCoordinate,
-	// 		_leftBoundary.GlobalPosition.Y
-	// 	);
-	// }
-
 	private void SetGemPosition(Node2D gem)
 	{
 		var margin = 85;
