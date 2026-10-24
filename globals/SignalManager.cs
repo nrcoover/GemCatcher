@@ -149,7 +149,7 @@ public partial class SignalManager : Node
 		EmitSignal(SignalName.ResetGame);
 	}
 
-	public static void EmitSpawnPoolObject(Vector2 position, PackedScene scene, string colorHex = null)
+	public static void EmitSpawnPoolObject(Vector2 position, PackedScene scene, string colorHex = "")
 	{
 		Instance.EmitSignal(SignalName.SpawnPoolObject, position, scene, colorHex);
 	}

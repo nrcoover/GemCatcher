@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 
@@ -44,7 +45,7 @@ public partial class ObjectContainer : Node
 		SignalManager.Instance.SpawnPoolObject -= OnSpawnPoolObject;
 	}
 
-	private void OnSpawnPoolObject(Vector2 position, PackedScene scene, string colorHex = null)
+	private void OnSpawnPoolObject(Vector2 position, PackedScene scene, string colorHex = "")
 	{
 		CallDeferred(MethodName.SpawnDeffered, position, scene, colorHex);
 	}
