@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://cwmoohy8sry3o"]
+
+[ext_resource type="Texture2D" uid="uid://c2a4m3pjt6egg" path="res://assets/images/sprites/base_diamond.png" id="1_8y0py"]
+[ext_resource type="Script" uid="uid://ckafgvbstm8eu" path="res://scripts/GemExplosion.cs" id="1_8y8a4"]
+
+[sub_resource type="Curve" id="Curve_8y0py"]
+_data = [Vector2(0, 0.9174894), 0.0, 0.0, 0, 0, Vector2(0.8896552, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="GemExplosion" type="Node2D" node_paths=PackedStringArray("_particles")]
+script = ExtResource("1_8y8a4")
+_particles = NodePath("CPUParticles2D")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+emitting = false
+amount = 12
+texture = ExtResource("1_8y0py")
+one_shot = true
+explosiveness = 0.9
+direction = Vector2(1, 25)
+spread = 85.0
+initial_velocity_min = 160.25
+initial_velocity_max = 288.46
+angular_velocity_min = -221.54
+angular_velocity_max = -83.08
+scale_amount_min = 0.15
+scale_amount_max = 0.5
+scale_amount_curve = SubResource("Curve_8y0py")

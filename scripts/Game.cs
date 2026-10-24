@@ -67,7 +67,8 @@ public partial class Game : Node2D
 
 		if (@event.IsActionPressed("test") && CustomDebug.IsDebugging)
 		{
-			GameManager.Instance.SetGameStateVictory();
+			// GameManager.Instance.SetGameStateVictory();
+			SignalManager.Instance.EmitAdvanceStage();
 		}
 
 		if (@event.IsActionPressed("toggle-test") && CustomDebug.IsDebugging)

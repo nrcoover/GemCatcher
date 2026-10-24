@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://8m2y1u6noqq5"]
+[gd_scene load_steps=9 format=3 uid="uid://8m2y1u6noqq5"]
 
 [ext_resource type="Script" uid="uid://b4i4niwmui66q" path="res://scripts/Gem.cs" id="1_o8oug"]
 [ext_resource type="Texture2D" uid="uid://c2a4m3pjt6egg" path="res://assets/images/sprites/base_diamond.png" id="2_tx2gm"]
+[ext_resource type="PackedScene" uid="uid://cwmoohy8sry3o" path="res://scenes/GemExplosion.tscn" id="2_xfm3s"]
 
 [sub_resource type="Curve" id="Curve_tx2gm"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5241379, 0.64245415), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -52,6 +53,7 @@ _data = {
 [node name="Gem" type="Area2D" node_paths=PackedStringArray("_particles") groups=["Moveable Objects"]]
 script = ExtResource("1_o8oug")
 _particles = NodePath("Particles")
+_explosionScene = ExtResource("2_xfm3s")
 _maxSpeedVariation = 1.75
 
 [node name="Particles" type="CPUParticles2D" parent="."]

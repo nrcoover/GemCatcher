@@ -41,6 +41,7 @@ public partial class GemPowerUp : Gem
 
   public override void _ExitTree()
 	{
+		base._ExitTree();
 		KillTweens();
 	}
 

@@ -3,6 +3,7 @@ using Godot;
 public partial class Gem : Area2D
 {
 	[Export] CpuParticles2D _particles;
+	[Export] PackedScene _explosionScene;
 	[Export] protected float _movementSpeed = 100;
 	[Export] float _minSpeedVariation = 1.0f;
 	[Export] float _maxSpeedVariation = 3.5f;
@@ -42,15 +43,56 @@ public partial class Gem : Area2D
 		SubscribeToSignals();
 	}
 
+  public override void _ExitTree()
+  {
+    UnsubscribeFromSignals();
+  }
+
 	public override void _Process(double delta)
 	{
 		HandleMovement((float)delta);
 	}
-	
+
+
+
+#region Signals
+
 	private void SubscribeToSignals()
 	{
+		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
 		AreaEntered += OnAreaEntered;
 	}
+
+	private void UnsubscribeFromSignals()
+	{
+		SignalManager.Instance.AdvanceStage -= OnAdvanceStage;
+	}
+
+	private void OnAdvanceStage()
+	{
+		CreateExplosion();
+	}
+
+	public virtual void OnAreaEntered(Area2D area)
+	{
+		if (area is Paddle || area is PaddleGhost)
+		{
+			SignalManager.Instance.EmitScored(Modulate);
+			EndParticleEmission();
+			QueueFree();
+		}
+		else if (area is MenuPaddle)
+		{
+			EndParticleEmission();
+			QueueFree();
+		}
+	}
+
+#endregion
+
+
+
+#region Handlers
 
 	private void HandleMovement(float delta)
 	{
@@ -88,6 +130,11 @@ public partial class Gem : Area2D
 	{
 		Rotation += _rotationSpeed * _rotationVariation * delta;
 	}
+
+#endregion
+
+
+
 
 	private void SetVariations()
 	{
@@ -130,42 +177,13 @@ public partial class Gem : Area2D
 		_particles.Emitting = false;
 	}
 
-#region Signals
+	private void CreateExplosion() {
+		SignalManager.EmitSpawnPoolObject(
+			GlobalPosition, _explosionScene
+		);
 
-	public virtual void OnAreaEntered(Area2D area)
-	{
-		if (area is Paddle || area is PaddleGhost)
-		{
-			SignalManager.Instance.EmitScored(Modulate);
-			EndParticleEmission();
-			QueueFree();
-		}
-		else if (area is MenuPaddle)
-		{
-			EndParticleEmission();
-			QueueFree();
-		}
+		CallDeferred(MethodName.EndParticleEmission);
+		// CustomUtils.DeactivateArea2D(this);
+		CallDeferred(MethodName.QueueFree);
 	}
-
-#endregion
-
-	// TODO: Customize function to create explosion when gem is removed during stage advancement
-	// private void CreateExplosion(Area2D area) {
-	// 	GD.Print($"{Name} OnAreaEntered!");
-
-	// 	var explosionPosition = _explosionMarker.GlobalPosition;
-
-	// 	if (!_usesMarker)
-	// 	{
-	// 		Vector2 direction = GlobalPosition.DirectionTo(area.GlobalPosition).Normalized();
-	// 		explosionPosition = GlobalPosition + direction * _explosionMargin;
-	// 	}
-
-	// 	SignalManager.EmitSpawnPoolObject(
-	// 		_explosionMarker.GlobalPosition, _explosionScene
-	// 	);
-
-	// 	DeActivate();
-	// }
-
 }
