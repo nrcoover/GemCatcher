@@ -43,6 +43,7 @@ autoplay = true
 
 [editable path="CanvasLayer/MainMenuUi"]
 [editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/PlayButton"]
+[editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/InfiniteModeButton"]
 [editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/RulesButton"]
 [editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/MovesButton"]
 [editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/QuitButton"]
