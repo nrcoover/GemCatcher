@@ -78,13 +78,11 @@ public partial class Gem : Area2D
 		if (area is Paddle || area is PaddleGhost)
 		{
 			SignalManager.Instance.EmitScored(Modulate);
-			EndParticleEmission();
-			QueueFree();
+			HandleObjectRemoval();
 		}
 		else if (area is MenuPaddle)
 		{
-			EndParticleEmission();
-			QueueFree();
+			HandleObjectRemoval();
 		}
 	}
 
@@ -117,7 +115,7 @@ public partial class Gem : Area2D
 	{
 		if (Position.Y > GetViewportRect().End.Y + _viewportBoundaryMargin)
 		{
-			QueueFree();
+			HandleObjectRemoval();
 		}
 
 		Position = new Vector2(
@@ -129,6 +127,12 @@ public partial class Gem : Area2D
 	private void HandleRotation(float delta)
 	{
 		Rotation += _rotationSpeed * _rotationVariation * delta;
+	}
+
+	private void HandleObjectRemoval()
+	{
+		EndParticleEmission();
+		QueueFree();
 	}
 
 #endregion
@@ -182,8 +186,6 @@ public partial class Gem : Area2D
 			GlobalPosition, _explosionScene
 		);
 
-		CallDeferred(MethodName.EndParticleEmission);
-		// CustomUtils.DeactivateArea2D(this);
-		CallDeferred(MethodName.QueueFree);
+		CallDeferred(MethodName.HandleObjectRemoval);
 	}
 }
