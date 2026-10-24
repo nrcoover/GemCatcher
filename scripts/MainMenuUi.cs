@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using Godot;
 
 public partial class MainMenuUi : Control
 {
 	[Export] private TextureButton _playButton;
+	[Export] private TextureButton _infiniteModeButton;
 	[Export] private TextureButton _rulesButton;
 	[Export] private TextureButton _movesButton;
 	[Export] private TextureButton _quitButton;
@@ -38,6 +38,15 @@ public partial class MainMenuUi : Control
 	{
 		_isFirstAnimationRun = true;
 
+		if (SaveDataManager.Instance.IsInfiniteModeUnlocked)
+		{
+			ShowInfiniteModeButton();
+		}
+		else
+		{
+			HideInfiniteModeButton();
+		}
+
 		HandleHighScoreDisplay();
 		CloseAllModals();
 		InitializeTitleColors();
@@ -54,7 +63,7 @@ public partial class MainMenuUi : Control
 
   public void SubscribeToSignals()
 	{
-		SignalManager.Instance.HighScoreChanged += OnHighScoreChanged;
+		SignalManager.Instance.SaveDataReset += OnSaveDataReset;
 		_titleTimer.Timeout += OnTitleTimeout;
 		_playButton.Pressed += OnPlayClicked;
 		_rulesButton.Pressed += OnRulesClicked;
@@ -63,16 +72,18 @@ public partial class MainMenuUi : Control
 		_creditsButton.Pressed += OnCreditsClicked;
 		_resetHighScoreButton.Pressed += OnResetHighScoreClicked;
 		_restoreHighScoreButton.Pressed += OnRestoreHighScoreClicked;
+		_infiniteModeButton.Pressed += OnInfiniteModeClicked;
 	}
 
 	public void UnsubscribeFromSignals()
 	{
-		SignalManager.Instance.HighScoreChanged -= OnHighScoreChanged;
+		SignalManager.Instance.SaveDataReset -= OnSaveDataReset;
 	}
 
-  private void OnHighScoreChanged()
+  private void OnSaveDataReset()
   {
     HandleHighScoreDisplay();
+		HandleInfiniteModeButtonDisplay();
   }
 
   private void OnTitleTimeout()
@@ -82,7 +93,8 @@ public partial class MainMenuUi : Control
 
 	private void OnPlayClicked()
   {
-    LevelManager.Instance.LoadGame();
+		GameManager.Instance.SetGameModeNormal();
+		LevelManager.Instance.LoadGame();
   }
 
   private void OnRulesClicked()
@@ -110,13 +122,20 @@ public partial class MainMenuUi : Control
 	
   private void OnResetHighScoreClicked()
   {
-    ScoreManager.Instance.ResetHighScore();
+		GameManager.Instance.SetGameModeNormal();
+		SaveDataManager.Instance.ResetSaveData();
   }
 
   private void OnRestoreHighScoreClicked()
   {
-    ScoreManager.Instance.RestoreHighScore();
+    SaveDataManager.Instance.RestoreHighScore();
   }
+
+	private void OnInfiniteModeClicked()
+	{
+		GameManager.Instance.SetGameModeInfinite();
+		LevelManager.Instance.LoadGame();
+	}
 
 #endregion
 
@@ -148,8 +167,8 @@ public partial class MainMenuUi : Control
   private void HandleHighScoreDisplay()
   {
 		_marginHighScoreContainer.Visible = false;
-    var highScore = ScoreManager.Instance.HighScore;
-		var highScoreRestore = ScoreManager.Instance.HighScoreRestore;
+    var highScore = SaveDataManager.Instance.HighScore;
+		var highScoreRestore = SaveDataManager.Instance.HighScoreRestore;
 
 		if (highScore != 0 || highScoreRestore != 0)
 		{
@@ -166,6 +185,26 @@ public partial class MainMenuUi : Control
 			}
 		}
   }
+
+	private void HandleInfiniteModeButtonDisplay()
+	{
+		if(SaveDataManager.Instance.IsInfiniteModeUnlocked)
+		{
+			return;
+		}
+
+		HideInfiniteModeButton();
+	}
+
+	private void HideInfiniteModeButton()
+	{
+		_infiniteModeButton.Hide();
+	}
+
+	private void ShowInfiniteModeButton()
+	{
+		_infiniteModeButton.Show();
+	}
 	
   private async void HandleLabelTweeningAsync()
 	{

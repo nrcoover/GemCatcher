@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://bjktv0avyw2nu"]
+
+[ext_resource type="PackedScene" uid="uid://8m2y1u6noqq5" path="res://scenes/Gem.tscn" id="1_422sk"]
+[ext_resource type="Script" uid="uid://dy71bvddwph4e" path="res://scenes/FalseGem.cs" id="2_xy76t"]
+
+[node name="FalseGem" instance=ExtResource("1_422sk")]
+script = ExtResource("2_xy76t")
+_maxSpeedVariation = 3.5

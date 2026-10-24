@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://bgk1gf8kovaqj"]
+
+[ext_resource type="Script" uid="uid://dew5vnvnsm6r4" path="res://scripts/VictorySpawnerContainer.cs" id="1_50cg4"]
+[ext_resource type="PackedScene" uid="uid://bbrkr3etn88hu" path="res://scenes/GemSpawner.tscn" id="2_r0j3s"]
+
+[node name="VictorySpawnerContainer" type="Node2D"]
+script = ExtResource("1_50cg4")
+
+[node name="GemSpawner" parent="." instance=ExtResource("2_r0j3s")]
+_isVictorySpawner = true
+
+[node name="GemSpawnTimer" parent="GemSpawner" index="1"]
+autostart = false
+
+[node name="GemSpawner2" parent="." instance=ExtResource("2_r0j3s")]
+_isVictorySpawner = true
+
+[node name="GemSpawnTimer" parent="GemSpawner2" index="1"]
+autostart = false
+
+[node name="GemSpawner3" parent="." instance=ExtResource("2_r0j3s")]
+_isVictorySpawner = true
+
+[node name="GemSpawnTimer" parent="GemSpawner3" index="1"]
+autostart = false
+
+[editable path="GemSpawner"]
+[editable path="GemSpawner2"]
+[editable path="GemSpawner3"]

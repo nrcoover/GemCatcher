@@ -9,10 +9,12 @@ public partial class GemSpawner : Node2D
 	[Export] private Timer _gemSpawnTimer;
 	[Export] private Timer _powerUpSpawnTimer;
 	[Export] private PackedScene _gemScene;
+	[Export] private PackedScene _falseGemScene;
 	[Export] private PackedScene _gemHeartScene;
 	[Export] private PackedScene _gemPowerUpScene;
 	[Export] private Node _gemContainer;
 	[Export] private bool _isOnMainMenu;
+	[Export] private bool _isVictorySpawner;
 
 	public float SpawnTime = 1.75f;
 
@@ -24,8 +26,7 @@ public partial class GemSpawner : Node2D
 
 	public override void _Ready()
 	{
-		InitializeVariables();
-		StartPowerUpTimer();
+		SubscribeToSignals();
 
 		if (_isOnMainMenu)
 		{
@@ -33,15 +34,25 @@ public partial class GemSpawner : Node2D
 		}
 		else
 		{
+			InitializeVariables();
 			SpawnGem();
 		}
 
-		SubscribeToSignals();
+		StartPowerUpTimer();
 	}
 
 	public override void _ExitTree()
 	{
 		UnsubscribeFromSignals();
+	}
+
+	public void InitializeVictoryVariables()
+	{
+		var minTime = 0.01f;
+		var maxTime = 0.1f;
+
+		SpawnTime = Helper.GetRandomFloat(minTime, maxTime);
+		_gemSpawnTimer.WaitTime = SpawnTime;
 	}
 
 	private void InitializeVariables()
@@ -51,31 +62,40 @@ public partial class GemSpawner : Node2D
 		_gemSpawnTimer.WaitTime = SpawnTime;
 	}
 
+
+
+#region Signals
+
   private void SubscribeToSignals()
 	{
+		SignalManager.Instance.DifficultyIncreased += OnDifficultyIncreased;
+		SignalManager.Instance.GameVictory += OnGameVictory;
 		_gemSpawnTimer.Timeout += OnGemSpawnTimeout;
 		_powerUpSpawnTimer.Timeout += OnPowerUpSpawnTimeout;
-		SignalManager.Instance.DifficultyIncreased += OnDifficultyIncreased;
 	}
 
-	private void OnGemSpawnTimeout()
-	{
-		SpawnGemType();
-	}
-
-  private void OnPowerUpSpawnTimeout()
-  {
-    EnablePowerUpSpawning();
-		GD.Print("Wait Time ended. Can spawn power ups is: " + _canSpawnPowerUp);
-  }
-
-  private void UnsubscribeFromSignals()
+	private void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.DifficultyIncreased -= OnDifficultyIncreased;
+		SignalManager.Instance.GameVictory -= OnGameVictory;
 	}
 
-  private void OnDifficultyIncreased()
+	private void OnGameVictory()
+	{
+		if (_isVictorySpawner)
+		{
+			InitializeVictoryVariables();
+			_gemSpawnTimer.Start();
+		}
+	}
+
+	private void OnDifficultyIncreased()
   {
+		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			return;
+		}
+
 		var decrementalTime = 0.01;
 		var minWaitTime = 0.75f; // Clamp at .25 or .15 wait time; .75 when mixed with speed increase on difficulty level increase.
 
@@ -91,6 +111,26 @@ public partial class GemSpawner : Node2D
 		GD.Print($"NEW WAIT TIME: {_gemSpawnTimer.WaitTime}");
   }
 
+	private void OnGemSpawnTimeout()
+	{
+		SpawnGemType();
+	}
+
+  private void OnPowerUpSpawnTimeout()
+  {
+		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			return;
+		}
+
+    EnablePowerUpSpawning();
+		GD.Print("Wait Time ended. Can spawn power ups is: " + _canSpawnPowerUp);
+  }
+
+#endregion
+
+
+
 	private void SetBoundaryMarkers()
   {
     _leftBoundary = (Marker2D)GetNode("../../MainMenu/CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/LeftBoundary");
@@ -98,11 +138,21 @@ public partial class GemSpawner : Node2D
 		_rightBoundary = (Marker2D)GetNode("../../MainMenu/CanvasLayer/MainMenuUi/MarginContainer/TitleContainer/RightBoundary");
   }
 
+
+
+#region Spawn Gems
+
   private void SpawnGemType()
 	{
 		if (_isOnMainMenu)
 		{
 			SpawnGem();
+			return;
+		}
+
+		if (_isVictorySpawner && GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			SpawnFalseGem();
 			return;
 		}
 
@@ -139,7 +189,6 @@ public partial class GemSpawner : Node2D
 			return;
 		}
 
-		SetGemSpeedByDifficultyLevel(gem);
 		SetGemPosition(gem);
 	}
 
@@ -169,19 +218,40 @@ public partial class GemSpawner : Node2D
 		SetGemPosition(powerUpGem);
 	}
 
+	private void SpawnFalseGem()
+	{
+		var spawnPosition = GetGemSpawnPosition();
+		SignalManager.EmitSpawnPoolObject(spawnPosition, _falseGemScene);
+	}
+
+	private Vector2 GetGemSpawnPosition()
+	{
+		var margin = 85;
+
+		var xBoundaryCoordinate = Helper.GetRandomFloat(
+			GetViewportRect().Position.X + margin, 
+			GetViewportRect().End.X - margin
+		);
+
+		return new Vector2(
+			xBoundaryCoordinate,
+			-margin
+		);
+	}
+
 	private void SetGemPosition(Node2D gem)
 	{
 		var margin = 85;
 
 		var xBoundaryCoordinate = Helper.GetRandomFloat(
-				GetViewportRect().Position.X + margin, 
-				GetViewportRect().End.X - margin
-			);
+			GetViewportRect().Position.X + margin, 
+			GetViewportRect().End.X - margin
+		);
 
 		gem.Position = new Vector2(
-				xBoundaryCoordinate,
-				-margin
-			);
+			xBoundaryCoordinate,
+			-margin
+		);
 	}
 
 	private void SetGemPositionOnMainMenu(Gem gem)
@@ -193,20 +263,20 @@ public partial class GemSpawner : Node2D
 		}
 
 		var xBoundaryCoordinate = Helper.GetRandomFloat(
-				_rightBoundary.GlobalPosition.X,
-				_leftBoundary.GlobalPosition.X 
-			);
+			_rightBoundary.GlobalPosition.X,
+			_leftBoundary.GlobalPosition.X 
+		);
 
 		gem.Position = new Vector2(
-				xBoundaryCoordinate,
-				_leftBoundary.GlobalPosition.Y
-			);
+			xBoundaryCoordinate,
+			_leftBoundary.GlobalPosition.Y
+		);
 	}
 
-  private void SetGemSpeedByDifficultyLevel(Gem gem)
-  {
-    gem.SpeedVariation *= GameManager.Instance.DifficultyLevel;
-  }
+
+#endregion
+
+
 
 	private void SetPowerUpTimerWaitTime()
 	{

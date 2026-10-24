@@ -1,54 +1,52 @@
 using System.Threading.Tasks;
 using System.Linq;
 using Godot;
+using GemCatcher.utils;
 
 public partial class Game : Node2D
 {
 	const int DEFAULT_POINT_VALUE = 1;
 
-	enum HealthStatus
-	{
-		FullHealth = 5,
-		FleshWound = 4,
-		Injured = 3,
-		Hurt = 2,
-		MortallyWounded = 1,
-		Dead = 0
-	}
-
 	[Export] private PackedScene _gemSpawner;
-
 	[Export] private Camera _camera;
-	[Export] private Label _scoreLabel;
 
+	// Music
 	[Export] private AudioStreamPlayer _music;
+	[Export] private AudioStreamPlayer _musicReversed;
+
+	// SFX
 	[Export] private AudioStreamPlayer _audioExplosion;
-	[Export] private AudioStreamPlayer2D _audioCommanderEncouragement;
-	[Export] private AudioStreamPlayer2D _audioCommanderAdvanceStage1;
-	[Export] private AudioStreamPlayer2D _audioCommanderAdvanceStage2;
-	[Export] private AudioStreamPlayer2D _audioCommanderAdvanceStage3;
-	[Export] private AudioStreamPlayer _audioCommencingMission;
-	[Export] private AudioStreamPlayer _audioMissionFailure;
-	[Export] private AudioStreamPlayer _audioStageAdvancement;
 	[Export] private AudioStreamPlayer2D _scoreSound;
 	[Export] private AudioStreamPlayer2D _hurtSound;
 	[Export] private AudioStreamPlayer2D _healthIncreaseSound;
 
-	[Export] private Node2D _heart1;
-	[Export] private Node2D _heart2;
-	[Export] private Node2D _heart3;
-	[Export] private Node2D _heart4;
-	[Export] private Node2D _heart5;
+	// Commander Dialogue
+	[Export] private AudioStreamPlayer2D _audioCommanderEncouragement;
+	[Export] private AudioStreamPlayer2D _audioCommanderAdvanceStage1;
+	[Export] private AudioStreamPlayer2D _audioCommanderAdvanceStage2;
+	[Export] private AudioStreamPlayer2D _audioCommanderAdvanceStage3;
+	[Export] private AudioStreamPlayer2D _audioCommanderCongratulations;
+
+	// Computer Dialogue
+	[Export] private AudioStreamPlayer _audioCommencingMission;
+	[Export] private AudioStreamPlayer _audioMissionFailure;
+	[Export] private AudioStreamPlayer _audioStageAdvancement;
+	[Export] private AudioStreamPlayer _audioFinalStageAdvancement;
+	[Export] private AudioStreamPlayer _audioMissionComplete;
+
+
+	[Export] private Node2D _normalSpawnerContainer;
+	[Export] private Node2D _victorySpawnerContainer;
+
+	[Export] private GameSuccessScreen _gameVictoryScreen;
 
 	[Export] private int _shakeIntensity;
 	[Export] private float _shakeTime;
 
-	private Tween _colorScaleTween;
-	private Tween _heartScaleTween;
 	private Tween _musicVolumeTween;
 
-	private int _score = 0;
 	private bool _isDying = false;
+	private bool _isVictorious = false;
 	private float _musicDefaultVolume;
 
 	public override async void _Ready()
@@ -65,6 +63,16 @@ public partial class Game : Node2D
 		if (@event.IsActionPressed("exit"))
 		{
 			HandleEscape();
+		}
+
+		if (@event.IsActionPressed("test") && CustomDebug.IsDebugging)
+		{
+			GameManager.Instance.SetGameStateVictory();
+		}
+
+		if (@event.IsActionPressed("toggle-test") && CustomDebug.IsDebugging)
+		{
+			SaveDataManager.Instance.IsInfiniteModeUnlocked = !SaveDataManager.Instance.IsInfiniteModeUnlocked;
 		}
 	}
 
@@ -93,6 +101,7 @@ public partial class Game : Node2D
 		SignalManager.Instance.PowerUpSpawned += OnPowerUpSpawned;
 		SignalManager.Instance.PowerUpRemoved += OnPowerUpRemoved;
 		SignalManager.Instance.AdvanceStage += OnAdvanceStageAsync;
+		SignalManager.Instance.GameVictory += OnGameVictory;
 	}
 
   private void UnsubscribeFromSignals() {
@@ -104,10 +113,12 @@ public partial class Game : Node2D
 		SignalManager.Instance.PowerUpSpawned -= OnPowerUpSpawned;
 		SignalManager.Instance.PowerUpRemoved -= OnPowerUpRemoved;
 		SignalManager.Instance.AdvanceStage -= OnAdvanceStageAsync;
+		SignalManager.Instance.GameVictory -= OnGameVictory;
 	}
 
-  public async void OnInitiateDeathSequenceAsync()
+  private async void OnInitiateDeathSequenceAsync()
 	{
+		// TODO: Consider refactoring _isDying into GameManager enum GameState
 		if (_isDying)
 		{
 			return;
@@ -134,6 +145,36 @@ public partial class Game : Node2D
 		}
 	}
 
+	private async void InitiateVictorySequenceAsync()
+	{
+		if (_isVictorious)
+		{
+			return;
+		}
+
+		_isVictorious = true;
+
+		// Play winning celebration sound
+		_music.Stop();
+		_audioExplosion.Play(); // TODO: Replace with special gem explosion sound
+		_musicReversed.Play();
+
+		await CreateTimerAsync(0.75f);
+
+		_audioMissionComplete.Play();
+
+		await CreateTimerAsync(2.5f);
+
+		_audioCommanderCongratulations.Play();
+
+		await CreateTimerAsync(2.0f);
+
+		// Victory screen initates with fade-in animation
+		_gameVictoryScreen.Visible = true;
+
+		SignalManager.Instance.EmitInitiateVictorySequence();
+	}
+
 	private void OnScored(Color color)
 	{
 		if (_isDying)
@@ -141,9 +182,8 @@ public partial class Game : Node2D
 			return;
 		}
 
-		IncrementScore(DEFAULT_POINT_VALUE);
+		GameManager.Instance.IncrementScore(DEFAULT_POINT_VALUE, color);
 		_scoreSound.Play();
-		UpdateScoreUi(color);
 	}
 	
   private void OnPlayerHurt()
@@ -151,13 +191,7 @@ public partial class Game : Node2D
     IncurDamage();
   }
 
-	private void OnGemOffScreen()
-	{
-		GameManager.Instance.IncrementMissedGems();
-		SignalManager.Instance.EmitPlayerHurt();
-	}
-	
-  private void OnHealthRecovered()
+	private void OnHealthRecovered()
   {
 		if (_isDying)
 		{
@@ -165,8 +199,18 @@ public partial class Game : Node2D
 		}
 
 		_healthIncreaseSound.Play();
-    UpdateHealthUi();
   }
+
+	private void OnGemOffScreen()
+	{
+		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			return;
+		}
+
+		GameManager.Instance.IncrementMissedGems();
+		SignalManager.Instance.EmitPlayerHurt();
+	}
 
   private void OnPowerUpSpawned()
 	{
@@ -201,6 +245,11 @@ public partial class Game : Node2D
 		}
 	}
 
+	private void OnGameVictory()
+	{
+		InitiateVictorySequenceAsync();
+	}
+
 #endregion
 
 
@@ -211,90 +260,13 @@ public partial class Game : Node2D
 	{
 		if (Input.IsKeyPressed(Key.Escape))
 		{
+			GameManager.Instance.ResetGame();
 			LevelManager.Instance.LoadMainMenu();
 		}
 	}
 	
 #endregion
 	
-
-
-#region UI
-
-	private void UpdateScoreUi(Color color)
-	{
-		_scoreLabel.Text = $"Score: {_score:000}";
-
-		var scaleMultiplier = 1.10f;
-		_scoreLabel.SelfModulate = Colors.White;
-		_scoreLabel.Scale = Vector2.One * scaleMultiplier;
-
-		CreateColorScaleTween(color);
-	}
-
-  private void UpdateHealthUi()
-	{
-		var currentHealth = GameManager.Instance.GetHealth();
-
-		switch (currentHealth)
-		{
-			case (int)HealthStatus.FullHealth:
-				_heart1.Visible = true;
-				_heart2.Visible = true;
-				_heart3.Visible = true;
-				_heart4.Visible = true;
-				_heart5.Visible = true;
-				CreateHeartScaleTween(_heart1);
-				
-				break;
-			case (int)HealthStatus.FleshWound:
-				_heart1.Visible = false;
-				_heart2.Visible = true;
-				_heart3.Visible = true;
-				_heart4.Visible = true;
-				_heart5.Visible = true;
-				CreateHeartScaleTween(_heart2);
-
-				break;
-			case (int)HealthStatus.Injured:
-				_heart1.Visible = false;
-				_heart2.Visible = false;
-				_heart3.Visible = true;
-				_heart4.Visible = true;
-				_heart5.Visible = true;
-				CreateHeartScaleTween(_heart3);
-
-				break;
-			case (int)HealthStatus.Hurt:
-				_heart1.Visible = false;
-				_heart2.Visible = false;
-				_heart3.Visible = false;
-				_heart4.Visible = true;
-				_heart5.Visible = true;
-				CreateHeartScaleTween(_heart4);
-
-				break;
-			case (int)HealthStatus.MortallyWounded:
-				_heart1.Visible = false;
-				_heart2.Visible = false;
-				_heart3.Visible = false;
-				_heart4.Visible = false;
-				_heart5.Visible = true;
-				CreateHeartScaleTween(_heart5);
-
-				break;
-			default:
-				_heart1.Visible = false;
-				_heart2.Visible = false;
-				_heart3.Visible = false;
-				_heart4.Visible = false;
-				_heart5.Visible = false;
-				break;
-		}
-	}
-	
-#endregion
-
 
 
 #region Audio
@@ -336,6 +308,7 @@ public partial class Game : Node2D
 
 	private void PlayStageAdvancementCommanderAudio()
 	{
+		// TODO: Prevent same audio twice in a row by storing previous random number in variable and re-roll if same as previous.
 		var randomNumber = Helper.GetRandomInt(1, 3);
 
 		switch (randomNumber)
@@ -360,65 +333,8 @@ public partial class Game : Node2D
 
 	private void KillAllTweens()
 	{
-		_colorScaleTween?.Kill();
-		_heartScaleTween?.Kill();
 		_musicVolumeTween?.Kill();
 	}
-
-	private void CreateColorScaleTween(Color color)
-  {
-    _colorScaleTween = CreateTween();
-		var tweenTime = 0.35f;
-
-		_colorScaleTween.SetParallel(true);
-
-		_colorScaleTween.TweenProperty(
-			_scoreLabel,
-			PropertyName.SelfModulate.ToString(),
-			color,
-			tweenTime
-		).SetTrans(Tween.TransitionType.Cubic)
-		.SetEase(Tween.EaseType.Out);
-
-		_colorScaleTween.TweenProperty(
-			_scoreLabel,
-			PropertyName.Scale.ToString(),
-			Vector2.One,
-			tweenTime
-		).SetTrans(Tween.TransitionType.Back)
-		.SetEase(Tween.EaseType.Out);
-  }
-
-	private void CreateHeartScaleTween(Node2D heart)
-  {
-		_heartScaleTween = CreateTween();
-
-    var scaleMultiplier = 3.25f;
-    var tweenTime = 0.35f;
-		var originalScale = heart.Scale;
-		var originalColor = heart.Modulate;
-
-    heart.Modulate = IncreaseColorIntensity(originalColor);
-    heart.Scale = Vector2.One * scaleMultiplier;
-
-		_heartScaleTween.SetParallel(true);
-
-		_heartScaleTween.TweenProperty(
-			heart,
-			PropertyName.Modulate.ToString(),
-			originalColor,
-			tweenTime
-		).SetTrans(Tween.TransitionType.Cubic)
-		.SetEase(Tween.EaseType.Out);
-
-		_heartScaleTween.TweenProperty(
-			heart,
-			PropertyName.Scale.ToString(),
-			originalScale,
-			tweenTime
-		).SetTrans(Tween.TransitionType.Back)
-		.SetEase(Tween.EaseType.Out);
-  }
 
 	private void CreateMusicVolumeTween()
 	{
@@ -435,18 +351,6 @@ public partial class Game : Node2D
 			tweenTime
 		).SetTrans(Tween.TransitionType.Cubic)
 		.SetEase(Tween.EaseType.Out);
-	}
-
-	private Color IncreaseColorIntensity(Color color)
-	{
-		float newIntensity = 3.25f;
-
-		return Color.FromHsv(
-				color.H,
-				color.S,
-				newIntensity,
-				color.A
-		);
 	}
 
 #endregion
@@ -497,7 +401,15 @@ public partial class Game : Node2D
 			return;
     }
 
-    _audioStageAdvancement.Play();
+		if (GameManager.Instance.CurrentStage == GameManager.VICTORY_STAGE 
+				&& !(GameManager.Instance.CurrentGameMode == (int)GameManager.GameMode.INFINITE))
+		{
+			_audioFinalStageAdvancement.Play();
+		}
+		else
+		{
+    	_audioStageAdvancement.Play();
+		}
 
     await CreateTimerAsync(1.75f);
 
@@ -511,7 +423,7 @@ public partial class Game : Node2D
 
 	private async Task HandleDeathSequenceAudioAsync()
 	{
-		ScoreManager.Instance.HighScore = _score;
+		SaveDataManager.Instance.HighScore = GameManager.Instance.CurrentScore;
 
 		SignalManager.Instance.EmitShowGameOverScreen();
 
@@ -538,14 +450,6 @@ public partial class Game : Node2D
 	{
 		_hurtSound.Play();
 		_camera.ScreenShake(_shakeIntensity, _shakeTime);
-		UpdateHealthUi();
-	}
-
-	//TODO: Move to Score Manager
-	private void IncrementScore(int points)
-	{
-		_score += points;
-		SignalManager.Instance.EmitScoreIncremented(_score);
 	}
 
 	private void StopMoveableObjectProcessing()
@@ -569,7 +473,7 @@ public partial class Game : Node2D
 		spawner.SpawnTime *= additionalSpawnerTimeMultiplier
 			* GameManager.Instance.CurrentStage;
 
-		CallDeferred("add_child", spawner);
+		_normalSpawnerContainer.CallDeferred("add_child", spawner);
 
 		GD.Print("Spawner SpawnTime = " + spawner.SpawnTime);
 	}

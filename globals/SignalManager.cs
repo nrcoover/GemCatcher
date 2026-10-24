@@ -5,7 +5,9 @@ public partial class SignalManager : Node
 	public static SignalManager Instance { get; private set;}
 
 	[Signal] public delegate void GameOverEventHandler();
+	[Signal] public delegate void GameVictoryEventHandler();
 	[Signal] public delegate void InitiateDeathSequenceEventHandler();
+	[Signal] public delegate void InitiateVictorySequenceEventHandler();
 	[Signal] public delegate void BoostFuelDepletedEventHandler();
 	[Signal] public delegate void BoostEngagedEventHandler();
 	[Signal] public delegate void BoostDisengagedEventHandler();
@@ -15,15 +17,17 @@ public partial class SignalManager : Node
 	[Signal] public delegate void ShowGameOverScreenEventHandler();
 	[Signal] public delegate void ShowMissionFailurePanelEventHandler();
 	[Signal] public delegate void ShowGameOverButtonsEventHandler();
-	[Signal] public delegate void HighScoreChangedEventHandler();
+	[Signal] public delegate void SaveDataResetEventHandler();
 	[Signal] public delegate void HealthRecoveredEventHandler();
-	[Signal] public delegate void ScoreIncrementedEventHandler(int score);
+	[Signal] public delegate void ScoreIncrementedEventHandler(int score, Color color);
+	[Signal] public delegate void ScoreUpdatedEventHandler(Color color);
 	[Signal] public delegate void DifficultyIncreasedEventHandler();
 	[Signal] public delegate void PowerUpCollectedEventHandler(Color color);
 	[Signal] public delegate void PowerUpSpawnedEventHandler();
 	[Signal] public delegate void PowerUpRemovedEventHandler();
 	[Signal] public delegate void AdvanceStageEventHandler();
 	[Signal] public delegate void ResetGameEventHandler();
+	[Signal] public delegate void SpawnPoolObjectEventHandler(Vector2 position, PackedScene scene);
 
 	public override void _Ready()
 	{
@@ -35,9 +39,19 @@ public partial class SignalManager : Node
 		EmitSignal(SignalName.GameOver);
 	}
 
+	public void EmitGameVictory()
+	{
+		EmitSignal(SignalName.GameVictory);
+	}
+
 	public void EmitInitiateDeathSequence() 
 	{
 		EmitSignal(SignalName.InitiateDeathSequence);
+	}
+
+	public void EmitInitiateVictorySequence() 
+	{
+		EmitSignal(SignalName.InitiateVictorySequence);
 	}
 
 	public void EmitBoostFuelDepleted()
@@ -85,9 +99,9 @@ public partial class SignalManager : Node
 		EmitSignal(SignalName.ShowGameOverButtons);
 	}
 
-	public void EmitHighScoreChangedSignal()
+	public void EmitSaveDataResetSignal()
 	{
-		EmitSignal(SignalName.HighScoreChanged);
+		EmitSignal(SignalName.SaveDataReset);
 	}
 
 	public void EmitHealthRecovered()
@@ -95,9 +109,14 @@ public partial class SignalManager : Node
 		EmitSignal(SignalName.HealthRecovered);
 	}
 
-	public void EmitScoreIncremented(int score)
+	public void EmitScoreIncremented(int score, Color color)
 	{
-		EmitSignal(SignalName.ScoreIncremented, score);
+		EmitSignal(SignalName.ScoreIncremented, score, color);
+	}
+
+	public void EmitScoreUpdated(Color color)
+	{
+		EmitSignal(SignalName.ScoreUpdated, color);
 	}
 
 	public void EmitDifficultyIncreased()
@@ -128,5 +147,10 @@ public partial class SignalManager : Node
 	public void EmitResetGame()
 	{
 		EmitSignal(SignalName.ResetGame);
+	}
+
+	public static void EmitSpawnPoolObject(Vector2 position, PackedScene scene)
+	{
+		Instance.EmitSignal(SignalName.SpawnPoolObject, position, scene);
 	}
 }

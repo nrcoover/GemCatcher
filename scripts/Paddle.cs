@@ -143,6 +143,11 @@ public partial class Paddle : Area2D
 	{
 		if (@event.IsActionPressed("boost"))
 		{
+			if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+			{
+				return;
+			}
+
 			if (_canBoost)
 			{
 				SignalManager.Instance.EmitBoostEngaged();
@@ -151,6 +156,11 @@ public partial class Paddle : Area2D
 
 		if (@event.IsActionReleased("boost"))
 		{
+			if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+			{
+				return;
+			}
+
 			SignalManager.Instance.EmitBoostDisengaged();
 		}
 	}
@@ -191,17 +201,19 @@ public partial class Paddle : Area2D
 
 	private void SubscribeToSignals()
 	{
-		_boostRefuelTimer.Timeout += OnRefuelTimeout;
-		_selfDestructWarningTimer.Timeout += OnSelfDestructWarningTimeout;
-		_selfDestructTimer.Timeout += OnSelfDestructTimeout;
-		_powerUpTimer.Timeout += OnPowerUpTimeout;
 		SignalManager.Instance.BoostFuelDepleted += OnBoostFuelDepleted;
 		SignalManager.Instance.BoostEngaged += OnBoostEngaged;
 		SignalManager.Instance.BoostDisengaged += OnBoostDisengaged;
 		SignalManager.Instance.Scored += OnScored;
 		SignalManager.Instance.GameOver += OnGameOver;
+		SignalManager.Instance.GameVictory += OnGameVictory;
 		SignalManager.Instance.PowerUpCollected += OnPowerUpCollected;
 		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
+		_boostRefuelTimer.Timeout += OnRefuelTimeout;
+		_selfDestructWarningTimer.Timeout += OnSelfDestructWarningTimeout;
+		_selfDestructTimer.Timeout += OnSelfDestructTimeout;
+		_powerUpTimer.Timeout += OnPowerUpTimeout;
+		AreaEntered += OnAreaEntered;
 	}
 
   private void UnsubscribeFromSignals()
@@ -211,6 +223,7 @@ public partial class Paddle : Area2D
 		SignalManager.Instance.BoostDisengaged -= OnBoostDisengaged;
 		SignalManager.Instance.Scored -= OnScored;
 		SignalManager.Instance.GameOver -= OnGameOver;
+		SignalManager.Instance.GameVictory -= OnGameVictory;
 		SignalManager.Instance.PowerUpCollected -= OnPowerUpCollected;
 		SignalManager.Instance.AdvanceStage -= OnAdvanceStage;
 	}
@@ -306,6 +319,17 @@ public partial class Paddle : Area2D
 		
     _colorScaleTween.Kill();
   }
+
+	private void OnGameVictory()
+	{
+		DisableAllActivePowerUps();
+		SetIsPoweredUp(false);
+		DisengageAllParticles();
+		ResetAnimator();
+
+		KillAllTweens();
+		StopAllAudio();
+	}
 	
   private void OnPowerUpCollected(Color color)
 	{
@@ -329,6 +353,14 @@ public partial class Paddle : Area2D
 		_originalSpeed *= MOVEMENT_SPEED_MULTIPLIER;
   }
 
+	private void OnAreaEntered(Area2D area)
+	{
+		if (area is FalseGem falseGem)
+		{
+			CreateColorScaleTweenAsync(falseGem.Modulate);
+		}
+	}
+
 #endregion
 
 #region Paddle Movement
@@ -344,7 +376,7 @@ public partial class Paddle : Area2D
 		var noChangeInPosition = 0;
 		float calculatedMovementSpeed;
 
-		if (_canBoost)
+		if (_canBoost && !(GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY))
 		{
 			calculatedMovementSpeed = _movementSpeed * _boostMultiplier;
 		}
@@ -389,9 +421,16 @@ public partial class Paddle : Area2D
 	
 	private void HandleFuelConsumption(float delta)
 	{
+		// TODO: Handle edge case of player winning during fuel depleted audio and animation (fade out audio and reset animation)
+		// TODO: Stop hurting player if fuel depleted in Game Winning State
+		// if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		// {
+		// 	return;
+		// }
+
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
 
-		if (_canBoost)
+		if (_canBoost && !(GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY))
 		{
 			BurnFuel(delta);
 
@@ -442,11 +481,16 @@ public partial class Paddle : Area2D
 
 	private void HandleFuelConsumptionAnimation()
   {
+		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			return;
+		}
+
 		HandlePaddleAnimation();
 
 		if (_boostFuelAnimator.CurrentAnimation == Constants.Animations.BoostFuel.FlashingWarning)
     {
-        return;
+			return;
     }
 
 		var isLowOnFuel = _boostFuel < (int)FuelState.Low;
@@ -498,6 +542,12 @@ public partial class Paddle : Area2D
 
 	public void HandlePaddleAnimation()
 	{
+		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			ResetAnimator();
+			return;
+		}
+		
 		if (_isInCooldown)
     {
 			_paddleAnimator.Play(Constants.Animations.Paddle.FlashYellow);
@@ -524,7 +574,7 @@ public partial class Paddle : Area2D
 
 #region Manage Particle System
 
-		private void EngageRightParticles()
+	private void EngageRightParticles()
 	{
 		SetParticleEmission(_leftParticles, false);
 		SetParticleEmission(_rightParticles, true);
@@ -551,6 +601,12 @@ public partial class Paddle : Area2D
 
 	private void HandleParticles()
 	{
+		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			DisengageAllParticles();
+			return;
+		}
+
 		if (!_canBoost)
 		{
 			DisengageAllParticles();
@@ -651,6 +707,12 @@ public partial class Paddle : Area2D
 #endregion
 
 #region Tweens
+
+	private void KillAllTweens()
+	{
+		_colorScaleTween?.Kill();
+		_bigPaddleTween?.Kill();
+	}
 
 	private async void CreateColorScaleTweenAsync(Color color)
 	{
@@ -754,6 +816,33 @@ public partial class Paddle : Area2D
 #endregion
 
 #region Audio
+
+	private void StopAllAudio()
+	{
+		var audioStreams = Helper.GetAllObjectsInGroup(
+			GetTree().Root,
+			Constants.GroupNames.PaddleAudio
+		);
+
+		foreach (Node audio in audioStreams)
+		{
+			if (audio.Name == "GhostPaddlesDeactivatedSound" || audio.Name == "BigPaddleDeactivatedSound")
+			{
+				continue;
+			}
+
+			if (audio is AudioStreamPlayer player)
+			{
+				player.Stop();
+				player.ProcessMode = ProcessModeEnum.Disabled;
+			}
+			else if (audio is AudioStreamPlayer2D player2D)
+			{
+				player2D.Stop();
+				player2D.ProcessMode = ProcessModeEnum.Disabled;
+			}
+		}
+	}
 
 	private void PlayBoostAudio()
 	{
@@ -900,6 +989,12 @@ public partial class Paddle : Area2D
 	private void SetIsPoweredUp(bool value)
 	{
 		_isPoweredUp = value;
+	}
+
+	private void ResetAnimator()
+	{
+		_paddleAnimator.Play(Constants.Animations.Paddle.Reset);
+		_boostFuelAnimator.Play(Constants.Animations.BoostFuel.Reset);
 	}
 
 #endregion

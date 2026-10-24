@@ -2,13 +2,36 @@ using Godot;
 
 public partial class GameManager : Node
 {
+	public static GameManager Instance {get; private set;}
+	
 	const int MAX_HEALTH = 5;
 	const int MIN_HEALTH = 0;
 
+	const int DEFAULT_SCORE = 0;
+
 	const float DEFAULT_DIFFICULTY_LEVEL = 1;
 	const float DIFFICULTY_MULTIPLIER = 1.01f;
+	const float MAXIMUM_DIFFICULTY = 2.75f; // Clamp at 2.5 or 2.75 difficulty
 
-	private float _difficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
+	const int DEFAULT_GAME_MODE = (int)GameMode.NORMAL;
+	const int DEFAULT_GAME_STATE = (int)GameState.PLAYING;
+	
+	const int STARTING_STAGE = 1;
+	public const int VICTORY_STAGE = 3; // TODO set to 12 after debugging
+	const int STAGE_ADVANCEMENT_INCREMENTOR = 3; // TODO set to 10 after debugging
+
+	public enum GameState
+	{
+		PLAYING = 0,
+		DEAD = 1,
+		VICTORY = 2
+	}
+
+	public enum GameMode
+	{
+		NORMAL = 0,
+		INFINITE = 1
+	}
 
 	public float DifficultyLevel
 	{
@@ -19,6 +42,18 @@ public partial class GameManager : Node
 		private set
 		{
 			_difficultyLevel = value;
+		}
+	}
+
+	public int CurrentScore
+	{
+		get
+		{
+			return _currentScore;
+		}
+		private set
+		{
+			_currentScore = value;
 		}
 	}
 
@@ -34,7 +69,29 @@ public partial class GameManager : Node
 		}
 	}
 
-	public static GameManager Instance {get; private set;}
+	public int CurrentGameMode
+	{
+		get
+		{
+			return _currentGameMode;
+		}
+		private set
+		{
+			_currentGameMode = value;
+		}
+	}
+
+	public int CurrentGameState
+	{
+		get
+		{
+			return _currentGameState;
+		}
+		private set
+		{
+			_currentGameState = value;
+		}
+	}
 
 	public int MaxHealth {
 		get
@@ -47,11 +104,15 @@ public partial class GameManager : Node
 		}
 	}
 
-	private int _highScore = 0;
+	private float _difficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
+	private int _highScore = DEFAULT_SCORE;
 	private int _maxHealth = MAX_HEALTH;
 	private int _missedGemsCount = 0;
 	private int _health = MAX_HEALTH;
-	private int _currentStage = 1;
+	private int _currentScore = DEFAULT_SCORE;
+	private int _currentStage = STARTING_STAGE;
+	private int _currentGameMode = DEFAULT_GAME_MODE;
+	private int _currentGameState = DEFAULT_GAME_STATE;
 
 	public override void _Ready()
 	{
@@ -77,6 +138,7 @@ public partial class GameManager : Node
 		SignalManager.Instance.HealthRecovered += OnHealthRecovered;
 		SignalManager.Instance.ScoreIncremented += OnScoreIncremented;
 		SignalManager.Instance.ResetGame += OnResetGame;
+		SignalManager.Instance.GameVictory += OnGameVictory;
 	}
 
   private void UnsubscribeFromSignals()
@@ -85,6 +147,7 @@ public partial class GameManager : Node
 		SignalManager.Instance.HealthRecovered -= OnHealthRecovered;
 		SignalManager.Instance.ScoreIncremented -= OnScoreIncremented;
 		SignalManager.Instance.ResetGame -= OnResetGame;
+		SignalManager.Instance.GameVictory -= OnGameVictory;
 	}
 
   public void OnGameOver()
@@ -97,10 +160,12 @@ public partial class GameManager : Node
     IncrementHealth();
   }
 	
-  private void OnScoreIncremented(int score)
+  private void OnScoreIncremented(int score, Color color)
   {
     HandleDifficultyLevel(score);
 		HandleStageAdvancement(score);
+		CheckForGameVictory();
+		SignalManager.Instance.EmitScoreUpdated(color);
   }
 
 	private void OnResetGame()
@@ -108,23 +173,78 @@ public partial class GameManager : Node
 		ResetGame();
 	}
 
+	private void OnGameVictory()
+	{
+		UnlockInfiniteMode();
+	}
+
 #endregion
-	
-  private void CheckForGameOver()
-  {
-    if (GetHealth() <= 0)
-		{
-			SignalManager.Instance.EmitGameOver();
-		}
-  }
+
+
+
+#region Manage Game
+
+	public void SetGameModeNormal()
+	{
+		CurrentGameMode = (int)GameMode.NORMAL;
+	}
+
+	public void SetGameModeInfinite()
+	{
+		CurrentGameMode = (int)GameMode.INFINITE;
+	}
+
+	public void SetGameStatePlaying()
+	{
+		CurrentGameState = (int)GameState.PLAYING;
+	}
+
+	public void SetGameStateDead()
+	{
+		CurrentGameState = (int)GameState.DEAD;
+	}
+
+	public void SetGameStateVictory()
+	{
+		CurrentGameState = (int)GameState.VICTORY;
+		SignalManager.Instance.EmitGameVictory();
+	}
 
 	public void ResetGame()
 	{
 		SetMissedGemCount(0);
 		SetHealth(MAX_HEALTH);
 		ResetStageCount();
+		ResetScore();
 		DifficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
+		SetGameStatePlaying();
 	}
+
+	private void CheckForGameOver()
+  {
+    if (GetHealth() <= 0)
+		{
+			SignalManager.Instance.EmitGameOver();
+			SignalManager.Instance.EmitInitiateVictorySequence();
+		}
+  }
+
+	private void CheckForGameVictory()
+	{
+		if ((CurrentGameMode == (int)GameMode.NORMAL) && (CurrentStage > VICTORY_STAGE))
+		{
+			SetGameStateVictory();
+		}
+	}
+
+	private void UnlockInfiniteMode()
+	{
+		SaveDataManager.Instance.IsInfiniteModeUnlocked = true;
+	}
+
+#endregion
+
+
 
 #region Manage Health
 
@@ -168,15 +288,15 @@ public partial class GameManager : Node
 		return _missedGemsCount; 
 	}
 
-	private void SetMissedGemCount(int value)
-	{
-		_missedGemsCount = Mathf.Abs(value);
-	}
-
 	public void IncrementMissedGems()
 	{
 		SetMissedGemCount(GetMissedGemCount() + 1);
     DecrementHealth();
+	}
+
+	private void SetMissedGemCount(int value)
+	{
+		_missedGemsCount = Mathf.Abs(value);
 	}
 
 #endregion
@@ -198,7 +318,6 @@ public partial class GameManager : Node
 
 	private void IncreaseDifficulty(int currentScore)
 	{
-		var maxDifficulty = 2.75; // Clamp at 2.5 or 2.75 difficulty
 		GD.Print("---------------NEW LOG--------------");
 		GD.Print("INCREASE DIFFICUTLY COMMENSING!!!");
 		GD.Print($"Current Level: {DifficultyLevel}");
@@ -207,7 +326,7 @@ public partial class GameManager : Node
 		DifficultyLevel = (float)Mathf.Clamp(
 			DifficultyLevel * DIFFICULTY_MULTIPLIER
 			, DEFAULT_DIFFICULTY_LEVEL
-			, maxDifficulty
+			, MAXIMUM_DIFFICULTY
 		);
 		GD.Print($"Updated Level: {DifficultyLevel}");
 		GD.Print($"DIFFICULTY LEVEL CHANGE COMPLETE!!!");
@@ -218,11 +337,17 @@ public partial class GameManager : Node
 
 	private void HandleStageAdvancement(int score)
 	{
-		var advancementIncrementer = 10;
-
-		if (score % advancementIncrementer == 0)
+		if (score % STAGE_ADVANCEMENT_INCREMENTOR == 0)
 		{
 			IncrementStage();
+
+			if (!(CurrentGameMode == (int)GameMode.INFINITE) && CurrentStage > VICTORY_STAGE)
+			{
+				SetGameStateVictory();
+
+				return;	
+			}
+
 			SignalManager.Instance.EmitAdvanceStage();
 		}
 	}
@@ -234,8 +359,24 @@ public partial class GameManager : Node
 
 	private void ResetStageCount()
 	{
-		_currentStage = 1;
+		CurrentStage = 1;
 	}
 
 #endregion
+
+	//TODO: Move to Score Manager
+	public void IncrementScore(int points, Color color)
+	{
+		GD.Print($"Current Score: {CurrentScore}");
+		GD.Print($"Add points: {points}");
+		CurrentScore += points;
+		GD.Print($"Current Score: {CurrentScore}");
+		SignalManager.Instance.EmitScoreIncremented(CurrentScore, color);
+	}
+
+	public void ResetScore()
+	{
+		CurrentScore = DEFAULT_SCORE;
+	}
+
 }

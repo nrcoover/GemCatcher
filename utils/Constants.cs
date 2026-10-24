@@ -20,6 +20,19 @@ public static partial class Constants
       public static readonly string FlashRedFast = "flash-red-fast";
     }
     
+    public static class GameUi
+    {
+      public static readonly string Reset = "RESET";
+      public static readonly string Fadeout = "fade-out";
+    }
+
+    public static class GameSuccessScreen
+    {
+      public static readonly string Reset = "RESET";
+      public static readonly string FadeIn = "fade-in";
+      public static readonly string ShowButtons = "show-buttons";
+      public static readonly string ShowSuccessPanel = "show-success-panel";
+    }
   }
 
   public static class CustomColors
@@ -66,5 +79,19 @@ public static partial class Constants
   {
     public static readonly string MoveableObjects = "Moveable Objects";
     public static readonly string AudioStreams = "Audio Streams";
+    public static readonly string PaddleAudio = "Paddle Audio";
+  }
+
+  public static class GameState
+  {
+    public static readonly string Playing = "Playing";
+    public static readonly string Dead = "Dead";
+    public static readonly string Victory = "Victory";
+  }
+
+  public static class GameMode
+  {
+    public static readonly string Normal = "Normal";
+    public static readonly string Infinite = "Infinite";
   }
 }
