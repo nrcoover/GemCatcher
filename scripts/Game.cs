@@ -230,6 +230,8 @@ public partial class Game : Node2D
 			return;
 		}
 
+		_audioExplosion.Play();
+
 		await PlayStageAdvancementSequenceAsync();
 
 		// The player may have died while the sequence was awaiting.
