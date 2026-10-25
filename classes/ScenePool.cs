@@ -70,7 +70,7 @@ public class ScenePool
     _container.AddChild(newItem);
     _items.Add(newItem);
 
-    Log($"New instance {newItem.Name} total: {_items.Count} / color: {newItem.Modulate}");
+    Log($"New instance {newItem.Name} total: {_items.Count}");
 
     return newItem;
   }

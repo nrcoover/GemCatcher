@@ -184,8 +184,6 @@ public partial class Gem : Area2D
 	protected virtual void CreateExplosion() {
 		var colorHex = Helper.GetHexCodeFromColor(Modulate);
 
-		GD.PrintErr(colorHex);
-
 		SignalManager.EmitSpawnPoolObject(
 			GlobalPosition, _explosionScene, colorHex
 		);

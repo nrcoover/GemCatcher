@@ -19,7 +19,6 @@ public partial class NormalSpawnContainer : Node2D
 		UnsubscribeFromSignals();
 	}
 
-
 	private void SubscribeToSignals()
 	{
 		SignalManager.Instance.GameVictory += OnGameVictory;

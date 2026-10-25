@@ -466,6 +466,8 @@ public partial class Game : Node2D
 		{
 			moveable.ProcessMode = ProcessModeEnum.Disabled;
 		}
+
+		GD.PrintErr("Disabling moveable processing!");
 	}
 
 	private void InstantiateAdditionalGemSpawner()

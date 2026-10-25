@@ -8,6 +8,7 @@ public partial class GemSpawner : Node2D
 
 	[Export] private Timer _gemSpawnTimer;
 	[Export] private Timer _powerUpSpawnTimer;
+	[Export] private Timer _spawnerDisabledTimer;
 	[Export] private PackedScene _gemScene;
 	[Export] private PackedScene _falseGemScene;
 	[Export] private PackedScene _gemHeartScene;
@@ -70,23 +71,17 @@ public partial class GemSpawner : Node2D
 	{
 		SignalManager.Instance.DifficultyIncreased += OnDifficultyIncreased;
 		SignalManager.Instance.GameVictory += OnGameVictory;
+		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
 		_gemSpawnTimer.Timeout += OnGemSpawnTimeout;
 		_powerUpSpawnTimer.Timeout += OnPowerUpSpawnTimeout;
+		_spawnerDisabledTimer.Timeout += OnSpawnerDisabledTimeout;
 	}
 
 	private void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.DifficultyIncreased -= OnDifficultyIncreased;
 		SignalManager.Instance.GameVictory -= OnGameVictory;
-	}
-
-	private void OnGameVictory()
-	{
-		if (_isVictorySpawner)
-		{
-			InitializeVictoryVariables();
-			_gemSpawnTimer.Start();
-		}
+		SignalManager.Instance.AdvanceStage -= OnAdvanceStage;
 	}
 
 	private void OnDifficultyIncreased()
@@ -111,6 +106,74 @@ public partial class GemSpawner : Node2D
 		GD.Print($"NEW WAIT TIME: {_gemSpawnTimer.WaitTime}");
   }
 
+	private void OnGameVictory()
+	{
+		if (_isVictorySpawner)
+		{
+			InitializeVictoryVariables();
+			StartGemSpawnTimer();
+		}
+	}
+
+	private void OnAdvanceStage()
+	{
+		GD.Print(
+    $"[Spawner {GetInstanceId()}] " +
+    $"AdvanceStage at {Time.GetTicksMsec()} ms | " +
+    $"Timer stopped: {_spawnerDisabledTimer.IsStopped()} | " +
+    $"Time left: {_spawnerDisabledTimer.TimeLeft}"
+		);
+
+		GD.PrintErr(
+			$"SPAWNER DISABLED | " +
+			$"Spawner: {GetInstanceId()} | " +
+			$"Timer: {_spawnerDisabledTimer.GetInstanceId()} | " +
+			$"InsideTree: {IsInsideTree()} | " +
+			$"TimerStopped: {_spawnerDisabledTimer.IsStopped()}"
+    );
+
+    StopGemSpawnTimer();
+    StopPowerUpSpawnTimer();
+
+		GD.Print(
+			$"[Spawner {GetInstanceId()}] " +
+			$"Timer ProcessMode: {_spawnerDisabledTimer.ProcessMode} | " +
+			$"Timer Paused: {_spawnerDisabledTimer.IsPaused()} | " +
+			$"Timer Stopped: {_spawnerDisabledTimer.IsStopped()} | " +
+			$"TimeLeft: {_spawnerDisabledTimer.TimeLeft} | " +
+			$"Engine TimeScale: {Engine.TimeScale}"
+		);
+
+		GD.PrintErr(
+			$"Spawner: {GetInstanceId()} | " +
+			$"Spawner ProcessMode: {ProcessMode} | " +
+			$"Spawner CanProcess: {CanProcess()} | " +
+			$"Timer ProcessMode: {_spawnerDisabledTimer.ProcessMode} | " +
+			$"Timer Paused: {_spawnerDisabledTimer.IsPaused()} | " +
+			$"Timer Stopped: {_spawnerDisabledTimer.IsStopped()} | " +
+			$"Timer TimeLeft: {_spawnerDisabledTimer.TimeLeft}"
+		);
+
+    StartSpawnerDisabledTimer();
+
+		GD.PrintErr(
+			$"Spawner: {GetInstanceId()} | " +
+			$"Spawner ProcessMode: {ProcessMode} | " +
+			$"Spawner CanProcess: {CanProcess()} | " +
+			$"Timer ProcessMode: {_spawnerDisabledTimer.ProcessMode} | " +
+			$"Timer Paused: {_spawnerDisabledTimer.IsPaused()} | " +
+			$"Timer Stopped: {_spawnerDisabledTimer.IsStopped()} | " +
+			$"Timer TimeLeft: {_spawnerDisabledTimer.TimeLeft}"
+		);
+
+    GD.PrintErr(
+			$"DISABLED TIMER STARTED | " +
+			$"Spawner: {GetInstanceId()} | " +
+			$"Timer: {_spawnerDisabledTimer.GetInstanceId()} | " +
+			$"TimeLeft: {_spawnerDisabledTimer.TimeLeft}"
+    );
+	}
+
 	private void OnGemSpawnTimeout()
 	{
 		SpawnGemType();
@@ -126,6 +189,22 @@ public partial class GemSpawner : Node2D
     EnablePowerUpSpawning();
 		GD.Print("Wait Time ended. Can spawn power ups is: " + _canSpawnPowerUp);
   }
+
+	private void OnSpawnerDisabledTimeout()
+	{
+		GD.Print(
+			$"[Spawner {GetInstanceId()}] " +
+			$"Timer ProcessMode: {_spawnerDisabledTimer.ProcessMode} | " +
+			$"Timer Paused: {_spawnerDisabledTimer.IsPaused()} | " +
+			$"Timer Stopped: {_spawnerDisabledTimer.IsStopped()} | " +
+			$"TimeLeft: {_spawnerDisabledTimer.TimeLeft} | " +
+			$"Engine TimeScale: {Engine.TimeScale}"
+		);
+
+		StopSpawnerDisabledTimer();
+		StartGemSpawnTimer();
+		StartPowerUpSpawnTimer();
+	}
 
 #endregion
 
@@ -179,6 +258,12 @@ public partial class GemSpawner : Node2D
 
 	private void SpawnGem()
 	{
+		if (_spawnerDisabledTimer.TimeLeft > 0)
+		{
+			GD.PrintErr("Gem Spawn canceled by Stage Advancement!");
+			return;
+		}
+
 		var gem = (Gem)_gemScene.Instantiate();
 		_gemContainer.AddChild(gem);
 
@@ -278,6 +363,8 @@ public partial class GemSpawner : Node2D
 
 
 
+#region Timers
+
 	private void SetPowerUpTimerWaitTime()
 	{
 		var minWaitTime = 10.0f - _difficultyTimeBalancer;
@@ -306,8 +393,42 @@ public partial class GemSpawner : Node2D
 
 		GD.Print("Power Up Timer Started! Wait time is: " + _powerUpSpawnTimer.WaitTime + " Can spawn power ups is: " + _canSpawnPowerUp);
 
+		StartPowerUpSpawnTimer();
+	}
+
+	private void StartGemSpawnTimer()
+	{
+		_gemSpawnTimer.Start();
+	}
+
+	private void StopGemSpawnTimer()
+	{
+		_gemSpawnTimer.Stop();
+	}
+
+	private void StartPowerUpSpawnTimer()
+	{
 		_powerUpSpawnTimer.Start();
 	}
+
+	private void StopPowerUpSpawnTimer()
+	{
+		_powerUpSpawnTimer.Stop();
+	}
+
+	private void StartSpawnerDisabledTimer()
+	{
+		_spawnerDisabledTimer.Start();
+	}
+
+	private void StopSpawnerDisabledTimer()
+	{
+		_spawnerDisabledTimer.Stop();
+	}
+
+#endregion
+
+
 
 	private void DisablePowerUpSpawning()
 	{

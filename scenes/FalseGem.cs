@@ -75,8 +75,6 @@ public partial class FalseGem : Gem, IPoolItem
 	protected override void CreateExplosion() {
 		var colorHex = Helper.GetHexCodeFromColor(Modulate);
 
-		GD.PrintErr(colorHex);
-
 		SignalManager.EmitSpawnPoolObject(
 			GlobalPosition, _explosionScene, colorHex
 		);
