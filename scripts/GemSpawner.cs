@@ -1,5 +1,6 @@
 using Godot;
 
+// TODO: Check if group name needs to be set when adding new spawners
 public partial class GemSpawner : Node2D
 {
 	const float WAIT_TIME_WINDOW_BOTTOM_CONSTRAINT = 5.0f;

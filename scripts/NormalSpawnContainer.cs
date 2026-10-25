@@ -36,7 +36,6 @@ public partial class NormalSpawnContainer : Node2D
 		GetAllActiveGems();
 		CallDeferred(MethodName.DisableAllSpawners);
 		CallDeferred(MethodName.EnableAllGems);
-		// TODO: Handle frozen gems issue. (BUG)
 	}
 
 	private void InitializeSpawnerData()
@@ -83,6 +82,5 @@ public partial class NormalSpawnContainer : Node2D
 	private void GetAllActiveGems()
 	{
 		_gems = this.GetFilteredChildrenRecursive<Gem>();
-		GD.PrintErr($"Active Gem Count: {_gems.Count}");
 	}
 }
