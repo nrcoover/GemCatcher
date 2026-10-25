@@ -117,61 +117,9 @@ public partial class GemSpawner : Node2D
 
 	private void OnAdvanceStage()
 	{
-		GD.Print(
-    $"[Spawner {GetInstanceId()}] " +
-    $"AdvanceStage at {Time.GetTicksMsec()} ms | " +
-    $"Timer stopped: {_spawnerDisabledTimer.IsStopped()} | " +
-    $"Time left: {_spawnerDisabledTimer.TimeLeft}"
-		);
-
-		GD.PrintErr(
-			$"SPAWNER DISABLED | " +
-			$"Spawner: {GetInstanceId()} | " +
-			$"Timer: {_spawnerDisabledTimer.GetInstanceId()} | " +
-			$"InsideTree: {IsInsideTree()} | " +
-			$"TimerStopped: {_spawnerDisabledTimer.IsStopped()}"
-    );
-
     StopGemSpawnTimer();
     StopPowerUpSpawnTimer();
-
-		GD.Print(
-			$"[Spawner {GetInstanceId()}] " +
-			$"Timer ProcessMode: {_spawnerDisabledTimer.ProcessMode} | " +
-			$"Timer Paused: {_spawnerDisabledTimer.IsPaused()} | " +
-			$"Timer Stopped: {_spawnerDisabledTimer.IsStopped()} | " +
-			$"TimeLeft: {_spawnerDisabledTimer.TimeLeft} | " +
-			$"Engine TimeScale: {Engine.TimeScale}"
-		);
-
-		GD.PrintErr(
-			$"Spawner: {GetInstanceId()} | " +
-			$"Spawner ProcessMode: {ProcessMode} | " +
-			$"Spawner CanProcess: {CanProcess()} | " +
-			$"Timer ProcessMode: {_spawnerDisabledTimer.ProcessMode} | " +
-			$"Timer Paused: {_spawnerDisabledTimer.IsPaused()} | " +
-			$"Timer Stopped: {_spawnerDisabledTimer.IsStopped()} | " +
-			$"Timer TimeLeft: {_spawnerDisabledTimer.TimeLeft}"
-		);
-
     StartSpawnerDisabledTimer();
-
-		GD.PrintErr(
-			$"Spawner: {GetInstanceId()} | " +
-			$"Spawner ProcessMode: {ProcessMode} | " +
-			$"Spawner CanProcess: {CanProcess()} | " +
-			$"Timer ProcessMode: {_spawnerDisabledTimer.ProcessMode} | " +
-			$"Timer Paused: {_spawnerDisabledTimer.IsPaused()} | " +
-			$"Timer Stopped: {_spawnerDisabledTimer.IsStopped()} | " +
-			$"Timer TimeLeft: {_spawnerDisabledTimer.TimeLeft}"
-		);
-
-    GD.PrintErr(
-			$"DISABLED TIMER STARTED | " +
-			$"Spawner: {GetInstanceId()} | " +
-			$"Timer: {_spawnerDisabledTimer.GetInstanceId()} | " +
-			$"TimeLeft: {_spawnerDisabledTimer.TimeLeft}"
-    );
 	}
 
 	private void OnGemSpawnTimeout()
@@ -192,15 +140,6 @@ public partial class GemSpawner : Node2D
 
 	private void OnSpawnerDisabledTimeout()
 	{
-		GD.Print(
-			$"[Spawner {GetInstanceId()}] " +
-			$"Timer ProcessMode: {_spawnerDisabledTimer.ProcessMode} | " +
-			$"Timer Paused: {_spawnerDisabledTimer.IsPaused()} | " +
-			$"Timer Stopped: {_spawnerDisabledTimer.IsStopped()} | " +
-			$"TimeLeft: {_spawnerDisabledTimer.TimeLeft} | " +
-			$"Engine TimeScale: {Engine.TimeScale}"
-		);
-
 		StopSpawnerDisabledTimer();
 		StartGemSpawnTimer();
 		StartPowerUpSpawnTimer();
