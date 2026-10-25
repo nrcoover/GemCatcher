@@ -4,7 +4,7 @@ using Godot;
 
 public partial class NormalSpawnContainer : Node2D
 {
-	private List<GemSpawner> victorySpawners = new();
+	private List<GemSpawner> normalSpawners = new();
 
 	public override void _Ready()
 	{
@@ -38,7 +38,7 @@ public partial class NormalSpawnContainer : Node2D
 
 	private void InitializeSpawnerData()
 	{
-		foreach (GemSpawner spawner in victorySpawners)
+		foreach (GemSpawner spawner in normalSpawners)
 		{
 			var minTime = 0.1f;
 			var maxTime = 0.75f;
@@ -49,7 +49,7 @@ public partial class NormalSpawnContainer : Node2D
 
 	private void DisableAllSpawners()
 	{
-		foreach (GemSpawner spawner in victorySpawners)
+		foreach (GemSpawner spawner in normalSpawners)
 		{
 			spawner.ProcessMode = ProcessModeEnum.Disabled;
 		}
@@ -57,7 +57,7 @@ public partial class NormalSpawnContainer : Node2D
 
 	private void EnableAllSpawners()
 	{
-		foreach (GemSpawner spawner in victorySpawners)
+		foreach (GemSpawner spawner in normalSpawners)
 		{
 			spawner.ProcessMode = ProcessModeEnum.Inherit;
 		}
@@ -65,6 +65,6 @@ public partial class NormalSpawnContainer : Node2D
 
 	private void GetAllActiveSpawners()
 	{
-		victorySpawners = GetChildren().OfType<GemSpawner>().ToList();
+		normalSpawners = GetChildren().OfType<GemSpawner>().ToList();
 	}
 }
