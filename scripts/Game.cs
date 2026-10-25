@@ -466,14 +466,11 @@ public partial class Game : Node2D
 		{
 			if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY && moveable is Gem)
 			{
-				GD.PrintErr("Gem Found! SKipping ending moveable processing!");
 				continue;
 			}
 
 			moveable.ProcessMode = ProcessModeEnum.Disabled;
 		}
-
-		GD.PrintErr("Disabling moveable processing!");
 	}
 
 	private void InstantiateAdditionalGemSpawner()
@@ -485,8 +482,6 @@ public partial class Game : Node2D
 			* GameManager.Instance.CurrentStage;
 
 		_normalSpawnerContainer.CallDeferred("add_child", spawner);
-
-		GD.Print("Spawner SpawnTime = " + spawner.SpawnTime);
 	}
 
 #endregion
