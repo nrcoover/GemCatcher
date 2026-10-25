@@ -4,7 +4,8 @@ using Godot;
 
 public partial class NormalSpawnContainer : Node2D
 {
-	private List<GemSpawner> normalSpawners = new();
+	private List<GemSpawner> _normalSpawners = new();
+	private List<Gem> _gems = new();
 
 	public override void _Ready()
 	{
@@ -32,13 +33,15 @@ public partial class NormalSpawnContainer : Node2D
 	private void OnGameVictory()
 	{
 		GetAllActiveSpawners();
+		GetAllActiveGems();
 		CallDeferred(MethodName.DisableAllSpawners);
+		CallDeferred(MethodName.EnableAllGems);
 		// TODO: Handle frozen gems issue. (BUG)
 	}
 
 	private void InitializeSpawnerData()
 	{
-		foreach (GemSpawner spawner in normalSpawners)
+		foreach (GemSpawner spawner in _normalSpawners)
 		{
 			var minTime = 0.1f;
 			var maxTime = 0.75f;
@@ -49,7 +52,7 @@ public partial class NormalSpawnContainer : Node2D
 
 	private void DisableAllSpawners()
 	{
-		foreach (GemSpawner spawner in normalSpawners)
+		foreach (GemSpawner spawner in _normalSpawners)
 		{
 			spawner.ProcessMode = ProcessModeEnum.Disabled;
 		}
@@ -57,14 +60,29 @@ public partial class NormalSpawnContainer : Node2D
 
 	private void EnableAllSpawners()
 	{
-		foreach (GemSpawner spawner in normalSpawners)
+		foreach (GemSpawner spawner in _normalSpawners)
 		{
 			spawner.ProcessMode = ProcessModeEnum.Inherit;
 		}
 	}
 
+	// Enables regular gems on victory sequence so they explode
+	private void EnableAllGems()
+	{
+		foreach (Gem gem in _gems)
+		{
+			gem.ProcessMode = ProcessModeEnum.Always;
+		}
+	}
+
 	private void GetAllActiveSpawners()
 	{
-		normalSpawners = GetChildren().OfType<GemSpawner>().ToList();
+		_normalSpawners = GetChildren().OfType<GemSpawner>().ToList();
+	}
+
+	private void GetAllActiveGems()
+	{
+		_gems = this.GetFilteredChildrenRecursive<Gem>();
+		GD.PrintErr($"Active Gem Count: {_gems.Count}");
 	}
 }

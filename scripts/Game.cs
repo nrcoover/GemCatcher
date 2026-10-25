@@ -464,6 +464,12 @@ public partial class Game : Node2D
 
 		foreach (Node2D moveable in moveables.Cast<Node2D>())
 		{
+			if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY && moveable is Gem)
+			{
+				GD.PrintErr("Gem Found! SKipping ending moveable processing!");
+				continue;
+			}
+
 			moveable.ProcessMode = ProcessModeEnum.Disabled;
 		}
 

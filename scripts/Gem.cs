@@ -60,15 +60,22 @@ public partial class Gem : Area2D
 	private void SubscribeToSignals()
 	{
 		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
+		SignalManager.Instance.GameVictory += OnGameVictory;
 		AreaEntered += OnAreaEntered;
 	}
 
 	private void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.AdvanceStage -= OnAdvanceStage;
+		SignalManager.Instance.GameVictory -= OnGameVictory;
 	}
 
 	private void OnAdvanceStage()
+	{
+		CreateExplosion();
+	}
+
+	private void OnGameVictory()
 	{
 		CreateExplosion();
 	}
@@ -192,6 +199,4 @@ public partial class Gem : Area2D
 	}
 
 	// TODO: Fix bug in which last gem captured before stage advancement also explodes
-
-	// TODO: Refactor Object pool to allow for an optional parameter of color so gems can colorize the shards on explosions
 }
