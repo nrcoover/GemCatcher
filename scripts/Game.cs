@@ -3,6 +3,7 @@ using System.Linq;
 using Godot;
 using GemCatcher.utils;
 
+// TODO: Add swirling image to background of failrue screen.
 public partial class Game : Node2D
 {
 	const int DEFAULT_POINT_VALUE = 1;
@@ -48,6 +49,7 @@ public partial class Game : Node2D
 	private bool _isDying = false;
 	private bool _isVictorious = false;
 	private float _musicDefaultVolume;
+	private int _lastPlayedAudioInt = 0;
 
 	public override async void _Ready()
 	{
@@ -311,8 +313,14 @@ public partial class Game : Node2D
 
 	private void PlayStageAdvancementCommanderAudio()
 	{
-		// TODO: Prevent same audio twice in a row by storing previous random number in variable and re-roll if same as previous.
-		var randomNumber = Helper.GetRandomInt(1, 3);
+		var randomNumber = _lastPlayedAudioInt;
+
+		while (randomNumber == _lastPlayedAudioInt)
+		{
+			randomNumber = Helper.GetRandomInt(1, 3);
+		}
+
+		_lastPlayedAudioInt = randomNumber;
 
 		switch (randomNumber)
 		{
