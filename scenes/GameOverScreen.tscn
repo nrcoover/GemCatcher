@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://0vd5n2cpnev8"]
+[gd_scene load_steps=11 format=3 uid="uid://0vd5n2cpnev8"]
 
 [ext_resource type="Script" uid="uid://d2qve15dpni7v" path="res://scripts/GameOverScreen.cs" id="1_jb1p3"]
 [ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/fonts/Play-Regular.ttf" id="1_wojlb"]
+[ext_resource type="PackedScene" uid="uid://bd4dtukgxgchv" path="res://scenes/SpinningBackdrop.tscn" id="2_qo38o"]
 [ext_resource type="PackedScene" uid="uid://dqthwsums7jjw" path="res://scenes/GemButton.tscn" id="3_1tm0t"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ocgqw"]
@@ -144,6 +145,8 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 color = Color(0.08468992, 0.08468994, 0.08468989, 1)
+
+[node name="SpinningBackdrop" parent="." instance=ExtResource("2_qo38o")]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
