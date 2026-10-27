@@ -24,16 +24,16 @@ public partial class SpinningBackdrop : Node2D
 
 	private void SubscribeToSignals()
 	{
-		SignalManager.Instance.GameOver += OnGameOver;
+		SignalManager.Instance.ShowGameOverScreen += OnShowGameOverScreen;
 		_fadeInTimer.Timeout += OnFadeInTimerTimeout;
 	}
 
 	private void UnsubscribeFromSignals()
 	{
-		SignalManager.Instance.GameOver -= OnGameOver;
+		SignalManager.Instance.ShowGameOverScreen -= OnShowGameOverScreen;
 	}
 
-	private void OnGameOver()
+	private void OnShowGameOverScreen()
 	{
 		CallDeferred(MethodName.StartFadeInTimer);
 	}
