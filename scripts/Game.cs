@@ -3,7 +3,6 @@ using System.Linq;
 using Godot;
 using GemCatcher.utils;
 
-// TODO: Add swirling image to background of failrue screen.
 public partial class Game : Node2D
 {
 	const int DEFAULT_POINT_VALUE = 1;

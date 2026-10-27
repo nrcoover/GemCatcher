@@ -3,6 +3,7 @@ using Godot;
 public partial class SpinningBackdrop : Node2D
 {
 	[Export] private AnimationPlayer _animator;
+	[Export] private Timer _fadeInTimer;
 	[Export] private float _spinSpeed = 0.05f;
 
 	public override void _Ready()
@@ -23,15 +24,21 @@ public partial class SpinningBackdrop : Node2D
 
 	private void SubscribeToSignals()
 	{
-		SignalManager.Instance.ShowGameOverButtons += OnShowGameOverButtons;
+		SignalManager.Instance.GameOver += OnGameOver;
+		_fadeInTimer.Timeout += OnFadeInTimerTimeout;
 	}
 
 	private void UnsubscribeFromSignals()
 	{
-		SignalManager.Instance.ShowGameOverButtons -= OnShowGameOverButtons;
+		SignalManager.Instance.GameOver -= OnGameOver;
 	}
 
-	private void OnShowGameOverButtons()
+	private void OnGameOver()
+	{
+		CallDeferred(MethodName.StartFadeInTimer);
+	}
+
+	private void OnFadeInTimerTimeout()
 	{
 		FadeInBackdrop();
 	}
@@ -46,5 +53,10 @@ public partial class SpinningBackdrop : Node2D
 	private void FadeInBackdrop()
 	{
 		_animator.Play(Constants.Animations.SpinningBackdrop.FadeIn);
+	}
+
+	private void StartFadeInTimer()
+	{
+		_fadeInTimer.Start();
 	}
 }
