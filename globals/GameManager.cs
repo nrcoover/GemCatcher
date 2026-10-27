@@ -202,6 +202,7 @@ public partial class GameManager : Node
 	public void SetGameStateDead()
 	{
 		CurrentGameState = (int)GameState.DEAD;
+		SignalManager.Instance.EmitGameOver();
 	}
 
 	public void SetGameStateVictory()
@@ -222,9 +223,14 @@ public partial class GameManager : Node
 
 	private void CheckForGameOver()
   {
+		if (CurrentGameState == (int)GameState.DEAD)
+		{
+			return;
+		}
+
     if (GetHealth() <= 0)
 		{
-			SignalManager.Instance.EmitGameOver();
+			SetGameStateDead();
 		}
   }
 
