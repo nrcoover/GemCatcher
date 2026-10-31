@@ -86,4 +86,14 @@ public static partial class Helper
 	{
 		return color.ToHtml(includeAlpha: true);
 	}
+
+	public static float GetReverseDecimalPercentRemaining(float total, float remainder)
+	{
+		return (total - remainder) / total;
+	}
+
+	public static float GetDecimalPercentRemaining(float total, float remainder)
+	{
+		return remainder / total;
+	}
 }

@@ -4,6 +4,7 @@ public partial class Gem : Area2D
 {
 	[Export] CpuParticles2D _particles;
 	[Export] protected PackedScene _explosionScene;
+	[Export] private Paddle _paddle;
 	[Export] protected float _movementSpeed = 100;
 	[Export] float _minSpeedVariation = 1.0f;
 	[Export] float _maxSpeedVariation = 3.5f;
@@ -17,6 +18,8 @@ public partial class Gem : Area2D
 
 	private Color _color;
 	protected bool _isOffScreen = false;
+	protected bool _isInEventHorizon = false;
+	protected bool _isGameGem = false;
 	protected float _speedVariation;
 	private float _rotationVariation;
 	private float _scaleVariation;
@@ -35,12 +38,23 @@ public partial class Gem : Area2D
 
 	public override void _Ready()
 	{
+		SubscribeToSignals();
+
 		SetVariations();
 		SetScale();
 		SetColor();
 		SetGemSpeedByDifficultyLevel();
 		BeginParticleEmission();
-		SubscribeToSignals();
+
+		if (GetTree().CurrentScene.Name == "Game")
+		{
+			_isGameGem = true;
+		}
+
+		if (_isGameGem)
+		{
+			GetReferenceToPlayerPaddle();
+		}
 	}
 
   public override void _ExitTree()
@@ -82,7 +96,12 @@ public partial class Gem : Area2D
 
 	public virtual void OnAreaEntered(Area2D area)
 	{
-		if (area is Paddle || area is PaddleGhost)
+		// through inheritance, Heart and PowerUp gems are intentionally unaffected by the event horizon
+		if (area is BlackHole)
+		{
+			_isInEventHorizon = true;
+		}
+		else if (area is Paddle || area is PaddleGhost)
 		{
 			SignalManager.Instance.EmitScored(Modulate);
 			HandleObjectRemoval();
@@ -125,10 +144,37 @@ public partial class Gem : Area2D
 			HandleObjectRemoval();
 		}
 
-		Position = new Vector2(
-			Position.X,
-			Position.Y + (_movementSpeed * _speedVariation * (float)delta)
-		);
+		if (_isGameGem && _isInEventHorizon)
+		{
+			GetPositionInEventHorizon(delta);
+		}
+		else
+		{
+			Position = new Vector2(
+				Position.X,
+				Position.Y + (_movementSpeed * SpeedVariation * (float)delta)
+			);
+		}
+	}
+
+	private void GetPositionInEventHorizon(float delta)
+	{
+		const float MAX_SPEED_IN_EVENT_HORIZON_MAX_SPEED = 600.0f;
+
+		var currentSpeed = _movementSpeed * SpeedVariation;
+
+		var percentDistanceTraveled = GetPercentDistanceFromSingularity();
+
+		var adjustedSpeed = MAX_SPEED_IN_EVENT_HORIZON_MAX_SPEED * percentDistanceTraveled;
+
+		if (adjustedSpeed < currentSpeed)
+		{
+			adjustedSpeed = currentSpeed;
+		}
+
+		var step = adjustedSpeed * delta;
+
+		Position = Position.MoveToward(_paddle.GlobalPosition, step);
 	}
 
 	private void HandleRotation(float delta)
@@ -149,7 +195,7 @@ public partial class Gem : Area2D
 
 	private void SetVariations()
 	{
-		_speedVariation = Helper.GetRandomFloat(_minSpeedVariation, _maxSpeedVariation);
+		SpeedVariation = Helper.GetRandomFloat(_minSpeedVariation, _maxSpeedVariation);
 
 		_rotationVariation = Helper.GetRandomFloat(_minRotationVariation, _maxRotationVariation);
 
@@ -176,7 +222,32 @@ public partial class Gem : Area2D
   private void SetGemSpeedByDifficultyLevel()
   {
     SpeedVariation *= GameManager.Instance.DifficultyLevel;
-  }	
+  }
+
+	private float GetPercentDistanceFromSingularity()
+	{
+		var defaultValue = 0.0f;
+
+		var radius = _paddle.EventHorizonRadius;
+		var distanceToPaddle = GlobalPosition.DistanceTo(_paddle.GlobalPosition);
+
+		if(radius == defaultValue || distanceToPaddle == defaultValue)
+		{
+			return defaultValue;
+		}
+
+		return Helper.GetReverseDecimalPercentRemaining(radius, distanceToPaddle);
+	}
+
+	private void GetReferenceToPlayerPaddle()
+	{
+		_paddle = GetNode<Paddle>("/root/Game/Paddle");
+
+		if(_paddle == null)
+		{
+			GD.PrintErr($"{this.Name} Scene: No Paddle Found in Scene!");
+		}
+	}
 
 	protected void BeginParticleEmission()
 	{

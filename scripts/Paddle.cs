@@ -28,10 +28,23 @@ public partial class Paddle : Area2D
 		Disabled
 	}
 
+	public float EventHorizonRadius
+	{
+		get 
+		{
+			return _eventHorizonRadius;
+		}
+		set
+		{
+			_eventHorizonRadius = value;
+		}	
+	}
+
 	[Export] float _movementSpeed = DEFAULT_MOVEMENT_SPEED;
 	[Export] float _boundaryMargin = 25.0f;
 	[Export] float _boostMultiplier = 1.5f;
 
+	[Export] CollisionShape2D _eventHorizon;
 	[Export] Label _boostLabel;
 	[Export] Label _powerUpSecondsLabel;
 	[Export] Label _boostPercentageLabel;
@@ -61,6 +74,7 @@ public partial class Paddle : Area2D
 	[Export] private float _boostBurnRate;
 	[Export] private float _boostRefuelRate = 12.5f;
 	
+	private float _eventHorizonRadius;
 	private float _boostFuel;
 	private bool _isFullyFueled;
 	private bool _boostLockedUntilRelease;
@@ -118,8 +132,9 @@ public partial class Paddle : Area2D
 
 	public override void _Ready()
 	{
-		_boostFuelAnimator.Play(Constants.Animations.BoostFuel.Reset);
 		SubscribeToSignals();
+
+		_boostFuelAnimator.Play(Constants.Animations.BoostFuel.Reset);
 		InitializeVariables();
 		UpdateBoostUi();
 		ResetPowerUpUi();
@@ -187,6 +202,8 @@ public partial class Paddle : Area2D
 		_originalSpeed = _movementSpeed;
 		_isPoweredUp = false;
 		_currentPowerUp = PowerUp.Disabled;
+
+		SetEventHorizon();
   }
 
 	private void ResetParticleSystems()
@@ -995,6 +1012,12 @@ public partial class Paddle : Area2D
 	{
 		_paddleAnimator.Play(Constants.Animations.Paddle.Reset);
 		_boostFuelAnimator.Play(Constants.Animations.BoostFuel.Reset);
+	}
+
+	private void SetEventHorizon()
+	{
+		var circle = _eventHorizon.Shape as CircleShape2D;
+		EventHorizonRadius = circle.Radius;
 	}
 
 #endregion
