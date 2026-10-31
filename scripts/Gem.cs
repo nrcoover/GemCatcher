@@ -78,6 +78,7 @@ public partial class Gem : Area2D
 		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
 		SignalManager.Instance.GameVictory += OnGameVictory;
 		AreaEntered += OnAreaEntered;
+		AreaExited += OnAreaExited;
 	}
 
 	private void UnsubscribeFromSignals()
@@ -111,6 +112,14 @@ public partial class Gem : Area2D
 		else if (area is MenuPaddle)
 		{
 			HandleObjectRemoval();
+		}
+	}
+
+	private void OnAreaExited(Area2D area)
+	{
+		if (area is BlackHole)
+		{
+			_isInEventHorizon = false;
 		}
 	}
 
@@ -167,7 +176,7 @@ public partial class Gem : Area2D
 		var direction = GetMovementDirection();
 		var perpendicularDirection = GetPerpendicularDirection(direction);
     var movement = direction * movementSpeed * delta;
-		
+
     GlobalPosition += movement;
 
     var waveOffset = GetWaveOffset(percentDistanceTraveled, delta);
