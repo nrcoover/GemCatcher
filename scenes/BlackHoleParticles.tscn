@@ -3,10 +3,10 @@
 [ext_resource type="Script" uid="uid://b5kmo6fn4kguq" path="res://scripts/BlackHoleParticles.cs" id="1_7ytgr"]
 
 [sub_resource type="Curve" id="Curve_mgnlr"]
-_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.17241378, 1), 0.0, 0.0, 0, 0, Vector2(0.4965517, 0.8716502), 0.0, 0.0, 0, 0, Vector2(0.7482758, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.34827584, 1), 0.0, 0.0, 0, 0, Vector2(0.50344825, 0.6974612), 0.0, 0.0, 0, 0, Vector2(0.6517241, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 5
 
-[node name="CPUParticles2D" type="CPUParticles2D"]
+[node name="BlackHoleCustomParticles" type="CPUParticles2D"]
 amount = 256
 lifetime = 8.0
 preprocess = 4.0
@@ -19,4 +19,5 @@ orbit_velocity_min = 0.1
 orbit_velocity_max = 0.5
 scale_amount_max = 6.0
 scale_amount_curve = SubResource("Curve_mgnlr")
+color = Color(1, 1, 1, 0.64100003)
 script = ExtResource("1_7ytgr")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://mo3emgtr8oc3"]
+[gd_scene load_steps=5 format=3 uid="uid://mo3emgtr8oc3"]
 
 [ext_resource type="Script" uid="uid://c3ixqc6mcotv4" path="res://scripts/BlackHole.cs" id="1_mgnlr"]
 [ext_resource type="PackedScene" uid="uid://bb4kodr0iavuv" path="res://scenes/BlackHoleParticles.tscn" id="2_5smf0"]
@@ -6,14 +6,58 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_5smf0"]
 radius = 430.0
 
+[sub_resource type="Gradient" id="Gradient_5smf0"]
+colors = PackedColorArray(0.82271457, 0, 1.1860281, 1, 0, 1.2861657, 0.46496978, 1)
+
 [node name="BlackHole" type="Area2D"]
 script = ExtResource("1_mgnlr")
 
 [node name="EventHorizon" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_5smf0")
 
-[node name="CPUParticles2D" parent="." node_paths=PackedStringArray("CollisionShape") instance=ExtResource("2_5smf0")]
+[node name="BlackHoleCustomParticles" parent="." node_paths=PackedStringArray("CollisionShape") instance=ExtResource("2_5smf0")]
 local_coords = true
 emission_sphere_radius = 430.0
 CollisionShape = NodePath("../EventHorizon")
 CustomEmissionRadius = 430.0
+
+[node name="BlackHoleCustomParticlesOuterCircle" parent="." instance=ExtResource("2_5smf0")]
+local_coords = true
+emission_shape = 5
+emission_points = PackedVector2Array(300, 300)
+emission_normals = PackedVector2Array()
+emission_colors = PackedColorArray()
+orbit_velocity_max = 0.25
+scale_amount_min = 6.0
+scale_amount_max = 12.0
+color = Color(1, 1, 1, 1)
+color_ramp = SubResource("Gradient_5smf0")
+script = null
+
+[node name="BlackHoleCustomParticlesMiddleCircle" parent="." instance=ExtResource("2_5smf0")]
+amount = 128
+local_coords = true
+emission_shape = 5
+emission_points = PackedVector2Array(280, 280)
+emission_normals = PackedVector2Array()
+emission_colors = PackedColorArray()
+orbit_velocity_min = -0.25
+orbit_velocity_max = -0.1
+scale_amount_min = 6.0
+scale_amount_max = 12.0
+color = Color(1, 1, 1, 1)
+color_ramp = SubResource("Gradient_5smf0")
+script = null
+
+[node name="BlackHoleCustomParticlesInnerCircle" parent="." instance=ExtResource("2_5smf0")]
+local_coords = true
+emission_shape = 5
+emission_points = PackedVector2Array(260, 260)
+emission_normals = PackedVector2Array()
+emission_colors = PackedColorArray()
+orbit_velocity_max = 0.25
+scale_amount_min = 6.0
+scale_amount_max = 12.0
+color = Color(1, 1, 1, 1)
+color_ramp = SubResource("Gradient_5smf0")
+script = null
