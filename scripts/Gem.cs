@@ -19,6 +19,8 @@ public partial class Gem : Area2D
 	private Color _color;
 	protected bool _isOffScreen = false;
 	protected bool _isInEventHorizon = false;
+	private float _eventHorizonStartingDistance;
+	private float _wavePhase = 0.0f;
 	protected bool _isGameGem = false;
 	protected float _speedVariation;
 	private float _rotationVariation;
@@ -160,11 +162,15 @@ public partial class Gem : Area2D
 	private void GetPositionInEventHorizon(float delta)
 	{
 		const float MAX_SPEED_IN_EVENT_HORIZON_MAX_SPEED = 600.0f;
-
-		var currentSpeed = _movementSpeed * SpeedVariation;
-
+		const float MAX_WAVE_AMPLITUDE = 20.0f;
+    const float MAX_WAVE_FREQUENCY = 10.0f;
+		
+		var completeDistanceRepresentation = 1.0f;
 		var percentDistanceTraveled = GetPercentDistanceFromSingularity();
+    var percentDistanceRemaining = completeDistanceRepresentation - percentDistanceTraveled;
 
+		// Movement speed
+		var currentSpeed = _movementSpeed * SpeedVariation;
 		var adjustedSpeed = MAX_SPEED_IN_EVENT_HORIZON_MAX_SPEED * percentDistanceTraveled;
 
 		if (adjustedSpeed < currentSpeed)
@@ -172,9 +178,31 @@ public partial class Gem : Area2D
 			adjustedSpeed = currentSpeed;
 		}
 
-		var step = adjustedSpeed * delta;
+		// Movement direction
+    var directionToPaddle = (_paddle.GlobalPosition - GlobalPosition)
+			.Normalized();
 
-		Position = Position.MoveToward(_paddle.GlobalPosition, step);
+		var perpendicularDirection = new Vector2
+		(
+			-directionToPaddle.Y,
+			directionToPaddle.X
+		);
+
+		// Move toward paddle
+    var movement = directionToPaddle * adjustedSpeed * delta;
+    GlobalPosition += movement;
+
+    // Wave properties
+		var adjustedWaveAmplitude = MAX_WAVE_AMPLITUDE * percentDistanceRemaining;
+    var adjustedWaveFrequency = MAX_WAVE_FREQUENCY * percentDistanceRemaining;
+
+		// Wave phase
+    _wavePhase += Mathf.Tau * adjustedWaveFrequency * delta;
+
+    var waveOffset = Mathf.Sin(_wavePhase) * adjustedWaveAmplitude;
+
+		// Apply oscillation
+    GlobalPosition += perpendicularDirection * waveOffset;
 	}
 
 	private void HandleRotation(float delta)
@@ -189,7 +217,6 @@ public partial class Gem : Area2D
 	}
 
 #endregion
-
 
 
 
