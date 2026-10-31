@@ -161,45 +161,16 @@ public partial class Gem : Area2D
 
 	private void GetPositionInEventHorizon(float delta)
 	{
-		const float MAX_SPEED_IN_EVENT_HORIZON_MAX_SPEED = 600.0f;
-		const float MAX_WAVE_AMPLITUDE = 20.0f;
-    const float MAX_WAVE_FREQUENCY = 10.0f;
-		
-		var completeDistanceRepresentation = 1.0f;
 		var percentDistanceTraveled = GetPercentDistanceFromSingularity();
-    var percentDistanceRemaining = completeDistanceRepresentation - percentDistanceTraveled;
 
-		// Movement speed
-		var currentSpeed = _movementSpeed * SpeedVariation;
-		var adjustedSpeed = MAX_SPEED_IN_EVENT_HORIZON_MAX_SPEED * percentDistanceTraveled;
-
-		if (adjustedSpeed < currentSpeed)
-		{
-			adjustedSpeed = currentSpeed;
-		}
-
-		// Movement direction
-    var directionToPaddle = (_paddle.GlobalPosition - GlobalPosition)
-			.Normalized();
-
-		var perpendicularDirection = new Vector2
-		(
-			-directionToPaddle.Y,
-			directionToPaddle.X
-		);
-
-		// Move toward paddle
-    var movement = directionToPaddle * adjustedSpeed * delta;
+		var movementSpeed = GetMovementSpeed(percentDistanceTraveled);
+		var direction = GetMovementDirection();
+		var perpendicularDirection = GetPerpendicularDirection(direction);
+    var movement = direction * movementSpeed * delta;
+		
     GlobalPosition += movement;
 
-    // Wave properties
-		var adjustedWaveAmplitude = MAX_WAVE_AMPLITUDE * percentDistanceRemaining;
-    var adjustedWaveFrequency = MAX_WAVE_FREQUENCY * percentDistanceRemaining;
-
-		// Wave phase
-    _wavePhase += Mathf.Tau * adjustedWaveFrequency * delta;
-
-    var waveOffset = Mathf.Sin(_wavePhase) * adjustedWaveAmplitude;
+    var waveOffset = GetWaveOffset(percentDistanceTraveled, delta);
 
 		// Apply oscillation
     GlobalPosition += perpendicularDirection * waveOffset;
@@ -219,6 +190,84 @@ public partial class Gem : Area2D
 #endregion
 
 
+
+#region Event Horizon Methods
+
+	private float GetPercentDistanceFromSingularity()
+	{
+		var defaultValue = 0.0f;
+
+		var radius = _paddle.EventHorizonRadius;
+		var distanceToPaddle = GlobalPosition.DistanceTo(_paddle.GlobalPosition);
+
+		if(radius == defaultValue || distanceToPaddle == defaultValue)
+		{
+			return defaultValue;
+		}
+
+		return Helper.GetReverseDecimalPercentRemaining(radius, distanceToPaddle);
+	}
+
+	private void GetReferenceToPlayerPaddle()
+	{
+		_paddle = GetNode<Paddle>("/root/Game/Paddle");
+
+		if(_paddle == null)
+		{
+			GD.PrintErr($"{this.Name} Scene: No Paddle Found in Scene!");
+		}
+	}
+
+	private float GetMovementSpeed(float percentAlongPath)
+	{
+		const float MAX_SPEED_IN_EVENT_HORIZON_MAX_SPEED = 600.0f;
+		
+		var currentSpeed = _movementSpeed * SpeedVariation;
+		var adjustedSpeed = MAX_SPEED_IN_EVENT_HORIZON_MAX_SPEED * percentAlongPath;
+
+		if (adjustedSpeed < currentSpeed)
+		{
+			adjustedSpeed = currentSpeed;
+		}
+
+		return adjustedSpeed;
+	}
+
+	private Vector2 GetMovementDirection()
+	{
+		return (_paddle.GlobalPosition - GlobalPosition).Normalized();
+	}
+
+	private Vector2 GetPerpendicularDirection(Vector2 direction)
+	{
+		return new Vector2
+		(
+			-direction.Y,
+			direction.X
+		);
+	}
+
+	private float GetWaveOffset(float travelProgress, float delta)
+	{
+		const float MAX_WAVE_AMPLITUDE = 20.0f;
+    const float MAX_WAVE_FREQUENCY = 10.0f;
+
+		var completeDistanceRepresentation = 1.0f;
+    var percentDistanceRemaining = completeDistanceRepresentation - travelProgress;
+
+		var adjustedWaveAmplitude = MAX_WAVE_AMPLITUDE * percentDistanceRemaining;
+    var adjustedWaveFrequency = MAX_WAVE_FREQUENCY * percentDistanceRemaining;
+
+    _wavePhase += Mathf.Tau * adjustedWaveFrequency * delta;
+
+    return Mathf.Sin(_wavePhase) * adjustedWaveAmplitude;
+	}
+
+#endregion
+
+
+
+#region Initalizers
 
 	private void SetVariations()
 	{
@@ -251,30 +300,11 @@ public partial class Gem : Area2D
     SpeedVariation *= GameManager.Instance.DifficultyLevel;
   }
 
-	private float GetPercentDistanceFromSingularity()
-	{
-		var defaultValue = 0.0f;
+#endregion
 
-		var radius = _paddle.EventHorizonRadius;
-		var distanceToPaddle = GlobalPosition.DistanceTo(_paddle.GlobalPosition);
 
-		if(radius == defaultValue || distanceToPaddle == defaultValue)
-		{
-			return defaultValue;
-		}
 
-		return Helper.GetReverseDecimalPercentRemaining(radius, distanceToPaddle);
-	}
-
-	private void GetReferenceToPlayerPaddle()
-	{
-		_paddle = GetNode<Paddle>("/root/Game/Paddle");
-
-		if(_paddle == null)
-		{
-			GD.PrintErr($"{this.Name} Scene: No Paddle Found in Scene!");
-		}
-	}
+#region Paricles & Effects
 
 	protected void BeginParticleEmission()
 	{
@@ -297,4 +327,5 @@ public partial class Gem : Area2D
 	}
 
 	// TODO: Fix bug in which last gem captured before stage advancement also explodes
+#endregion
 }
