@@ -927,7 +927,7 @@ public partial class Paddle : Area2D
 
   private void SelectRandomPowerUp(Color color)
   {
-		var randomNumber = Helper.GetRandomInt(0, 1);
+		var randomNumber = Helper.GetRandomInt(2, 2); // TODO: Put back to 0, 2
 
 		switch (randomNumber)
 		{
