@@ -28,6 +28,7 @@ public partial class SignalManager : Node
 	[Signal] public delegate void AdvanceStageEventHandler();
 	[Signal] public delegate void ResetGameEventHandler();
 	[Signal] public delegate void SpawnPoolObjectEventHandler(Vector2 position, PackedScene scene, string colorHex);
+	[Signal] public delegate void BlackHoleActivatedEventHandler();
 
 	public override void _Ready()
 	{
@@ -152,5 +153,10 @@ public partial class SignalManager : Node
 	public static void EmitSpawnPoolObject(Vector2 position, PackedScene scene, string colorHex = "")
 	{
 		Instance.EmitSignal(SignalName.SpawnPoolObject, position, scene, colorHex);
+	}
+
+	public void EmitBlackHoleActivated()
+	{
+		EmitSignal(SignalName.BlackHoleActivated);
 	}
 }

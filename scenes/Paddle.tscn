@@ -267,8 +267,12 @@ texture = ExtResource("1_ry5ju")
 visible = false
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_6kxou")
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="BlackHole" parent="." instance=ExtResource("4_gw2y4")]
+
+[node name="EventHorizon" parent="BlackHole" index="0"]
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="DebugLog" type="Label" parent="."]
 offset_left = 57.0
@@ -338,5 +342,9 @@ one_shot = true
 
 [node name="SelfDestructTimer" type="Timer" parent="Timers"]
 one_shot = true
+
+[node name="DebugEventHorizonRayCast" type="RayCast2D" parent="."]
+visibility_layer = 4
+target_position = Vector2(0, -430)
 
 [editable path="BlackHole"]

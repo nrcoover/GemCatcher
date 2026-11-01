@@ -982,6 +982,8 @@ public partial class Paddle : Area2D
 
 		_blackHoleActivatedSound.Play();
 		_currentPowerUp = PowerUp.BlackHole;
+
+		SignalManager.Instance.EmitBlackHoleActivated();
 	}
 
 	private void EndLargePaddlePowerUp()

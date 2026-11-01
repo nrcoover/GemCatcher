@@ -21,7 +21,6 @@ public partial class Gem : Area2D
 	private Color _color;
 	protected bool _isOffScreen = false;
 	protected bool _isInEventHorizon = false;
-	private float _eventHorizonStartingDistance;
 	private float _wavePhase = 0.0f;
 	protected bool _isGameGem = false;
 	protected float _speedVariation;
@@ -61,14 +60,14 @@ public partial class Gem : Area2D
 		}
 	}
 
-  public override void _ExitTree()
-  {
-    UnsubscribeFromSignals();
-  }
-
 	public override void _Process(double delta)
 	{
 		HandleMovement((float)delta);
+	}
+	
+	public override void _ExitTree()
+	{
+		UnsubscribeFromSignals();
 	}
 
 
@@ -79,6 +78,7 @@ public partial class Gem : Area2D
 	{
 		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
 		SignalManager.Instance.GameVictory += OnGameVictory;
+		SignalManager.Instance.BlackHoleActivated += OnBlackHoleActivated;
 		AreaEntered += OnAreaEntered;
 		AreaExited += OnAreaExited;
 	}
@@ -87,6 +87,7 @@ public partial class Gem : Area2D
 	{
 		SignalManager.Instance.AdvanceStage -= OnAdvanceStage;
 		SignalManager.Instance.GameVictory -= OnGameVictory;
+		SignalManager.Instance.BlackHoleActivated -= OnBlackHoleActivated;
 	}
 
 	private void OnAdvanceStage()
@@ -97,6 +98,11 @@ public partial class Gem : Area2D
 	private void OnGameVictory()
 	{
 		CreateExplosion();
+	}
+
+	private async void OnBlackHoleActivated()
+	{
+		CheckIfInBlackHole();
 	}
 
 	public virtual void OnAreaEntered(Area2D area)
@@ -272,6 +278,18 @@ public partial class Gem : Area2D
     _wavePhase += Mathf.Tau * adjustedWaveFrequency * delta;
 
     return Mathf.Sin(_wavePhase) * adjustedWaveAmplitude;
+	}
+
+	private void CheckIfInBlackHole()
+	{
+		if (_paddle == null || !IsInstanceValid(_paddle))
+		{
+			return;
+		}
+
+		float distance = GlobalPosition.DistanceTo(_paddle.GlobalPosition);
+
+		_isInEventHorizon = distance <= _paddle.EventHorizonRadius;
 	}
 
 #endregion
