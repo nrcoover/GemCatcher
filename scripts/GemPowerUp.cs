@@ -72,7 +72,8 @@ public partial class GemPowerUp : Gem
 				_isOffBottomScreen = true;
 				SignalManager.Instance.EmitPowerUpRemoved();
 			}
-		} else
+		}
+		else
 		{
 			_queueFreeTimer.Start();
 			CreateAudioVolumeFadeOutTween();
@@ -88,6 +89,14 @@ public partial class GemPowerUp : Gem
 	{
 		_audioVolumeFadeInTween?.Kill();
 		_audioVolumeFadeOutTween?.Kill();
+	}
+
+	protected override void HandleObjectRemoval()
+	{
+		SignalManager.Instance.EmitPowerUpRemoved();
+		EndParticleEmission();
+		KillTweens();
+		QueueFree();
 	}
 
 	private void CreateAudioVolumeFadeInTween()
