@@ -139,7 +139,7 @@ public partial class Game : Node2D
 			return;
 		}
 
-		await HandleDeathSequenceAudioAsync();
+		await HandleDeathSequenceAsync();
 
 		if (!IsInsideTree())
 		{
@@ -155,6 +155,8 @@ public partial class Game : Node2D
 		}
 
 		_isVictorious = true;
+
+		SaveDataManager.Instance.HighScore = GameManager.Instance.CurrentScore;
 
 		// Play winning celebration sound
 		_music.Stop();
@@ -431,7 +433,7 @@ public partial class Game : Node2D
 		PlayStageAdvancementCommanderAudio();
 	}
 
-	private async Task HandleDeathSequenceAudioAsync()
+	private async Task HandleDeathSequenceAsync()
 	{
 		SaveDataManager.Instance.HighScore = GameManager.Instance.CurrentScore;
 
