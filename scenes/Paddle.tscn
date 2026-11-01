@@ -11,7 +11,7 @@
 [ext_resource type="AudioStream" uid="uid://dvv1d5u1hxynp" path="res://assets/audio/sfx/503520__lilmati__powerup-04.wav" id="8_d3tdo"]
 [ext_resource type="AudioStream" uid="uid://cunxilvwv2m7j" path="res://assets/audio/sfx/344522__jeremysykes__powerup05.wav" id="9_b3lqm"]
 [ext_resource type="AudioStream" uid="uid://cic5a6iq51dod" path="res://assets/audio/sfx/BlackHoleWarble_V6.wav" id="11_b3lqm"]
-[ext_resource type="AudioStream" uid="uid://b123jhagd853n" path="res://assets/audio/sfx/BlackHolePowerDown.mp3" id="12_b3lqm"]
+[ext_resource type="AudioStream" uid="uid://d0ylfrjm2e5rs" path="res://assets/audio/sfx/BlackHolePowerDown_V3.mp3" id="12_b3lqm"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6kxou"]
 radius = 12.0
@@ -319,7 +319,7 @@ volume_db = -14.0
 
 [node name="BlackHoleDeactivatedSound" type="AudioStreamPlayer2D" parent="Audio" groups=["Audio Streams", "Paddle Audio"]]
 stream = ExtResource("12_b3lqm")
-volume_db = -14.0
+volume_db = -12.0
 
 [node name="Timers" type="Node" parent="."]
 
