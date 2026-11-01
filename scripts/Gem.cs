@@ -2,6 +2,8 @@ using Godot;
 
 public partial class Gem : Area2D
 {
+	// TODO: if power up gem explodes, return music from it's "ducked" state.
+	// TODO: investigate existing gems unaffected by blackhole if already on screen?
 	[Export] CpuParticles2D _particles;
 	[Export] protected PackedScene _explosionScene;
 	[Export] private Paddle _paddle;

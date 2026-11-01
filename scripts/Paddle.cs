@@ -25,6 +25,7 @@ public partial class Paddle : Area2D
 	{
 		TripplePaddle,
 		BigPaddle,
+		BlackHole,
 		Disabled
 	}
 
@@ -62,12 +63,15 @@ public partial class Paddle : Area2D
 	[Export] Node2D _rightParticles;
 	[Export] PaddleGhost _paddleGhostLeft;
 	[Export] PaddleGhost _paddleGhostRight;
+	[Export] BlackHole _blackHole;
 
 	[Export] AudioStreamPlayer2D _boostSound;
 	[Export] AudioStreamPlayer2D _bigPaddleActivatedSound;
 	[Export] AudioStreamPlayer2D _bigPaddleDeactivatedSound;
 	[Export] AudioStreamPlayer2D _ghostPaddlesActivatedSound;
 	[Export] AudioStreamPlayer2D _ghostPaddlesDeactivatedSound;
+	[Export] AudioStreamPlayer2D _blackHoleActivatedSound;
+	[Export] AudioStreamPlayer2D _blackHoleDeactivatedSound;
 	[Export] AudioStreamPlayer _audioDisengageBoosters;
 	[Export] AudioStreamPlayer _audioBoostersReengaged;
 	[Export] AudioStreamPlayer _audioCooldownInProgress;
@@ -292,12 +296,16 @@ public partial class Paddle : Area2D
 		{
 			_ghostPaddlesDeactivatedSound.Play();
 		}
+		else if (_currentPowerUp == PowerUp.BlackHole)
+		{
+			_blackHoleDeactivatedSound.Play();
+		}
 
 		DisableAllActivePowerUps();
 		SetIsPoweredUp(false);
 		ResetPowerUpUi();
 	}
-	
+
   private void OnSelfDestructTimeout()
 	{
 		GameManager.Instance.DecrementHealth();
@@ -887,6 +895,14 @@ public partial class Paddle : Area2D
 		}
 	}
 
+	private void StopBlackHolePowerUpAudio()
+	{
+		if (_blackHoleActivatedSound.IsPlaying())
+		{
+			_blackHoleActivatedSound.Stop();
+		}
+	}
+
 #endregion
 
 #region Power Ups
@@ -896,6 +912,7 @@ public partial class Paddle : Area2D
 		StopPowerUpTimer();
 		EndTriplePaddlePowerUp();
 		EndLargePaddlePowerUp();
+		EndBlackHolePowerUp();
 	}
 
   private void StartPowerUpTimer()
@@ -922,6 +939,10 @@ public partial class Paddle : Area2D
 				BeginTripplePaddlePowerUp();
 				CreateColorScaleTweenAsync(color);
 				break;
+			
+			case (int)PowerUp.BlackHole:
+				BeginBlackHolePowerUp();
+				break;
 		}
   }
 
@@ -930,6 +951,7 @@ public partial class Paddle : Area2D
 		SetIsPoweredUp(true);
 		EnableGhostPaddles();
 		EnablePowerUpProgressBar();
+
 		_ghostPaddlesActivatedSound.Play();
 		_currentPowerUp = PowerUp.TripplePaddle;
 	}
@@ -952,6 +974,16 @@ public partial class Paddle : Area2D
 		PlayBigPaddleTransformationTween(powerUpMultiplier);
 	}
 
+	private void BeginBlackHolePowerUp()
+	{
+		SetIsPoweredUp(true);
+		EnableBlackHole();
+		EnablePowerUpProgressBar();
+
+		_blackHoleActivatedSound.Play();
+		_currentPowerUp = PowerUp.BlackHole;
+	}
+
 	private void EndLargePaddlePowerUp()
   {
     _currentScaleMultiplier = 1.0f;
@@ -971,6 +1003,16 @@ public partial class Paddle : Area2D
 		_currentPowerUp = PowerUp.Disabled;
   }
 
+	private void EndBlackHolePowerUp()
+	{
+		StopBlackHolePowerUpAudio();
+
+		SetIsPoweredUp(false);
+		DisableBlackHole();
+
+		_currentPowerUp = PowerUp.Disabled;
+	}
+
 	private void EnableGhostPaddles()
 	{
 		_paddleGhostLeft.Visible = true;
@@ -980,6 +1022,13 @@ public partial class Paddle : Area2D
 		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitorable, true);
 	}
 
+	private void EnableBlackHole()
+	{
+		_blackHole.Visible = true;
+
+		_blackHole.SetDeferred(Area2D.PropertyName.Monitorable, true);
+	}
+
 	private void DisableGhostPaddles()
 	{
 		_paddleGhostLeft.Visible = false;
@@ -987,6 +1036,13 @@ public partial class Paddle : Area2D
 
 		_paddleGhostLeft.SetDeferred(Area2D.PropertyName.Monitorable, false);
 		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitorable, false);
+	}
+
+	private void DisableBlackHole()
+	{
+		_blackHole.Visible = false;
+
+		_blackHole.SetDeferred(Area2D.PropertyName.Monitorable, false);
 	}
 	
 #endregion
