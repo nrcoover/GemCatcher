@@ -308,6 +308,11 @@ public partial class Paddle : Area2D
 
   private void OnSelfDestructTimeout()
 	{
+		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			return;
+		}
+
 		GameManager.Instance.DecrementHealth();
 		SignalManager.Instance.EmitPlayerHurt();
 		_selfDestructTimer.Start();
@@ -350,10 +355,17 @@ public partial class Paddle : Area2D
 		DisableAllActivePowerUps();
 		SetIsPoweredUp(false);
 		DisengageAllParticles();
+		ResetParticleSystems();
+		ResetMovementSpeed();
 		ResetAnimator();
 
 		KillAllTweens();
 		StopAllAudio();
+
+		if (_audioDisengageBoosters.IsPlaying())
+		{
+			_audioDisengageBoosters.Stop();
+		}
 	}
 	
   private void OnPowerUpCollected(Color color)
@@ -446,13 +458,6 @@ public partial class Paddle : Area2D
 	
 	private void HandleFuelConsumption(float delta)
 	{
-		// TODO: Handle edge case of player winning during fuel depleted audio and animation (fade out audio and reset animation)
-		// TODO: Stop hurting player if fuel depleted in Game Winning State
-		// if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
-		// {
-		// 	return;
-		// }
-
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
 
 		if (_canBoost && !(GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY))
@@ -461,8 +466,8 @@ public partial class Paddle : Area2D
 
 			if (_boostFuel <= 0 && _boostersReady)
 			{
-					_boostFuel = 0;
-					SignalManager.Instance.EmitBoostFuelDepleted();
+				_boostFuel = 0;
+				SignalManager.Instance.EmitBoostFuelDepleted();
 			}
 		}
 		else
