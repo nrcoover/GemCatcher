@@ -18,8 +18,8 @@ public partial class GameManager : Node
 	const int DEFAULT_GAME_STATE = (int)GameState.PLAYING;
 	
 	const int STARTING_STAGE = 1;
-	public const int VICTORY_STAGE = 3; // TODO set to 12 after debugging
-	const int STAGE_ADVANCEMENT_INCREMENTOR = 3; // TODO set to 10 after debugging
+	public const int VICTORY_STAGE = 12;
+	const int STAGE_ADVANCEMENT_INCREMENTOR = 25;
 
 	public enum GameState
 	{
