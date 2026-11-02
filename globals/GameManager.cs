@@ -408,10 +408,7 @@ public partial class GameManager : Node
 	//TODO: Move to Score Manager
 	public void IncrementScore(int points, Color color)
 	{
-		GD.Print($"Current Score: {CurrentScore}");
-		GD.Print($"Add points: {points}");
 		CurrentScore += points;
-		GD.Print($"Current Score: {CurrentScore}");
 		SignalManager.Instance.EmitScoreIncremented(CurrentScore, color);
 	}
 

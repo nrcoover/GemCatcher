@@ -200,7 +200,6 @@ public partial class GemSpawner : Node2D
 	{
 		if (_spawnerDisabledTimer.TimeLeft > 0)
 		{
-			GD.PrintErr("Gem Spawn canceled by Stage Advancement!");
 			return;
 		}
 

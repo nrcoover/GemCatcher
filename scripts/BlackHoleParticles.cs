@@ -26,9 +26,5 @@ public partial class BlackHoleParticles : CpuParticles2D
 		EmissionSphereRadius = CustomEmissionRadius;
 
 		LocalCoords = true;
-
-		GD.Print($"Emission Shape: {EmissionShape}");
-		GD.Print($"Emission Radius: {EmissionSphereRadius}");
-		GD.Print($"Collision Radius: {circle.Radius}");
 	}
 }
