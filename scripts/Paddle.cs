@@ -25,13 +25,27 @@ public partial class Paddle : Area2D
 	{
 		TripplePaddle,
 		BigPaddle,
+		BlackHole,
 		Disabled
+	}
+
+	public float EventHorizonRadius
+	{
+		get 
+		{
+			return _eventHorizonRadius;
+		}
+		set
+		{
+			_eventHorizonRadius = value;
+		}	
 	}
 
 	[Export] float _movementSpeed = DEFAULT_MOVEMENT_SPEED;
 	[Export] float _boundaryMargin = 25.0f;
 	[Export] float _boostMultiplier = 1.5f;
 
+	[Export] CollisionShape2D _eventHorizon;
 	[Export] Label _boostLabel;
 	[Export] Label _powerUpSecondsLabel;
 	[Export] Label _boostPercentageLabel;
@@ -49,18 +63,22 @@ public partial class Paddle : Area2D
 	[Export] Node2D _rightParticles;
 	[Export] PaddleGhost _paddleGhostLeft;
 	[Export] PaddleGhost _paddleGhostRight;
+	[Export] BlackHole _blackHole;
 
 	[Export] AudioStreamPlayer2D _boostSound;
 	[Export] AudioStreamPlayer2D _bigPaddleActivatedSound;
 	[Export] AudioStreamPlayer2D _bigPaddleDeactivatedSound;
 	[Export] AudioStreamPlayer2D _ghostPaddlesActivatedSound;
 	[Export] AudioStreamPlayer2D _ghostPaddlesDeactivatedSound;
+	[Export] AudioStreamPlayer2D _blackHoleActivatedSound;
+	[Export] AudioStreamPlayer2D _blackHoleDeactivatedSound;
 	[Export] AudioStreamPlayer _audioDisengageBoosters;
 	[Export] AudioStreamPlayer _audioBoostersReengaged;
 	[Export] AudioStreamPlayer _audioCooldownInProgress;
 	[Export] private float _boostBurnRate;
 	[Export] private float _boostRefuelRate = 12.5f;
 	
+	private float _eventHorizonRadius;
 	private float _boostFuel;
 	private bool _isFullyFueled;
 	private bool _boostLockedUntilRelease;
@@ -118,8 +136,9 @@ public partial class Paddle : Area2D
 
 	public override void _Ready()
 	{
-		_boostFuelAnimator.Play(Constants.Animations.BoostFuel.Reset);
 		SubscribeToSignals();
+
+		_boostFuelAnimator.Play(Constants.Animations.BoostFuel.Reset);
 		InitializeVariables();
 		UpdateBoostUi();
 		ResetPowerUpUi();
@@ -187,6 +206,8 @@ public partial class Paddle : Area2D
 		_originalSpeed = _movementSpeed;
 		_isPoweredUp = false;
 		_currentPowerUp = PowerUp.Disabled;
+
+		SetEventHorizon();
   }
 
 	private void ResetParticleSystems()
@@ -275,14 +296,23 @@ public partial class Paddle : Area2D
 		{
 			_ghostPaddlesDeactivatedSound.Play();
 		}
+		else if (_currentPowerUp == PowerUp.BlackHole)
+		{
+			_blackHoleDeactivatedSound.Play();
+		}
 
 		DisableAllActivePowerUps();
 		SetIsPoweredUp(false);
 		ResetPowerUpUi();
 	}
-	
+
   private void OnSelfDestructTimeout()
 	{
+		if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			return;
+		}
+
 		GameManager.Instance.DecrementHealth();
 		SignalManager.Instance.EmitPlayerHurt();
 		_selfDestructTimer.Start();
@@ -325,10 +355,17 @@ public partial class Paddle : Area2D
 		DisableAllActivePowerUps();
 		SetIsPoweredUp(false);
 		DisengageAllParticles();
+		ResetParticleSystems();
+		ResetMovementSpeed();
 		ResetAnimator();
 
 		KillAllTweens();
 		StopAllAudio();
+
+		if (_audioDisengageBoosters.IsPlaying())
+		{
+			_audioDisengageBoosters.Stop();
+		}
 	}
 	
   private void OnPowerUpCollected(Color color)
@@ -421,13 +458,6 @@ public partial class Paddle : Area2D
 	
 	private void HandleFuelConsumption(float delta)
 	{
-		// TODO: Handle edge case of player winning during fuel depleted audio and animation (fade out audio and reset animation)
-		// TODO: Stop hurting player if fuel depleted in Game Winning State
-		// if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
-		// {
-		// 	return;
-		// }
-
 		_isFullyFueled = _boostFuel >= MAX_BOOST_FUEL;
 
 		if (_canBoost && !(GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY))
@@ -436,8 +466,8 @@ public partial class Paddle : Area2D
 
 			if (_boostFuel <= 0 && _boostersReady)
 			{
-					_boostFuel = 0;
-					SignalManager.Instance.EmitBoostFuelDepleted();
+				_boostFuel = 0;
+				SignalManager.Instance.EmitBoostFuelDepleted();
 			}
 		}
 		else
@@ -870,6 +900,14 @@ public partial class Paddle : Area2D
 		}
 	}
 
+	private void StopBlackHolePowerUpAudio()
+	{
+		if (_blackHoleActivatedSound.IsPlaying())
+		{
+			_blackHoleActivatedSound.Stop();
+		}
+	}
+
 #endregion
 
 #region Power Ups
@@ -879,6 +917,7 @@ public partial class Paddle : Area2D
 		StopPowerUpTimer();
 		EndTriplePaddlePowerUp();
 		EndLargePaddlePowerUp();
+		EndBlackHolePowerUp();
 	}
 
   private void StartPowerUpTimer()
@@ -893,7 +932,7 @@ public partial class Paddle : Area2D
 
   private void SelectRandomPowerUp(Color color)
   {
-		var randomNumber = Helper.GetRandomInt(0, 1);
+		var randomNumber = Helper.GetRandomInt(2, 2); // TODO: Put back to 0, 2
 
 		switch (randomNumber)
 		{
@@ -905,6 +944,10 @@ public partial class Paddle : Area2D
 				BeginTripplePaddlePowerUp();
 				CreateColorScaleTweenAsync(color);
 				break;
+			
+			case (int)PowerUp.BlackHole:
+				BeginBlackHolePowerUp();
+				break;
 		}
   }
 
@@ -913,6 +956,7 @@ public partial class Paddle : Area2D
 		SetIsPoweredUp(true);
 		EnableGhostPaddles();
 		EnablePowerUpProgressBar();
+
 		_ghostPaddlesActivatedSound.Play();
 		_currentPowerUp = PowerUp.TripplePaddle;
 	}
@@ -935,6 +979,18 @@ public partial class Paddle : Area2D
 		PlayBigPaddleTransformationTween(powerUpMultiplier);
 	}
 
+	private void BeginBlackHolePowerUp()
+	{
+		SetIsPoweredUp(true);
+		EnableBlackHole();
+		EnablePowerUpProgressBar();
+
+		_blackHoleActivatedSound.Play();
+		_currentPowerUp = PowerUp.BlackHole;
+
+		SignalManager.Instance.EmitBlackHoleActivated();
+	}
+
 	private void EndLargePaddlePowerUp()
   {
     _currentScaleMultiplier = 1.0f;
@@ -954,6 +1010,16 @@ public partial class Paddle : Area2D
 		_currentPowerUp = PowerUp.Disabled;
   }
 
+	private void EndBlackHolePowerUp()
+	{
+		StopBlackHolePowerUpAudio();
+
+		SetIsPoweredUp(false);
+		DisableBlackHole();
+
+		_currentPowerUp = PowerUp.Disabled;
+	}
+
 	private void EnableGhostPaddles()
 	{
 		_paddleGhostLeft.Visible = true;
@@ -963,6 +1029,13 @@ public partial class Paddle : Area2D
 		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitorable, true);
 	}
 
+	private void EnableBlackHole()
+	{
+		_blackHole.Visible = true;
+
+		_blackHole.SetDeferred(Area2D.PropertyName.Monitorable, true);
+	}
+
 	private void DisableGhostPaddles()
 	{
 		_paddleGhostLeft.Visible = false;
@@ -970,6 +1043,13 @@ public partial class Paddle : Area2D
 
 		_paddleGhostLeft.SetDeferred(Area2D.PropertyName.Monitorable, false);
 		_paddleGhostRight.SetDeferred(Area2D.PropertyName.Monitorable, false);
+	}
+
+	private void DisableBlackHole()
+	{
+		_blackHole.Visible = false;
+
+		_blackHole.SetDeferred(Area2D.PropertyName.Monitorable, false);
 	}
 	
 #endregion
@@ -995,6 +1075,12 @@ public partial class Paddle : Area2D
 	{
 		_paddleAnimator.Play(Constants.Animations.Paddle.Reset);
 		_boostFuelAnimator.Play(Constants.Animations.BoostFuel.Reset);
+	}
+
+	private void SetEventHorizon()
+	{
+		var circle = _eventHorizon.Shape as CircleShape2D;
+		EventHorizonRadius = circle.Radius;
 	}
 
 #endregion

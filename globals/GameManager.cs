@@ -1,10 +1,11 @@
+using System.Threading.Tasks;
 using Godot;
 
 public partial class GameManager : Node
 {
 	public static GameManager Instance {get; private set;}
 	
-	const int MAX_HEALTH = 5;
+	public const int MAX_HEALTH = 5;
 	const int MIN_HEALTH = 0;
 
 	const int DEFAULT_SCORE = 0;
@@ -139,6 +140,7 @@ public partial class GameManager : Node
 		SignalManager.Instance.ScoreIncremented += OnScoreIncremented;
 		SignalManager.Instance.ResetGame += OnResetGame;
 		SignalManager.Instance.GameVictory += OnGameVictory;
+		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
 	}
 
   private void UnsubscribeFromSignals()
@@ -148,6 +150,7 @@ public partial class GameManager : Node
 		SignalManager.Instance.ScoreIncremented -= OnScoreIncremented;
 		SignalManager.Instance.ResetGame -= OnResetGame;
 		SignalManager.Instance.GameVictory -= OnGameVictory;
+		SignalManager.Instance.AdvanceStage -= OnAdvanceStage;
 	}
 
   public void OnGameOver()
@@ -178,6 +181,14 @@ public partial class GameManager : Node
 		UnlockInfiniteMode();
 	}
 
+	private void OnAdvanceStage()
+	{
+		if (CurrentGameState != (int)GameState.VICTORY)
+		{
+			RestoreHealthToFullAsync();
+		}
+	}
+
 #endregion
 
 
@@ -202,6 +213,7 @@ public partial class GameManager : Node
 	public void SetGameStateDead()
 	{
 		CurrentGameState = (int)GameState.DEAD;
+		SignalManager.Instance.EmitGameOver();
 	}
 
 	public void SetGameStateVictory()
@@ -222,10 +234,14 @@ public partial class GameManager : Node
 
 	private void CheckForGameOver()
   {
+		if (CurrentGameState == (int)GameState.DEAD)
+		{
+			return;
+		}
+
     if (GetHealth() <= 0)
 		{
-			SignalManager.Instance.EmitGameOver();
-			SignalManager.Instance.EmitInitiateVictorySequence();
+			SetGameStateDead();
 		}
   }
 
@@ -279,7 +295,28 @@ public partial class GameManager : Node
 		SetHealth(GetHealth() + 1);
 	}
 
+	private async void RestoreHealthToFullAsync()
+	{
+		if (_health == MAX_HEALTH)
+		{
+			return;
+		}
+
+		var waitTime = 0.5f;
+		await CreateTimerAsync(waitTime);
+
+		while (_health < MAX_HEALTH)
+		{
+			waitTime = 0.1f;
+			await CreateTimerAsync(waitTime);
+			
+			SignalManager.Instance.EmitHealthRecovered();
+		}
+	}
+
 #endregion
+
+
 
 #region Manage Gems
 
@@ -300,6 +337,8 @@ public partial class GameManager : Node
 	}
 
 #endregion
+
+
 
 #region Manage Difficulty Level
 
@@ -364,6 +403,8 @@ public partial class GameManager : Node
 
 #endregion
 
+
+
 	//TODO: Move to Score Manager
 	public void IncrementScore(int points, Color color)
 	{
@@ -378,5 +419,26 @@ public partial class GameManager : Node
 	{
 		CurrentScore = DEFAULT_SCORE;
 	}
+
+
+
+#region Asynchronous Tasks
+
+	private async Task CreateTimerAsync(float timeInSeconds)
+	{
+		var tree = GetTree();
+
+		if (tree == null)
+		{
+			return;
+		}
+
+		await ToSignal(
+			tree.CreateTimer(timeInSeconds),
+			SceneTreeTimer.SignalName.Timeout
+		);
+	}
+
+#endregion
 
 }

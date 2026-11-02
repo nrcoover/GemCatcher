@@ -48,6 +48,7 @@ public partial class Game : Node2D
 	private bool _isDying = false;
 	private bool _isVictorious = false;
 	private float _musicDefaultVolume;
+	private int _lastPlayedAudioInt = 0;
 
 	public override async void _Ready()
 	{
@@ -67,7 +68,8 @@ public partial class Game : Node2D
 
 		if (@event.IsActionPressed("test") && CustomDebug.IsDebugging)
 		{
-			GameManager.Instance.SetGameStateVictory();
+			// GameManager.Instance.SetGameStateVictory();
+			SignalManager.Instance.EmitAdvanceStage();
 		}
 
 		if (@event.IsActionPressed("toggle-test") && CustomDebug.IsDebugging)
@@ -137,7 +139,7 @@ public partial class Game : Node2D
 			return;
 		}
 
-		await HandleDeathSequenceAudioAsync();
+		await HandleDeathSequenceAsync();
 
 		if (!IsInsideTree())
 		{
@@ -153,6 +155,8 @@ public partial class Game : Node2D
 		}
 
 		_isVictorious = true;
+
+		SaveDataManager.Instance.HighScore = GameManager.Instance.CurrentScore;
 
 		// Play winning celebration sound
 		_music.Stop();
@@ -228,6 +232,8 @@ public partial class Game : Node2D
 		{
 			return;
 		}
+
+		_audioExplosion.Play();
 
 		await PlayStageAdvancementSequenceAsync();
 
@@ -308,8 +314,14 @@ public partial class Game : Node2D
 
 	private void PlayStageAdvancementCommanderAudio()
 	{
-		// TODO: Prevent same audio twice in a row by storing previous random number in variable and re-roll if same as previous.
-		var randomNumber = Helper.GetRandomInt(1, 3);
+		var randomNumber = _lastPlayedAudioInt;
+
+		while (randomNumber == _lastPlayedAudioInt)
+		{
+			randomNumber = Helper.GetRandomInt(1, 3);
+		}
+
+		_lastPlayedAudioInt = randomNumber;
 
 		switch (randomNumber)
 		{
@@ -421,7 +433,7 @@ public partial class Game : Node2D
 		PlayStageAdvancementCommanderAudio();
 	}
 
-	private async Task HandleDeathSequenceAudioAsync()
+	private async Task HandleDeathSequenceAsync()
 	{
 		SaveDataManager.Instance.HighScore = GameManager.Instance.CurrentScore;
 
@@ -461,6 +473,11 @@ public partial class Game : Node2D
 
 		foreach (Node2D moveable in moveables.Cast<Node2D>())
 		{
+			if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY && moveable is Gem)
+			{
+				continue;
+			}
+
 			moveable.ProcessMode = ProcessModeEnum.Disabled;
 		}
 	}
@@ -474,8 +491,6 @@ public partial class Game : Node2D
 			* GameManager.Instance.CurrentStage;
 
 		_normalSpawnerContainer.CallDeferred("add_child", spawner);
-
-		GD.Print("Spawner SpawnTime = " + spawner.SpawnTime);
 	}
 
 #endregion

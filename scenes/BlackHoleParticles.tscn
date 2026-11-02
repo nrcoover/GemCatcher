@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://bb4kodr0iavuv"]
+
+[ext_resource type="Script" uid="uid://b5kmo6fn4kguq" path="res://scripts/BlackHoleParticles.cs" id="1_7ytgr"]
+
+[sub_resource type="Curve" id="Curve_mgnlr"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.34827584, 1), 0.0, 0.0, 0, 0, Vector2(0.50344825, 0.6974612), 0.0, 0.0, 0, 0, Vector2(0.6517241, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[node name="BlackHoleCustomParticles" type="CPUParticles2D"]
+amount = 256
+lifetime = 8.0
+preprocess = 4.0
+emission_shape = 2
+emission_sphere_radius = 0.0
+direction = Vector2(0, 0)
+spread = 0.0
+gravity = Vector2(0, 0)
+orbit_velocity_min = 0.1
+orbit_velocity_max = 0.5
+scale_amount_max = 6.0
+scale_amount_curve = SubResource("Curve_mgnlr")
+color = Color(1, 1, 1, 0.64100003)
+script = ExtResource("1_7ytgr")

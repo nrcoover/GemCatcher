@@ -6,10 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://bjktv0avyw2nu" path="res://scenes/FalseGem.tscn" id="3_hb04v"]
 [ext_resource type="PackedScene" uid="uid://dqo0w8yoly0x5" path="res://scenes/GemPowerUp.tscn" id="4_qlh1u"]
 
-[node name="GemSpawner" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_powerUpSpawnTimer", "_gemContainer") groups=["Moveable Objects"]]
+[node name="GemSpawner" type="Node2D" node_paths=PackedStringArray("_gemSpawnTimer", "_powerUpSpawnTimer", "_spawnerDisabledTimer", "_gemContainer") groups=["Moveable Objects"]]
 script = ExtResource("1_23civ")
 _gemSpawnTimer = NodePath("GemSpawnTimer")
 _powerUpSpawnTimer = NodePath("PowerUpSpawnTimer")
+_spawnerDisabledTimer = NodePath("SpawnerDisabledTimer")
 _gemScene = ExtResource("2_inrc3")
 _falseGemScene = ExtResource("3_hb04v")
 _gemHeartScene = ExtResource("2_23civ")
@@ -24,4 +25,8 @@ autostart = true
 
 [node name="PowerUpSpawnTimer" type="Timer" parent="."]
 wait_time = 10.0
+one_shot = true
+
+[node name="SpawnerDisabledTimer" type="Timer" parent="."]
+wait_time = 2.5
 one_shot = true

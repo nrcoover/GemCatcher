@@ -71,4 +71,14 @@ public partial class FalseGem : Gem, IPoolItem
 			_isOffScreen = true;
 		}
 	}
+
+	protected override void CreateExplosion() {
+		var colorHex = Helper.GetHexCodeFromColor(Modulate);
+
+		SignalManager.EmitSpawnPoolObject(
+			GlobalPosition, _explosionScene, colorHex
+		);
+
+		Deactivate();
+	}
 }
