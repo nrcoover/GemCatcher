@@ -328,7 +328,7 @@ volume_db = -12.0
 [node name="Timers" type="Node" parent="."]
 
 [node name="PowerUpTimer" type="Timer" parent="Timers"]
-wait_time = 7.0
+wait_time = 10.0
 one_shot = true
 autostart = true
 
