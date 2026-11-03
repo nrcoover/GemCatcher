@@ -21,16 +21,19 @@ _isOnMainMenu = true
 
 [node name="MainMenuUi" parent="CanvasLayer" instance=ExtResource("4_ow34m")]
 
+[node name="RulesModal" parent="CanvasLayer/MainMenuUi" index="6"]
+visible = true
+
 [node name="Instructions" parent="CanvasLayer/MainMenuUi/RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
 text = "1. Catch as many gems as you can.
 2. Don't let your paddle's boosters overheat.
 3. Look out for special gems that grant extra abilities.
-4. Eat your vegetables. 
+4. Collect 25 gems to advance to the next stage.
+5. Complete all 12 stages to win and unlock Infinite Mode.
+6. Press \"B\" during victory stage to experience some fun.
+7. Eat your vegetables. 
     (...I mean actually, like in real life;
     there are no vegetables in this game.)"
-
-[node name="CreditsModal" parent="CanvasLayer/MainMenuUi" index="7"]
-visible = true
 
 [node name="Instructions" parent="CanvasLayer/MainMenuUi/CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
 text = "This game was created as a student project and is an expansion upon an original game created by following the Udemy Course \"Learn 2D Game Development: Godot 4.5 & C# from Scratch\" by Richard Allbert and Martyna Olivares. Assets are sourced, royalty free, from Kenny Assets, freesounds.org, and Pexels.com. Recorded dialogue clips are original recordings by the game developer, Nicklefritz, and the game is distributed under the same name. Development took 80 hours over 6 months. Thank you for playing, and most importantly: Thank you for being you!"
