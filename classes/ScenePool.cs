@@ -5,6 +5,13 @@ using Godot;
 
 public class ScenePool
 {
+#region Variables - Debugging
+
+	private readonly bool IS_DEBUGGING =  CustomDebug.IsDebugging && clasIsDebugging;
+	const bool clasIsDebugging = false;
+
+#endregion
+
   private readonly List<Node2D> _items = new();
   private readonly PackedScene _packedScene;
   private readonly Node _container;
@@ -16,7 +23,7 @@ public class ScenePool
     _container = container;
     _packedScene = scene;
 
-    // Log($"Creating pool with {initialCount} items");
+    Log($"Creating pool with {initialCount} items");
 
     for (int i = 0; i < initialCount; i++)
     {
@@ -25,13 +32,13 @@ public class ScenePool
   }
 
   public void ActivateNext(Vector2 position, string colorHex) {
-    // Log($"ActivateNext Active: {ActiveCount}/{_items.Count}");
+    Log($"ActivateNext Active: {ActiveCount}/{_items.Count}");
 
     foreach (var node in _items)
     {
       if (!node.Visible)
       {
-        // Log($"Reusing instance {node.Name}");
+        Log($"Reusing instance {node.Name}");
         
         if (!string.IsNullOrEmpty(colorHex))
         {
@@ -45,7 +52,7 @@ public class ScenePool
       }
     }
 
-    // Log($"Nothing free, extending pool");
+    Log($"Nothing free, extending pool");
     Node2D newItem = AddNewItem(colorHex);
     newItem.Show();
     newItem.GlobalPosition = position;
@@ -63,21 +70,21 @@ public class ScenePool
 
     if (newItem is not IPoolItem)
     {
-      // GD.PrintErr($"{newItem.Name} does not implement IPoolItem");
+      GD.PrintErr($"{newItem.Name} does not implement IPoolItem");
     }
 
     newItem.Hide();
     _container.AddChild(newItem);
     _items.Add(newItem);
 
-    // Log($"New instance {newItem.Name} total: {_items.Count}");
+    Log($"New instance {newItem.Name} total: {_items.Count}");
 
     return newItem;
   }
 
   private void Log(string message) 
   {
-    if (CustomDebug.IsDebugging)
+    if (IS_DEBUGGING)
     {
       GD.Print($"[ScenePool: {_packedScene.ResourcePath}] {message}");
     }

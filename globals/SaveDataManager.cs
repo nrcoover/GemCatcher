@@ -1,5 +1,6 @@
 using Godot;
 
+// TODO: Include top number of stages completed; derive from highscore
 public partial class SaveDataManager : Node
 {
 	private const string SAVE_DATA_FILE_PATH = "user://gemSaveData.tres";

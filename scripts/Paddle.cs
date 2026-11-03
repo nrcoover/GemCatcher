@@ -1,10 +1,12 @@
+using GemCatcher.utils;
 using Godot;
 
 public partial class Paddle : Area2D
 {
 #region Variables - Debugging
 
-	const bool IS_DEBUGGING = false;
+	private readonly bool IS_DEBUGGING =  CustomDebug.IsDebugging && clasIsDebugging;
+	const bool clasIsDebugging = true;
 	[Export] Label _debugLogLabel;
 
 #endregion
@@ -64,6 +66,7 @@ public partial class Paddle : Area2D
 	[Export] PaddleGhost _paddleGhostLeft;
 	[Export] PaddleGhost _paddleGhostRight;
 	[Export] BlackHole _blackHole;
+	[Export] RayCast2D _debugEventHorizonRayCast;
 
 	[Export] AudioStreamPlayer2D _boostSound;
 	[Export] AudioStreamPlayer2D _bigPaddleActivatedSound;
@@ -114,12 +117,10 @@ public partial class Paddle : Area2D
 
 	private Rect2 _viewportBoundary;
 	
-  private void HandleDebugLog()
+  private void HandleDebug()
   {
-		if (!IS_DEBUGGING)
-		{
-			_debugLogLabel.Visible = false;
-		}
+		_debugLogLabel.Visible = IS_DEBUGGING;
+		_debugEventHorizonRayCast.Visible = IS_DEBUGGING;
 
     _debugLogLabel.Text = "BEBUGGING: \n"
 			+ $"Fuel: {_boostFuel},\n"
@@ -155,7 +156,7 @@ public partial class Paddle : Area2D
 		UpdatePowerUpUi();
 		HandleParticles();
 
-		HandleDebugLog();
+		HandleDebug();
 	}
 
   public override void _UnhandledInput(InputEvent @event)
