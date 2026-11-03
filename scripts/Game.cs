@@ -4,7 +4,6 @@ using Godot;
 using GemCatcher.utils;
 
 // TODO: BUG - investigate Gem and Heart gems affected by processing when outside event horizon (get's pulled in)
-// TODO: BUG - investigate audio ducking still remaining when PowerUP gem explodes; consider using a Global music volume and use that for resetting music volume - ensuring it always returns to normal after a stage advancement.
 public partial class Game : Node2D
 {
 	const int DEFAULT_POINT_VALUE = 1;
@@ -259,6 +258,8 @@ public partial class Game : Node2D
 		{
 			InstantiateAdditionalGemSpawner();
 		}
+
+		ResetMusicVolume();
 	}
 
 	private void OnGameVictory()
@@ -322,7 +323,7 @@ public partial class Game : Node2D
 		CreateMusicVolumeTween();
 	}
 	
-	private void ResetMusicVolume()
+	private async void ResetMusicVolume()
 	{
 		_music.VolumeDb = _musicDefaultVolume;
 	}

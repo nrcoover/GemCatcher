@@ -96,6 +96,7 @@ public partial class GemPowerUp : Gem
 		SignalManager.Instance.EmitPowerUpRemoved();
 		EndParticleEmission();
 		KillTweens();
+		
 		QueueFree();
 	}
 
