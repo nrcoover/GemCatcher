@@ -72,6 +72,12 @@ public partial class Game : Node2D
 			SignalManager.Instance.EmitAdvanceStage();
 		}
 
+		if (@event.IsActionPressed("explode") 
+				&& GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			SignalManager.Instance.EmitPlayerSummonedExplosion();
+		}
+
 		if (@event.IsActionPressed("toggle-test") && CustomDebug.IsDebugging)
 		{
 			SaveDataManager.Instance.IsInfiniteModeUnlocked = !SaveDataManager.Instance.IsInfiniteModeUnlocked;
@@ -104,6 +110,7 @@ public partial class Game : Node2D
 		SignalManager.Instance.PowerUpRemoved += OnPowerUpRemoved;
 		SignalManager.Instance.AdvanceStage += OnAdvanceStageAsync;
 		SignalManager.Instance.GameVictory += OnGameVictory;
+		SignalManager.Instance.PlayerSummonedExplosion += OnPlayerSummonedExplosion;
 	}
 
   private void UnsubscribeFromSignals() {
@@ -116,6 +123,7 @@ public partial class Game : Node2D
 		SignalManager.Instance.PowerUpRemoved -= OnPowerUpRemoved;
 		SignalManager.Instance.AdvanceStage -= OnAdvanceStageAsync;
 		SignalManager.Instance.GameVictory -= OnGameVictory;
+		SignalManager.Instance.PlayerSummonedExplosion -= OnPlayerSummonedExplosion;
 	}
 
   private async void OnInitiateDeathSequenceAsync()
@@ -254,6 +262,11 @@ public partial class Game : Node2D
 	private void OnGameVictory()
 	{
 		InitiateVictorySequenceAsync();
+	}
+
+	private void OnPlayerSummonedExplosion()
+	{
+		_audioExplosion.Play();
 	}
 
 #endregion

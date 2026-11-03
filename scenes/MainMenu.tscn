@@ -21,9 +21,6 @@ _isOnMainMenu = true
 
 [node name="MainMenuUi" parent="CanvasLayer" instance=ExtResource("4_ow34m")]
 
-[node name="RulesModal" parent="CanvasLayer/MainMenuUi" index="6"]
-visible = true
-
 [node name="Instructions" parent="CanvasLayer/MainMenuUi/RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
 text = "1. Catch as many gems as you can.
 2. Don't let your paddle's boosters overheat.
