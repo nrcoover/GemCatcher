@@ -19,7 +19,7 @@ public partial class GameManager : Node
 	
 	const int STARTING_STAGE = 1;
 	public const int VICTORY_STAGE = 12;
-	const int STAGE_ADVANCEMENT_INCREMENTOR = 25;
+	public const int STAGE_ADVANCEMENT_INCREMENTOR = 25;
 
 	public enum GameState
 	{

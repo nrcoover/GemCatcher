@@ -1,12 +1,19 @@
-[gd_scene load_steps=6 format=3 uid="uid://cubv40p7fxyh5"]
+[gd_scene load_steps=8 format=3 uid="uid://cubv40p7fxyh5"]
 
 [ext_resource type="Script" uid="uid://roupoeg0m343" path="res://scripts/MainMenuUi.cs" id="1_it30p"]
 [ext_resource type="PackedScene" uid="uid://dqthwsums7jjw" path="res://scenes/GemButton.tscn" id="3_pqhkh"]
 [ext_resource type="PackedScene" uid="uid://dvxadunjhuoll" path="res://scenes/MenuModal.tscn" id="4_h6icy"]
 [ext_resource type="LabelSettings" uid="uid://5mcorwbq3ffs" path="res://resources/fonts/play_white_24_font_normal.tres" id="5_7v7mi"]
+[ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/fonts/Play-Regular.ttf" id="5_gh1cy"]
 [ext_resource type="PackedScene" uid="uid://2sfkess71hko" path="res://scenes/MenuTitle.tscn" id="6_56fvm"]
 
-[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_infiniteModeButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_movesModal", "_rulesModal", "_creditsModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_titleTimer", "_titleContainer", "_marginHighScoreContainer")]
+[sub_resource type="LabelSettings" id="LabelSettings_it30p"]
+font = ExtResource("5_gh1cy")
+font_size = 22
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(1.25, 1.25)
+
+[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_infiniteModeButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_movesModal", "_rulesModal", "_creditsModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_stagesWonLabel", "_titleTimer", "_titleContainer", "_marginHighScoreContainer")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,7 +40,8 @@ _titleLayer3 = NodePath("MarginContainer/TitleContainer/TitleAlpha3")
 _titleLayer4 = NodePath("MarginContainer/TitleContainer/TitleAlpha4")
 _titleLayer5 = NodePath("MarginContainer/TitleContainer/TitleAlpha5")
 _titleLayer6 = NodePath("MarginContainer/TitleContainer/TitleAlpha6")
-_highScoreLabel = NodePath("MarginHighScore/VBoxContainer/HBoxContainer2/HighScoreLabel")
+_highScoreLabel = NodePath("MarginHighScore/VBoxContainer/HBoxContainer2/VBoxContainer/HighScoreLabel")
+_stagesWonLabel = NodePath("MarginHighScore/VBoxContainer/HBoxContainer2/VBoxContainer/StagesWonLabel")
 _titleTimer = NodePath("TitleTimer")
 _titleContainer = NodePath("MarginContainer/TitleContainer")
 _marginHighScoreContainer = NodePath("MarginHighScore")
@@ -236,12 +244,22 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 
-[node name="HighScoreLabel" type="Label" parent="MarginHighScore/VBoxContainer/HBoxContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginHighScore/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+
+[node name="HighScoreLabel" type="Label" parent="MarginHighScore/VBoxContainer/HBoxContainer2/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "High Score: xxx"
 label_settings = ExtResource("5_7v7mi")
+
+[node name="StagesWonLabel" type="Label" parent="MarginHighScore/VBoxContainer/HBoxContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Stages Won: xxx"
+label_settings = SubResource("LabelSettings_it30p")
 
 [node name="MovesModal" parent="." instance=ExtResource("4_h6icy")]
 visible = false

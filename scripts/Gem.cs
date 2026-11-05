@@ -168,7 +168,12 @@ public partial class Gem : Area2D
 			HandleObjectRemoval();
 		}
 
-		if (_isGameGem && _isInEventHorizon)
+		// TODO: BUG - investigate Gem and Heart gems affected by processing when outside event horizon (get's pulled in)
+		if (_isGameGem 
+				&& _isInEventHorizon
+				&& this is not GemHeart
+				&& this is not GemPowerUp
+			)
 		{
 			GetPositionInEventHorizon(delta);
 		}

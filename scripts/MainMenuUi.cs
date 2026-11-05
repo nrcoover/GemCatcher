@@ -23,6 +23,7 @@ public partial class MainMenuUi : Control
 	[Export] private Label _titleLayer5;
 	[Export] private Label _titleLayer6;
 	[Export] private Label _highScoreLabel;
+	[Export] private Label _stagesWonLabel;
 
 	[Export] private Timer _titleTimer;
 	[Export] private Control _titleContainer;
@@ -47,7 +48,7 @@ public partial class MainMenuUi : Control
 			HideInfiniteModeButton();
 		}
 
-		HandleHighScoreDisplay();
+		HandleLabelDisplays();
 		CloseAllModals();
 		InitializeTitleColors();
 		HandleLabelTweeningAsync();
@@ -82,7 +83,7 @@ public partial class MainMenuUi : Control
 
   private void OnSaveDataReset()
   {
-    HandleHighScoreDisplay();
+    HandleLabelDisplays();
 		HandleInfiniteModeButtonDisplay();
   }
 
@@ -164,16 +165,19 @@ public partial class MainMenuUi : Control
 		_baseColors[label] = label.Modulate;
 	}
 	
-  private void HandleHighScoreDisplay()
+  private void HandleLabelDisplays()
   {
 		_marginHighScoreContainer.Visible = false;
     var highScore = SaveDataManager.Instance.HighScore;
 		var highScoreRestore = SaveDataManager.Instance.HighScoreRestore;
+		int stagesWon = highScore / GameManager.STAGE_ADVANCEMENT_INCREMENTOR;
 
 		if (highScore != 0 || highScoreRestore != 0)
 		{
 			_marginHighScoreContainer.Visible = true;
 			_highScoreLabel.Text = $"High Score: {highScore}";
+			_stagesWonLabel.Text = $"Stages Won: {stagesWon}";
+			_stagesWonLabel.Visible = SaveDataManager.Instance.IsInfiniteModeUnlocked;
 
 			if (highScoreRestore == 0)
 			{

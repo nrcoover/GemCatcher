@@ -3,7 +3,8 @@ using System.Linq;
 using Godot;
 using GemCatcher.utils;
 
-// TODO: BUG - investigate Gem and Heart gems affected by processing when outside event horizon (get's pulled in)
+// TODO: Update power up timeout to flash during last 3 seconds (add warning)
+// TODO: Known Bug: Paddle does not always update size when catching gem as same time as powerup
 public partial class Game : Node2D
 {
 	const int DEFAULT_POINT_VALUE = 1;
