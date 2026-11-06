@@ -168,7 +168,6 @@ public partial class Gem : Area2D
 			HandleObjectRemoval();
 		}
 
-		// TODO: BUG - investigate Gem and Heart gems affected by processing when outside event horizon (get's pulled in)
 		if (_isGameGem 
 				&& _isInEventHorizon
 				&& this is not GemHeart
@@ -293,6 +292,11 @@ public partial class Gem : Area2D
 	private void CheckIfInBlackHole()
 	{
 		if (_paddle == null || !IsInstanceValid(_paddle))
+		{
+			return;
+		}
+
+		if (this is GemPowerUp || this is GemHeart)
 		{
 			return;
 		}
