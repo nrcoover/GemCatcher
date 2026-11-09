@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using GemCatcher.utils;
 using Godot;
 
 public partial class GameManager : Node
@@ -357,19 +358,26 @@ public partial class GameManager : Node
 
 	private void IncreaseDifficulty(int currentScore)
 	{
-		GD.Print("---------------NEW LOG--------------");
-		GD.Print("INCREASE DIFFICUTLY COMMENSING!!!");
-		GD.Print($"Current Level: {DifficultyLevel}");
-		GD.Print($"Current Score: {currentScore}");
+		if (CustomDebug.IsDebugging)
+		{
+			GD.Print("---------------NEW LOG--------------");
+			GD.Print("INCREASE DIFFICUTLY COMMENSING!!!");
+			GD.Print($"Current Level: {DifficultyLevel}");
+			GD.Print($"Current Score: {currentScore}");
+		}
 		
 		DifficultyLevel = (float)Mathf.Clamp(
 			DifficultyLevel * DIFFICULTY_MULTIPLIER
 			, DEFAULT_DIFFICULTY_LEVEL
 			, MAXIMUM_DIFFICULTY
 		);
-		GD.Print($"Updated Level: {DifficultyLevel}");
-		GD.Print($"DIFFICULTY LEVEL CHANGE COMPLETE!!!");
-		GD.Print("------------------------------------");
+
+		if (CustomDebug.IsDebugging)
+		{
+			GD.Print($"Updated Level: {DifficultyLevel}");
+			GD.Print($"DIFFICULTY LEVEL CHANGE COMPLETE!!!");
+			GD.Print("------------------------------------");
+		}
 
 		SignalManager.Instance.EmitDifficultyIncreased();
 	}
