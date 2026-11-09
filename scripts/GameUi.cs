@@ -81,7 +81,6 @@ public partial class GameUi : Control
 
   private async void OnInitiateDeathSequenceAsync()
 	{
-		// TODO: Consider refactoring _isDying into GameManager enum GameState
 		if (_isDying)
 		{
 			return;
