@@ -405,7 +405,6 @@ public partial class GameManager : Node
 
 
 
-	//TODO: Move to Score Manager
 	public void IncrementScore(int points, Color color)
 	{
 		CurrentScore += points;

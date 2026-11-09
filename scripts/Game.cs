@@ -128,7 +128,6 @@ public partial class Game : Node2D
 
   private async void OnInitiateDeathSequenceAsync()
 	{
-		// TODO: Consider refactoring _isDying into GameManager enum GameState
 		if (_isDying)
 		{
 			return;
@@ -168,7 +167,7 @@ public partial class Game : Node2D
 
 		// Play winning celebration sound
 		_music.Stop();
-		_audioExplosion.Play(); // TODO: Replace with special gem explosion sound
+		_audioExplosion.Play();
 		_musicReversed.Play();
 
 		await CreateTimerAsync(0.75f);
