@@ -384,7 +384,12 @@ public partial class Paddle : Area2D
 		if (_movementSpeed > MAX_MOVEMENT_SPEED)
 		{
 			_movementSpeed = MAX_MOVEMENT_SPEED;
-			GD.Print("MAXIMUM SPEED ACHIEVED!!!");
+
+			if (CustomDebug.IsDebugging)
+			{
+				GD.Print("MAXIMUM SPEED ACHIEVED!!!");
+			}
+
 			return;
 		}
 

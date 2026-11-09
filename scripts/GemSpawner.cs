@@ -1,3 +1,4 @@
+using GemCatcher.utils;
 using Godot;
 
 public partial class GemSpawner : Node2D
@@ -103,7 +104,10 @@ public partial class GemSpawner : Node2D
 		var timeBalancerIncrementor = 0.05f;
 		_difficultyTimeBalancer += timeBalancerIncrementor;
 		
-		GD.Print($"NEW WAIT TIME: {_gemSpawnTimer.WaitTime}");
+		if (CustomDebug.IsDebugging)
+		{
+			GD.Print($"NEW WAIT TIME: {_gemSpawnTimer.WaitTime}");
+		}
   }
 
 	private void OnGameVictory()
@@ -135,7 +139,11 @@ public partial class GemSpawner : Node2D
 		}
 
     EnablePowerUpSpawning();
-		GD.Print("Wait Time ended. Can spawn power ups is: " + _canSpawnPowerUp);
+		
+		if (CustomDebug.IsDebugging)
+		{
+			GD.Print("Wait Time ended. Can spawn power ups is: " + _canSpawnPowerUp);
+		}
   }
 
 	private void OnSpawnerDisabledTimeout()
@@ -321,7 +329,10 @@ public partial class GemSpawner : Node2D
 		var waitTime = Helper.GetRandomFloat(minWaitTime, maxWaitTime);
 		_powerUpSpawnTimer.WaitTime = waitTime;
 
-		GD.Print("Power Up Wait Time Set: " + waitTime + " seconds. Can spawn power ups is: " + _canSpawnPowerUp);
+		if (CustomDebug.IsDebugging)
+		{
+			GD.Print("Power Up Wait Time Set: " + waitTime + " seconds. Can spawn power ups is: " + _canSpawnPowerUp);
+		}
 	}
 
 	private void StartPowerUpTimer()
@@ -329,7 +340,10 @@ public partial class GemSpawner : Node2D
 		DisablePowerUpSpawning();
 		SetPowerUpTimerWaitTime();
 
-		GD.Print("Power Up Timer Started! Wait time is: " + _powerUpSpawnTimer.WaitTime + " Can spawn power ups is: " + _canSpawnPowerUp);
+		if (CustomDebug.IsDebugging)
+		{
+			GD.Print("Power Up Timer Started! Wait time is: " + _powerUpSpawnTimer.WaitTime + " Can spawn power ups is: " + _canSpawnPowerUp);
+		}
 
 		StartPowerUpSpawnTimer();
 	}
