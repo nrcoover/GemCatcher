@@ -1,6 +1,6 @@
 # GemCatcher
 
-A simple arcade-style game built with Godot 4.5 in C#
+A simple arcade-style game built with Godot 4.5 in C#.
 
 This game was created as a student project, expanding upon and building off of a game from the Udemy course ("Learn 2D Game Development: Godot 4 & C# from Scracth by Richard Allbert and Martyna Olivares)[https://www.udemy.com/course/learn-2d-game-development-godot-43-c-from-scratch/].
 
@@ -33,6 +33,7 @@ This game was built with the following implemented features and techincal design
 # Known Bugs
 
 - Big Paddle Delay | Paddle Tweens occasionally interfere with one another. Most noticeable when a falling gem and a the "Big Paddle" power up are caught at near the same time; paddle size doesn't update until the next falling gem is caught, triggering a new size Tween.
+- Last Gem of Stage Explodes | When the last gem of any stage is collected, it explodes, triggered by the Advance Stage event. Visually this is odd as it suggests the gem was not captured, but this bug is purely cosmetic and does not affect game play as the correct score is persisted.
 
 # Desired Improvements
 

@@ -369,6 +369,5 @@ public partial class Gem : Area2D
 		CallDeferred(MethodName.HandleObjectRemoval);
 	}
 
-	// TODO: Fix bug in which last gem captured before stage advancement also explodes
 #endregion
 }
