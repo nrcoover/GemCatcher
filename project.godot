@@ -10,7 +10,8 @@ config_version=5
 
 [application]
 
-config/name="GemCatcher"
+config/name="GemCadet"
+config/description="A simple arcade-style catching game developed by Nicklefritz using Godot 4.5.2 with C#."
 run/main_scene="uid://cr3xrjvpb4sfi"
 config/features=PackedStringArray("4.5", "C#", "Mobile")
 config/icon="uid://d1oy1mgl4kmo6"
