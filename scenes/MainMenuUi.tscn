@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cubv40p7fxyh5"]
+[gd_scene load_steps=9 format=3 uid="uid://cubv40p7fxyh5"]
 
 [ext_resource type="Script" uid="uid://roupoeg0m343" path="res://scripts/MainMenuUi.cs" id="1_it30p"]
 [ext_resource type="PackedScene" uid="uid://dqthwsums7jjw" path="res://scenes/GemButton.tscn" id="3_pqhkh"]
@@ -6,6 +6,7 @@
 [ext_resource type="LabelSettings" uid="uid://5mcorwbq3ffs" path="res://resources/fonts/play_white_24_font_normal.tres" id="5_7v7mi"]
 [ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/fonts/Play-Regular.ttf" id="5_gh1cy"]
 [ext_resource type="PackedScene" uid="uid://2sfkess71hko" path="res://scenes/MenuTitle.tscn" id="6_56fvm"]
+[ext_resource type="AudioStream" uid="uid://d2nbwve0egbq5" path="res://assets/audio/dialogue/developer/thank-you.mp3" id="7_it30p"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_it30p"]
 font = ExtResource("5_gh1cy")
@@ -13,7 +14,7 @@ font_size = 22
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(1.25, 1.25)
 
-[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_infiniteModeButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_movesModal", "_rulesModal", "_creditsModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_stagesWonLabel", "_titleTimer", "_titleContainer", "_marginHighScoreContainer")]
+[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_infiniteModeButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_theDevButton", "_thankYouButton", "_movesModal", "_rulesModal", "_creditsModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_stagesWonLabel", "_titleTimer", "_titleContainer", "_highScoreContainer", "_thankYouAudio")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,8 +30,10 @@ _rulesButton = NodePath("MarginButtons/HBoxButtons/RulesButton")
 _movesButton = NodePath("MarginButtons/HBoxButtons/MovesButton")
 _quitButton = NodePath("MarginButtons/HBoxButtons/QuitButton")
 _creditsButton = NodePath("MarginButtons/HBoxButtons/CreditsButton")
-_resetHighScoreButton = NodePath("MarginHighScore/VBoxContainer/HBoxContainer/ResetButton")
-_restoreHighScoreButton = NodePath("MarginHighScore/VBoxContainer/HBoxContainer/RestoreButton")
+_resetHighScoreButton = NodePath("MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton")
+_restoreHighScoreButton = NodePath("MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/RestoreButton")
+_theDevButton = NodePath("MarginHighScore/VBoxDeveloper/HBoxContainer/TheDevButton")
+_thankYouButton = NodePath("MarginHighScore/VBoxDeveloper/HBoxContainer/ThankYouButton")
 _movesModal = NodePath("MovesModal")
 _rulesModal = NodePath("RulesModal")
 _creditsModal = NodePath("CreditsModal")
@@ -40,11 +43,12 @@ _titleLayer3 = NodePath("MarginContainer/TitleContainer/TitleAlpha3")
 _titleLayer4 = NodePath("MarginContainer/TitleContainer/TitleAlpha4")
 _titleLayer5 = NodePath("MarginContainer/TitleContainer/TitleAlpha5")
 _titleLayer6 = NodePath("MarginContainer/TitleContainer/TitleAlpha6")
-_highScoreLabel = NodePath("MarginHighScore/VBoxContainer/HBoxContainer2/VBoxContainer/HighScoreLabel")
-_stagesWonLabel = NodePath("MarginHighScore/VBoxContainer/HBoxContainer2/VBoxContainer/StagesWonLabel")
+_highScoreLabel = NodePath("MarginHighScore/VBoxScore/HBoxScore/HBoxLabels/VBoxContainer/HighScoreLabel")
+_stagesWonLabel = NodePath("MarginHighScore/VBoxScore/HBoxScore/HBoxLabels/VBoxContainer/StagesWonLabel")
 _titleTimer = NodePath("TitleTimer")
 _titleContainer = NodePath("MarginContainer/TitleContainer")
-_marginHighScoreContainer = NodePath("MarginHighScore")
+_highScoreContainer = NodePath("MarginHighScore/VBoxScore/HBoxScore")
+_thankYouAudio = NodePath("ThankYou")
 
 [node name="CenterMarker" type="Label" parent="."]
 visible = false
@@ -86,7 +90,6 @@ offset_left = -344.0
 offset_top = -16.0
 offset_right = 319.0
 offset_bottom = 96.0
-text = "GEM CADET"
 
 [node name="TitleAlpha2" parent="MarginContainer/TitleContainer" instance=ExtResource("6_56fvm")]
 z_index = 4
@@ -96,7 +99,6 @@ offset_left = -337.8884
 offset_top = -8.0
 offset_right = 325.1116
 offset_bottom = 104.0
-text = "GEM CADET"
 
 [node name="TitleAlpha3" parent="MarginContainer/TitleContainer" instance=ExtResource("6_56fvm")]
 z_index = 3
@@ -104,7 +106,6 @@ z_as_relative = false
 layout_mode = 0
 offset_left = -331.7768
 offset_right = 331.2232
-text = "GEM CADET"
 
 [node name="TitleAlpha4" parent="MarginContainer/TitleContainer" instance=ExtResource("6_56fvm")]
 z_index = 2
@@ -114,7 +115,6 @@ offset_left = -325.6652
 offset_top = 8.0
 offset_right = 337.3348
 offset_bottom = 120.0
-text = "GEM CADET"
 
 [node name="TitleAlpha5" parent="MarginContainer/TitleContainer" instance=ExtResource("6_56fvm")]
 z_index = 1
@@ -124,7 +124,6 @@ offset_left = -319.5536
 offset_top = 16.0
 offset_right = 343.4464
 offset_bottom = 128.0
-text = "GEM CADET"
 
 [node name="TitleAlpha6" parent="MarginContainer/TitleContainer" instance=ExtResource("6_56fvm")]
 z_as_relative = false
@@ -133,7 +132,6 @@ offset_left = -313.442
 offset_top = 24.0
 offset_right = 349.558
 offset_bottom = 136.0
-text = "GEM CADET"
 
 [node name="LeftBoundary" type="Marker2D" parent="MarginContainer/TitleContainer"]
 position = Vector2(-300, 35)
@@ -221,51 +219,108 @@ theme_override_constants/margin_top = 56
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 24
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginHighScore"]
+[node name="VBoxScore" type="VBoxContainer" parent="MarginHighScore"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
+theme_override_constants/separation = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginHighScore/VBoxContainer"]
+[node name="HBoxScore" type="HBoxContainer" parent="MarginHighScore/VBoxScore"]
 layout_mode = 2
-size_flags_horizontal = 4
-theme_override_constants/separation = 16
+size_flags_horizontal = 8
 
-[node name="ResetButton" parent="MarginHighScore/VBoxContainer/HBoxContainer" instance=ExtResource("3_pqhkh")]
-self_modulate = Color(1, 0.53333336, 1, 1)
-layout_mode = 2
-
-[node name="ButtonLabel" parent="MarginHighScore/VBoxContainer/HBoxContainer/ResetButton" index="0"]
-text = "Reset"
-
-[node name="RestoreButton" parent="MarginHighScore/VBoxContainer/HBoxContainer" instance=ExtResource("3_pqhkh")]
-self_modulate = Color(0.53333336, 0.53333336, 1, 1)
-layout_mode = 2
-
-[node name="ButtonLabel" parent="MarginHighScore/VBoxContainer/HBoxContainer/RestoreButton" index="0"]
-text = "Restore"
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginHighScore/VBoxContainer"]
+[node name="HBoxLabels" type="HBoxContainer" parent="MarginHighScore/VBoxScore/HBoxScore"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
+theme_override_constants/separation = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginHighScore/VBoxContainer/HBoxContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxLabels"]
 layout_mode = 2
 
-[node name="HighScoreLabel" type="Label" parent="MarginHighScore/VBoxContainer/HBoxContainer2/VBoxContainer"]
+[node name="HighScoreLabel" type="Label" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxLabels/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "High Score: xxx"
 label_settings = ExtResource("5_7v7mi")
 
-[node name="StagesWonLabel" type="Label" parent="MarginHighScore/VBoxContainer/HBoxContainer2/VBoxContainer"]
+[node name="StagesWonLabel" type="Label" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxLabels/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "Stages Won: xxx"
 label_settings = SubResource("LabelSettings_it30p")
+
+[node name="HBoxSeparator" type="HBoxContainer" parent="MarginHighScore/VBoxScore/HBoxScore"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 13
+
+[node name="HBoxSeparator2" type="HBoxContainer" parent="MarginHighScore/VBoxScore/HBoxScore"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 13
+
+[node name="HBoxSeparator3" type="HBoxContainer" parent="MarginHighScore/VBoxScore/HBoxScore"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 13
+
+[node name="HBoxSeparator4" type="HBoxContainer" parent="MarginHighScore/VBoxScore/HBoxScore"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 13
+
+[node name="HBoxSeparator5" type="HBoxContainer" parent="MarginHighScore/VBoxScore/HBoxScore"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 13
+
+[node name="HBoxButtons" type="HBoxContainer" parent="MarginHighScore/VBoxScore/HBoxScore"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 16
+
+[node name="ResetButton" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(1, 0.53333336, 1, 1)
+layout_mode = 2
+
+[node name="ButtonLabel" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton" index="0"]
+text = "Reset"
+
+[node name="RestoreButton" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.53333336, 0.53333336, 1, 1)
+layout_mode = 2
+
+[node name="ButtonLabel" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/RestoreButton" index="0"]
+text = "Restore"
+
+[node name="VBoxDeveloper" type="VBoxContainer" parent="MarginHighScore"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginHighScore/VBoxDeveloper"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 16
+
+[node name="TheDevButton" parent="MarginHighScore/VBoxDeveloper/HBoxContainer" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.6666667, 1, 0.8, 1)
+layout_mode = 2
+
+[node name="ButtonLabel" parent="MarginHighScore/VBoxDeveloper/HBoxContainer/TheDevButton" index="0"]
+text = "The
+Dev"
+
+[node name="ThankYouButton" parent="MarginHighScore/VBoxDeveloper/HBoxContainer" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.8666667, 0.6666667, 1, 1)
+layout_mode = 2
+
+[node name="ButtonLabel" parent="MarginHighScore/VBoxDeveloper/HBoxContainer/ThankYouButton" index="0"]
+text = "Thank
+You!"
 
 [node name="MovesModal" parent="." instance=ExtResource("4_h6icy")]
 visible = false
@@ -355,14 +410,19 @@ text = "CREDITS"
 text = "This game was created as a student project and is an expansion upon an original game created by following the Udemy Course \"Learn 2D Game Development: Godot 4.5 & C# from Scratch\" by Richard Allbert and Martyna Olivares. Assets are sourced, royalty free, from Kenny Assets and Pexels.com. Recorded dialogue clips are original recordings by the game developer, \"Nicklefritz\", distributed under the alias: \"Fritzie Games\"."
 horizontal_alignment = 3
 
+[node name="ThankYou" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_it30p")
+
 [editable path="MarginButtons/HBoxButtons/PlayButton"]
 [editable path="MarginButtons/HBoxButtons/InfiniteModeButton"]
 [editable path="MarginButtons/HBoxButtons/RulesButton"]
 [editable path="MarginButtons/HBoxButtons/MovesButton"]
 [editable path="MarginButtons/HBoxButtons/QuitButton"]
 [editable path="MarginButtons/HBoxButtons/CreditsButton"]
-[editable path="MarginHighScore/VBoxContainer/HBoxContainer/ResetButton"]
-[editable path="MarginHighScore/VBoxContainer/HBoxContainer/RestoreButton"]
+[editable path="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton"]
+[editable path="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/RestoreButton"]
+[editable path="MarginHighScore/VBoxDeveloper/HBoxContainer/TheDevButton"]
+[editable path="MarginHighScore/VBoxDeveloper/HBoxContainer/ThankYouButton"]
 [editable path="MovesModal"]
 [editable path="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
 [editable path="RulesModal"]

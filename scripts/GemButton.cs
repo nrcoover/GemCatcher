@@ -12,11 +12,17 @@ public partial class GemButton : TextureButton
 	public override void _Ready()
 	{
 		SubscribeToSignals();
+
 		SetPivotPoint();
 		_particles.Emitting = true;
 		SetParticleEmission(false);
 
 		_originalColor = SelfModulate;
+	}
+
+	public void KillSpinTwin()
+	{
+		_spinTween?.Kill();
 	}
 
 	private void SubscribeToSignals()
@@ -33,6 +39,20 @@ public partial class GemButton : TextureButton
 	private void OnMouseEntered()
 	{
 		SetParticleEmission(true);
+
+		if (Disabled)
+		{
+			SelfModulate = new Color(
+				Helper.GetColorFromHexCode(Constants.CustomColors.DisabledGray)
+			);
+
+			return;
+		}
+		else
+		{
+			SelfModulate = _originalColor;
+		}
+
 		PlaySparkleSound();
 
 		_spinTween = CreateTween();
@@ -58,8 +78,16 @@ public partial class GemButton : TextureButton
   private void OnMouseExited()
 	{
 		SetParticleEmission(false);
+		KillSpinTwin();
 
-		_spinTween?.Kill();
+		if (Disabled)
+		{
+			SelfModulate = new Color(
+				Helper.GetColorFromHexCode(Constants.CustomColors.DisabledGray)
+			);
+
+			return;
+		}
 		
 		Tween resetTween = CreateTween();
 		resetTween.TweenProperty(

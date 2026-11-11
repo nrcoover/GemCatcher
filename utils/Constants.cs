@@ -46,6 +46,7 @@ public static partial class Constants
     // Basic Colors
     public static readonly string White = "FFFFFF";
     public static readonly string AplhaInvisible = "FFFFFF00";
+    public static readonly string DisabledGray = "949494";
 
     // Pastelle Colors
     public static readonly string RedPastelle = "FF8888";
@@ -57,6 +58,11 @@ public static partial class Constants
     public static readonly string BlueDarkPastelle = "8888FF";
     public static readonly string PurplePastelle = "CC88FF";
     public static readonly string PinkPastelle = "FF88FF";
+    public static readonly string TealPastelle = "88FFCC";
+    public static readonly string MintPastelle = "AAFFCC";
+    public static readonly string PeachPastelle = "FFAA99";
+    public static readonly string LavenderPastelle = "DDAAFF";
+    public static readonly string CoralPastelle = "FF99BB";
 
     // Bright Colors
     public static readonly string RedBright = "FF0000";

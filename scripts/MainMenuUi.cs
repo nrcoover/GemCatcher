@@ -11,6 +11,8 @@ public partial class MainMenuUi : Control
 	[Export] private TextureButton _creditsButton;
 	[Export] private TextureButton _resetHighScoreButton;
 	[Export] private TextureButton _restoreHighScoreButton;
+	[Export] private GemButton _theDevButton;
+	[Export] private GemButton _thankYouButton;
 
 	[Export] private MenuModal _movesModal;
 	[Export] private MenuModal _rulesModal;
@@ -27,7 +29,9 @@ public partial class MainMenuUi : Control
 
 	[Export] private Timer _titleTimer;
 	[Export] private Control _titleContainer;
-	[Export] private MarginContainer _marginHighScoreContainer;
+	[Export] private HBoxContainer _highScoreContainer;
+
+	[Export] private AudioStreamPlayer _thankYouAudio;
 
 	private Dictionary<Label, Vector2> _baseScales = [];
 	private Dictionary<Label, Color> _baseColors = [];
@@ -35,8 +39,12 @@ public partial class MainMenuUi : Control
 	private bool _isAnimatingTitle = false;
 	private bool _isFirstAnimationRun = false;
 
+	private Color _thankYouButtonOriginalColor;
+
 	public override void _Ready()
 	{
+		SubscribeToSignals();
+
 		_isFirstAnimationRun = true;
 
 		if (SaveDataManager.Instance.IsInfiniteModeUnlocked)
@@ -52,7 +60,9 @@ public partial class MainMenuUi : Control
 		CloseAllModals();
 		InitializeTitleColors();
 		HandleLabelTweeningAsync();
-		SubscribeToSignals();
+		SetThankYouButtonOriginalColor();
+		SetThankYouButtonVisibility();
+		ResetThankYouButton();
 	}
 
   public override void _ExitTree()
@@ -74,6 +84,9 @@ public partial class MainMenuUi : Control
 		_resetHighScoreButton.Pressed += OnResetHighScoreClicked;
 		_restoreHighScoreButton.Pressed += OnRestoreHighScoreClicked;
 		_infiniteModeButton.Pressed += OnInfiniteModeClicked;
+		_theDevButton.Pressed += OnTheDevButtonPressed;
+		_thankYouButton.Pressed += OnThankYouButtonPressed;
+		_thankYouAudio.Finished += OnThankYouAudioFinished;
 	}
 
 	public void UnsubscribeFromSignals()
@@ -138,6 +151,33 @@ public partial class MainMenuUi : Control
 		LevelManager.Instance.LoadGame();
 	}
 
+	private void OnTheDevButtonPressed()
+	{
+		// button only appears after the 2nd time opening the game (or consider doing so 2nd time the main menu is opened? Yes, that's better)
+
+		// Open Dev Modal
+	}
+
+	private void OnThankYouButtonPressed()
+	{
+		_thankYouButton.Disabled = true;
+		_thankYouButton.KillSpinTwin();
+
+		_thankYouButton.SelfModulate = new Color(
+			Helper.GetColorFromHexCode(Constants.CustomColors.DisabledGray)
+		);
+
+		// Button only appears when game has been won
+
+		_thankYouAudio.Play();
+		// Stop audio if playing when game is started
+	}
+
+	private void OnThankYouAudioFinished()
+	{
+		ResetThankYouButton();
+	}
+
 #endregion
 
 	private void CloseAllModals()
@@ -167,14 +207,14 @@ public partial class MainMenuUi : Control
 	
   private void HandleLabelDisplays()
   {
-		_marginHighScoreContainer.Visible = false;
+		_highScoreContainer.Visible = false;
     var highScore = SaveDataManager.Instance.HighScore;
 		var highScoreRestore = SaveDataManager.Instance.HighScoreRestore;
 		int stagesWon = highScore / GameManager.STAGE_ADVANCEMENT_INCREMENTOR;
 
 		if (highScore != 0 || highScoreRestore != 0)
 		{
-			_marginHighScoreContainer.Visible = true;
+			_highScoreContainer.Visible = true;
 			_highScoreLabel.Text = $"High Score: {highScore}";
 			_stagesWonLabel.Text = $"Stages Won: {stagesWon}";
 			_stagesWonLabel.Visible = SaveDataManager.Instance.IsInfiniteModeUnlocked;
@@ -208,6 +248,22 @@ public partial class MainMenuUi : Control
 	private void ShowInfiniteModeButton()
 	{
 		_infiniteModeButton.Show();
+	}
+
+	private void SetThankYouButtonOriginalColor()
+	{
+		_thankYouButtonOriginalColor = _thankYouButton.SelfModulate;
+	}
+
+	private void SetThankYouButtonVisibility()
+	{
+		_thankYouButton.Visible = SaveDataManager.Instance.IsInfiniteModeUnlocked;
+	}
+
+	private void ResetThankYouButton()
+	{
+		_thankYouButton.Disabled = false;
+		_thankYouButton.SelfModulate = _thankYouButtonOriginalColor;
 	}
 	
   private async void HandleLabelTweeningAsync()
