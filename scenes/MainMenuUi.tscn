@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://cubv40p7fxyh5"]
+[gd_scene load_steps=10 format=3 uid="uid://cubv40p7fxyh5"]
 
 [ext_resource type="Script" uid="uid://roupoeg0m343" path="res://scripts/MainMenuUi.cs" id="1_it30p"]
 [ext_resource type="PackedScene" uid="uid://dqthwsums7jjw" path="res://scenes/GemButton.tscn" id="3_pqhkh"]
+[ext_resource type="Texture2D" uid="uid://c2a4m3pjt6egg" path="res://assets/images/sprites/base_diamond.png" id="4_56fvm"]
 [ext_resource type="PackedScene" uid="uid://dvxadunjhuoll" path="res://scenes/MenuModal.tscn" id="4_h6icy"]
 [ext_resource type="LabelSettings" uid="uid://5mcorwbq3ffs" path="res://resources/fonts/play_white_24_font_normal.tres" id="5_7v7mi"]
 [ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/fonts/Play-Regular.ttf" id="5_gh1cy"]
@@ -166,6 +167,7 @@ alignment = 1
 
 [node name="PlayButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 layout_mode = 2
+texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginButtons/HBoxButtons/PlayButton" index="0"]
 text = "PLAY"
@@ -173,6 +175,7 @@ text = "PLAY"
 [node name="InfiniteModeButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.8, 0.53333336, 1, 1)
 layout_mode = 2
+texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginButtons/HBoxButtons/InfiniteModeButton" index="0"]
 text = "INFINITE
@@ -181,6 +184,7 @@ MODE"
 [node name="RulesButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.53333336, 0.8, 1, 1)
 layout_mode = 2
+texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginButtons/HBoxButtons/RulesButton" index="0"]
 text = "RULES"
@@ -188,6 +192,7 @@ text = "RULES"
 [node name="MovesButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 0.8, 0.53333336, 1)
 layout_mode = 2
+texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginButtons/HBoxButtons/MovesButton" index="0"]
 text = "MOVES"
@@ -195,6 +200,7 @@ text = "MOVES"
 [node name="QuitButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 0.53333336, 0.53333336, 1)
 layout_mode = 2
+texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginButtons/HBoxButtons/QuitButton" index="0"]
 text = "QUIT"
@@ -202,6 +208,7 @@ text = "QUIT"
 [node name="CreditsButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 1, 0.53333336, 1)
 layout_mode = 2
+texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginButtons/HBoxButtons/CreditsButton" index="0"]
 text = "CREDITS"
@@ -285,6 +292,7 @@ theme_override_constants/separation = 16
 [node name="ResetButton" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 0.53333336, 1, 1)
 layout_mode = 2
+texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton" index="0"]
 text = "Reset"
@@ -292,6 +300,7 @@ text = "Reset"
 [node name="RestoreButton" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.53333336, 0.53333336, 1, 1)
 layout_mode = 2
+texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/RestoreButton" index="0"]
 text = "Restore"
@@ -375,6 +384,9 @@ label_settings = ExtResource("5_7v7mi")
 visible = false
 text = "Arrow Keys"
 
+[node name="CloseButton" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton" index="0"]
+texture_disabled = ExtResource("4_56fvm")
+
 [node name="RulesModal" parent="." instance=ExtResource("4_h6icy")]
 visible = false
 layout_mode = 1
@@ -398,6 +410,9 @@ text = "1. Catch as many gems as you can.
     (...I mean actually, like in real life;
     there are no vegetables in this game.)"
 
+[node name="CloseButton" parent="RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton" index="0"]
+texture_disabled = ExtResource("4_56fvm")
+
 [node name="CreditsModal" parent="." instance=ExtResource("4_h6icy")]
 visible = false
 layout_mode = 1
@@ -408,6 +423,9 @@ text = "CREDITS"
 [node name="Instructions" parent="CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
 text = "This game was created as a student project and is an expansion upon an original game created by following the Udemy Course \"Learn 2D Game Development: Godot 4.5 & C# from Scratch\" by Richard Allbert and Martyna Olivares. Assets are sourced, royalty free, from Kenny Assets and Pexels.com. Recorded dialogue clips are original recordings by the game developer, \"Nicklefritz\", distributed under the alias: \"Fritzie Games\"."
 horizontal_alignment = 3
+
+[node name="CloseButton" parent="CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton" index="0"]
+texture_disabled = ExtResource("4_56fvm")
 
 [node name="ThankYou" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_it30p")
