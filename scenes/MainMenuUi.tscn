@@ -290,7 +290,7 @@ size_flags_horizontal = 4
 theme_override_constants/separation = 16
 
 [node name="ResetButton" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons" instance=ExtResource("3_pqhkh")]
-self_modulate = Color(1, 0.53333336, 1, 1)
+self_modulate = Color(0.53333336, 1, 0.8, 1)
 layout_mode = 2
 texture_disabled = ExtResource("4_56fvm")
 
@@ -323,7 +323,7 @@ layout_mode = 2
 text = "Hello"
 
 [node name="ThankYouButton" parent="MarginHighScore/VBoxDeveloper/HBoxContainer" instance=ExtResource("3_pqhkh")]
-self_modulate = Color(0.8666667, 0.6666667, 1, 1)
+self_modulate = Color(0.53333336, 1, 1, 1)
 layout_mode = 2
 
 [node name="ButtonLabel" parent="MarginHighScore/VBoxDeveloper/HBoxContainer/ThankYouButton" index="0"]
