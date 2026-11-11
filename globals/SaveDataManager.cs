@@ -112,11 +112,13 @@ public partial class SaveDataManager : Node
 	public void MarkGameAsPlayed()
 	{
 		_hasPlayedGame = true;
+
+		SaveDataToFile();
 	}
 
 	private void SaveDataToFile()
 	{
-		var hasPlayedGame = new HasPlayedGameResource
+		var hasPlayedGameResource = new HasPlayedGameResource
 		{
 			HasPlayedGame = _hasPlayedGame
 		};
@@ -134,7 +136,7 @@ public partial class SaveDataManager : Node
 
 		var containerResource = new SaveGameContainerResource
 		{
-			HasPlayedGame = hasPlayedGame,
+			HasPlayedGame = hasPlayedGameResource,
 			InfiniteMode = isInfiniteModeUnlockedResource,
 			HighScore = highScoreResource
 		};
