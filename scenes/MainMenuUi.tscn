@@ -307,7 +307,7 @@ size_flags_horizontal = 4
 theme_override_constants/separation = 16
 
 [node name="HelloButton" parent="MarginHighScore/VBoxDeveloper/HBoxContainer" instance=ExtResource("3_pqhkh")]
-self_modulate = Color(0.6666667, 1, 0.8, 1)
+self_modulate = Color(1, 1, 0.53333336, 1)
 layout_mode = 2
 
 [node name="ButtonLabel" parent="MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton" index="0"]
