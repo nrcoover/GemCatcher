@@ -14,7 +14,7 @@ font_size = 22
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(1.25, 1.25)
 
-[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_infiniteModeButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_theDevButton", "_thankYouButton", "_movesModal", "_rulesModal", "_creditsModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_stagesWonLabel", "_titleTimer", "_titleContainer", "_highScoreContainer", "_thankYouAudio")]
+[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_infiniteModeButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_helloButton", "_thankYouButton", "_movesModal", "_rulesModal", "_creditsModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_stagesWonLabel", "_titleTimer", "_titleContainer", "_highScoreContainer", "_thankYouAudio")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,7 +32,7 @@ _quitButton = NodePath("MarginButtons/HBoxButtons/QuitButton")
 _creditsButton = NodePath("MarginButtons/HBoxButtons/CreditsButton")
 _resetHighScoreButton = NodePath("MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton")
 _restoreHighScoreButton = NodePath("MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/RestoreButton")
-_theDevButton = NodePath("MarginHighScore/VBoxDeveloper/HBoxContainer/TheDevButton")
+_helloButton = NodePath("MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton")
 _thankYouButton = NodePath("MarginHighScore/VBoxDeveloper/HBoxContainer/ThankYouButton")
 _movesModal = NodePath("MovesModal")
 _rulesModal = NodePath("RulesModal")
@@ -306,13 +306,12 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 16
 
-[node name="TheDevButton" parent="MarginHighScore/VBoxDeveloper/HBoxContainer" instance=ExtResource("3_pqhkh")]
+[node name="HelloButton" parent="MarginHighScore/VBoxDeveloper/HBoxContainer" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.6666667, 1, 0.8, 1)
 layout_mode = 2
 
-[node name="ButtonLabel" parent="MarginHighScore/VBoxDeveloper/HBoxContainer/TheDevButton" index="0"]
-text = "The
-Dev"
+[node name="ButtonLabel" parent="MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton" index="0"]
+text = "Hello"
 
 [node name="ThankYouButton" parent="MarginHighScore/VBoxDeveloper/HBoxContainer" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.8666667, 0.6666667, 1, 1)
@@ -421,7 +420,7 @@ stream = ExtResource("7_it30p")
 [editable path="MarginButtons/HBoxButtons/CreditsButton"]
 [editable path="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton"]
 [editable path="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/RestoreButton"]
-[editable path="MarginHighScore/VBoxDeveloper/HBoxContainer/TheDevButton"]
+[editable path="MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton"]
 [editable path="MarginHighScore/VBoxDeveloper/HBoxContainer/ThankYouButton"]
 [editable path="MovesModal"]
 [editable path="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]

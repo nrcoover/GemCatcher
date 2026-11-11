@@ -10,6 +10,7 @@ public partial class SaveDataManager : Node
 	private int _highScore = DEFAULT_SCORE;
 	private int _highScoreRestore = DEFAULT_SCORE;
 	private bool _isInfiniteModeUnlocked = false;
+	private bool _hasPlayedGame = false;
 
 	public int HighScore
 	{
@@ -68,6 +69,21 @@ public partial class SaveDataManager : Node
 		}
 	}
 
+	public bool HasPlayedGame
+	{
+		get
+		{
+			return _hasPlayedGame;
+		}
+		set
+		{
+			{
+				_hasPlayedGame = value;
+				SaveDataToFile();
+			}
+		}
+	}
+
 	public override void _Ready()
 	{
 		Instance = this;
@@ -93,8 +109,18 @@ public partial class SaveDataManager : Node
 		SignalManager.Instance.EmitSaveDataResetSignal();
 	}
 
+	public void MarkGameAsPlayed()
+	{
+		_hasPlayedGame = true;
+	}
+
 	private void SaveDataToFile()
 	{
+		var hasPlayedGame = new HasPlayedGameResource
+		{
+			HasPlayedGame = _hasPlayedGame
+		};
+
 		var highScoreResource = new HighScoreResource
 		{
 			HighScore = _highScore,
@@ -108,6 +134,7 @@ public partial class SaveDataManager : Node
 
 		var containerResource = new SaveGameContainerResource
 		{
+			HasPlayedGame = hasPlayedGame,
 			InfiniteMode = isInfiniteModeUnlockedResource,
 			HighScore = highScoreResource
 		};
@@ -129,8 +156,14 @@ public partial class SaveDataManager : Node
 			return;
 		}
 
+		var hasPlayedGameResource = saveData.HasPlayedGame;
 		var highScoreResource = saveData.HighScore;
 		var isInfiniteModeUnlockedResource = saveData.InfiniteMode;
+
+		if (hasPlayedGameResource != null)
+		{
+			_hasPlayedGame = hasPlayedGameResource.HasPlayedGame;
+		}
 
 		if (highScoreResource != null)
 		{

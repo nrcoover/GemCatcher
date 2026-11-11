@@ -11,7 +11,7 @@ public partial class MainMenuUi : Control
 	[Export] private TextureButton _creditsButton;
 	[Export] private TextureButton _resetHighScoreButton;
 	[Export] private TextureButton _restoreHighScoreButton;
-	[Export] private GemButton _theDevButton;
+	[Export] private GemButton _helloButton;
 	[Export] private GemButton _thankYouButton;
 
 	[Export] private MenuModal _movesModal;
@@ -62,6 +62,7 @@ public partial class MainMenuUi : Control
 		HandleLabelTweeningAsync();
 		SetThankYouButtonOriginalColor();
 		SetThankYouButtonVisibility();
+		SetHelloButtonVisibility();
 		ResetThankYouButton();
 	}
 
@@ -84,8 +85,8 @@ public partial class MainMenuUi : Control
 		_resetHighScoreButton.Pressed += OnResetHighScoreClicked;
 		_restoreHighScoreButton.Pressed += OnRestoreHighScoreClicked;
 		_infiniteModeButton.Pressed += OnInfiniteModeClicked;
-		_theDevButton.Pressed += OnTheDevButtonPressed;
-		_thankYouButton.Pressed += OnThankYouButtonPressed;
+		_helloButton.Pressed += OnHelloClicked;
+		_thankYouButton.Pressed += OnThankYouClicked;
 		_thankYouAudio.Finished += OnThankYouAudioFinished;
 	}
 
@@ -108,6 +109,7 @@ public partial class MainMenuUi : Control
 	private void OnPlayClicked()
   {
 		GameManager.Instance.SetGameModeNormal();
+		SaveDataManager.Instance.MarkGameAsPlayed();
 		LevelManager.Instance.LoadGame();
   }
 
@@ -151,14 +153,14 @@ public partial class MainMenuUi : Control
 		LevelManager.Instance.LoadGame();
 	}
 
-	private void OnTheDevButtonPressed()
+	private void OnHelloClicked()
 	{
 		// button only appears after the 2nd time opening the game (or consider doing so 2nd time the main menu is opened? Yes, that's better)
 
 		// Open Dev Modal
 	}
 
-	private void OnThankYouButtonPressed()
+	private void OnThankYouClicked()
 	{
 		_thankYouButton.Disabled = true;
 		_thankYouButton.KillSpinTwin();
@@ -166,8 +168,6 @@ public partial class MainMenuUi : Control
 		_thankYouButton.SelfModulate = new Color(
 			Helper.GetColorFromHexCode(Constants.CustomColors.DisabledGray)
 		);
-
-		// Button only appears when game has been won
 
 		_thankYouAudio.Play();
 		// Stop audio if playing when game is started
@@ -258,6 +258,11 @@ public partial class MainMenuUi : Control
 	private void SetThankYouButtonVisibility()
 	{
 		_thankYouButton.Visible = SaveDataManager.Instance.IsInfiniteModeUnlocked;
+	}
+
+	private void SetHelloButtonVisibility()
+	{
+		_helloButton.Visible = SaveDataManager.Instance.HasPlayedGame;
 	}
 
 	private void ResetThankYouButton()
