@@ -17,6 +17,7 @@ public partial class MainMenuUi : Control
 	[Export] private MenuModal _movesModal;
 	[Export] private MenuModal _rulesModal;
 	[Export] private MenuModal _creditsModal;
+	[Export] private MenuModal _helloModal;
 	
 	[Export] private Label _titleLayer1;
 	[Export] private Label _titleLayer2;
@@ -138,12 +139,14 @@ public partial class MainMenuUi : Control
 	
   private void OnResetHighScoreClicked()
   {
+		CloseAllModals();
 		GameManager.Instance.SetGameModeNormal();
 		SaveDataManager.Instance.ResetSaveData();
   }
 
   private void OnRestoreHighScoreClicked()
   {
+		CloseAllModals();
     SaveDataManager.Instance.RestoreHighScore();
   }
 
@@ -155,13 +158,13 @@ public partial class MainMenuUi : Control
 
 	private void OnHelloClicked()
 	{
-		// button only appears after the 2nd time opening the game (or consider doing so 2nd time the main menu is opened? Yes, that's better)
-
-		// Open Dev Modal
+		CloseAllModals();
+		_helloModal.Visible = true;
 	}
 
 	private void OnThankYouClicked()
 	{
+		CloseAllModals();
 		_thankYouButton.Disabled = true;
 		_thankYouButton.KillSpinTwin();
 
@@ -185,6 +188,7 @@ public partial class MainMenuUi : Control
 		_rulesModal.Visible = false;
 		_movesModal.Visible = false;
 		_creditsModal.Visible = false;
+		_helloModal.Visible = false;
 	}
 
 	private void InitializeTitleColors()
