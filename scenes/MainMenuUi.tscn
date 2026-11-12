@@ -434,75 +434,75 @@ layout_mode = 1
 text = "MEET THE DEVELOPER"
 
 [node name="Instructions" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
-text = "Hello! I'm Nicklefritz, I built this game, and if you want to follow my game dev journey, you can! The buttons below will take you to my various social medias and website! Additionally, you can subscribe to my YouTube channels: \"NicklefritzDev\" for my game dev work and \"Nicklefritz\" if you'd like to watch my Let's Play content! Thanks again for playing, and most importantly: Thank you for being you!"
+text = "Hello! I'm Nicklefritz, I built this game, and if you want to follow my game dev journey, you can! The buttons below will take you to my various social medias and website! Why not come say \"hello\"? Also, you can stop by my YouTube channels: \"NicklefritzDev\" for my game dev work and \"Nicklefritz\" for my Let's Play content! Thanks again for playing, and most importantly: Thank you for being you!"
 horizontal_alignment = 3
 
-[node name="HBoxButtonWrapper2" type="HBoxContainer" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer" index="2"]
+[node name="HBoxSocialButtonsWrapper" type="HBoxContainer" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer" index="2"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 
-[node name="HBoxButton" type="HBoxContainer" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2"]
+[node name="HBoxButtons" type="HBoxContainer" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
+theme_override_constants/separation = 24
 
-[node name="WebsiteButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton" instance=ExtResource("3_pqhkh")]
-self_modulate = Color(0.8, 0.53333336, 1, 1)
+[node name="WebsiteButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(1, 0.53333336, 0.53333336, 1)
 layout_mode = 2
 texture_disabled = ExtResource("4_56fvm")
 
-[node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton/WebsiteButton" index="0"]
+[node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/WebsiteButton" index="0"]
 text = "Website"
 
-[node name="GameDevButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton" instance=ExtResource("3_pqhkh")]
-self_modulate = Color(0.8, 0.53333336, 1, 1)
+[node name="GameDevButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(1, 0.8, 0.53333336, 1)
 layout_mode = 2
 texture_disabled = ExtResource("4_56fvm")
 
-[node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton/GameDevButton" index="0"]
+[node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/GameDevButton" index="0"]
 text = "GameDev
 YouTube"
 
-[node name="GamingButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton" instance=ExtResource("3_pqhkh")]
-self_modulate = Color(0.8, 0.53333336, 1, 1)
+[node name="GamingButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(1, 1, 0.53333336, 1)
 layout_mode = 2
 texture_disabled = ExtResource("4_56fvm")
 
-[node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton/GamingButton" index="0"]
+[node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/GamingButton" index="0"]
 text = "Gaming
 YouTube"
 
-[node name="FacebookButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton" instance=ExtResource("3_pqhkh")]
-self_modulate = Color(0.8, 0.53333336, 1, 1)
+[node name="FacebookButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
 layout_mode = 2
 texture_disabled = ExtResource("4_56fvm")
 
-[node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton/FacebookButton" index="0"]
+[node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/FacebookButton" index="0"]
 text = "Facebook"
 
-[node name="ThreadsButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton" instance=ExtResource("3_pqhkh")]
-self_modulate = Color(0.8, 0.53333336, 1, 1)
+[node name="ThreadsButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.53333336, 0.8, 1, 1)
 layout_mode = 2
 texture_disabled = ExtResource("4_56fvm")
 
-[node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton/ThreadsButton" index="0"]
+[node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/ThreadsButton" index="0"]
 text = "Threads"
 
-[node name="TwitterButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton" instance=ExtResource("3_pqhkh")]
-self_modulate = Color(0.8, 0.53333336, 1, 1)
+[node name="TwitterButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.53333336, 0.53333336, 1, 1)
 layout_mode = 2
 texture_disabled = ExtResource("4_56fvm")
 
-[node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton/TwitterButton" index="0"]
+[node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/TwitterButton" index="0"]
 text = "Twitter"
 
-[node name="SpotifyButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton" instance=ExtResource("3_pqhkh")]
+[node name="SpotifyButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.8, 0.53333336, 1, 1)
 layout_mode = 2
 texture_disabled = ExtResource("4_56fvm")
 
-[node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton/SpotifyButton" index="0"]
+[node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/SpotifyButton" index="0"]
 text = "Spotify"
 
 [node name="CloseButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton" index="0"]
@@ -528,11 +528,11 @@ stream = ExtResource("7_it30p")
 [editable path="CreditsModal"]
 [editable path="CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
 [editable path="HelloModal"]
-[editable path="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton/WebsiteButton"]
-[editable path="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton/GameDevButton"]
-[editable path="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton/GamingButton"]
-[editable path="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton/FacebookButton"]
-[editable path="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton/ThreadsButton"]
-[editable path="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton/TwitterButton"]
-[editable path="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper2/HBoxButton/SpotifyButton"]
+[editable path="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/WebsiteButton"]
+[editable path="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/GameDevButton"]
+[editable path="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/GamingButton"]
+[editable path="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/FacebookButton"]
+[editable path="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/ThreadsButton"]
+[editable path="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/TwitterButton"]
+[editable path="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/SpotifyButton"]
 [editable path="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
