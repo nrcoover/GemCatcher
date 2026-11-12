@@ -173,7 +173,6 @@ public partial class MainMenuUi : Control
 		);
 
 		_thankYouAudio.Play();
-		// Stop audio if playing when game is started
 	}
 
 	private void OnThankYouAudioFinished()
