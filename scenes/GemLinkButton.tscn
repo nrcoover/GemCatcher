@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://btg616jeanop1"]
+
+[ext_resource type="PackedScene" uid="uid://dqthwsums7jjw" path="res://scenes/GemButton.tscn" id="1_8iqic"]
+[ext_resource type="Script" uid="uid://g7ys2laef6o4" path="res://scripts/GemLinkButton.cs" id="2_f22dd"]
+
+[node name="GemLinkButton" instance=ExtResource("1_8iqic")]
+script = ExtResource("2_f22dd")
+Url = ""

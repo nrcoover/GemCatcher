@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cubv40p7fxyh5"]
+[gd_scene load_steps=11 format=3 uid="uid://cubv40p7fxyh5"]
 
 [ext_resource type="Script" uid="uid://roupoeg0m343" path="res://scripts/MainMenuUi.cs" id="1_it30p"]
 [ext_resource type="PackedScene" uid="uid://dqthwsums7jjw" path="res://scenes/GemButton.tscn" id="3_pqhkh"]
@@ -8,6 +8,7 @@
 [ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/fonts/Play-Regular.ttf" id="5_gh1cy"]
 [ext_resource type="PackedScene" uid="uid://2sfkess71hko" path="res://scenes/MenuTitle.tscn" id="6_56fvm"]
 [ext_resource type="AudioStream" uid="uid://d2nbwve0egbq5" path="res://assets/audio/dialogue/developer/thank-you.mp3" id="7_it30p"]
+[ext_resource type="Script" uid="uid://g7ys2laef6o4" path="res://scripts/GemLinkButton.cs" id="8_7mmql"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_it30p"]
 font = ExtResource("5_gh1cy")
@@ -454,6 +455,8 @@ theme_override_constants/separation = 24
 self_modulate = Color(1, 0.53333336, 0.53333336, 1)
 layout_mode = 2
 texture_disabled = ExtResource("4_56fvm")
+script = ExtResource("8_7mmql")
+Url = "https://www.nicklefritz.com/game-dev"
 
 [node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/WebsiteButton" index="0"]
 text = "Website"
@@ -462,6 +465,8 @@ text = "Website"
 self_modulate = Color(1, 0.8, 0.53333336, 1)
 layout_mode = 2
 texture_disabled = ExtResource("4_56fvm")
+script = ExtResource("8_7mmql")
+Url = "https://www.youtube.com/@nicklefritzDev"
 
 [node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/GameDevButton" index="0"]
 text = "GameDev
@@ -471,6 +476,8 @@ YouTube"
 self_modulate = Color(1, 1, 0.53333336, 1)
 layout_mode = 2
 texture_disabled = ExtResource("4_56fvm")
+script = ExtResource("8_7mmql")
+Url = "https://www.youtube.com/nicklefritz"
 
 [node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/GamingButton" index="0"]
 text = "Gaming
@@ -479,6 +486,8 @@ YouTube"
 [node name="FacebookButton" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
 layout_mode = 2
 texture_disabled = ExtResource("4_56fvm")
+script = ExtResource("8_7mmql")
+Url = "https://www.facebook.com/nicklefritzDev"
 
 [node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/FacebookButton" index="0"]
 text = "Facebook"
@@ -487,6 +496,8 @@ text = "Facebook"
 self_modulate = Color(0.53333336, 0.8, 1, 1)
 layout_mode = 2
 texture_disabled = ExtResource("4_56fvm")
+script = ExtResource("8_7mmql")
+Url = "https://www.threads.com/@nicklefritzdev"
 
 [node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/ThreadsButton" index="0"]
 text = "Threads"
@@ -495,6 +506,8 @@ text = "Threads"
 self_modulate = Color(0.53333336, 0.53333336, 1, 1)
 layout_mode = 2
 texture_disabled = ExtResource("4_56fvm")
+script = ExtResource("8_7mmql")
+Url = "https://x.com/nicklefritzDev"
 
 [node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/TwitterButton" index="0"]
 text = "Twitter"
@@ -503,6 +516,8 @@ text = "Twitter"
 self_modulate = Color(0.8, 0.53333336, 1, 1)
 layout_mode = 2
 texture_disabled = ExtResource("4_56fvm")
+script = ExtResource("8_7mmql")
+Url = "https://open.spotify.com/artist/3rRZlHaSwLeTRIm3CPQTcf"
 
 [node name="ButtonLabel" parent="HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/SpotifyButton" index="0"]
 text = "Spotify"

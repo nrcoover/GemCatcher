@@ -1,5 +1,6 @@
 using Godot;
 
+[GlobalClass]
 public partial class GemButton : TextureButton
 {
 	[Export] public GpuParticles2D _particles;
@@ -25,7 +26,7 @@ public partial class GemButton : TextureButton
 		_spinTween?.Kill();
 	}
 
-	private void SubscribeToSignals()
+	protected virtual void SubscribeToSignals()
 	{
 		MouseEntered += OnMouseEntered;
 		MouseExited += OnMouseExited;
