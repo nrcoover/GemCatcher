@@ -16,6 +16,7 @@ scale_max = 2.0
 
 [node name="PlayButton" type="TextureButton" node_paths=PackedStringArray("_particles", "_sparkleSound")]
 self_modulate = Color(0.53333336, 1, 0.53333336, 1)
+z_index = 5
 texture_normal = ExtResource("1_53y1h")
 script = ExtResource("2_htack")
 _particles = NodePath("GPUParticles2D")
