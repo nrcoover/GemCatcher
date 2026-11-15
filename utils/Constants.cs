@@ -106,4 +106,11 @@ public static partial class Constants
     public static readonly string Normal = "Normal";
     public static readonly string Infinite = "Infinite";
   }
+
+  public static class Controls
+  {
+    public static readonly string Boost = "boost";
+    public static readonly string ControllerBoostLeft = "controller-boost-left";
+    public static readonly string ControllerBoostRight = "controller-boost-right";
+  }
 }

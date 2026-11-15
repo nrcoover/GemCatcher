@@ -38,3 +38,7 @@ This game was built with the following implemented features and techincal design
 # Desired Improvements
 
 - Power Up Timeout Flash | Players have commented on the unforunate lack of notice that a power up is about to expire. There is a visible countdown, but has proven not noticable enough during gameplay. A flashing warning as time runs out would be beneficial, but an implementation that doesn't interfere with the current flashing warning system for the Paddle's boost function has yet to be discovered.
+
+# Technical Design: Future Considerations
+
+- Place all z-indexing into constants folder to easy visual of all included layers (maintainability improvement).

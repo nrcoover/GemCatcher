@@ -65,6 +65,7 @@ public partial class MainMenuUi : Control
 		SetThankYouButtonVisibility();
 		SetHelloButtonVisibility();
 		ResetThankYouButton();
+		HandleFocusControl();
 	}
 
   public override void _ExitTree()
@@ -241,6 +242,12 @@ public partial class MainMenuUi : Control
 		}
 
 		HideInfiniteModeButton();
+	}
+
+	private void HandleFocusControl()
+	{
+		// TODO: Get focus only if controller is detected
+		_playButton.CallDeferred(MethodName.GrabFocus);
 	}
 
 	private void HideInfiniteModeButton()

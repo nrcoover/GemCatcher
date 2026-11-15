@@ -30,6 +30,8 @@ public partial class GemButton : TextureButton
 	{
 		MouseEntered += OnMouseEntered;
 		MouseExited += OnMouseExited;
+		FocusEntered += OnFocusEntered;
+		FocusExited += OnFocusExited;
 	}
 
 	private void SetPivotPoint()
@@ -38,6 +40,16 @@ public partial class GemButton : TextureButton
 	}
 
 	private void OnMouseEntered()
+	{
+		OnFocusEntered();
+	}
+
+	private void OnMouseExited()
+	{
+		OnFocusExited();
+	}
+
+	private void OnFocusEntered()
 	{
 		SetParticleEmission(true);
 
@@ -76,7 +88,7 @@ public partial class GemButton : TextureButton
 		_spinTween.SetLoops(0); 
 	}
 
-  private void OnMouseExited()
+  private void OnFocusExited()
 	{
 		SetParticleEmission(false);
 		KillSpinTwin();

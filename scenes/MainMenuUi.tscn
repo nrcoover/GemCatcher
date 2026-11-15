@@ -169,6 +169,10 @@ alignment = 1
 
 [node name="PlayButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 layout_mode = 2
+focus_neighbor_right = NodePath("../InfiniteModeButton")
+focus_neighbor_bottom = NodePath("../../../MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton")
+focus_next = NodePath("../InfiniteModeButton")
+focus_previous = NodePath("../../../MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton")
 texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginButtons/HBoxButtons/PlayButton" index="0"]
@@ -177,6 +181,11 @@ text = "PLAY"
 [node name="InfiniteModeButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.8, 0.53333336, 1, 1)
 layout_mode = 2
+focus_neighbor_left = NodePath("../PlayButton")
+focus_neighbor_right = NodePath("../RulesButton")
+focus_neighbor_bottom = NodePath("../../../MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton")
+focus_next = NodePath("../RulesButton")
+focus_previous = NodePath(".")
 texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginButtons/HBoxButtons/InfiniteModeButton" index="0"]
@@ -186,6 +195,11 @@ MODE"
 [node name="RulesButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.53333336, 0.8, 1, 1)
 layout_mode = 2
+focus_neighbor_left = NodePath("../InfiniteModeButton")
+focus_neighbor_right = NodePath("../MovesButton")
+focus_neighbor_bottom = NodePath("../../../MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton")
+focus_next = NodePath("../MovesButton")
+focus_previous = NodePath("../InfiniteModeButton")
 texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginButtons/HBoxButtons/RulesButton" index="0"]
@@ -194,6 +208,11 @@ text = "RULES"
 [node name="MovesButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 0.8, 0.53333336, 1)
 layout_mode = 2
+focus_neighbor_left = NodePath("../RulesButton")
+focus_neighbor_right = NodePath("../QuitButton")
+focus_neighbor_bottom = NodePath("../../../MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton")
+focus_next = NodePath("../QuitButton")
+focus_previous = NodePath("../RulesButton")
 texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginButtons/HBoxButtons/MovesButton" index="0"]
@@ -202,6 +221,11 @@ text = "MOVES"
 [node name="QuitButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 0.53333336, 0.53333336, 1)
 layout_mode = 2
+focus_neighbor_left = NodePath("../MovesButton")
+focus_neighbor_right = NodePath("../CreditsButton")
+focus_neighbor_bottom = NodePath("../../../MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton")
+focus_next = NodePath("../CreditsButton")
+focus_previous = NodePath("../MovesButton")
 texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginButtons/HBoxButtons/QuitButton" index="0"]
@@ -210,6 +234,10 @@ text = "QUIT"
 [node name="CreditsButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 1, 0.53333336, 1)
 layout_mode = 2
+focus_neighbor_left = NodePath("../QuitButton")
+focus_neighbor_bottom = NodePath("../../../MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton")
+focus_next = NodePath("../../../MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton")
+focus_previous = NodePath("../QuitButton")
 texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginButtons/HBoxButtons/CreditsButton" index="0"]
@@ -294,6 +322,11 @@ theme_override_constants/separation = 16
 [node name="ResetButton" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.53333336, 1, 0.8, 1)
 layout_mode = 2
+focus_neighbor_left = NodePath("../../../../VBoxDeveloper/HBoxContainer/ThankYouButton")
+focus_neighbor_top = NodePath("../../../../../MarginButtons/HBoxButtons/CreditsButton")
+focus_neighbor_right = NodePath("../RestoreButton")
+focus_next = NodePath("../RestoreButton")
+focus_previous = NodePath("../../../../VBoxDeveloper/HBoxContainer/ThankYouButton")
 texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton" index="0"]
@@ -302,6 +335,9 @@ text = "Reset"
 [node name="RestoreButton" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.53333336, 0.53333336, 1, 1)
 layout_mode = 2
+focus_neighbor_left = NodePath("../ResetButton")
+focus_neighbor_top = NodePath("../../../../../MarginButtons/HBoxButtons/CreditsButton")
+focus_previous = NodePath("../ResetButton")
 texture_disabled = ExtResource("4_56fvm")
 
 [node name="ButtonLabel" parent="MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/RestoreButton" index="0"]
@@ -320,6 +356,10 @@ theme_override_constants/separation = 16
 [node name="HelloButton" parent="MarginHighScore/VBoxDeveloper/HBoxContainer" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 1, 0.53333336, 1)
 layout_mode = 2
+focus_neighbor_top = NodePath("../../../../MarginButtons/HBoxButtons/PlayButton")
+focus_neighbor_right = NodePath("../ThankYouButton")
+focus_next = NodePath("../ThankYouButton")
+focus_previous = NodePath("../../../../MarginButtons/HBoxButtons/PlayButton")
 
 [node name="ButtonLabel" parent="MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton" index="0"]
 text = "Hello"
@@ -327,6 +367,11 @@ text = "Hello"
 [node name="ThankYouButton" parent="MarginHighScore/VBoxDeveloper/HBoxContainer" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.53333336, 1, 1, 1)
 layout_mode = 2
+focus_neighbor_left = NodePath("../HelloButton")
+focus_neighbor_top = NodePath("../../../../MarginButtons/HBoxButtons/PlayButton")
+focus_neighbor_right = NodePath("../../../VBoxScore/HBoxScore/HBoxButtons/ResetButton")
+focus_next = NodePath("../../../VBoxScore/HBoxScore/HBoxButtons/ResetButton")
+focus_previous = NodePath("../HelloButton")
 
 [node name="ButtonLabel" parent="MarginHighScore/VBoxDeveloper/HBoxContainer/ThankYouButton" index="0"]
 text = "Thank

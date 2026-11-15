@@ -97,7 +97,9 @@ public partial class Paddle : Area2D
 	private PowerUp _currentPowerUp;
 	
 	private bool _isTryingToBoost =>
-	Input.IsActionPressed("boost");
+	Input.IsActionPressed(Constants.Controls.Boost)
+	|| Input.IsActionPressed(Constants.Controls.ControllerBoostLeft)
+	|| Input.IsActionPressed(Constants.Controls.ControllerBoostRight);
 
 	private bool _canBoost =>
 		_isTryingToBoost &&
@@ -161,7 +163,9 @@ public partial class Paddle : Area2D
 
   public override void _UnhandledInput(InputEvent @event)
 	{
-		if (@event.IsActionPressed("boost"))
+		if (@event.IsActionPressed(Constants.Controls.Boost) 
+		|| @event.IsActionPressed(Constants.Controls.ControllerBoostLeft)
+		|| @event.IsActionPressed(Constants.Controls.ControllerBoostRight))
 		{
 			if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
 			{
@@ -174,7 +178,15 @@ public partial class Paddle : Area2D
 			}
 		}
 
-		if (@event.IsActionReleased("boost"))
+		if ((@event.IsActionReleased(Constants.Controls.Boost) 
+				&& !_isTryingToBoost)
+			||
+				(@event.IsActionReleased(Constants.Controls.ControllerBoostLeft) 
+				&& !_isTryingToBoost)
+			||
+				(@event.IsActionReleased(Constants.Controls.ControllerBoostRight) 
+				&& !_isTryingToBoost)	
+			)
 		{
 			if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
 			{

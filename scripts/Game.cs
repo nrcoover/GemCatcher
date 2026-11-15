@@ -63,6 +63,7 @@ public partial class Game : Node2D
 	{
 		if (@event.IsActionPressed("exit"))
 		{
+			GD.Print("Escape Pressed!");
 			HandleEscape();
 		}
 
@@ -278,11 +279,8 @@ public partial class Game : Node2D
 
   private void HandleEscape()
 	{
-		if (Input.IsKeyPressed(Key.Escape))
-		{
-			GameManager.Instance.ResetGame();
-			LevelManager.Instance.LoadMainMenu();
-		}
+		GameManager.Instance.ResetGame();
+		LevelManager.Instance.LoadMainMenu();
 	}
 	
 #endregion
