@@ -63,7 +63,6 @@ public partial class Game : Node2D
 	{
 		if (@event.IsActionPressed("exit"))
 		{
-			GD.Print("Escape Pressed!");
 			HandleEscape();
 		}
 
