@@ -16,25 +16,6 @@ public partial class MenuModal : Control
 		CloseModal();
 	}
 
-  public override void _UnhandledInput(InputEvent @event)
-  {
-		if (!Visible)
-		{
-			return;
-		}
-
-		if (@event.IsActionPressed("ui_up")
-			|| @event.IsActionPressed("ui_down")
-			|| @event.IsActionPressed("ui_right")
-			|| @event.IsActionPressed("ui_left")
-			|| @event.IsActionPressed("ui_focus_prev")
-			|| @event.IsActionPressed("ui_focus_next")
-		)
-		{
-			_closeButton.CallDeferred(MethodName.GrabFocus);
-		}
-  }
-
   public override void _ExitTree()
   {
     UnsubscribeFromSignals();
