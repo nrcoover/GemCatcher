@@ -3,6 +3,7 @@ using Godot;
 
 public partial class MainMenuUi : Control
 {
+	[Export] private Control _mainMenuControls;
 	[Export] private TextureButton _playButton;
 	[Export] private TextureButton _infiniteModeButton;
 	[Export] private TextureButton _rulesButton;
@@ -14,6 +15,7 @@ public partial class MainMenuUi : Control
 	[Export] private GemButton _helloButton;
 	[Export] private GemButton _thankYouButton;
 
+	[Export] private Control _modalControls;
 	[Export] private MenuModal _movesModal;
 	[Export] private MenuModal _rulesModal;
 	[Export] private MenuModal _creditsModal;
@@ -44,6 +46,7 @@ public partial class MainMenuUi : Control
 
 	private Control _lastFocusedControl;
 	private readonly Dictionary<Control, Control.FocusModeEnum> _savedFocusModes = new();
+	private MenuModal _activeModal;
 
 	public override void _Ready()
 	{
@@ -71,19 +74,29 @@ public partial class MainMenuUi : Control
 	}
 
   public override void _UnhandledInput(InputEvent @event)
-  {
-    if ((@event.IsActionPressed("ui_up")
-			|| @event.IsActionPressed("ui_down")
-			|| @event.IsActionPressed("ui_right")
-			|| @event.IsActionPressed("ui_left")
-			|| @event.IsActionPressed("ui_focus_prev")
-			|| @event.IsActionPressed("ui_focus_next"))
-		&& !IsAnyControlFocused()
-		)
+	{
+		if (_activeModal != null)
 		{
-			HandleFocusControl();
+			return;
 		}
-  }
+
+		if (UIInputManager.Instance.CurrentMode != UIInputManager.InputMode.Gamepad)
+		{
+			return;
+		}
+
+		bool navigationPressed = @event.IsActionPressed("ui_up")
+			|| @event.IsActionPressed("ui_down") 
+			|| @event.IsActionPressed("ui_left") 
+			|| @event.IsActionPressed("ui_right") 
+			|| @event.IsActionPressed("ui_focus_prev") 
+			|| @event.IsActionPressed("ui_focus_next");
+
+		if (navigationPressed && !IsAnyControlFocused())
+		{
+			_playButton.CallDeferred(Control.MethodName.GrabFocus);
+		}
+	}
 
   public override void _ExitTree()
   {
@@ -95,8 +108,12 @@ public partial class MainMenuUi : Control
   public void SubscribeToSignals()
 	{
 		SignalManager.Instance.SaveDataReset += OnSaveDataReset;
-		SignalManager.Instance.EnableMainMenuFocus += OnEnableMainMenuFocus;
+		UIInputManager.Instance.InputModeChanged += OnInputModeChanged;
 		_titleTimer.Timeout += OnTitleTimeout;
+		_movesModal.Closed += OnModalClosed;
+		_rulesModal.Closed += OnModalClosed;
+		_creditsModal.Closed += OnModalClosed;
+		_helloModal.Closed += OnModalClosed;
 		_playButton.Pressed += OnPlayClicked;
 		_rulesButton.Pressed += OnRulesClicked;
 		_movesButton.Pressed += OnMovesClicked;
@@ -113,7 +130,7 @@ public partial class MainMenuUi : Control
 	public void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.SaveDataReset -= OnSaveDataReset;
-		SignalManager.Instance.EnableMainMenuFocus -= OnEnableMainMenuFocus;
+		UIInputManager.Instance.InputModeChanged -= OnInputModeChanged;
 	}
 
   private void OnSaveDataReset()
@@ -122,15 +139,51 @@ public partial class MainMenuUi : Control
 		HandleInfiniteModeButtonDisplay();
   }
 
-	private void OnEnableMainMenuFocus()
+	private void OnInputModeChanged(UIInputManager.InputMode mode)
 	{
-		EnableMenusFocus();
+		if (mode == UIInputManager.InputMode.MouseKeyboard)
+		{
+			ClearAllFocus();
+			return;
+		}
+
+		if (_activeModal != null)
+		{
+			_activeModal.GrabInitialFocus();
+			return;
+		}
+
+		if (!IsAnyControlFocused())
+		{
+			_playButton.CallDeferred(Control.MethodName.GrabFocus);
+		}
 	}
 
   private void OnTitleTimeout()
   {
     HandleLabelTweeningAsync();
   }
+
+	private void OnModalClosed(MenuModal modal)
+	{
+		if (_activeModal != modal)
+		{
+			return;
+		}
+
+		_activeModal = null;
+
+		SetControlsFocusEnabled(_mainMenuControls, true);
+
+		if (UIInputManager.Instance.CurrentMode == UIInputManager.InputMode.Gamepad)
+		{
+			RestorePreviousFocus();
+		}
+		else
+		{
+			ClearAllFocus();
+		}
+	}
 
 #endregion
 
@@ -146,16 +199,12 @@ public partial class MainMenuUi : Control
 
   private void OnRulesClicked()
 	{
-		ResetToMainMenu();
 		OpenModal(_rulesModal);
-		DisableMenuFocus();
 	}
 
   private void OnMovesClicked()
 	{
-		ResetToMainMenu();
 		OpenModal(_movesModal);
-		DisableMenuFocus();
 	}
 	
 	private void OnQuitClicked()
@@ -165,9 +214,7 @@ public partial class MainMenuUi : Control
 
   private void OnCreditsClicked()
 	{
-		ResetToMainMenu();
 		OpenModal(_creditsModal);
-		DisableMenuFocus();
 	}
 	
   private void OnResetHighScoreClicked()
@@ -191,9 +238,7 @@ public partial class MainMenuUi : Control
 
 	private void OnHelloClicked()
 	{
-		ResetToMainMenu();
 		OpenModal(_helloModal);
-		DisableMenuFocus();
 	}
 
 	private void OnThankYouClicked()
@@ -410,7 +455,6 @@ public partial class MainMenuUi : Control
 
 	private void HandleFocusControl()
 	{
-		// TODO: Get focus only if controller is detected
 		_playButton.CallDeferred(MethodName.GrabFocus);
 	}
 
@@ -425,32 +469,20 @@ public partial class MainMenuUi : Control
 		GetViewport().GuiReleaseFocus();
 	}
 
-	private void ResetToMainMenu()
-	{
-		CloseAllModals();
-		ClearAllFocus();
-	}
-
-	private void DisableMenuFocus()
-	{
-		FocusMode = Control.FocusModeEnum.None;
-	}
-
-	private void EnableMenusFocus()
-	{
-		FocusMode = Control.FocusModeEnum.All;
-	}
-
 	public void OpenModal(MenuModal modal)
 	{
+		if (_activeModal != null)
+		{
+			return;
+		}
+
 		_lastFocusedControl = GetViewport().GuiGetFocusOwner();
 
-		SetControlsFocusEnabled(this, false);
+		_activeModal = modal;
 
-		modal.Show();
+		SetControlsFocusEnabled(_mainMenuControls, false);
 
-		SignalManager.Instance.EmitModalOpened();
-		// modalFirstFocus?.CallDeferred(Control.MethodName.GrabFocus);
+		modal.Open();
 	}
 
 	private void SetControlsFocusEnabled(Node root, bool enabled)
@@ -459,14 +491,18 @@ public partial class MainMenuUi : Control
 		{
 			if (child is Control control)
 			{
-				if (!enabled && control.FocusMode != Control.FocusModeEnum.None)
+				if (!enabled)
 				{
-					_savedFocusModes[control] = control.FocusMode;
-					control.FocusMode = Control.FocusModeEnum.None;
+					if (control.FocusMode != Control.FocusModeEnum.None)
+					{
+						_savedFocusModes[control] = control.FocusMode;
+						control.FocusMode = Control.FocusModeEnum.None;
+					}
 				}
-				else if (enabled && _savedFocusModes.TryGetValue(control, out var originalMode))
+				else if (_savedFocusModes.TryGetValue(control, out var originalMode))
 				{
 					control.FocusMode = originalMode;
+					_savedFocusModes.Remove(control);
 				}
 			}
 
@@ -475,6 +511,34 @@ public partial class MainMenuUi : Control
 				SetControlsFocusEnabled(child, enabled);
 			}
 		}
+	}
+
+	private void RestorePreviousFocus()
+	{
+		if (CanReceiveFocus(_lastFocusedControl))
+		{
+			_lastFocusedControl.CallDeferred(Control.MethodName.GrabFocus);
+		}
+		else
+		{
+			_playButton.CallDeferred(Control.MethodName.GrabFocus);
+		}
+
+		_lastFocusedControl = null;
+	}
+
+	private bool CanReceiveFocus(Control control)
+	{
+		if (control == null || !GodotObject.IsInstanceValid(control)
+			|| (!control.IsVisibleInTree())
+			|| (control.FocusMode == Control.FocusModeEnum.None)
+			|| (control is BaseButton button && button.Disabled)
+		)
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 #endregion

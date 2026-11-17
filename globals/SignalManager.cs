@@ -30,8 +30,6 @@ public partial class SignalManager : Node
 	[Signal] public delegate void SpawnPoolObjectEventHandler(Vector2 position, PackedScene scene, string colorHex);
 	[Signal] public delegate void BlackHoleActivatedEventHandler();
 	[Signal] public delegate void PlayerSummonedExplosionEventHandler();
-	[Signal] public delegate void EnableMainMenuFocusEventHandler();
-	[Signal] public delegate void ModalOpenedEventHandler();
 
 	public override void _Ready()
 	{
@@ -166,15 +164,5 @@ public partial class SignalManager : Node
 	public void EmitPlayerSummonedExplosion()
 	{
 		EmitSignal(SignalName.PlayerSummonedExplosion);
-	}
-
-	public void EmitEnableMainMenuFocus()
-	{
-		EmitSignal(SignalName.EnableMainMenuFocus);
-	}
-
-	public void EmitModalOpened()
-	{
-		EmitSignal(SignalName.ModalOpened);
 	}
 }
