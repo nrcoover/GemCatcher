@@ -42,6 +42,9 @@ public partial class MainMenuUi : Control
 
 	private Color _thankYouButtonOriginalColor;
 
+	private Control _lastFocusedControl;
+	private readonly Dictionary<Control, Control.FocusModeEnum> _savedFocusModes = new();
+
 	public override void _Ready()
 	{
 		SubscribeToSignals();
@@ -65,8 +68,22 @@ public partial class MainMenuUi : Control
 		SetThankYouButtonVisibility();
 		SetHelloButtonVisibility();
 		ResetThankYouButton();
-		HandleFocusControl();
 	}
+
+  public override void _UnhandledInput(InputEvent @event)
+  {
+    if ((@event.IsActionPressed("ui_up")
+			|| @event.IsActionPressed("ui_down")
+			|| @event.IsActionPressed("ui_right")
+			|| @event.IsActionPressed("ui_left")
+			|| @event.IsActionPressed("ui_focus_prev")
+			|| @event.IsActionPressed("ui_focus_next"))
+		&& !IsAnyControlFocused()
+		)
+		{
+			HandleFocusControl();
+		}
+  }
 
   public override void _ExitTree()
   {
@@ -78,6 +95,7 @@ public partial class MainMenuUi : Control
   public void SubscribeToSignals()
 	{
 		SignalManager.Instance.SaveDataReset += OnSaveDataReset;
+		SignalManager.Instance.EnableMainMenuFocus += OnEnableMainMenuFocus;
 		_titleTimer.Timeout += OnTitleTimeout;
 		_playButton.Pressed += OnPlayClicked;
 		_rulesButton.Pressed += OnRulesClicked;
@@ -95,6 +113,7 @@ public partial class MainMenuUi : Control
 	public void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.SaveDataReset -= OnSaveDataReset;
+		SignalManager.Instance.EnableMainMenuFocus -= OnEnableMainMenuFocus;
 	}
 
   private void OnSaveDataReset()
@@ -103,10 +122,20 @@ public partial class MainMenuUi : Control
 		HandleInfiniteModeButtonDisplay();
   }
 
+	private void OnEnableMainMenuFocus()
+	{
+		EnableMenusFocus();
+	}
+
   private void OnTitleTimeout()
   {
     HandleLabelTweeningAsync();
   }
+
+#endregion
+
+
+#region Button Signals
 
 	private void OnPlayClicked()
   {
@@ -117,14 +146,16 @@ public partial class MainMenuUi : Control
 
   private void OnRulesClicked()
 	{
-		CloseAllModals();
-		_rulesModal.Visible = true;
+		ResetToMainMenu();
+		OpenModal(_rulesModal);
+		DisableMenuFocus();
 	}
 
   private void OnMovesClicked()
 	{
-		CloseAllModals();
-		_movesModal.Visible = true;
+		ResetToMainMenu();
+		OpenModal(_movesModal);
+		DisableMenuFocus();
 	}
 	
 	private void OnQuitClicked()
@@ -134,8 +165,9 @@ public partial class MainMenuUi : Control
 
   private void OnCreditsClicked()
 	{
-		CloseAllModals();
-		_creditsModal.Visible = true;
+		ResetToMainMenu();
+		OpenModal(_creditsModal);
+		DisableMenuFocus();
 	}
 	
   private void OnResetHighScoreClicked()
@@ -159,8 +191,9 @@ public partial class MainMenuUi : Control
 
 	private void OnHelloClicked()
 	{
-		CloseAllModals();
-		_helloModal.Visible = true;
+		ResetToMainMenu();
+		OpenModal(_helloModal);
+		DisableMenuFocus();
 	}
 
 	private void OnThankYouClicked()
@@ -242,12 +275,6 @@ public partial class MainMenuUi : Control
 		}
 
 		HideInfiniteModeButton();
-	}
-
-	private void HandleFocusControl()
-	{
-		// TODO: Get focus only if controller is detected
-		_playButton.CallDeferred(MethodName.GrabFocus);
 	}
 
 	private void HideInfiniteModeButton()
@@ -378,4 +405,77 @@ public partial class MainMenuUi : Control
 		).SetTrans(Tween.TransitionType.Sine)
 		.SetEase(Tween.EaseType.InOut);
 	}
+
+#region Handle UI
+
+	private void HandleFocusControl()
+	{
+		// TODO: Get focus only if controller is detected
+		_playButton.CallDeferred(MethodName.GrabFocus);
+	}
+
+	private bool IsAnyControlFocused()
+	{
+		Control focusedControl = GetViewport().GuiGetFocusOwner();
+		return focusedControl != null;
+	}
+
+	private void ClearAllFocus()
+	{
+		GetViewport().GuiReleaseFocus();
+	}
+
+	private void ResetToMainMenu()
+	{
+		CloseAllModals();
+		ClearAllFocus();
+	}
+
+	private void DisableMenuFocus()
+	{
+		FocusMode = Control.FocusModeEnum.None;
+	}
+
+	private void EnableMenusFocus()
+	{
+		FocusMode = Control.FocusModeEnum.All;
+	}
+
+	public void OpenModal(MenuModal modal)
+	{
+		_lastFocusedControl = GetViewport().GuiGetFocusOwner();
+
+		SetControlsFocusEnabled(this, false);
+
+		modal.Show();
+
+		SignalManager.Instance.EmitModalOpened();
+		// modalFirstFocus?.CallDeferred(Control.MethodName.GrabFocus);
+	}
+
+	private void SetControlsFocusEnabled(Node root, bool enabled)
+	{
+		foreach (Node child in root.GetChildren())
+		{
+			if (child is Control control)
+			{
+				if (!enabled && control.FocusMode != Control.FocusModeEnum.None)
+				{
+					_savedFocusModes[control] = control.FocusMode;
+					control.FocusMode = Control.FocusModeEnum.None;
+				}
+				else if (enabled && _savedFocusModes.TryGetValue(control, out var originalMode))
+				{
+					control.FocusMode = originalMode;
+				}
+			}
+
+			if (child.GetChildCount() > 0)
+			{
+				SetControlsFocusEnabled(child, enabled);
+			}
+		}
+	}
+
+#endregion
 }
