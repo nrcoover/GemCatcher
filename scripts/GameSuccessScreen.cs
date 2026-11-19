@@ -51,7 +51,6 @@ public partial class GameSuccessScreen : Control
 	private void ShowGameSuccessButtons()
 	{
 		PlayShowButtonsAnimation();
-		Input.MouseMode = Input.MouseModeEnum.Visible;
 	}
 	
   private void OnRetryButtonPressed()

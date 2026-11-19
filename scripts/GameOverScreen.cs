@@ -51,7 +51,6 @@ public partial class GameOverScreen : Control
 	private void OnShowGameOverButtons()
 	{
 		_animator.Play("show-buttons");
-		Input.MouseMode = Input.MouseModeEnum.Visible;
 	}
 	
   private void OnRetryButtonPressed()

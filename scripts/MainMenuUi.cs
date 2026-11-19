@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Godot;
 
+// TODO: Fix mouse not working bug
 public partial class MainMenuUi : Control
 {
 	[Export] private Control _mainMenuControls;
