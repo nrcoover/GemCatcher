@@ -52,9 +52,10 @@ public partial class Game : Node2D
 
 	public override async void _Ready()
 	{
-		Input.MouseMode = Input.MouseModeEnum.Captured;
-		GameManager.Instance.ResetGame();
 		SubscribeToSignals();
+		
+		UIInputManager.Instance.SetCursorModeOverride(Input.MouseModeEnum.Captured);
+		GameManager.Instance.ResetGame();
 		InitializeVariables();
 		await PlayGameStartSequenceAsync();
 	}

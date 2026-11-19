@@ -53,6 +53,9 @@ public partial class MainMenuUi : Control
 	{
 		SubscribeToSignals();
 
+		UIInputManager.Instance.SetCursorModeOverride(null);
+		OnInputModeChanged(UIInputManager.Instance.CurrentMode);
+
 		_isFirstAnimationRun = true;
 
 		if (SaveDataManager.Instance.IsInfiniteModeUnlocked)

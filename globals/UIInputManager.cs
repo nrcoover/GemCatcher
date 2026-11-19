@@ -17,6 +17,8 @@ public partial class UIInputManager : Node
 
 	private const float JOY_AXIS_THRESHOLD = 0.2f;
 
+	private Input.MouseModeEnum? _cursorModeOverride = null;
+
 	public override void _EnterTree()
 	{
 		Instance = this;
@@ -62,6 +64,25 @@ public partial class UIInputManager : Node
 		}
 	}
 
+	public void SetCursorModeOverride(Input.MouseModeEnum? mode)
+	{
+		_cursorModeOverride = mode;
+		UpdateCursorVisibility();
+	}
+
+	private void UpdateCursorVisibility()
+	{
+		if (_cursorModeOverride.HasValue)
+		{
+			Input.MouseMode = _cursorModeOverride.Value;
+			return;
+		}
+
+		Input.MouseMode = CurrentMode == InputMode.Gamepad
+			? Input.MouseModeEnum.Hidden
+			: Input.MouseModeEnum.Visible;
+	}
+
 	private void SetInputMode(InputMode newMode)
 	{
 		if (CurrentMode == newMode)
@@ -69,12 +90,12 @@ public partial class UIInputManager : Node
 			return;
 		}
 
+		GD.Print($"INPUT MODE CHANGED: {CurrentMode} -> {newMode}");
+
 		CurrentMode = newMode;
 
-		Input.MouseMode = newMode == InputMode.Gamepad
-			? Input.MouseModeEnum.Hidden
-			: Input.MouseModeEnum.Visible;
-		
-		InputModeChanged?.Invoke(CurrentMode);
+		UpdateCursorVisibility();
+
+		InputModeChanged?.Invoke(newMode);
 	}
 }
