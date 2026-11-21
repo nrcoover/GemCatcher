@@ -120,4 +120,19 @@ public partial class GemButton : TextureButton
 	{
 		_sparkleSound.Play();
 	}
+
+	public void RefreshMouseHoverState()
+	{
+		bool isMouseOverButton =
+			GetGlobalRect().HasPoint(GetGlobalMousePosition());
+
+		if (isMouseOverButton)
+		{
+			OnMouseEntered();
+		}
+		else
+		{
+			OnMouseExited();
+		}
+	}
 }

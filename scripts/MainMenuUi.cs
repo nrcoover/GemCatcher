@@ -57,6 +57,12 @@ public partial class MainMenuUi : Control
 
 		CloseAllModals();
 
+		if (UIInputManager.Instance.CurrentMode ==
+    UIInputManager.InputMode.MouseKeyboard)
+		{
+			CallDeferred(nameof(RefreshMenuMouseHover));
+		}
+
 		CacheOriginalMouseFilters(this);
 
 		UIInputManager.Instance.SetCursorModeOverride(null);
@@ -485,7 +491,10 @@ public partial class MainMenuUi : Control
 	private bool IsAnyControlFocused()
 	{
 		Control focusedControl = GetViewport().GuiGetFocusOwner();
-		return focusedControl != null;
+
+    return focusedControl != null
+			&& IsAncestorOf(focusedControl)
+			&& CanReceiveFocus(focusedControl);
 	}
 
 	private void ClearAllFocus()
@@ -590,6 +599,19 @@ public partial class MainMenuUi : Control
 			entry.Key.MouseFilter = allowMouseInteraction
 				? entry.Value
 				: Control.MouseFilterEnum.Ignore;
+		}
+	}
+
+	private void RefreshMenuMouseHover()
+	{
+		foreach (BaseButton button in _originalMouseFilters.Keys)
+		{
+			if (button is GemButton gemButton
+				&& GodotObject.IsInstanceValid(gemButton)
+				&& gemButton.IsVisibleInTree())
+			{
+				gemButton.RefreshMouseHoverState();
+			}
 		}
 	}
 
