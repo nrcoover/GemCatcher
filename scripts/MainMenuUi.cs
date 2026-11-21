@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Godot;
 
-// TODO: Fix mouse not working bug
 public partial class MainMenuUi : Control
 {
 	[Export] private Control _mainMenuControls;
@@ -49,9 +48,16 @@ public partial class MainMenuUi : Control
 	private readonly Dictionary<Control, Control.FocusModeEnum> _savedFocusModes = new();
 	private MenuModal _activeModal;
 
+	private readonly Dictionary<BaseButton, Control.MouseFilterEnum>
+    _originalMouseFilters = new();
+
 	public override void _Ready()
 	{
 		SubscribeToSignals();
+
+		CloseAllModals();
+
+		CacheOriginalMouseFilters(this);
 
 		UIInputManager.Instance.SetCursorModeOverride(null);
 		OnInputModeChanged(UIInputManager.Instance.CurrentMode);
@@ -68,13 +74,22 @@ public partial class MainMenuUi : Control
 		}
 
 		HandleLabelDisplays();
-		CloseAllModals();
 		InitializeTitleColors();
 		HandleLabelTweeningAsync();
 		SetThankYouButtonOriginalColor();
 		SetThankYouButtonVisibility();
 		SetHelloButtonVisibility();
 		ResetThankYouButton();
+	}
+
+	public override void _Process(double delta)
+	{
+		Control focused = GetViewport().GuiGetFocusOwner();
+
+		if (focused != null)
+		{
+			GD.Print($"GUI FOCUS: {focused.Name}");
+		}
 	}
 
   public override void _UnhandledInput(InputEvent @event)
@@ -145,7 +160,12 @@ public partial class MainMenuUi : Control
 
 	private void OnInputModeChanged(UIInputManager.InputMode mode)
 	{
-		if (mode == UIInputManager.InputMode.MouseKeyboard)
+		bool isMouseKeyboard =
+			mode == UIInputManager.InputMode.MouseKeyboard;
+
+		UpdateButtonMouseInteraction(isMouseKeyboard);
+
+		if (isMouseKeyboard)
 		{
 			ClearAllFocus();
 			return;
@@ -543,6 +563,34 @@ public partial class MainMenuUi : Control
 		}
 
 		return true;
+	}
+
+	private void CacheOriginalMouseFilters(Node node)
+	{
+		if (node is BaseButton button)
+		{
+			_originalMouseFilters.TryAdd(button, button.MouseFilter);
+		}
+
+		foreach (Node child in node.GetChildren())
+		{
+			CacheOriginalMouseFilters(child);
+		}
+	}
+
+	private void UpdateButtonMouseInteraction(bool allowMouseInteraction)
+	{
+		foreach (var entry in _originalMouseFilters)
+		{
+			if (!GodotObject.IsInstanceValid(entry.Key))
+			{
+				continue;
+			}
+
+			entry.Key.MouseFilter = allowMouseInteraction
+				? entry.Value
+				: Control.MouseFilterEnum.Ignore;
+		}
 	}
 
 #endregion

@@ -50,9 +50,18 @@ public partial class UIInputManager : Node
 				}
 				break;
 
-			case InputEventMouseMotion:
-			case InputEventMouseButton:
-				SetInputMode(InputMode.MouseKeyboard);
+			case InputEventMouseMotion mouseMotion:
+				if (mouseMotion.Relative.LengthSquared() > 0.0f)
+				{
+					SetInputMode(InputMode.MouseKeyboard);
+				}
+				break;
+
+			case InputEventMouseButton mouseButton:
+				if (mouseButton.Pressed)
+				{
+					SetInputMode(InputMode.MouseKeyboard);
+				}
 				break;
 
 			case InputEventKey key:
