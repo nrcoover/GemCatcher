@@ -23,6 +23,8 @@ public partial class UIInputManager : Node
 
 	public InputContext CurrentContext { get; private set; } = InputContext.Menu;
 
+	private bool _ignoreMouseMotion;
+
 	private const float JOY_AXIS_THRESHOLD = 0.2f;
 
 	public override void _EnterTree()
@@ -57,8 +59,18 @@ public partial class UIInputManager : Node
 				break;
 
 			case InputEventMouseMotion mouseMotion:
-				if (CurrentContext == InputContext.Menu
-					&& mouseMotion.Relative.LengthSquared() > 0.0f)
+				if (CurrentContext != InputContext.Menu)
+				{
+					break;
+				}
+
+				if (_ignoreMouseMotion)
+				{
+					_ignoreMouseMotion = false;
+					break;
+				}
+
+				if (mouseMotion.Relative.LengthSquared() > 0.0f)
 				{
 					SetInputMode(InputMode.MouseKeyboard);
 				}
