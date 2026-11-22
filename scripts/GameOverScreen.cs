@@ -51,6 +51,10 @@ public partial class GameOverScreen : Control
 	private void OnShowGameOverButtons()
 	{
 		_animator.Play("show-buttons");
+
+		UIInputManager.Instance.SetInputContext(
+			UIInputManager.InputContext.Menu
+		);
 	}
 	
   private void OnRetryButtonPressed()

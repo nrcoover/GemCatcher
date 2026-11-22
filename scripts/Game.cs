@@ -54,9 +54,9 @@ public partial class Game : Node2D
 	{
 		SubscribeToSignals();
 		
-		UIInputManager.Instance.SetCursorModeOverride(Input.MouseModeEnum.Captured);
 		GameManager.Instance.ResetGame();
 		InitializeVariables();
+
 		await PlayGameStartSequenceAsync();
 	}
 
@@ -279,6 +279,10 @@ public partial class Game : Node2D
 
   private void HandleEscape()
 	{
+		UIInputManager.Instance.SetInputContext(
+        UIInputManager.InputContext.Menu
+    );
+		
 		GameManager.Instance.ResetGame();
 		LevelManager.Instance.LoadMainMenu();
 	}

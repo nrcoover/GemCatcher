@@ -91,6 +91,10 @@ public partial class GameSuccessScreen : Control
 	private void PlayShowButtonsAnimation()
 	{
 		_animator.Play(Constants.Animations.GameSuccessScreen.ShowButtons);
+
+		UIInputManager.Instance.SetInputContext(
+			UIInputManager.InputContext.Menu
+		);
 	}
 
 	#region Asynchronous Tasks

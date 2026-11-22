@@ -9,15 +9,21 @@ public partial class UIInputManager : Node
 		Gamepad
 	}
 
+	public enum InputContext
+	{
+		Menu,
+		Gameplay
+	}
+
 	public static UIInputManager Instance { get; private set; }
 
 	public event Action<InputMode> InputModeChanged;
 
 	public InputMode CurrentMode { get; private set; } = InputMode.MouseKeyboard;
 
-	private const float JOY_AXIS_THRESHOLD = 0.2f;
+	public InputContext CurrentContext { get; private set; } = InputContext.Menu;
 
-	private Input.MouseModeEnum? _cursorModeOverride = null;
+	private const float JOY_AXIS_THRESHOLD = 0.2f;
 
 	public override void _EnterTree()
 	{
@@ -51,14 +57,15 @@ public partial class UIInputManager : Node
 				break;
 
 			case InputEventMouseMotion mouseMotion:
-				if (mouseMotion.Relative.LengthSquared() > 0.0f)
+				if (CurrentContext == InputContext.Menu
+					&& mouseMotion.Relative.LengthSquared() > 0.0f)
 				{
 					SetInputMode(InputMode.MouseKeyboard);
 				}
 				break;
 
 			case InputEventMouseButton mouseButton:
-				if (mouseButton.Pressed)
+				if (CurrentContext == InputContext.Menu && mouseButton.Pressed)
 				{
 					SetInputMode(InputMode.MouseKeyboard);
 				}
@@ -73,17 +80,11 @@ public partial class UIInputManager : Node
 		}
 	}
 
-	public void SetCursorModeOverride(Input.MouseModeEnum? mode)
-	{
-		_cursorModeOverride = mode;
-		UpdateCursorVisibility();
-	}
-
 	private void UpdateCursorVisibility()
 	{
-		if (_cursorModeOverride.HasValue)
+		if (CurrentContext == InputContext.Gameplay)
 		{
-			Input.MouseMode = _cursorModeOverride.Value;
+			Input.MouseMode = Input.MouseModeEnum.Captured;
 			return;
 		}
 
@@ -106,5 +107,11 @@ public partial class UIInputManager : Node
 		UpdateCursorVisibility();
 
 		InputModeChanged?.Invoke(newMode);
+	}
+
+	public void SetInputContext(InputContext context)
+	{
+		CurrentContext = context;
+		UpdateCursorVisibility();
 	}
 }

@@ -15,11 +15,19 @@ public partial class LevelManager : Node
 
 	public void LoadGame()
 	{
+		UIInputManager.Instance.SetInputContext(
+			UIInputManager.InputContext.Gameplay
+		);
+
 		GetTree().ChangeSceneToPacked(Game);
 	}
 
 	public void LoadMainMenu()
 	{
+		UIInputManager.Instance.SetInputContext(
+			UIInputManager.InputContext.Menu
+		);
+
 		GetTree().ChangeSceneToPacked(MainMenu);
 		GetTree().Paused = false;
 	}

@@ -65,7 +65,6 @@ public partial class MainMenuUi : Control
 
 		CacheOriginalMouseFilters(this);
 
-		UIInputManager.Instance.SetCursorModeOverride(null);
 		OnInputModeChanged(UIInputManager.Instance.CurrentMode);
 
 		_isFirstAnimationRun = true;
