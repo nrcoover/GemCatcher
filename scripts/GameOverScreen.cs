@@ -68,6 +68,18 @@ public partial class GameOverScreen : Control
 
 	private void OnInputModeChanged(UIInputManager.InputMode mode)
 	{
+		Control focusedControl = GetViewport().GuiGetFocusOwner();
+
+    GD.Print(
+			$"[GameOverScreen] INPUT MODE CHANGED\n" +
+			$"  Mode: {mode}\n" +
+			$"  Menu Interactive: {IsMenuInteractive()}\n" +
+			$"  Retry Visible: {_retryButton.IsVisibleInTree()}\n" +
+			$"  Retry Focus Mode: {_retryButton.FocusMode}\n" +
+			$"  Retry Disabled: {_retryButton.Disabled}\n" +
+			$"  Focus Owner: {(focusedControl != null ? focusedControl.Name : "None")}"
+    );
+
 		if (!IsMenuInteractive())
 		{
 			return;

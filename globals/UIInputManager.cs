@@ -47,48 +47,64 @@ public partial class UIInputManager : Node
 			case InputEventJoypadButton joyButton:
 				if (joyButton.Pressed)
 				{
-					SetInputMode(InputMode.Gamepad);
+					SetInputMode(
+						InputMode.Gamepad,
+						$"Joypad Button: {joyButton.ButtonIndex}"
+					);
 				}
 				break;
 
 			case InputEventJoypadMotion joyMotion:
-				if (Mathf.Abs(joyMotion.AxisValue) > JOY_AXIS_THRESHOLD)
-				{
-					SetInputMode(InputMode.Gamepad);
-				}
-				break;
+					if (Mathf.Abs(joyMotion.AxisValue) > JOY_AXIS_THRESHOLD)
+					{
+						SetInputMode(
+							InputMode.Gamepad,
+							$"Joypad Axis: {joyMotion.Axis} | Value: {joyMotion.AxisValue}"
+						);
+					}
+					break;
 
 			case InputEventMouseMotion mouseMotion:
-				if (CurrentContext != InputContext.Menu)
-				{
-					break;
-				}
+					if (CurrentContext != InputContext.Menu)
+					{
+						break;
+					}
 
-				if (_ignoreMouseMotion)
-				{
-					_ignoreMouseMotion = false;
-					break;
-				}
+					if (_ignoreMouseMotion)
+					{
+						GD.Print("[UIInputManager] Ignored Mouse Motion");
+						_ignoreMouseMotion = false;
+						break;
+					}
 
-				if (mouseMotion.Relative.LengthSquared() > 0.0f)
-				{
-					SetInputMode(InputMode.MouseKeyboard);
-				}
-				break;
+					if (mouseMotion.Relative.LengthSquared() > 0.0f)
+					{
+						SetInputMode(
+							InputMode.MouseKeyboard,
+							$"Mouse Motion: {mouseMotion.Relative}"
+						);
+					}
+					break;
 
 			case InputEventMouseButton mouseButton:
-				if (CurrentContext == InputContext.Menu && mouseButton.Pressed)
-				{
-					SetInputMode(InputMode.MouseKeyboard);
-				}
-				break;
+					if (CurrentContext == InputContext.Menu && mouseButton.Pressed)
+					{
+						SetInputMode(
+							InputMode.MouseKeyboard,
+							$"Mouse Button: {mouseButton.ButtonIndex}"
+						);
+					}
+					break;
 
 			case InputEventKey key:
-				if (key.Pressed && !key.Echo)
-				{
-					SetInputMode(InputMode.MouseKeyboard);
-				}
-				break;
+					if (key.Pressed && !key.Echo)
+					{
+						SetInputMode(
+							InputMode.MouseKeyboard,
+							$"Keyboard Key: {key.Keycode}"
+						);
+					}
+					break;
 		}
 	}
 
@@ -105,25 +121,52 @@ public partial class UIInputManager : Node
 			: Input.MouseModeEnum.Visible;
 	}
 
-	private void SetInputMode(InputMode newMode)
+	private void SetInputMode(InputMode mode, string reason)
 	{
-		if (CurrentMode == newMode)
+		if (CurrentMode == mode)
 		{
 			return;
 		}
 
-		GD.Print($"INPUT MODE CHANGED: {CurrentMode} -> {newMode}");
+		InputMode previousMode = CurrentMode;
+		Input.MouseModeEnum previousMouseMode = Input.MouseMode;
 
-		CurrentMode = newMode;
+		CurrentMode = mode;
 
 		UpdateCursorVisibility();
 
-		InputModeChanged?.Invoke(newMode);
+		GD.Print(
+			$"[UIInputManager] INPUT MODE CHANGED\n" +
+			$"  Previous: {previousMode}\n" +
+			$"  New: {CurrentMode}\n" +
+			$"  Reason: {reason}\n" +
+			$"  Context: {CurrentContext}\n" +
+			$"  Mouse Mode: {previousMouseMode} -> {Input.MouseMode}"
+		);
+
+		InputModeChanged?.Invoke(CurrentMode);
 	}
 
 	public void SetInputContext(InputContext context)
 	{
+		if (CurrentContext == context)
+		{
+			return;
+		}
+
+		InputContext previousContext = CurrentContext;
+		Input.MouseModeEnum previousMouseMode = Input.MouseMode;
+
 		CurrentContext = context;
+
 		UpdateCursorVisibility();
+
+		GD.Print(
+			$"[UIInputManager] INPUT CONTEXT CHANGED\n" +
+			$"  Previous: {previousContext}\n" +
+			$"  New: {CurrentContext}\n" +
+			$"  Active Input: {CurrentMode}\n" +
+			$"  Mouse Mode: {previousMouseMode} -> {Input.MouseMode}"
+		);
 	}
 }
