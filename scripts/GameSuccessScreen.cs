@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Godot;
 
@@ -9,14 +10,18 @@ public partial class GameSuccessScreen : Control
 	[Export] TextureButton _exitButton;
 	[Export] VBoxContainer _buttonsContainer;
 
+	private readonly Dictionary<BaseButton, Control.MouseFilterEnum>
+    _originalMouseFilters = new();
+
 	public override void _Ready()
 	{
+		SubscribeToSignals();
+		HandleStartupUI();
+
 		_buttonsContainer.Visible = false;
 		_gameSuccessPanel.Visible = false;
 		_gameSuccessPanel.Modulate = new Color(Constants.CustomColors.AplhaInvisible);
 		Modulate = new Color(Constants.CustomColors.AplhaInvisible);
-
-		SubscribeToSignals();
 	}
 
 	public override void _ExitTree()
@@ -27,6 +32,7 @@ public partial class GameSuccessScreen : Control
   private void SubscribeToSignals()
   {
 		SignalManager.Instance.InitiateVictorySequence += OnInitiateVictorySequenceAsync;
+		UIInputManager.Instance.InputModeChanged += OnInputModeChanged;
 		_replayButton.Pressed += OnRetryButtonPressed;
 		_exitButton.Pressed += OnExitButtonPressed;
   }
@@ -34,9 +40,60 @@ public partial class GameSuccessScreen : Control
   private void UnsubscribeToSignals()
   {
 		SignalManager.Instance.InitiateVictorySequence -= OnInitiateVictorySequenceAsync;
+		UIInputManager.Instance.InputModeChanged -= OnInputModeChanged;
   }
 
-  private void ShowMissionSuccessPanel()
+	private async void OnInitiateVictorySequenceAsync()
+	{
+		ShowGameSuccessScreen();
+		
+		await CreateTimerAsync(3.5f); // Above animation is 4 seconds; this leaves a transparency by ending the animation early (accidental, but created a desirable side-effect).
+
+		ShowMissionSuccessPanel();
+
+		await CreateTimerAsync(4.0f);
+
+		ShowGameSuccessButtons();
+	}
+
+	private void OnInputModeChanged(UIInputManager.InputMode mode)
+	{
+		if (!IsMenuInteractive())
+		{
+			return;
+		}
+
+		bool isMouseKeyboard =
+			mode == UIInputManager.InputMode.MouseKeyboard;
+
+		UpdateButtonMouseInteraction(isMouseKeyboard);
+
+		if (isMouseKeyboard)
+		{
+			ClearAllFocus();
+			RefreshMenuMouseHover();
+			return;
+		}
+
+		if (!IsAnyControlFocused() && CanReceiveFocus(_replayButton))
+		{
+			_replayButton.GrabFocus();
+		}
+	}
+	
+  private void OnRetryButtonPressed()
+  {
+		SignalManager.Instance.EmitResetGame();
+    LevelManager.Instance.LoadGame();
+  }
+
+  private void OnExitButtonPressed()
+  {
+		SignalManager.Instance.EmitResetGame();
+    LevelManager.Instance.LoadMainMenu();
+  }
+
+	private void ShowMissionSuccessPanel()
   {
     _gameSuccessPanel.Visible = true;
 		PlayShowSuccessPanelAnimation();
@@ -52,31 +109,7 @@ public partial class GameSuccessScreen : Control
 	{
 		PlayShowButtonsAnimation();
 	}
-	
-  private void OnRetryButtonPressed()
-  {
-		SignalManager.Instance.EmitResetGame();
-    LevelManager.Instance.LoadGame();
-  }
 
-  private void OnExitButtonPressed()
-  {
-		SignalManager.Instance.EmitResetGame();
-    LevelManager.Instance.LoadMainMenu();
-  }
-
-	private async void OnInitiateVictorySequenceAsync()
-	{
-		ShowGameSuccessScreen();
-		
-		await CreateTimerAsync(3.5f); // Above animation is 4 seconds; does this leaves a transparency by ending the animation early
-
-		ShowMissionSuccessPanel();
-
-		await CreateTimerAsync(4.0f);
-
-		ShowGameSuccessButtons();
-	}
 
 	private void PlayScreenFadeInAnimation()
 	{
@@ -95,6 +128,8 @@ public partial class GameSuccessScreen : Control
 		UIInputManager.Instance.SetInputContext(
 			UIInputManager.InputContext.Menu
 		);
+
+		InitializeActiveMenuAsync();
 	}
 
 	#region Asynchronous Tasks
@@ -114,5 +149,109 @@ public partial class GameSuccessScreen : Control
 		);
 	}
 
+	private async void InitializeActiveMenuAsync()
+	{
+		while (IsInsideTree() && !_buttonsContainer.IsVisibleInTree())
+		{
+			await ToSignal(
+				GetTree(),
+				SceneTree.SignalName.ProcessFrame
+			);
+		}
+
+		if (!IsInsideTree() || !IsMenuInteractive())
+		{
+			return;
+		}
+
+		OnInputModeChanged(UIInputManager.Instance.CurrentMode);
+	}
+
 #endregion
+
+
+#region UI Handling
+
+	private void HandleStartupUI()
+	{
+		CacheOriginalMouseFilters(this);
+	}
+
+	private void UpdateButtonMouseInteraction(bool allowMouseInteraction)
+	{
+		foreach (var entry in _originalMouseFilters)
+		{
+			if (!GodotObject.IsInstanceValid(entry.Key))
+			{
+				continue;
+			}
+
+			entry.Key.MouseFilter = allowMouseInteraction
+				? entry.Value
+				: Control.MouseFilterEnum.Ignore;
+		}
+	}
+
+	private void ClearAllFocus()
+	{
+		GetViewport().GuiReleaseFocus();
+	}
+
+	private bool IsAnyControlFocused()
+	{
+		Control focusedControl = GetViewport().GuiGetFocusOwner();
+
+    return focusedControl != null
+			&& IsAncestorOf(focusedControl)
+			&& CanReceiveFocus(focusedControl);
+	}
+
+	private bool CanReceiveFocus(Control control)
+	{
+		if (control == null || !GodotObject.IsInstanceValid(control)
+			|| (!control.IsVisibleInTree())
+			|| (control.FocusMode == Control.FocusModeEnum.None)
+			|| (control is BaseButton button && button.Disabled)
+		)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	private void RefreshMenuMouseHover()
+	{
+		foreach (BaseButton button in _originalMouseFilters.Keys)
+		{
+			if (button is GemButton gemButton
+				&& GodotObject.IsInstanceValid(gemButton)
+				&& gemButton.IsVisibleInTree())
+			{
+				gemButton.RefreshMouseHoverState();
+			}
+		}
+	}
+
+	private void CacheOriginalMouseFilters(Node node)
+	{
+		if (node is BaseButton button)
+		{
+			_originalMouseFilters.TryAdd(button, button.MouseFilter);
+		}
+
+		foreach (Node child in node.GetChildren())
+		{
+			CacheOriginalMouseFilters(child);
+		}
+	}
+
+	private bool IsMenuInteractive()
+	{
+		return IsVisibleInTree()
+			&& _buttonsContainer.IsVisibleInTree();
+	}
+
+#endregion
+
 }

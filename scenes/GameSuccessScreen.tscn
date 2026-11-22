@@ -337,6 +337,12 @@ theme_override_constants/separation = 32
 self_modulate = Color(0.53333336, 0.8, 1, 1)
 z_index = 1
 layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath("../ExitButton")
+focus_neighbor_bottom = NodePath(".")
+focus_next = NodePath("../ExitButton")
+focus_previous = NodePath(".")
 
 [node name="ButtonLabel" parent="VBoxButtons/HBoxContainer/ReplayButton" index="0"]
 text = "REPLAY"
@@ -345,6 +351,12 @@ text = "REPLAY"
 self_modulate = Color(0.8, 0.53333336, 1, 1)
 z_index = 1
 layout_mode = 2
+focus_neighbor_left = NodePath("../ReplayButton")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath(".")
+focus_next = NodePath(".")
+focus_previous = NodePath("../ReplayButton")
 
 [node name="ButtonLabel" parent="VBoxButtons/HBoxContainer/ExitButton" index="0"]
 text = "EXIT"

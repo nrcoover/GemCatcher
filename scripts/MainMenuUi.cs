@@ -57,15 +57,7 @@ public partial class MainMenuUi : Control
 
 		CloseAllModals();
 
-		if (UIInputManager.Instance.CurrentMode ==
-    UIInputManager.InputMode.MouseKeyboard)
-		{
-			CallDeferred(nameof(RefreshMenuMouseHover));
-		}
-
-		CacheOriginalMouseFilters(this);
-
-		OnInputModeChanged(UIInputManager.Instance.CurrentMode);
+		HandleStartupUI();
 
 		_isFirstAnimationRun = true;
 
@@ -481,6 +473,19 @@ public partial class MainMenuUi : Control
 	}
 
 #region Handle UI
+
+	private void HandleStartupUI()
+	{
+		if (UIInputManager.Instance.CurrentMode ==
+    UIInputManager.InputMode.MouseKeyboard)
+		{
+			CallDeferred(nameof(RefreshMenuMouseHover));
+		}
+
+		CacheOriginalMouseFilters(this);
+
+		OnInputModeChanged(UIInputManager.Instance.CurrentMode);
+	}
 
 	private void HandleFocusControl()
 	{
