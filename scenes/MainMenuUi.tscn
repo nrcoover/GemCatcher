@@ -335,6 +335,7 @@ theme_override_constants/separation = 13
 [node name="HBoxButtons" type="HBoxContainer" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore"]
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 4
 theme_override_constants/separation = 16
 
 [node name="ResetButton" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxButtons" instance=ExtResource("3_pqhkh")]
