@@ -2,7 +2,7 @@ using Godot;
 
 public partial class SaveDataManager : Node
 {
-	private const string SAVE_DATA_FILE_PATH = "user://gemSaveData.tres";
+	private const string SAVE_DATA_FILE_PATH = "user://gemSaveData.res";
 	private const int DEFAULT_SCORE = 0;
 
 	public static SaveDataManager Instance { get; private set; }
