@@ -123,7 +123,34 @@ public partial class UIInputManager : Node
 
 	public void SetInputContext(InputContext context)
 	{
+		if (CurrentContext == context)
+		{
+			return;
+		}
+
+		InputContext previousContext = CurrentContext;
+
+		// Ignore the first mouse motion event when transitioning
+		// from captured gameplay into a menu.
+		if (previousContext == InputContext.Gameplay
+			&& context == InputContext.Menu)
+		{
+			_ignoreMouseMotion = true;
+		}
+
+		Input.MouseModeEnum previousMouseMode = Input.MouseMode;
+
 		CurrentContext = context;
+
 		UpdateCursorVisibility();
+
+		GD.Print(
+			$"[UIInputManager] INPUT CONTEXT CHANGED\n" +
+			$"  Previous: {previousContext}\n" +
+			$"  New: {CurrentContext}\n" +
+			$"  Active Input: {CurrentMode}\n" +
+			$"  Mouse Mode: {previousMouseMode} -> {Input.MouseMode}\n" +
+			$"  Ignore Mouse Motion: {_ignoreMouseMotion}"
+		);
 	}
 }
