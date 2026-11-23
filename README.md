@@ -4,7 +4,7 @@ A simple arcade-style game built with Godot 4.5 in C#.
 
 This game was created as a student project, expanding upon and building off of a game from the Udemy course ("Learn 2D Game Development: Godot 4 & C# from Scracth by Richard Allbert and Martyna Olivares)[https://www.udemy.com/course/learn-2d-game-development-godot-43-c-from-scratch/].
 
-This game is the first game created in full by the game developer, Nicklefritz, and took roughly 80 hours spread across 6 months of work.
+This game is the first game created in full by the game developer, Nicklefritz, and took roughly 120 hours spread across 8 months of work.
 
 # Game Rules
 
