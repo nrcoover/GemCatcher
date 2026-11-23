@@ -154,6 +154,7 @@ public partial class MainMenuUi : Control
   {
     HandleLabelDisplays();
 		HandleInfiniteModeButtonDisplay();
+		SetThankYouButtonVisibility();
   }
 
 	private void OnInputModeChanged(UIInputManager.InputMode mode)
