@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GemCatcher.utils;
 using Godot;
 
 public partial class MainMenuUi : Control
@@ -83,7 +84,7 @@ public partial class MainMenuUi : Control
 	{
 		Control focused = GetViewport().GuiGetFocusOwner();
 
-		if (focused != null)
+		if (focused != null && CustomDebug.IsDebugging)
 		{
 			GD.Print($"GUI FOCUS: {focused.Name}");
 		}
