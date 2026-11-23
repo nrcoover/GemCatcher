@@ -236,7 +236,7 @@ public partial class Gem : Area2D
 
 	private void GetReferenceToPlayerPaddle()
 	{
-		_paddle = GetNode<Paddle>("/root/Game/Paddle");
+		_paddle = GetNode<Paddle>("/root/Game/PaddleWrapper/Paddle");
 
 		if(_paddle == null)
 		{

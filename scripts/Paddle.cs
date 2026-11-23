@@ -47,6 +47,7 @@ public partial class Paddle : Area2D
 	[Export] float _boundaryMargin = 25.0f;
 	[Export] float _boostMultiplier = 1.5f;
 
+	[Export] Node2D _paddleWrapper;
 	[Export] CollisionShape2D _eventHorizon;
 	[Export] Label _boostLabel;
 	[Export] Label _powerUpSecondsLabel;
@@ -330,6 +331,7 @@ public partial class Paddle : Area2D
 		GameManager.Instance.DecrementHealth();
 		SignalManager.Instance.EmitPlayerHurt();
 
+		_engineFireParticles.GlobalPosition = GlobalPosition;
 		_engineFireParticles.Restart();
 
 		_selfDestructTimer.Start();
@@ -446,7 +448,7 @@ public partial class Paddle : Area2D
 
 		if (Input.IsActionPressed("move_right"))
 		{
-			Position += new Vector2(
+			_paddleWrapper.Position += new Vector2(
 				calculatedMovementSpeed * delta,
 				noChangeInPosition
 			);
@@ -454,7 +456,7 @@ public partial class Paddle : Area2D
 
 		if (Input.IsActionPressed("move_left"))
 		{
-			Position -= new Vector2(
+			_paddleWrapper.Position -= new Vector2(
 				calculatedMovementSpeed * delta, 
 				noChangeInPosition
 			);
@@ -463,14 +465,14 @@ public partial class Paddle : Area2D
 
 	private void RestrictPaddleToBoundary()
 	{
-		if(Position.X < _viewportBoundary.Position.X + _boundaryMargin)
+		if(_paddleWrapper.Position.X < _viewportBoundary.Position.X + _boundaryMargin)
 		{
-			Position = new Vector2(_viewportBoundary.Position.X + _boundaryMargin, Position.Y);
+			_paddleWrapper.Position = new Vector2(_viewportBoundary.Position.X + _boundaryMargin, _paddleWrapper.Position.Y);
 		}
 
-		if(Position.X > _viewportBoundary.End.X - _boundaryMargin)
+		if(_paddleWrapper.Position.X > _viewportBoundary.End.X - _boundaryMargin)
 		{
-			Position = new Vector2(_viewportBoundary.End.X - _boundaryMargin, Position.Y);
+			_paddleWrapper.Position = new Vector2(_viewportBoundary.End.X - _boundaryMargin, _paddleWrapper.Position.Y);
 		}
 	}
 

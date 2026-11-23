@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://bsd3ktyaellt5"]
+
+[ext_resource type="PackedScene" uid="uid://3kq5fr5oomem" path="res://scenes/Paddle.tscn" id="1_e3oqh"]
+
+[sub_resource type="Curve" id="Curve_od3ld"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.6862069, 0.8166431), 0.0, 0.0, 0, 0, Vector2(1, 0.32157964), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_nat4r"]
+offsets = PackedFloat32Array(0, 0.49242425, 0.8636364, 0.95075756, 1)
+colors = PackedColorArray(0.7602029, 2.5509298e-06, 4.813075e-07, 1, 0.7626212, 0.5864823, 0.30741423, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0)
+
+[node name="PaddleWrapper" type="Node2D"]
+
+[node name="EngineFireParticles2" type="CPUParticles2D" parent="." groups=["Moveable Objects"]]
+emitting = false
+amount = 64
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.53
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 115.39
+initial_velocity_max = 294.87
+angular_velocity_min = 64.62
+angular_velocity_max = 563.08
+scale_amount_max = 8.0
+scale_amount_curve = SubResource("Curve_od3ld")
+color_ramp = SubResource("Gradient_nat4r")
+
+[node name="Paddle" parent="." instance=ExtResource("1_e3oqh")]
