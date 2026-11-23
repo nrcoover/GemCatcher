@@ -57,6 +57,7 @@ public partial class Paddle : Area2D
 	[Export] Timer _powerUpTimer;
 	[Export] AnimationPlayer _boostFuelAnimator;
 	[Export] AnimationPlayer _paddleAnimator;
+	[Export] CpuParticles2D _engineFireParticles;
 	[Export] ProgressBar _progressBoostLeft;
 	[Export] ProgressBar _progressBoostRight;
 	[Export] ProgressBar _progressPowerUpLeft;
@@ -328,6 +329,9 @@ public partial class Paddle : Area2D
 
 		GameManager.Instance.DecrementHealth();
 		SignalManager.Instance.EmitPlayerHurt();
+
+		_engineFireParticles.Restart();
+
 		_selfDestructTimer.Start();
 	}
 
