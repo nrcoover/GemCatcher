@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bsd3ktyaellt5"]
+[gd_scene load_steps=5 format=3 uid="uid://bsd3ktyaellt5"]
 
 [ext_resource type="PackedScene" uid="uid://3kq5fr5oomem" path="res://scenes/Paddle.tscn" id="1_e3oqh"]
+[ext_resource type="PackedScene" uid="uid://mo3emgtr8oc3" path="res://scenes/BlackHole.tscn" id="2_od3ld"]
 
 [sub_resource type="Curve" id="Curve_od3ld"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.6862069, 0.8166431), 0.0, 0.0, 0, 0, Vector2(1, 0.32157964), 0.0, 0.0, 0, 0]
@@ -28,4 +29,13 @@ scale_amount_max = 8.0
 scale_amount_curve = SubResource("Curve_od3ld")
 color_ramp = SubResource("Gradient_nat4r")
 
-[node name="Paddle" parent="." instance=ExtResource("1_e3oqh")]
+[node name="Paddle" parent="." node_paths=PackedStringArray("_eventHorizon", "_blackHole") instance=ExtResource("1_e3oqh")]
+_eventHorizon = NodePath("../BlackHole/EventHorizon")
+_blackHole = NodePath("../BlackHole")
+
+[node name="BlackHole" parent="." instance=ExtResource("2_od3ld")]
+
+[node name="EventHorizon" parent="BlackHole" index="0"]
+debug_color = Color(0, 0.6, 0.7, 0.42)
+
+[editable path="BlackHole"]

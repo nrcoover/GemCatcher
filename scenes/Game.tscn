@@ -489,9 +489,9 @@ flip_v = true
 
 [node name="PaddleWrapper" parent="." instance=ExtResource("6_426vi")]
 position = Vector2(561, 570)
+scale = Vector2(0.6, 0.6)
 
 [node name="Paddle" parent="PaddleWrapper" index="1" node_paths=PackedStringArray("_paddleWrapper", "_boostLabel", "_powerUpSecondsLabel", "_boostPercentageLabel", "_boostFuelAnimator", "_engineFireParticles", "_progressBoostLeft", "_progressBoostRight", "_progressPowerUpLeft", "_progressPowerUpRight", "_audioDisengageBoosters", "_audioBoostersReengaged", "_audioCooldownInProgress")]
-scale = Vector2(0.600926, 0.6009259)
 _boundaryMargin = 35.0
 _paddleWrapper = NodePath("..")
 _boostLabel = NodePath("../../CanvasLayer/GameUi/MarginContainer/BoostDebugLabel")
@@ -628,6 +628,7 @@ stream = ExtResource("17_attvq")
 volume_db = -12.0
 
 [editable path="PaddleWrapper"]
+[editable path="PaddleWrapper/BlackHole"]
 [editable path="NormalSpawnerContainer"]
 [editable path="VictorySpawnerContainer"]
 [editable path="VictorySpawnerContainer/GemSpawner"]
