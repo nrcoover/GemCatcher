@@ -1,3 +1,4 @@
+using GemCatcher.utils;
 using Godot;
 using System;
 
@@ -112,7 +113,10 @@ public partial class UIInputManager : Node
 			return;
 		}
 
-		GD.Print($"INPUT MODE CHANGED: {CurrentMode} -> {newMode}");
+		if (CustomDebug.IsDebugging)
+		{
+			GD.Print($"INPUT MODE CHANGED: {CurrentMode} -> {newMode}");
+		}
 
 		CurrentMode = newMode;
 

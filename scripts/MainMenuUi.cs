@@ -30,6 +30,7 @@ public partial class MainMenuUi : Control
 	[Export] private Label _titleLayer6;
 	[Export] private Label _highScoreLabel;
 	[Export] private Label _stagesWonLabel;
+	[Export] private Label _keysLabel;
 
 	[Export] private Timer _titleTimer;
 	[Export] private Control _titleContainer;
@@ -157,12 +158,13 @@ public partial class MainMenuUi : Control
 		SetThankYouButtonVisibility();
   }
 
-	private void OnInputModeChanged(UIInputManager.InputMode mode)
+	private void OnInputModeChanged(UIInputManager.InputMode inputMode)
 	{
 		bool isMouseKeyboard =
-			mode == UIInputManager.InputMode.MouseKeyboard;
+			inputMode == UIInputManager.InputMode.MouseKeyboard;
 
 		UpdateButtonMouseInteraction(isMouseKeyboard);
+		UpdateMovesModalInstructionsText(inputMode);
 
 		if (isMouseKeyboard)
 		{
@@ -618,6 +620,36 @@ public partial class MainMenuUi : Control
 			{
 				gemButton.RefreshMouseHoverState();
 			}
+		}
+	}
+
+	private void UpdateMovesModalInstructionsText(UIInputManager.InputMode inputMode)
+	{
+		var mouseKeyboardMoves = 
+			"W-A-S-D Keys"
+			+ "\n"
+			+ "\nShift Key"
+			+ "\n"
+			+ "\nEscape Key";
+
+		var gamepadMoves =
+			"LT, RT"
+			+ "\n"
+			+ "\nLB, RB"
+			+ "\n"
+			+ "\nMenu Button";
+
+		if (inputMode == UIInputManager.InputMode.MouseKeyboard)
+		{
+			_keysLabel.Text = mouseKeyboardMoves;
+		}
+		else if (inputMode == UIInputManager.InputMode.Gamepad)
+		{
+			_keysLabel.Text = gamepadMoves;
+		}
+		else
+		{
+			_keysLabel.Text = mouseKeyboardMoves;
 		}
 	}
 

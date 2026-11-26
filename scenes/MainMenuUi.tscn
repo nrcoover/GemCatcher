@@ -16,7 +16,7 @@ font_size = 22
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(1.25, 1.25)
 
-[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_mainMenuControls", "_playButton", "_infiniteModeButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_helloButton", "_thankYouButton", "_modalControls", "_movesModal", "_rulesModal", "_creditsModal", "_helloModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_stagesWonLabel", "_titleTimer", "_titleContainer", "_highScoreContainer", "_thankYouAudio")]
+[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_mainMenuControls", "_playButton", "_infiniteModeButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_helloButton", "_thankYouButton", "_modalControls", "_movesModal", "_rulesModal", "_creditsModal", "_helloModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_stagesWonLabel", "_keysLabel", "_titleTimer", "_titleContainer", "_highScoreContainer", "_thankYouAudio")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -50,6 +50,7 @@ _titleLayer5 = NodePath("MarginContainer/TitleContainer/TitleAlpha5")
 _titleLayer6 = NodePath("MarginContainer/TitleContainer/TitleAlpha6")
 _highScoreLabel = NodePath("MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxLabels/VBoxContainer/HighScoreLabel")
 _stagesWonLabel = NodePath("MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxLabels/VBoxContainer/StagesWonLabel")
+_keysLabel = NodePath("Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/VBoxContainer2/Keys")
 _titleTimer = NodePath("TitleTimer")
 _titleContainer = NodePath("MarginContainer/TitleContainer")
 _highScoreContainer = NodePath("MainMenuControls/MarginHighScore/VBoxScore/HBoxScore")
@@ -436,7 +437,7 @@ visible = false
 layout_mode = 1
 
 [node name="Title" parent="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
-text = "MOVES"
+text = "MOVES (Includes Controller Support)"
 
 [node name="HBoxInstructions" parent="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer" index="1"]
 theme_override_constants/separation = 24
@@ -474,11 +475,11 @@ size_flags_horizontal = 3
 
 [node name="Keys" type="Label" parent="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/VBoxContainer2"]
 layout_mode = 2
-text = "A-S-D-W Keys
+text = "W-A-S-D Keys / LT, RT
 
-Shift Key
+Shift Key / LB, RB
 
-Escape Key"
+Escape Key / Menu Button"
 label_settings = ExtResource("5_7v7mi")
 
 [node name="Instructions" parent="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="3"]
