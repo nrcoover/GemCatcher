@@ -35,6 +35,10 @@ This game was built with the following implemented features and techincal design
 - Big Paddle Delay | Paddle Tweens occasionally interfere with one another. Most noticeable when a falling gem and a the "Big Paddle" power up are caught at near the same time; paddle size doesn't update until the next falling gem is caught, triggering a new size Tween.
 - Last Gem of Stage Explodes | When the last gem of any stage is collected, it explodes, triggered by the Advance Stage event. Visually this is odd as it suggests the gem was not captured, but this bug is purely cosmetic and does not affect game play as the correct score is persisted.
 
+# Generative AI Disclosure
+
+No generative AI was used to create any visual or audio asset. Generative AI was used to identify and resolve several bugs during development and to implement controller support.
+
 # Desired Improvements
 
 - Power Up Timeout Flash | Players have commented on the unforunate lack of notice that a power up is about to expire. There is a visible countdown, but has proven not noticable enough during gameplay. A flashing warning as time runs out would be beneficial, but an implementation that doesn't interfere with the current flashing warning system for the Paddle's boost function has yet to be discovered.
