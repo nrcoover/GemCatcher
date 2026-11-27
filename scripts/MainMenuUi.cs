@@ -633,7 +633,7 @@ public partial class MainMenuUi : Control
 			+ "\nEscape Key";
 
 		var gamepadMoves =
-			"LT, RT"
+			"Left Stick (LS), Right Stick (RS)"
 			+ "\n"
 			+ "\nLB, RB"
 			+ "\n"

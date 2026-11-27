@@ -475,7 +475,7 @@ size_flags_horizontal = 3
 
 [node name="Keys" type="Label" parent="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/VBoxContainer2"]
 layout_mode = 2
-text = "W-A-S-D Keys / LT, RT
+text = "W-A-S-D Keys / Left Stick (LS), Right Stick (RS)
 
 Shift Key / LB, RB
 
