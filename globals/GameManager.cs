@@ -2,6 +2,16 @@ using System.Threading.Tasks;
 using GemCatcher.utils;
 using Godot;
 
+
+// TODO: Update save structure to support multiple high scores for each level of difficulty;
+// TODO: Fix spacing issue on Play Modal and Infinite Play Modal;
+// TODO: Gray out infinite modes based on the highest difficulty mode completed;
+// TODO: Update percentage of Black Hole power up based on difficulty level;
+// TODO: Slightly decrease maximum paddle speed;
+// TODO: Reassess gem speed;
+// TODO: Update final stage number based on difficulty level: 8, 10, 12;
+// TODO: Update Instructions (update explanation to be based off of difficulty level);
+
 public partial class GameManager : Node
 {
 	public static GameManager Instance {get; private set;}
