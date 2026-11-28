@@ -15,12 +15,20 @@ public partial class MainMenuUi : Control
 	[Export] private TextureButton _restoreHighScoreButton;
 	[Export] private GemButton _helloButton;
 	[Export] private GemButton _thankYouButton;
+	[Export] private GemButton _childsPlayModeButton;
+	[Export] private GemButton _normalModeButton;
+	[Export] private GemButton _stellarModeButton;
+	[Export] private GemButton _infiniteChildsPlayModeButton;
+	[Export] private GemButton _infiniteNormalModeButton;
+	[Export] private GemButton _infiniteStellarModeButton;
 
 	[Export] private Control _modalControls;
 	[Export] private MenuModal _movesModal;
 	[Export] private MenuModal _rulesModal;
 	[Export] private MenuModal _creditsModal;
 	[Export] private MenuModal _helloModal;
+	[Export] private MenuModal _playModeModal;
+	[Export] private MenuModal _infiniteModeNodal;
 	
 	[Export] private Label _titleLayer1;
 	[Export] private Label _titleLayer2;
@@ -121,7 +129,9 @@ public partial class MainMenuUi : Control
     UnsubscribeFromSignals();
   }
 
-  #region Signals
+
+
+#region Signals
 
   public void SubscribeToSignals()
 	{
@@ -132,6 +142,8 @@ public partial class MainMenuUi : Control
 		_rulesModal.Closed += OnModalClosed;
 		_creditsModal.Closed += OnModalClosed;
 		_helloModal.Closed += OnModalClosed;
+		_playModeModal.Closed += OnModalClosed;
+		_infiniteModeNodal.Closed += OnModalClosed;
 		_playButton.Pressed += OnPlayClicked;
 		_rulesButton.Pressed += OnRulesClicked;
 		_movesButton.Pressed += OnMovesClicked;
@@ -143,6 +155,12 @@ public partial class MainMenuUi : Control
 		_helloButton.Pressed += OnHelloClicked;
 		_thankYouButton.Pressed += OnThankYouClicked;
 		_thankYouAudio.Finished += OnThankYouAudioFinished;
+		_childsPlayModeButton.Pressed += OnChildsPlayModeClicked;
+		_normalModeButton.Pressed += OnNormalPlayModeClicked;
+		_stellarModeButton.Pressed += OnStellarPlayModeClicked;
+		_infiniteChildsPlayModeButton.Pressed += OnInfiniteChildsPlayModeClicked;
+		_infiniteNormalModeButton.Pressed += OnInfiniteNormalPlayModeClicked;
+		_infiniteStellarModeButton.Pressed += OnInfiniteStellarPlayModeClicked;
 	}
 
 	public void UnsubscribeFromSignals()
@@ -213,13 +231,12 @@ public partial class MainMenuUi : Control
 #endregion
 
 
+
 #region Button Signals
 
 	private void OnPlayClicked()
   {
-		GameManager.Instance.SetGameModeNormal();
-		SaveDataManager.Instance.MarkGameAsPlayed();
-		LevelManager.Instance.LoadGame();
+		OpenModal(_playModeModal);
   }
 
   private void OnRulesClicked()
@@ -257,8 +274,61 @@ public partial class MainMenuUi : Control
 
 	private void OnInfiniteModeClicked()
 	{
-		GameManager.Instance.SetGameModeInfinite();
-		LevelManager.Instance.LoadGame();
+		OpenModal(_infiniteModeNodal);
+	}
+
+	private void OnChildsPlayModeClicked()
+	{
+		GameManager.Instance.SetGameDifficultyMode(
+			GameManager.GameDifficulty.CHILDSPLAY
+		);
+
+		PlayNormalMode();
+	}
+
+	private void OnNormalPlayModeClicked()
+	{
+		GameManager.Instance.SetGameDifficultyMode(
+			GameManager.GameDifficulty.NORMAL
+		);
+
+		PlayNormalMode();
+	}
+
+	private void OnStellarPlayModeClicked()
+	{
+		GameManager.Instance.SetGameDifficultyMode(
+			GameManager.GameDifficulty.STELLAR
+		);
+
+		PlayNormalMode();
+	}
+
+	private void OnInfiniteChildsPlayModeClicked()
+	{
+		GameManager.Instance.SetGameDifficultyMode(
+			GameManager.GameDifficulty.CHILDSPLAY
+		);
+
+		PlayInfiniteMode();
+	}
+
+	private void OnInfiniteNormalPlayModeClicked()
+	{
+		GameManager.Instance.SetGameDifficultyMode(
+			GameManager.GameDifficulty.NORMAL
+		);
+		
+		PlayInfiniteMode();
+	}
+
+	private void OnInfiniteStellarPlayModeClicked()
+	{
+		GameManager.Instance.SetGameDifficultyMode(
+			GameManager.GameDifficulty.STELLAR
+		);
+		
+		PlayInfiniteMode();
 	}
 
 	private void OnHelloClicked()
@@ -286,12 +356,31 @@ public partial class MainMenuUi : Control
 
 #endregion
 
+
+
+#region Utilities
+	
 	private void CloseAllModals()
 	{
 		_rulesModal.Visible = false;
 		_movesModal.Visible = false;
 		_creditsModal.Visible = false;
 		_helloModal.Visible = false;
+		_playModeModal.Visible = false;
+		_infiniteModeNodal.Visible = false;
+	}
+
+	private void PlayNormalMode()
+	{
+		GameManager.Instance.SetGameModeNormal();
+		SaveDataManager.Instance.MarkGameAsPlayed();
+		LevelManager.Instance.LoadGame();
+	}
+
+	private void PlayInfiniteMode()
+	{
+		GameManager.Instance.SetGameModeInfinite();
+		LevelManager.Instance.LoadGame();
 	}
 
 	private void InitializeTitleColors()
@@ -377,7 +466,13 @@ public partial class MainMenuUi : Control
 		_thankYouButton.Disabled = false;
 		_thankYouButton.SelfModulate = _thankYouButtonOriginalColor;
 	}
-	
+
+#endregion
+
+
+
+#region Async Operations
+		
   private async void HandleLabelTweeningAsync()
 	{
 		if (_isFirstAnimationRun)
@@ -428,6 +523,12 @@ public partial class MainMenuUi : Control
 		_isAnimatingTitle = false;
 	}
 
+#endregion
+
+
+
+#region Tweens
+	
 	private void CreateColorScaleTween(Label label)
 	{
 		float tweenTime = 0.22f;
@@ -475,6 +576,10 @@ public partial class MainMenuUi : Control
 		).SetTrans(Tween.TransitionType.Sine)
 		.SetEase(Tween.EaseType.InOut);
 	}
+
+#endregion
+
+
 
 #region Handle UI
 

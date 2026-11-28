@@ -500,6 +500,11 @@ public partial class Game : Node2D
 
 	private void InstantiateAdditionalGemSpawner()
 	{
+		if (GameManager.Instance.SelectedDifficultyMode == GameManager.GameDifficulty.CHILDSPLAY)
+		{
+			return;
+		}
+
 		var additionalSpawnerTimeMultiplier = 7.0f;
 		var spawner = (GemSpawner)_gemSpawner.Instantiate();
 

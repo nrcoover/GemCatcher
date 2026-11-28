@@ -12,7 +12,9 @@ public partial class GameManager : Node
 	const int DEFAULT_SCORE = 0;
 
 	const float DEFAULT_DIFFICULTY_LEVEL = 1;
-	const float DIFFICULTY_MULTIPLIER = 1.01f;
+	const float DIFFICULTY_MULTIPLIER_CHILDSPLAY = 1f;
+	const float DIFFICULTY_MULTIPLIER_NORMAL = 1.005f;
+	const float DIFFICULTY_MULTIPLIER_STELLAR = 1.01f;
 	const float MAXIMUM_DIFFICULTY = 2.75f; // Clamp at 2.5 or 2.75 difficulty
 
 	const int DEFAULT_GAME_MODE = (int)GameMode.NORMAL;
@@ -21,6 +23,8 @@ public partial class GameManager : Node
 	const int STARTING_STAGE = 1;
 	public const int VICTORY_STAGE = 12;
 	public const int STAGE_ADVANCEMENT_INCREMENTOR = 25;
+
+	private float _difficultyModeMultiplier = DIFFICULTY_MULTIPLIER_NORMAL;
 
 	public enum GameState
 	{
@@ -33,6 +37,25 @@ public partial class GameManager : Node
 	{
 		NORMAL = 0,
 		INFINITE = 1
+	}
+
+	public enum GameDifficulty
+	{
+		CHILDSPLAY = 0,
+		NORMAL = 1,
+		STELLAR = 2,
+	}
+
+	public GameDifficulty SelectedDifficultyMode
+	{
+		get
+		{
+			return _selectedDifficultyMode;
+		}
+		private set
+		{
+			_selectedDifficultyMode = value;
+		}
 	}
 
 	public float DifficultyLevel
@@ -106,6 +129,7 @@ public partial class GameManager : Node
 		}
 	}
 
+	private GameDifficulty _selectedDifficultyMode = GameDifficulty.NORMAL;
 	private float _difficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
 	private int _highScore = DEFAULT_SCORE;
 	private int _maxHealth = MAX_HEALTH;
@@ -120,6 +144,8 @@ public partial class GameManager : Node
 	{
 		Instance ??= this;
     SubscribeToSignals();
+
+		SetDifficultyValues();
 	}
 
 	public override void _Process(double _delta)
@@ -142,6 +168,7 @@ public partial class GameManager : Node
 		SignalManager.Instance.ResetGame += OnResetGame;
 		SignalManager.Instance.GameVictory += OnGameVictory;
 		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
+		SignalManager.Instance.SetGameDifficulty += OnSetGameDifficulty;
 	}
 
   private void UnsubscribeFromSignals()
@@ -152,6 +179,7 @@ public partial class GameManager : Node
 		SignalManager.Instance.ResetGame -= OnResetGame;
 		SignalManager.Instance.GameVictory -= OnGameVictory;
 		SignalManager.Instance.AdvanceStage -= OnAdvanceStage;
+		SignalManager.Instance.SetGameDifficulty -= OnSetGameDifficulty;
 	}
 
   public void OnGameOver()
@@ -190,6 +218,11 @@ public partial class GameManager : Node
 		}
 	}
 
+	private void OnSetGameDifficulty(int gameDifficultyInt)
+	{
+		SelectedDifficultyMode = (GameDifficulty)gameDifficultyInt;
+	}
+
 #endregion
 
 
@@ -204,6 +237,11 @@ public partial class GameManager : Node
 	public void SetGameModeInfinite()
 	{
 		CurrentGameMode = (int)GameMode.INFINITE;
+	}
+
+	public void SetGameDifficultyMode(GameDifficulty difficulty)
+	{
+		SelectedDifficultyMode = difficulty;
 	}
 
 	public void SetGameStatePlaying()
@@ -231,6 +269,26 @@ public partial class GameManager : Node
 		ResetScore();
 		DifficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
 		SetGameStatePlaying();
+	}
+
+	private void SetDifficultyValues()
+	{
+		if (SelectedDifficultyMode == GameDifficulty.CHILDSPLAY)
+		{
+			DifficultyLevel = DIFFICULTY_MULTIPLIER_CHILDSPLAY;
+		}
+		else if (SelectedDifficultyMode == GameDifficulty.NORMAL)
+		{
+			DifficultyLevel = DIFFICULTY_MULTIPLIER_NORMAL;
+		}
+		else if (SelectedDifficultyMode == GameDifficulty.STELLAR)
+		{
+			DifficultyLevel = DIFFICULTY_MULTIPLIER_STELLAR;
+		}
+		else
+		{
+			DifficultyLevel = DIFFICULTY_MULTIPLIER_NORMAL;
+		}
 	}
 
 	private void CheckForGameOver()
@@ -367,7 +425,7 @@ public partial class GameManager : Node
 		}
 		
 		DifficultyLevel = (float)Mathf.Clamp(
-			DifficultyLevel * DIFFICULTY_MULTIPLIER
+			DifficultyLevel * _difficultyModeMultiplier
 			, DEFAULT_DIFFICULTY_LEVEL
 			, MAXIMUM_DIFFICULTY
 		);

@@ -16,7 +16,7 @@ font_size = 22
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(1.25, 1.25)
 
-[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_mainMenuControls", "_playButton", "_infiniteModeButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_helloButton", "_thankYouButton", "_modalControls", "_movesModal", "_rulesModal", "_creditsModal", "_helloModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_stagesWonLabel", "_keysLabel", "_titleTimer", "_titleContainer", "_highScoreContainer", "_thankYouAudio")]
+[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_mainMenuControls", "_playButton", "_infiniteModeButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_helloButton", "_thankYouButton", "_childsPlayModeButton", "_normalModeButton", "_stellarModeButton", "_infiniteChildsPlayModeButton", "_infiniteNormalModeButton", "_infiniteStellarModeButton", "_modalControls", "_movesModal", "_rulesModal", "_creditsModal", "_helloModal", "_playModeModal", "_infiniteModeNodal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_stagesWonLabel", "_keysLabel", "_titleTimer", "_titleContainer", "_highScoreContainer", "_thankYouAudio")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,11 +37,19 @@ _resetHighScoreButton = NodePath("MainMenuControls/MarginHighScore/VBoxScore/HBo
 _restoreHighScoreButton = NodePath("MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/RestoreButton")
 _helloButton = NodePath("MainMenuControls/MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton")
 _thankYouButton = NodePath("MainMenuControls/MarginHighScore/VBoxDeveloper/HBoxContainer/ThankYouButton")
+_childsPlayModeButton = NodePath("Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/ChildsPlayModeButton")
+_normalModeButton = NodePath("Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/NormalModeButton")
+_stellarModeButton = NodePath("Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/StellarModeButton")
+_infiniteChildsPlayModeButton = NodePath("Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/InfiniteChildsPlayModeButton")
+_infiniteNormalModeButton = NodePath("Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/InfiniteNormalModeButton")
+_infiniteStellarModeButton = NodePath("Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/InfiniteStellarModeButton")
 _modalControls = NodePath("Modals")
 _movesModal = NodePath("Modals/MovesModal")
 _rulesModal = NodePath("Modals/RulesModal")
 _creditsModal = NodePath("Modals/CreditsModal")
 _helloModal = NodePath("Modals/HelloModal")
+_playModeModal = NodePath("Modals/PlayModeModal")
+_infiniteModeNodal = NodePath("Modals/InfiniteModeModal")
 _titleLayer1 = NodePath("MarginContainer/TitleContainer/TitleAlpha")
 _titleLayer2 = NodePath("MarginContainer/TitleContainer/TitleAlpha2")
 _titleLayer3 = NodePath("MarginContainer/TitleContainer/TitleAlpha3")
@@ -406,6 +414,142 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="PlayModeModal" parent="Modals" instance=ExtResource("4_h6icy")]
+visible = false
+layout_mode = 1
+
+[node name="Title" parent="Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
+text = "SELECT YOUR GAME DIFFICULTY"
+
+[node name="HBoxSocialButtonsWrapper" type="HBoxContainer" parent="Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="HBoxButtons" type="HBoxContainer" parent="Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_constants/separation = 24
+
+[node name="ChildsPlayModeButton" parent="Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.53333336, 0.8, 1, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath("../NormalModeButton")
+focus_neighbor_bottom = NodePath("../../../HBoxButtonWrapper/HBoxButton/CloseButton")
+focus_next = NodePath("../NormalModeButton")
+focus_previous = NodePath(".")
+texture_disabled = ExtResource("4_56fvm")
+
+[node name="ButtonLabel" parent="Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/ChildsPlayModeButton" index="0"]
+text = "Child's
+Play"
+
+[node name="NormalModeButton" parent="Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+layout_mode = 2
+focus_neighbor_left = NodePath("../ChildsPlayModeButton")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath("../StellarModeButton")
+focus_neighbor_bottom = NodePath("../../../HBoxButtonWrapper/HBoxButton/CloseButton")
+focus_next = NodePath("../StellarModeButton")
+focus_previous = NodePath("../ChildsPlayModeButton")
+texture_disabled = ExtResource("4_56fvm")
+
+[node name="ButtonLabel" parent="Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/NormalModeButton" index="0"]
+text = "Normal"
+
+[node name="StellarModeButton" parent="Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(1, 1, 0.53333336, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../NormalModeButton")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../../../HBoxButtonWrapper/HBoxButton/CloseButton")
+focus_next = NodePath("../../../HBoxButtonWrapper/HBoxButton/CloseButton")
+focus_previous = NodePath("../NormalModeButton")
+texture_disabled = ExtResource("4_56fvm")
+
+[node name="ButtonLabel" parent="Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/StellarModeButton" index="0"]
+text = "Stellar"
+
+[node name="Instructions" parent="Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
+text = "Please hover over a button
+to learn about it's mode."
+horizontal_alignment = 1
+
+[node name="CloseButton" parent="Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton" index="0"]
+texture_disabled = ExtResource("4_56fvm")
+
+[node name="InfiniteModeModal" parent="Modals" instance=ExtResource("4_h6icy")]
+visible = false
+layout_mode = 1
+
+[node name="Title" parent="Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
+text = "SELECT YOUR GAME DIFFICULTY"
+
+[node name="HBoxSocialButtonsWrapper" type="HBoxContainer" parent="Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer" index="1"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="HBoxButtons" type="HBoxContainer" parent="Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_constants/separation = 24
+
+[node name="InfiniteChildsPlayModeButton" parent="Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.53333336, 0.8, 1, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath("../InfiniteNormalModeButton")
+focus_neighbor_bottom = NodePath("../../../HBoxButtonWrapper/HBoxButton/CloseButton")
+focus_next = NodePath("../InfiniteNormalModeButton")
+focus_previous = NodePath(".")
+texture_disabled = ExtResource("4_56fvm")
+
+[node name="ButtonLabel" parent="Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/InfiniteChildsPlayModeButton" index="0"]
+text = "Child's
+Play"
+
+[node name="InfiniteNormalModeButton" parent="Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+layout_mode = 2
+focus_neighbor_left = NodePath("../InfiniteChildsPlayModeButton")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath("../InfiniteStellarModeButton")
+focus_neighbor_bottom = NodePath("../../../HBoxButtonWrapper/HBoxButton/CloseButton")
+focus_next = NodePath("../InfiniteStellarModeButton")
+focus_previous = NodePath("../InfiniteChildsPlayModeButton")
+texture_disabled = ExtResource("4_56fvm")
+
+[node name="ButtonLabel" parent="Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/InfiniteNormalModeButton" index="0"]
+text = "Normal"
+
+[node name="InfiniteStellarModeButton" parent="Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(1, 1, 0.53333336, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../InfiniteNormalModeButton")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../../../HBoxButtonWrapper/HBoxButton/CloseButton")
+focus_next = NodePath("../../../HBoxButtonWrapper/HBoxButton/CloseButton")
+focus_previous = NodePath("../InfiniteNormalModeButton")
+texture_disabled = ExtResource("4_56fvm")
+
+[node name="ButtonLabel" parent="Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/InfiniteStellarModeButton" index="0"]
+text = "Stellar"
+
+[node name="Instructions" parent="Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
+text = "Please hover over a button
+to learn about it's mode."
+horizontal_alignment = 1
+
+[node name="CloseButton" parent="Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton" index="0"]
+texture_disabled = ExtResource("4_56fvm")
+
 [node name="RulesModal" parent="Modals" instance=ExtResource("4_h6icy")]
 visible = false
 layout_mode = 1
@@ -612,6 +756,16 @@ stream = ExtResource("7_it30p")
 [editable path="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/RestoreButton"]
 [editable path="MainMenuControls/MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton"]
 [editable path="MainMenuControls/MarginHighScore/VBoxDeveloper/HBoxContainer/ThankYouButton"]
+[editable path="Modals/PlayModeModal"]
+[editable path="Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/ChildsPlayModeButton"]
+[editable path="Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/NormalModeButton"]
+[editable path="Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/StellarModeButton"]
+[editable path="Modals/PlayModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
+[editable path="Modals/InfiniteModeModal"]
+[editable path="Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/InfiniteChildsPlayModeButton"]
+[editable path="Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/InfiniteNormalModeButton"]
+[editable path="Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/InfiniteStellarModeButton"]
+[editable path="Modals/InfiniteModeModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
 [editable path="Modals/RulesModal"]
 [editable path="Modals/RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
 [editable path="Modals/MovesModal"]

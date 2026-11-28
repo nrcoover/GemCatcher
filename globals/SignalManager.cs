@@ -1,4 +1,5 @@
 using Godot;
+using static GameManager;
 
 public partial class SignalManager : Node
 {
@@ -30,6 +31,7 @@ public partial class SignalManager : Node
 	[Signal] public delegate void SpawnPoolObjectEventHandler(Vector2 position, PackedScene scene, string colorHex);
 	[Signal] public delegate void BlackHoleActivatedEventHandler();
 	[Signal] public delegate void PlayerSummonedExplosionEventHandler();
+	[Signal] public delegate void SetGameDifficultyEventHandler(int gameDifficultyInt);
 
 	public override void _Ready()
 	{
@@ -164,5 +166,10 @@ public partial class SignalManager : Node
 	public void EmitPlayerSummonedExplosion()
 	{
 		EmitSignal(SignalName.PlayerSummonedExplosion);
+	}
+
+	public void EmitSetGameDifficulty(int gameDifficultyInt)
+	{
+		EmitSignal(SignalName.SetGameDifficulty, gameDifficultyInt);
 	}
 }
