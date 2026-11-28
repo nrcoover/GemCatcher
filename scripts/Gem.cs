@@ -77,6 +77,7 @@ public partial class Gem : Area2D
 		SignalManager.Instance.AdvanceStage += OnAdvanceStage;
 		SignalManager.Instance.GameVictory += OnGameVictory;
 		SignalManager.Instance.BlackHoleActivated += OnBlackHoleActivated;
+		SignalManager.Instance.PlayerSummonedExplosion += OnPlayerSummonedExplosion;
 		AreaEntered += OnAreaEntered;
 		AreaExited += OnAreaExited;
 	}
@@ -86,6 +87,7 @@ public partial class Gem : Area2D
 		SignalManager.Instance.AdvanceStage -= OnAdvanceStage;
 		SignalManager.Instance.GameVictory -= OnGameVictory;
 		SignalManager.Instance.BlackHoleActivated -= OnBlackHoleActivated;
+		SignalManager.Instance.PlayerSummonedExplosion -= OnPlayerSummonedExplosion;
 	}
 
 	private void OnAdvanceStage()
@@ -101,6 +103,11 @@ public partial class Gem : Area2D
 	private async void OnBlackHoleActivated()
 	{
 		CheckIfInBlackHole();
+	}
+
+	private void OnPlayerSummonedExplosion()
+	{
+		CreateExplosion();
 	}
 
 	public virtual void OnAreaEntered(Area2D area)
@@ -161,7 +168,11 @@ public partial class Gem : Area2D
 			HandleObjectRemoval();
 		}
 
-		if (_isGameGem && _isInEventHorizon)
+		if (_isGameGem 
+				&& _isInEventHorizon
+				&& this is not GemHeart
+				&& this is not GemPowerUp
+			)
 		{
 			GetPositionInEventHorizon(delta);
 		}
@@ -225,7 +236,7 @@ public partial class Gem : Area2D
 
 	private void GetReferenceToPlayerPaddle()
 	{
-		_paddle = GetNode<Paddle>("/root/Game/Paddle");
+		_paddle = GetNode<Paddle>("/root/Game/PaddleWrapper/Paddle");
 
 		if(_paddle == null)
 		{
@@ -285,6 +296,11 @@ public partial class Gem : Area2D
 			return;
 		}
 
+		if (this is GemPowerUp || this is GemHeart)
+		{
+			return;
+		}
+
 		float distance = GlobalPosition.DistanceTo(_paddle.GlobalPosition);
 
 		_isInEventHorizon = distance <= _paddle.EventHorizonRadius;
@@ -331,7 +347,7 @@ public partial class Gem : Area2D
 
 
 
-#region Paricles & Effects
+#region Particles & Effects
 
 	protected void BeginParticleEmission()
 	{
@@ -353,6 +369,5 @@ public partial class Gem : Area2D
 		CallDeferred(MethodName.HandleObjectRemoval);
 	}
 
-	// TODO: Fix bug in which last gem captured before stage advancement also explodes
 #endregion
 }

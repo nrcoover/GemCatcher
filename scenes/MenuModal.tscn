@@ -104,6 +104,12 @@ size_flags_vertical = 8
 [node name="CloseButton" parent="MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton" instance=ExtResource("3_8awu7")]
 self_modulate = Color(0.8, 0.53333336, 1, 1)
 layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath(".")
+focus_next = NodePath(".")
+focus_previous = NodePath(".")
 
 [node name="ButtonLabel" parent="MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton" index="0"]
 text = "CLOSE"

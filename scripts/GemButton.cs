@@ -1,5 +1,6 @@
 using Godot;
 
+[GlobalClass]
 public partial class GemButton : TextureButton
 {
 	[Export] public GpuParticles2D _particles;
@@ -12,6 +13,7 @@ public partial class GemButton : TextureButton
 	public override void _Ready()
 	{
 		SubscribeToSignals();
+
 		SetPivotPoint();
 		_particles.Emitting = true;
 		SetParticleEmission(false);
@@ -19,10 +21,17 @@ public partial class GemButton : TextureButton
 		_originalColor = SelfModulate;
 	}
 
-	private void SubscribeToSignals()
+	public void KillSpinTwin()
+	{
+		_spinTween?.Kill();
+	}
+
+	protected virtual void SubscribeToSignals()
 	{
 		MouseEntered += OnMouseEntered;
 		MouseExited += OnMouseExited;
+		FocusEntered += OnFocusEntered;
+		FocusExited += OnFocusExited;
 	}
 
 	private void SetPivotPoint()
@@ -32,7 +41,31 @@ public partial class GemButton : TextureButton
 
 	private void OnMouseEntered()
 	{
+		OnFocusEntered();
+	}
+
+	private void OnMouseExited()
+	{
+		OnFocusExited();
+	}
+
+	private void OnFocusEntered()
+	{
 		SetParticleEmission(true);
+
+		if (Disabled)
+		{
+			SelfModulate = new Color(
+				Helper.GetColorFromHexCode(Constants.CustomColors.DisabledGray)
+			);
+
+			return;
+		}
+		else
+		{
+			SelfModulate = _originalColor;
+		}
+
 		PlaySparkleSound();
 
 		_spinTween = CreateTween();
@@ -55,11 +88,19 @@ public partial class GemButton : TextureButton
 		_spinTween.SetLoops(0); 
 	}
 
-  private void OnMouseExited()
+  private void OnFocusExited()
 	{
 		SetParticleEmission(false);
+		KillSpinTwin();
 
-		_spinTween?.Kill();
+		if (Disabled)
+		{
+			SelfModulate = new Color(
+				Helper.GetColorFromHexCode(Constants.CustomColors.DisabledGray)
+			);
+
+			return;
+		}
 		
 		Tween resetTween = CreateTween();
 		resetTween.TweenProperty(
@@ -78,5 +119,20 @@ public partial class GemButton : TextureButton
 	private void PlaySparkleSound()
 	{
 		_sparkleSound.Play();
+	}
+
+	public void RefreshMouseHoverState()
+	{
+		bool isMouseOverButton =
+			GetGlobalRect().HasPoint(GetGlobalMousePosition());
+
+		if (isMouseOverButton)
+		{
+			OnMouseEntered();
+		}
+		else
+		{
+			OnMouseExited();
+		}
 	}
 }

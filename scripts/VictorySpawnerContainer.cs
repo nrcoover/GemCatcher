@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using GemCatcher.utils;
 using Godot;
 
 public partial class VictorySpawnerContainer : Node2D
@@ -56,7 +57,11 @@ public partial class VictorySpawnerContainer : Node2D
 		foreach (GemSpawner spawner in victorySpawners)
 		{
 			spawner.ProcessMode = ProcessModeEnum.Inherit;
-			GD.Print($"Spawner Spawn Time: {spawner.SpawnTime}");
+
+			if (CustomDebug.IsDebugging)
+			{
+				GD.Print($"Spawner Spawn Time: {spawner.SpawnTime}");
+			}
 		}
 	}
 }

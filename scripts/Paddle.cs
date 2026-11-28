@@ -1,10 +1,12 @@
+using GemCatcher.utils;
 using Godot;
 
 public partial class Paddle : Area2D
 {
 #region Variables - Debugging
 
-	const bool IS_DEBUGGING = false;
+	private readonly bool IS_DEBUGGING =  CustomDebug.IsDebugging && clasIsDebugging;
+	const bool clasIsDebugging = true;
 	[Export] Label _debugLogLabel;
 
 #endregion
@@ -45,6 +47,7 @@ public partial class Paddle : Area2D
 	[Export] float _boundaryMargin = 25.0f;
 	[Export] float _boostMultiplier = 1.5f;
 
+	[Export] Node2D _paddleWrapper;
 	[Export] CollisionShape2D _eventHorizon;
 	[Export] Label _boostLabel;
 	[Export] Label _powerUpSecondsLabel;
@@ -55,6 +58,7 @@ public partial class Paddle : Area2D
 	[Export] Timer _powerUpTimer;
 	[Export] AnimationPlayer _boostFuelAnimator;
 	[Export] AnimationPlayer _paddleAnimator;
+	[Export] CpuParticles2D _engineFireParticles;
 	[Export] ProgressBar _progressBoostLeft;
 	[Export] ProgressBar _progressBoostRight;
 	[Export] ProgressBar _progressPowerUpLeft;
@@ -64,6 +68,7 @@ public partial class Paddle : Area2D
 	[Export] PaddleGhost _paddleGhostLeft;
 	[Export] PaddleGhost _paddleGhostRight;
 	[Export] BlackHole _blackHole;
+	[Export] RayCast2D _debugEventHorizonRayCast;
 
 	[Export] AudioStreamPlayer2D _boostSound;
 	[Export] AudioStreamPlayer2D _bigPaddleActivatedSound;
@@ -94,7 +99,9 @@ public partial class Paddle : Area2D
 	private PowerUp _currentPowerUp;
 	
 	private bool _isTryingToBoost =>
-	Input.IsActionPressed("boost");
+	Input.IsActionPressed(Constants.Controls.Boost)
+	|| Input.IsActionPressed(Constants.Controls.ControllerBoostLeft)
+	|| Input.IsActionPressed(Constants.Controls.ControllerBoostRight);
 
 	private bool _canBoost =>
 		_isTryingToBoost &&
@@ -114,12 +121,10 @@ public partial class Paddle : Area2D
 
 	private Rect2 _viewportBoundary;
 	
-  private void HandleDebugLog()
+  private void HandleDebug()
   {
-		if (!IS_DEBUGGING)
-		{
-			_debugLogLabel.Visible = false;
-		}
+		_debugLogLabel.Visible = IS_DEBUGGING;
+		_debugEventHorizonRayCast.Visible = IS_DEBUGGING;
 
     _debugLogLabel.Text = "BEBUGGING: \n"
 			+ $"Fuel: {_boostFuel},\n"
@@ -155,12 +160,14 @@ public partial class Paddle : Area2D
 		UpdatePowerUpUi();
 		HandleParticles();
 
-		HandleDebugLog();
+		HandleDebug();
 	}
 
   public override void _UnhandledInput(InputEvent @event)
 	{
-		if (@event.IsActionPressed("boost"))
+		if (@event.IsActionPressed(Constants.Controls.Boost) 
+		|| @event.IsActionPressed(Constants.Controls.ControllerBoostLeft)
+		|| @event.IsActionPressed(Constants.Controls.ControllerBoostRight))
 		{
 			if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
 			{
@@ -173,7 +180,15 @@ public partial class Paddle : Area2D
 			}
 		}
 
-		if (@event.IsActionReleased("boost"))
+		if ((@event.IsActionReleased(Constants.Controls.Boost) 
+				&& !_isTryingToBoost)
+			||
+				(@event.IsActionReleased(Constants.Controls.ControllerBoostLeft) 
+				&& !_isTryingToBoost)
+			||
+				(@event.IsActionReleased(Constants.Controls.ControllerBoostRight) 
+				&& !_isTryingToBoost)	
+			)
 		{
 			if (GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
 			{
@@ -315,6 +330,10 @@ public partial class Paddle : Area2D
 
 		GameManager.Instance.DecrementHealth();
 		SignalManager.Instance.EmitPlayerHurt();
+
+		_engineFireParticles.GlobalPosition = GlobalPosition;
+		_engineFireParticles.Restart();
+
 		_selfDestructTimer.Start();
 	}
 
@@ -383,7 +402,12 @@ public partial class Paddle : Area2D
 		if (_movementSpeed > MAX_MOVEMENT_SPEED)
 		{
 			_movementSpeed = MAX_MOVEMENT_SPEED;
-			GD.Print("MAXIMUM SPEED ACHIEVED!!!");
+
+			if (CustomDebug.IsDebugging)
+			{
+				GD.Print("MAXIMUM SPEED ACHIEVED!!!");
+			}
+
 			return;
 		}
 
@@ -424,7 +448,7 @@ public partial class Paddle : Area2D
 
 		if (Input.IsActionPressed("move_right"))
 		{
-			Position += new Vector2(
+			_paddleWrapper.Position += new Vector2(
 				calculatedMovementSpeed * delta,
 				noChangeInPosition
 			);
@@ -432,7 +456,7 @@ public partial class Paddle : Area2D
 
 		if (Input.IsActionPressed("move_left"))
 		{
-			Position -= new Vector2(
+			_paddleWrapper.Position -= new Vector2(
 				calculatedMovementSpeed * delta, 
 				noChangeInPosition
 			);
@@ -441,14 +465,14 @@ public partial class Paddle : Area2D
 
 	private void RestrictPaddleToBoundary()
 	{
-		if(Position.X < _viewportBoundary.Position.X + _boundaryMargin)
+		if(_paddleWrapper.Position.X < _viewportBoundary.Position.X + _boundaryMargin)
 		{
-			Position = new Vector2(_viewportBoundary.Position.X + _boundaryMargin, Position.Y);
+			_paddleWrapper.Position = new Vector2(_viewportBoundary.Position.X + _boundaryMargin, _paddleWrapper.Position.Y);
 		}
 
-		if(Position.X > _viewportBoundary.End.X - _boundaryMargin)
+		if(_paddleWrapper.Position.X > _viewportBoundary.End.X - _boundaryMargin)
 		{
-			Position = new Vector2(_viewportBoundary.End.X - _boundaryMargin, Position.Y);
+			_paddleWrapper.Position = new Vector2(_viewportBoundary.End.X - _boundaryMargin, _paddleWrapper.Position.Y);
 		}
 	}
 
@@ -932,7 +956,7 @@ public partial class Paddle : Area2D
 
   private void SelectRandomPowerUp(Color color)
   {
-		var randomNumber = Helper.GetRandomInt(2, 2); // TODO: Put back to 0, 2
+		var randomNumber = Helper.GetRandomInt(0, 2);
 
 		switch (randomNumber)
 		{

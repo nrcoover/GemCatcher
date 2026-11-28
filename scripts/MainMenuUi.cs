@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using GemCatcher.utils;
 using Godot;
 
 public partial class MainMenuUi : Control
 {
+	[Export] private Control _mainMenuControls;
 	[Export] private TextureButton _playButton;
 	[Export] private TextureButton _infiniteModeButton;
 	[Export] private TextureButton _rulesButton;
@@ -11,10 +13,14 @@ public partial class MainMenuUi : Control
 	[Export] private TextureButton _creditsButton;
 	[Export] private TextureButton _resetHighScoreButton;
 	[Export] private TextureButton _restoreHighScoreButton;
+	[Export] private GemButton _helloButton;
+	[Export] private GemButton _thankYouButton;
 
+	[Export] private Control _modalControls;
 	[Export] private MenuModal _movesModal;
 	[Export] private MenuModal _rulesModal;
 	[Export] private MenuModal _creditsModal;
+	[Export] private MenuModal _helloModal;
 	
 	[Export] private Label _titleLayer1;
 	[Export] private Label _titleLayer2;
@@ -23,10 +29,14 @@ public partial class MainMenuUi : Control
 	[Export] private Label _titleLayer5;
 	[Export] private Label _titleLayer6;
 	[Export] private Label _highScoreLabel;
+	[Export] private Label _stagesWonLabel;
+	[Export] private Label _keysLabel;
 
 	[Export] private Timer _titleTimer;
 	[Export] private Control _titleContainer;
-	[Export] private MarginContainer _marginHighScoreContainer;
+	[Export] private HBoxContainer _highScoreContainer;
+
+	[Export] private AudioStreamPlayer _thankYouAudio;
 
 	private Dictionary<Label, Vector2> _baseScales = [];
 	private Dictionary<Label, Color> _baseColors = [];
@@ -34,8 +44,23 @@ public partial class MainMenuUi : Control
 	private bool _isAnimatingTitle = false;
 	private bool _isFirstAnimationRun = false;
 
+	private Color _thankYouButtonOriginalColor;
+
+	private Control _lastFocusedControl;
+	private readonly Dictionary<Control, Control.FocusModeEnum> _savedFocusModes = new();
+	private MenuModal _activeModal;
+
+	private readonly Dictionary<BaseButton, Control.MouseFilterEnum>
+    _originalMouseFilters = new();
+
 	public override void _Ready()
 	{
+		SubscribeToSignals();
+
+		CloseAllModals();
+
+		HandleStartupUI();
+
 		_isFirstAnimationRun = true;
 
 		if (SaveDataManager.Instance.IsInfiniteModeUnlocked)
@@ -47,11 +72,48 @@ public partial class MainMenuUi : Control
 			HideInfiniteModeButton();
 		}
 
-		HandleHighScoreDisplay();
-		CloseAllModals();
+		HandleLabelDisplays();
 		InitializeTitleColors();
 		HandleLabelTweeningAsync();
-		SubscribeToSignals();
+		SetThankYouButtonOriginalColor();
+		SetThankYouButtonVisibility();
+		SetHelloButtonVisibility();
+		ResetThankYouButton();
+	}
+
+	public override void _Process(double delta)
+	{
+		Control focused = GetViewport().GuiGetFocusOwner();
+
+		if (focused != null && CustomDebug.IsDebugging)
+		{
+			GD.Print($"GUI FOCUS: {focused.Name}");
+		}
+	}
+
+  public override void _UnhandledInput(InputEvent @event)
+	{
+		if (_activeModal != null)
+		{
+			return;
+		}
+
+		if (UIInputManager.Instance.CurrentMode != UIInputManager.InputMode.Gamepad)
+		{
+			return;
+		}
+
+		bool navigationPressed = @event.IsActionPressed("ui_up")
+			|| @event.IsActionPressed("ui_down") 
+			|| @event.IsActionPressed("ui_left") 
+			|| @event.IsActionPressed("ui_right") 
+			|| @event.IsActionPressed("ui_focus_prev") 
+			|| @event.IsActionPressed("ui_focus_next");
+
+		if (navigationPressed && !IsAnyControlFocused())
+		{
+			_playButton.CallDeferred(Control.MethodName.GrabFocus);
+		}
 	}
 
   public override void _ExitTree()
@@ -64,7 +126,12 @@ public partial class MainMenuUi : Control
   public void SubscribeToSignals()
 	{
 		SignalManager.Instance.SaveDataReset += OnSaveDataReset;
+		UIInputManager.Instance.InputModeChanged += OnInputModeChanged;
 		_titleTimer.Timeout += OnTitleTimeout;
+		_movesModal.Closed += OnModalClosed;
+		_rulesModal.Closed += OnModalClosed;
+		_creditsModal.Closed += OnModalClosed;
+		_helloModal.Closed += OnModalClosed;
 		_playButton.Pressed += OnPlayClicked;
 		_rulesButton.Pressed += OnRulesClicked;
 		_movesButton.Pressed += OnMovesClicked;
@@ -73,40 +140,96 @@ public partial class MainMenuUi : Control
 		_resetHighScoreButton.Pressed += OnResetHighScoreClicked;
 		_restoreHighScoreButton.Pressed += OnRestoreHighScoreClicked;
 		_infiniteModeButton.Pressed += OnInfiniteModeClicked;
+		_helloButton.Pressed += OnHelloClicked;
+		_thankYouButton.Pressed += OnThankYouClicked;
+		_thankYouAudio.Finished += OnThankYouAudioFinished;
 	}
 
 	public void UnsubscribeFromSignals()
 	{
 		SignalManager.Instance.SaveDataReset -= OnSaveDataReset;
+		UIInputManager.Instance.InputModeChanged -= OnInputModeChanged;
 	}
 
   private void OnSaveDataReset()
   {
-    HandleHighScoreDisplay();
+    HandleLabelDisplays();
 		HandleInfiniteModeButtonDisplay();
+		SetThankYouButtonVisibility();
   }
+
+	private void OnInputModeChanged(UIInputManager.InputMode inputMode)
+	{
+		bool isMouseKeyboard =
+			inputMode == UIInputManager.InputMode.MouseKeyboard;
+
+		UpdateButtonMouseInteraction(isMouseKeyboard);
+		UpdateMovesModalInstructionsText(inputMode);
+
+		if (isMouseKeyboard)
+		{
+			ClearAllFocus();
+			return;
+		}
+
+		if (_activeModal != null)
+		{
+			_activeModal.GrabInitialFocus();
+			return;
+		}
+
+		if (!IsAnyControlFocused())
+		{
+			_playButton.CallDeferred(Control.MethodName.GrabFocus);
+		}
+	}
 
   private void OnTitleTimeout()
   {
     HandleLabelTweeningAsync();
   }
 
+	private void OnModalClosed(MenuModal modal)
+	{
+		if (_activeModal != modal)
+		{
+			return;
+		}
+
+		_activeModal = null;
+
+		SetControlsFocusEnabled(_mainMenuControls, true);
+
+		if (UIInputManager.Instance.CurrentMode == UIInputManager.InputMode.Gamepad)
+		{
+			RestorePreviousFocus();
+		}
+		else
+		{
+			ClearAllFocus();
+		}
+	}
+
+#endregion
+
+
+#region Button Signals
+
 	private void OnPlayClicked()
   {
 		GameManager.Instance.SetGameModeNormal();
+		SaveDataManager.Instance.MarkGameAsPlayed();
 		LevelManager.Instance.LoadGame();
   }
 
   private void OnRulesClicked()
 	{
-		CloseAllModals();
-		_rulesModal.Visible = true;
+		OpenModal(_rulesModal);
 	}
 
   private void OnMovesClicked()
 	{
-		CloseAllModals();
-		_movesModal.Visible = true;
+		OpenModal(_movesModal);
 	}
 	
 	private void OnQuitClicked()
@@ -116,18 +239,19 @@ public partial class MainMenuUi : Control
 
   private void OnCreditsClicked()
 	{
-		CloseAllModals();
-		_creditsModal.Visible = true;
+		OpenModal(_creditsModal);
 	}
 	
   private void OnResetHighScoreClicked()
   {
+		CloseAllModals();
 		GameManager.Instance.SetGameModeNormal();
 		SaveDataManager.Instance.ResetSaveData();
   }
 
   private void OnRestoreHighScoreClicked()
   {
+		CloseAllModals();
     SaveDataManager.Instance.RestoreHighScore();
   }
 
@@ -137,6 +261,29 @@ public partial class MainMenuUi : Control
 		LevelManager.Instance.LoadGame();
 	}
 
+	private void OnHelloClicked()
+	{
+		OpenModal(_helloModal);
+	}
+
+	private void OnThankYouClicked()
+	{
+		CloseAllModals();
+		_thankYouButton.Disabled = true;
+		_thankYouButton.KillSpinTwin();
+
+		_thankYouButton.SelfModulate = new Color(
+			Helper.GetColorFromHexCode(Constants.CustomColors.DisabledGray)
+		);
+
+		_thankYouAudio.Play();
+	}
+
+	private void OnThankYouAudioFinished()
+	{
+		ResetThankYouButton();
+	}
+
 #endregion
 
 	private void CloseAllModals()
@@ -144,6 +291,7 @@ public partial class MainMenuUi : Control
 		_rulesModal.Visible = false;
 		_movesModal.Visible = false;
 		_creditsModal.Visible = false;
+		_helloModal.Visible = false;
 	}
 
 	private void InitializeTitleColors()
@@ -164,16 +312,19 @@ public partial class MainMenuUi : Control
 		_baseColors[label] = label.Modulate;
 	}
 	
-  private void HandleHighScoreDisplay()
+  private void HandleLabelDisplays()
   {
-		_marginHighScoreContainer.Visible = false;
+		_highScoreContainer.Visible = false;
     var highScore = SaveDataManager.Instance.HighScore;
 		var highScoreRestore = SaveDataManager.Instance.HighScoreRestore;
+		int stagesWon = highScore / GameManager.STAGE_ADVANCEMENT_INCREMENTOR;
 
 		if (highScore != 0 || highScoreRestore != 0)
 		{
-			_marginHighScoreContainer.Visible = true;
+			_highScoreContainer.Visible = true;
 			_highScoreLabel.Text = $"High Score: {highScore}";
+			_stagesWonLabel.Text = $"Stages Won: {stagesWon}";
+			_stagesWonLabel.Visible = SaveDataManager.Instance.IsInfiniteModeUnlocked;
 
 			if (highScoreRestore == 0)
 			{
@@ -204,6 +355,27 @@ public partial class MainMenuUi : Control
 	private void ShowInfiniteModeButton()
 	{
 		_infiniteModeButton.Show();
+	}
+
+	private void SetThankYouButtonOriginalColor()
+	{
+		_thankYouButtonOriginalColor = _thankYouButton.SelfModulate;
+	}
+
+	private void SetThankYouButtonVisibility()
+	{
+		_thankYouButton.Visible = SaveDataManager.Instance.IsInfiniteModeUnlocked;
+	}
+
+	private void SetHelloButtonVisibility()
+	{
+		_helloButton.Visible = SaveDataManager.Instance.HasPlayedGame;
+	}
+
+	private void ResetThankYouButton()
+	{
+		_thankYouButton.Disabled = false;
+		_thankYouButton.SelfModulate = _thankYouButtonOriginalColor;
 	}
 	
   private async void HandleLabelTweeningAsync()
@@ -303,4 +475,183 @@ public partial class MainMenuUi : Control
 		).SetTrans(Tween.TransitionType.Sine)
 		.SetEase(Tween.EaseType.InOut);
 	}
+
+#region Handle UI
+
+	private void HandleStartupUI()
+	{
+		if (UIInputManager.Instance.CurrentMode ==
+    UIInputManager.InputMode.MouseKeyboard)
+		{
+			CallDeferred(nameof(RefreshMenuMouseHover));
+		}
+
+		CacheOriginalMouseFilters(this);
+
+		OnInputModeChanged(UIInputManager.Instance.CurrentMode);
+	}
+
+	private void HandleFocusControl()
+	{
+		_playButton.CallDeferred(MethodName.GrabFocus);
+	}
+
+	private bool IsAnyControlFocused()
+	{
+		Control focusedControl = GetViewport().GuiGetFocusOwner();
+
+    return focusedControl != null
+			&& IsAncestorOf(focusedControl)
+			&& CanReceiveFocus(focusedControl);
+	}
+
+	private void ClearAllFocus()
+	{
+		GetViewport().GuiReleaseFocus();
+	}
+
+	public void OpenModal(MenuModal modal)
+	{
+		if (_activeModal != null)
+		{
+			return;
+		}
+
+		_lastFocusedControl = GetViewport().GuiGetFocusOwner();
+
+		_activeModal = modal;
+
+		SetControlsFocusEnabled(_mainMenuControls, false);
+
+		modal.Open();
+	}
+
+	private void SetControlsFocusEnabled(Node root, bool enabled)
+	{
+		foreach (Node child in root.GetChildren())
+		{
+			if (child is Control control)
+			{
+				if (!enabled)
+				{
+					if (control.FocusMode != Control.FocusModeEnum.None)
+					{
+						_savedFocusModes[control] = control.FocusMode;
+						control.FocusMode = Control.FocusModeEnum.None;
+					}
+				}
+				else if (_savedFocusModes.TryGetValue(control, out var originalMode))
+				{
+					control.FocusMode = originalMode;
+					_savedFocusModes.Remove(control);
+				}
+			}
+
+			if (child.GetChildCount() > 0)
+			{
+				SetControlsFocusEnabled(child, enabled);
+			}
+		}
+	}
+
+	private void RestorePreviousFocus()
+	{
+		if (CanReceiveFocus(_lastFocusedControl))
+		{
+			_lastFocusedControl.CallDeferred(Control.MethodName.GrabFocus);
+		}
+		else
+		{
+			_playButton.CallDeferred(Control.MethodName.GrabFocus);
+		}
+
+		_lastFocusedControl = null;
+	}
+
+	private bool CanReceiveFocus(Control control)
+	{
+		if (control == null || !GodotObject.IsInstanceValid(control)
+			|| (!control.IsVisibleInTree())
+			|| (control.FocusMode == Control.FocusModeEnum.None)
+			|| (control is BaseButton button && button.Disabled)
+		)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	private void CacheOriginalMouseFilters(Node node)
+	{
+		if (node is BaseButton button)
+		{
+			_originalMouseFilters.TryAdd(button, button.MouseFilter);
+		}
+
+		foreach (Node child in node.GetChildren())
+		{
+			CacheOriginalMouseFilters(child);
+		}
+	}
+
+	private void UpdateButtonMouseInteraction(bool allowMouseInteraction)
+	{
+		foreach (var entry in _originalMouseFilters)
+		{
+			if (!GodotObject.IsInstanceValid(entry.Key))
+			{
+				continue;
+			}
+
+			entry.Key.MouseFilter = allowMouseInteraction
+				? entry.Value
+				: Control.MouseFilterEnum.Ignore;
+		}
+	}
+
+	private void RefreshMenuMouseHover()
+	{
+		foreach (BaseButton button in _originalMouseFilters.Keys)
+		{
+			if (button is GemButton gemButton
+				&& GodotObject.IsInstanceValid(gemButton)
+				&& gemButton.IsVisibleInTree())
+			{
+				gemButton.RefreshMouseHoverState();
+			}
+		}
+	}
+
+	private void UpdateMovesModalInstructionsText(UIInputManager.InputMode inputMode)
+	{
+		var mouseKeyboardMoves = 
+			"W-A-S-D Keys"
+			+ "\n"
+			+ "\nShift Key"
+			+ "\n"
+			+ "\nEscape Key";
+
+		var gamepadMoves =
+			"Left Stick (LS), Right Stick (RS)"
+			+ "\n"
+			+ "\nLB, RB"
+			+ "\n"
+			+ "\nMenu Button";
+
+		if (inputMode == UIInputManager.InputMode.MouseKeyboard)
+		{
+			_keysLabel.Text = mouseKeyboardMoves;
+		}
+		else if (inputMode == UIInputManager.InputMode.Gamepad)
+		{
+			_keysLabel.Text = gamepadMoves;
+		}
+		else
+		{
+			_keysLabel.Text = mouseKeyboardMoves;
+		}
+	}
+
+#endregion
 }

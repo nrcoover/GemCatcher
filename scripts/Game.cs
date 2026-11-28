@@ -52,10 +52,11 @@ public partial class Game : Node2D
 
 	public override async void _Ready()
 	{
-		Input.MouseMode = Input.MouseModeEnum.Captured;
-		GameManager.Instance.ResetGame();
 		SubscribeToSignals();
+		
+		GameManager.Instance.ResetGame();
 		InitializeVariables();
+
 		await PlayGameStartSequenceAsync();
 	}
 
@@ -70,6 +71,12 @@ public partial class Game : Node2D
 		{
 			// GameManager.Instance.SetGameStateVictory();
 			SignalManager.Instance.EmitAdvanceStage();
+		}
+
+		if (@event.IsActionPressed("explode") 
+				&& GameManager.Instance.CurrentGameState == (int)GameManager.GameState.VICTORY)
+		{
+			SignalManager.Instance.EmitPlayerSummonedExplosion();
 		}
 
 		if (@event.IsActionPressed("toggle-test") && CustomDebug.IsDebugging)
@@ -104,6 +111,7 @@ public partial class Game : Node2D
 		SignalManager.Instance.PowerUpRemoved += OnPowerUpRemoved;
 		SignalManager.Instance.AdvanceStage += OnAdvanceStageAsync;
 		SignalManager.Instance.GameVictory += OnGameVictory;
+		SignalManager.Instance.PlayerSummonedExplosion += OnPlayerSummonedExplosion;
 	}
 
   private void UnsubscribeFromSignals() {
@@ -116,11 +124,11 @@ public partial class Game : Node2D
 		SignalManager.Instance.PowerUpRemoved -= OnPowerUpRemoved;
 		SignalManager.Instance.AdvanceStage -= OnAdvanceStageAsync;
 		SignalManager.Instance.GameVictory -= OnGameVictory;
+		SignalManager.Instance.PlayerSummonedExplosion -= OnPlayerSummonedExplosion;
 	}
 
   private async void OnInitiateDeathSequenceAsync()
 	{
-		// TODO: Consider refactoring _isDying into GameManager enum GameState
 		if (_isDying)
 		{
 			return;
@@ -160,7 +168,7 @@ public partial class Game : Node2D
 
 		// Play winning celebration sound
 		_music.Stop();
-		_audioExplosion.Play(); // TODO: Replace with special gem explosion sound
+		_audioExplosion.Play();
 		_musicReversed.Play();
 
 		await CreateTimerAsync(0.75f);
@@ -249,11 +257,18 @@ public partial class Game : Node2D
 		{
 			InstantiateAdditionalGemSpawner();
 		}
+
+		ResetMusicVolume();
 	}
 
 	private void OnGameVictory()
 	{
 		InitiateVictorySequenceAsync();
+	}
+
+	private void OnPlayerSummonedExplosion()
+	{
+		_audioExplosion.Play();
 	}
 
 #endregion
@@ -264,11 +279,12 @@ public partial class Game : Node2D
 
   private void HandleEscape()
 	{
-		if (Input.IsKeyPressed(Key.Escape))
-		{
-			GameManager.Instance.ResetGame();
-			LevelManager.Instance.LoadMainMenu();
-		}
+		UIInputManager.Instance.SetInputContext(
+        UIInputManager.InputContext.Menu
+    );
+		
+		GameManager.Instance.ResetGame();
+		LevelManager.Instance.LoadMainMenu();
 	}
 	
 #endregion
@@ -307,7 +323,7 @@ public partial class Game : Node2D
 		CreateMusicVolumeTween();
 	}
 	
-	private void ResetMusicVolume()
+	private async void ResetMusicVolume()
 	{
 		_music.VolumeDb = _musicDefaultVolume;
 	}

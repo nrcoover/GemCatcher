@@ -21,19 +21,19 @@ _isOnMainMenu = true
 
 [node name="MainMenuUi" parent="CanvasLayer" instance=ExtResource("4_ow34m")]
 
-[node name="Instructions" parent="CanvasLayer/MainMenuUi/RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
+[node name="Instructions" parent="CanvasLayer/MainMenuUi/Modals/RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
 text = "1. Catch as many gems as you can.
 2. Don't let your paddle's boosters overheat.
 3. Look out for special gems that grant extra abilities.
-4. Eat your vegetables. 
+4. Collect 25 gems to advance to the next stage.
+5. Complete all 12 stages to win and unlock Infinite Mode.
+6. Press \"B\" during victory stage to experience some fun.
+7. Eat your vegetables. 
     (...I mean actually, like in real life;
     there are no vegetables in this game.)"
 
-[node name="CreditsModal" parent="CanvasLayer/MainMenuUi" index="7"]
-visible = true
-
-[node name="Instructions" parent="CanvasLayer/MainMenuUi/CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
-text = "This game was created as a student project and is an expansion upon an original game created by following the Udemy Course \"Learn 2D Game Development: Godot 4.5 & C# from Scratch\" by Richard Allbert and Martyna Olivares. Assets are sourced, royalty free, from Kenny Assets, freesounds.org, and Pexels.com. Recorded dialogue clips are original recordings by the game developer, \"Nicklefritz\", distributed under the alias: \"Fritzie Games\"."
+[node name="Instructions" parent="CanvasLayer/MainMenuUi/Modals/CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
+text = "This game was created as a student project and is an expansion upon an original game created by following the Udemy Course \"Learn 2D Game Development: Godot 4.5 & C# from Scratch\" by Richard Allbert and Martyna Olivares. Assets are sourced, royalty free, from Kenny Assets, freesounds.org, and Pexels.com. Recorded dialogue clips are original recordings by the game developer, Nicklefritz, and the game is distributed under the same name. Development took 120 hours over 8 months. Thank you for playing, and most importantly: Thank you for being you!"
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_l72w3")
@@ -42,17 +42,28 @@ pitch_scale = 0.5
 autoplay = true
 
 [editable path="CanvasLayer/MainMenuUi"]
-[editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/PlayButton"]
-[editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/InfiniteModeButton"]
-[editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/RulesButton"]
-[editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/MovesButton"]
-[editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/QuitButton"]
-[editable path="CanvasLayer/MainMenuUi/MarginButtons/HBoxButtons/CreditsButton"]
-[editable path="CanvasLayer/MainMenuUi/MarginHighScore/VBoxContainer/HBoxContainer/ResetButton"]
-[editable path="CanvasLayer/MainMenuUi/MarginHighScore/VBoxContainer/HBoxContainer/RestoreButton"]
-[editable path="CanvasLayer/MainMenuUi/MovesModal"]
-[editable path="CanvasLayer/MainMenuUi/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
-[editable path="CanvasLayer/MainMenuUi/RulesModal"]
-[editable path="CanvasLayer/MainMenuUi/RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
-[editable path="CanvasLayer/MainMenuUi/CreditsModal"]
-[editable path="CanvasLayer/MainMenuUi/CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
+[editable path="CanvasLayer/MainMenuUi/MainMenuControls/MarginButtons/HBoxButtons/PlayButton"]
+[editable path="CanvasLayer/MainMenuUi/MainMenuControls/MarginButtons/HBoxButtons/InfiniteModeButton"]
+[editable path="CanvasLayer/MainMenuUi/MainMenuControls/MarginButtons/HBoxButtons/RulesButton"]
+[editable path="CanvasLayer/MainMenuUi/MainMenuControls/MarginButtons/HBoxButtons/MovesButton"]
+[editable path="CanvasLayer/MainMenuUi/MainMenuControls/MarginButtons/HBoxButtons/QuitButton"]
+[editable path="CanvasLayer/MainMenuUi/MainMenuControls/MarginButtons/HBoxButtons/CreditsButton"]
+[editable path="CanvasLayer/MainMenuUi/MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton"]
+[editable path="CanvasLayer/MainMenuUi/MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/RestoreButton"]
+[editable path="CanvasLayer/MainMenuUi/MainMenuControls/MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton"]
+[editable path="CanvasLayer/MainMenuUi/MainMenuControls/MarginHighScore/VBoxDeveloper/HBoxContainer/ThankYouButton"]
+[editable path="CanvasLayer/MainMenuUi/Modals/RulesModal"]
+[editable path="CanvasLayer/MainMenuUi/Modals/RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
+[editable path="CanvasLayer/MainMenuUi/Modals/MovesModal"]
+[editable path="CanvasLayer/MainMenuUi/Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
+[editable path="CanvasLayer/MainMenuUi/Modals/CreditsModal"]
+[editable path="CanvasLayer/MainMenuUi/Modals/CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
+[editable path="CanvasLayer/MainMenuUi/Modals/HelloModal"]
+[editable path="CanvasLayer/MainMenuUi/Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/WebsiteButton"]
+[editable path="CanvasLayer/MainMenuUi/Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/GameDevButton"]
+[editable path="CanvasLayer/MainMenuUi/Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/GamingButton"]
+[editable path="CanvasLayer/MainMenuUi/Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/FacebookButton"]
+[editable path="CanvasLayer/MainMenuUi/Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/ThreadsButton"]
+[editable path="CanvasLayer/MainMenuUi/Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/TwitterButton"]
+[editable path="CanvasLayer/MainMenuUi/Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/SpotifyButton"]
+[editable path="CanvasLayer/MainMenuUi/Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]

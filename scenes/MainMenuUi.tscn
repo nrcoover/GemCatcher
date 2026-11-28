@@ -1,12 +1,22 @@
-[gd_scene load_steps=6 format=3 uid="uid://cubv40p7fxyh5"]
+[gd_scene load_steps=11 format=3 uid="uid://cubv40p7fxyh5"]
 
 [ext_resource type="Script" uid="uid://roupoeg0m343" path="res://scripts/MainMenuUi.cs" id="1_it30p"]
 [ext_resource type="PackedScene" uid="uid://dqthwsums7jjw" path="res://scenes/GemButton.tscn" id="3_pqhkh"]
+[ext_resource type="Texture2D" uid="uid://c2a4m3pjt6egg" path="res://assets/images/sprites/base_diamond.png" id="4_56fvm"]
 [ext_resource type="PackedScene" uid="uid://dvxadunjhuoll" path="res://scenes/MenuModal.tscn" id="4_h6icy"]
 [ext_resource type="LabelSettings" uid="uid://5mcorwbq3ffs" path="res://resources/fonts/play_white_24_font_normal.tres" id="5_7v7mi"]
+[ext_resource type="FontFile" uid="uid://bwj4w1pwpwh0k" path="res://assets/fonts/Play-Regular.ttf" id="5_gh1cy"]
 [ext_resource type="PackedScene" uid="uid://2sfkess71hko" path="res://scenes/MenuTitle.tscn" id="6_56fvm"]
+[ext_resource type="AudioStream" uid="uid://d2nbwve0egbq5" path="res://assets/audio/dialogue/developer/thank-you.mp3" id="7_it30p"]
+[ext_resource type="Script" uid="uid://g7ys2laef6o4" path="res://scripts/GemLinkButton.cs" id="8_7mmql"]
 
-[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_playButton", "_infiniteModeButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_movesModal", "_rulesModal", "_creditsModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_titleTimer", "_titleContainer", "_marginHighScoreContainer")]
+[sub_resource type="LabelSettings" id="LabelSettings_it30p"]
+font = ExtResource("5_gh1cy")
+font_size = 22
+shadow_color = Color(0, 0, 0, 1)
+shadow_offset = Vector2(1.25, 1.25)
+
+[node name="MainMenuUi" type="Control" node_paths=PackedStringArray("_mainMenuControls", "_playButton", "_infiniteModeButton", "_rulesButton", "_movesButton", "_quitButton", "_creditsButton", "_resetHighScoreButton", "_restoreHighScoreButton", "_helloButton", "_thankYouButton", "_modalControls", "_movesModal", "_rulesModal", "_creditsModal", "_helloModal", "_titleLayer1", "_titleLayer2", "_titleLayer3", "_titleLayer4", "_titleLayer5", "_titleLayer6", "_highScoreLabel", "_stagesWonLabel", "_keysLabel", "_titleTimer", "_titleContainer", "_highScoreContainer", "_thankYouAudio")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,27 +26,35 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_it30p")
-_playButton = NodePath("MarginButtons/HBoxButtons/PlayButton")
-_infiniteModeButton = NodePath("MarginButtons/HBoxButtons/InfiniteModeButton")
-_rulesButton = NodePath("MarginButtons/HBoxButtons/RulesButton")
-_movesButton = NodePath("MarginButtons/HBoxButtons/MovesButton")
-_quitButton = NodePath("MarginButtons/HBoxButtons/QuitButton")
-_creditsButton = NodePath("MarginButtons/HBoxButtons/CreditsButton")
-_resetHighScoreButton = NodePath("MarginHighScore/VBoxContainer/HBoxContainer/ResetButton")
-_restoreHighScoreButton = NodePath("MarginHighScore/VBoxContainer/HBoxContainer/RestoreButton")
-_movesModal = NodePath("MovesModal")
-_rulesModal = NodePath("RulesModal")
-_creditsModal = NodePath("CreditsModal")
+_mainMenuControls = NodePath("MainMenuControls")
+_playButton = NodePath("MainMenuControls/MarginButtons/HBoxButtons/PlayButton")
+_infiniteModeButton = NodePath("MainMenuControls/MarginButtons/HBoxButtons/InfiniteModeButton")
+_rulesButton = NodePath("MainMenuControls/MarginButtons/HBoxButtons/RulesButton")
+_movesButton = NodePath("MainMenuControls/MarginButtons/HBoxButtons/MovesButton")
+_quitButton = NodePath("MainMenuControls/MarginButtons/HBoxButtons/QuitButton")
+_creditsButton = NodePath("MainMenuControls/MarginButtons/HBoxButtons/CreditsButton")
+_resetHighScoreButton = NodePath("MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton")
+_restoreHighScoreButton = NodePath("MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/RestoreButton")
+_helloButton = NodePath("MainMenuControls/MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton")
+_thankYouButton = NodePath("MainMenuControls/MarginHighScore/VBoxDeveloper/HBoxContainer/ThankYouButton")
+_modalControls = NodePath("Modals")
+_movesModal = NodePath("Modals/MovesModal")
+_rulesModal = NodePath("Modals/RulesModal")
+_creditsModal = NodePath("Modals/CreditsModal")
+_helloModal = NodePath("Modals/HelloModal")
 _titleLayer1 = NodePath("MarginContainer/TitleContainer/TitleAlpha")
 _titleLayer2 = NodePath("MarginContainer/TitleContainer/TitleAlpha2")
 _titleLayer3 = NodePath("MarginContainer/TitleContainer/TitleAlpha3")
 _titleLayer4 = NodePath("MarginContainer/TitleContainer/TitleAlpha4")
 _titleLayer5 = NodePath("MarginContainer/TitleContainer/TitleAlpha5")
 _titleLayer6 = NodePath("MarginContainer/TitleContainer/TitleAlpha6")
-_highScoreLabel = NodePath("MarginHighScore/VBoxContainer/HBoxContainer2/HighScoreLabel")
+_highScoreLabel = NodePath("MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxLabels/VBoxContainer/HighScoreLabel")
+_stagesWonLabel = NodePath("MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxLabels/VBoxContainer/StagesWonLabel")
+_keysLabel = NodePath("Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/VBoxContainer2/Keys")
 _titleTimer = NodePath("TitleTimer")
 _titleContainer = NodePath("MarginContainer/TitleContainer")
-_marginHighScoreContainer = NodePath("MarginHighScore")
+_highScoreContainer = NodePath("MainMenuControls/MarginHighScore/VBoxScore/HBoxScore")
+_thankYouAudio = NodePath("ThankYou")
 
 [node name="CenterMarker" type="Label" parent="."]
 visible = false
@@ -130,7 +148,15 @@ position = Vector2(300, 35)
 [node name="TitleTimer" type="Timer" parent="."]
 wait_time = 5.0
 
-[node name="MarginButtons" type="MarginContainer" parent="."]
+[node name="MainMenuControls" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginButtons" type="MarginContainer" parent="MainMenuControls"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -145,56 +171,98 @@ theme_override_constants/margin_top = 56
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 24
 
-[node name="HBoxButtons" type="BoxContainer" parent="MarginButtons"]
+[node name="HBoxButtons" type="BoxContainer" parent="MainMenuControls/MarginButtons"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 24
 alignment = 1
 
-[node name="PlayButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
+[node name="PlayButton" parent="MainMenuControls/MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath("../InfiniteModeButton")
+focus_neighbor_bottom = NodePath("../../../MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton")
+focus_next = NodePath("../InfiniteModeButton")
+focus_previous = NodePath("../../../MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton")
+texture_disabled = ExtResource("4_56fvm")
 
-[node name="ButtonLabel" parent="MarginButtons/HBoxButtons/PlayButton" index="0"]
+[node name="ButtonLabel" parent="MainMenuControls/MarginButtons/HBoxButtons/PlayButton" index="0"]
 text = "PLAY"
 
-[node name="InfiniteModeButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
+[node name="InfiniteModeButton" parent="MainMenuControls/MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.8, 0.53333336, 1, 1)
 layout_mode = 2
+focus_neighbor_left = NodePath("../PlayButton")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath("../RulesButton")
+focus_neighbor_bottom = NodePath("../../../MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton")
+focus_next = NodePath("../RulesButton")
+focus_previous = NodePath(".")
+texture_disabled = ExtResource("4_56fvm")
 
-[node name="ButtonLabel" parent="MarginButtons/HBoxButtons/InfiniteModeButton" index="0"]
+[node name="ButtonLabel" parent="MainMenuControls/MarginButtons/HBoxButtons/InfiniteModeButton" index="0"]
 text = "INFINITE
 MODE"
 
-[node name="RulesButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
+[node name="RulesButton" parent="MainMenuControls/MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(0.53333336, 0.8, 1, 1)
 layout_mode = 2
+focus_neighbor_left = NodePath("../InfiniteModeButton")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath("../MovesButton")
+focus_neighbor_bottom = NodePath("../../../MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton")
+focus_next = NodePath("../MovesButton")
+focus_previous = NodePath("../InfiniteModeButton")
+texture_disabled = ExtResource("4_56fvm")
 
-[node name="ButtonLabel" parent="MarginButtons/HBoxButtons/RulesButton" index="0"]
+[node name="ButtonLabel" parent="MainMenuControls/MarginButtons/HBoxButtons/RulesButton" index="0"]
 text = "RULES"
 
-[node name="MovesButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
+[node name="MovesButton" parent="MainMenuControls/MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 0.8, 0.53333336, 1)
 layout_mode = 2
+focus_neighbor_left = NodePath("../RulesButton")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath("../QuitButton")
+focus_neighbor_bottom = NodePath("../../../MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton")
+focus_next = NodePath("../QuitButton")
+focus_previous = NodePath("../RulesButton")
+texture_disabled = ExtResource("4_56fvm")
 
-[node name="ButtonLabel" parent="MarginButtons/HBoxButtons/MovesButton" index="0"]
+[node name="ButtonLabel" parent="MainMenuControls/MarginButtons/HBoxButtons/MovesButton" index="0"]
 text = "MOVES"
 
-[node name="QuitButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
+[node name="QuitButton" parent="MainMenuControls/MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 0.53333336, 0.53333336, 1)
 layout_mode = 2
+focus_neighbor_left = NodePath("../MovesButton")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath("../CreditsButton")
+focus_neighbor_bottom = NodePath("../../../MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton")
+focus_next = NodePath("../CreditsButton")
+focus_previous = NodePath("../MovesButton")
+texture_disabled = ExtResource("4_56fvm")
 
-[node name="ButtonLabel" parent="MarginButtons/HBoxButtons/QuitButton" index="0"]
+[node name="ButtonLabel" parent="MainMenuControls/MarginButtons/HBoxButtons/QuitButton" index="0"]
 text = "QUIT"
 
-[node name="CreditsButton" parent="MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
+[node name="CreditsButton" parent="MainMenuControls/MarginButtons/HBoxButtons" instance=ExtResource("3_pqhkh")]
 self_modulate = Color(1, 1, 0.53333336, 1)
 layout_mode = 2
+focus_neighbor_left = NodePath("../QuitButton")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../../../MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton")
+focus_next = NodePath("../../../MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton")
+focus_previous = NodePath("../QuitButton")
+texture_disabled = ExtResource("4_56fvm")
 
-[node name="ButtonLabel" parent="MarginButtons/HBoxButtons/CreditsButton" index="0"]
+[node name="ButtonLabel" parent="MainMenuControls/MarginButtons/HBoxButtons/CreditsButton" index="0"]
 text = "CREDITS"
 
-[node name="MarginHighScore" type="MarginContainer" parent="."]
+[node name="MarginHighScore" type="MarginContainer" parent="MainMenuControls"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -207,110 +275,151 @@ theme_override_constants/margin_top = 56
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 24
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginHighScore"]
+[node name="VBoxScore" type="VBoxContainer" parent="MainMenuControls/MarginHighScore"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
+theme_override_constants/separation = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginHighScore/VBoxContainer"]
+[node name="HBoxScore" type="HBoxContainer" parent="MainMenuControls/MarginHighScore/VBoxScore"]
 layout_mode = 2
-size_flags_horizontal = 4
-theme_override_constants/separation = 16
+size_flags_horizontal = 8
 
-[node name="ResetButton" parent="MarginHighScore/VBoxContainer/HBoxContainer" instance=ExtResource("3_pqhkh")]
-self_modulate = Color(1, 0.53333336, 1, 1)
-layout_mode = 2
-
-[node name="ButtonLabel" parent="MarginHighScore/VBoxContainer/HBoxContainer/ResetButton" index="0"]
-text = "Reset"
-
-[node name="RestoreButton" parent="MarginHighScore/VBoxContainer/HBoxContainer" instance=ExtResource("3_pqhkh")]
-self_modulate = Color(0.53333336, 0.53333336, 1, 1)
-layout_mode = 2
-
-[node name="ButtonLabel" parent="MarginHighScore/VBoxContainer/HBoxContainer/RestoreButton" index="0"]
-text = "Restore"
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="MarginHighScore/VBoxContainer"]
+[node name="HBoxLabels" type="HBoxContainer" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
+theme_override_constants/separation = 4
 
-[node name="HighScoreLabel" type="Label" parent="MarginHighScore/VBoxContainer/HBoxContainer2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxLabels"]
+layout_mode = 2
+
+[node name="HighScoreLabel" type="Label" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxLabels/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
 text = "High Score: xxx"
 label_settings = ExtResource("5_7v7mi")
 
-[node name="MovesModal" parent="." instance=ExtResource("4_h6icy")]
+[node name="StagesWonLabel" type="Label" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxLabels/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+text = "Stages Won: xxx"
+label_settings = SubResource("LabelSettings_it30p")
+
+[node name="HBoxSeparator" type="HBoxContainer" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 13
+
+[node name="HBoxSeparator2" type="HBoxContainer" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 13
+
+[node name="HBoxSeparator3" type="HBoxContainer" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 13
+
+[node name="HBoxSeparator4" type="HBoxContainer" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 13
+
+[node name="HBoxSeparator5" type="HBoxContainer" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 13
+
+[node name="HBoxButtons" type="HBoxContainer" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 16
+
+[node name="ResetButton" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.53333336, 1, 0.8, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../../../../VBoxDeveloper/HBoxContainer/ThankYouButton")
+focus_neighbor_top = NodePath("../../../../../MarginButtons/HBoxButtons/CreditsButton")
+focus_neighbor_right = NodePath("../RestoreButton")
+focus_next = NodePath("../RestoreButton")
+focus_previous = NodePath("../../../../VBoxDeveloper/HBoxContainer/ThankYouButton")
+texture_disabled = ExtResource("4_56fvm")
+
+[node name="ButtonLabel" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton" index="0"]
+text = "Reset"
+
+[node name="RestoreButton" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.53333336, 0.53333336, 1, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../ResetButton")
+focus_neighbor_top = NodePath("../../../../../MarginButtons/HBoxButtons/CreditsButton")
+focus_previous = NodePath("../ResetButton")
+texture_disabled = ExtResource("4_56fvm")
+
+[node name="ButtonLabel" parent="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/RestoreButton" index="0"]
+text = "Restore"
+
+[node name="VBoxDeveloper" type="VBoxContainer" parent="MainMenuControls/MarginHighScore"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainMenuControls/MarginHighScore/VBoxDeveloper"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 16
+
+[node name="HelloButton" parent="MainMenuControls/MarginHighScore/VBoxDeveloper/HBoxContainer" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(1, 1, 0.53333336, 1)
+layout_mode = 2
+focus_neighbor_top = NodePath("../../../../MarginButtons/HBoxButtons/PlayButton")
+focus_neighbor_right = NodePath("../ThankYouButton")
+focus_next = NodePath("../ThankYouButton")
+focus_previous = NodePath("../../../../MarginButtons/HBoxButtons/PlayButton")
+
+[node name="ButtonLabel" parent="MainMenuControls/MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton" index="0"]
+text = "Hello"
+
+[node name="ThankYouButton" parent="MainMenuControls/MarginHighScore/VBoxDeveloper/HBoxContainer" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.53333336, 1, 1, 1)
+layout_mode = 2
+focus_neighbor_left = NodePath("../HelloButton")
+focus_neighbor_top = NodePath("../../../../MarginButtons/HBoxButtons/PlayButton")
+focus_neighbor_right = NodePath("../../../VBoxScore/HBoxScore/HBoxButtons/ResetButton")
+focus_next = NodePath("../../../VBoxScore/HBoxScore/HBoxButtons/ResetButton")
+focus_previous = NodePath("../HelloButton")
+
+[node name="ButtonLabel" parent="MainMenuControls/MarginHighScore/VBoxDeveloper/HBoxContainer/ThankYouButton" index="0"]
+text = "Thank
+You!"
+
+[node name="Modals" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="RulesModal" parent="Modals" instance=ExtResource("4_h6icy")]
 visible = false
 layout_mode = 1
 
-[node name="Title" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
-text = "MOVES"
-
-[node name="HBoxInstructions" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer" index="1"]
-theme_override_constants/separation = 24
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Moves" type="Label" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/VBoxContainer"]
-layout_mode = 2
-text = "Move Paddle
-
-Boost
-
-Exit To Main Menu"
-label_settings = ExtResource("5_7v7mi")
-horizontal_alignment = 2
-
-[node name="VBoxContainer3" type="VBoxContainer" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="1"]
-layout_mode = 2
-
-[node name="Seperator" type="Label" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/VBoxContainer3"]
-layout_mode = 2
-text = "|
-
-|
-
-|
-"
-label_settings = ExtResource("5_7v7mi")
-
-[node name="VBoxContainer2" type="VBoxContainer" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="2"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Keys" type="Label" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/VBoxContainer2"]
-layout_mode = 2
-text = "A-S-D-W Keys
-
-Shift Key
-
-Escape Key"
-label_settings = ExtResource("5_7v7mi")
-
-[node name="Instructions" parent="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="3"]
-visible = false
-text = "Arrow Keys"
-
-[node name="RulesModal" parent="." instance=ExtResource("4_h6icy")]
-visible = false
-layout_mode = 1
-
-[node name="VBoxContainer" parent="RulesModal/MarginOuter/Panel/MarginInner" index="0"]
+[node name="VBoxContainer" parent="Modals/RulesModal/MarginOuter/Panel/MarginInner" index="0"]
 size_flags_horizontal = 4
 
-[node name="Title" parent="RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
+[node name="Title" parent="Modals/RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
 text = "RULES"
 
-[node name="HBoxInstructions" parent="RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer" index="1"]
+[node name="HBoxInstructions" parent="Modals/RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer" index="1"]
 size_flags_horizontal = 4
 
-[node name="Instructions" parent="RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
+[node name="Instructions" parent="Modals/RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
 size_flags_horizontal = 4
 text = "1. Catch as many gems as you can.
 
@@ -320,28 +429,201 @@ text = "1. Catch as many gems as you can.
     (...I mean actually, like in real life;
     there are no vegetables in this game.)"
 
-[node name="CreditsModal" parent="." instance=ExtResource("4_h6icy")]
+[node name="CloseButton" parent="Modals/RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton" index="0"]
+texture_disabled = ExtResource("4_56fvm")
+
+[node name="MovesModal" parent="Modals" instance=ExtResource("4_h6icy")]
 visible = false
 layout_mode = 1
 
-[node name="Title" parent="CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
+[node name="Title" parent="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
+text = "MOVES (Includes Controller Support)"
+
+[node name="HBoxInstructions" parent="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer" index="1"]
+theme_override_constants/separation = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Moves" type="Label" parent="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/VBoxContainer"]
+layout_mode = 2
+text = "Move Paddle
+
+Boost
+
+Exit To Main Menu"
+label_settings = ExtResource("5_7v7mi")
+horizontal_alignment = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="1"]
+layout_mode = 2
+
+[node name="Seperator" type="Label" parent="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/VBoxContainer3"]
+layout_mode = 2
+text = "|
+
+|
+
+|
+"
+label_settings = ExtResource("5_7v7mi")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Keys" type="Label" parent="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions/VBoxContainer2"]
+layout_mode = 2
+text = "W-A-S-D Keys / Left Stick (LS), Right Stick (RS)
+
+Shift Key / LB, RB
+
+Escape Key / Menu Button"
+label_settings = ExtResource("5_7v7mi")
+
+[node name="Instructions" parent="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="3"]
+visible = false
+text = "Arrow Keys"
+
+[node name="CloseButton" parent="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton" index="0"]
+texture_disabled = ExtResource("4_56fvm")
+
+[node name="CreditsModal" parent="Modals" instance=ExtResource("4_h6icy")]
+visible = false
+layout_mode = 1
+
+[node name="Title" parent="Modals/CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
 text = "CREDITS"
 
-[node name="Instructions" parent="CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
+[node name="Instructions" parent="Modals/CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
 text = "This game was created as a student project and is an expansion upon an original game created by following the Udemy Course \"Learn 2D Game Development: Godot 4.5 & C# from Scratch\" by Richard Allbert and Martyna Olivares. Assets are sourced, royalty free, from Kenny Assets and Pexels.com. Recorded dialogue clips are original recordings by the game developer, \"Nicklefritz\", distributed under the alias: \"Fritzie Games\"."
 horizontal_alignment = 3
 
-[editable path="MarginButtons/HBoxButtons/PlayButton"]
-[editable path="MarginButtons/HBoxButtons/InfiniteModeButton"]
-[editable path="MarginButtons/HBoxButtons/RulesButton"]
-[editable path="MarginButtons/HBoxButtons/MovesButton"]
-[editable path="MarginButtons/HBoxButtons/QuitButton"]
-[editable path="MarginButtons/HBoxButtons/CreditsButton"]
-[editable path="MarginHighScore/VBoxContainer/HBoxContainer/ResetButton"]
-[editable path="MarginHighScore/VBoxContainer/HBoxContainer/RestoreButton"]
-[editable path="MovesModal"]
-[editable path="MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
-[editable path="RulesModal"]
-[editable path="RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
-[editable path="CreditsModal"]
-[editable path="CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
+[node name="CloseButton" parent="Modals/CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton" index="0"]
+texture_disabled = ExtResource("4_56fvm")
+
+[node name="HelloModal" parent="Modals" instance=ExtResource("4_h6icy")]
+visible = false
+layout_mode = 1
+
+[node name="Title" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxTitle" index="0"]
+text = "MEET THE DEVELOPER"
+
+[node name="Instructions" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxInstructions" index="0"]
+text = "Hello! I'm Nicklefritz, I built this game, and if you want to follow my game dev journey, you can! The buttons below will take you to my various social medias and website! Why not come say \"hello\"? Also, you can stop by my YouTube channels: \"NicklefritzDev\" for my game dev work and \"Nicklefritz\" for my Let's Play content! Thanks again for playing, and most importantly: Thank you for being you!"
+horizontal_alignment = 3
+
+[node name="HBoxSocialButtonsWrapper" type="HBoxContainer" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer" index="2"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="HBoxButtons" type="HBoxContainer" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_constants/separation = 24
+
+[node name="WebsiteButton" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(1, 0.53333336, 0.53333336, 1)
+layout_mode = 2
+texture_disabled = ExtResource("4_56fvm")
+script = ExtResource("8_7mmql")
+Url = "https://www.nicklefritz.com/game-dev"
+
+[node name="ButtonLabel" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/WebsiteButton" index="0"]
+text = "Website"
+
+[node name="GameDevButton" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(1, 0.8, 0.53333336, 1)
+layout_mode = 2
+texture_disabled = ExtResource("4_56fvm")
+script = ExtResource("8_7mmql")
+Url = "https://www.youtube.com/@nicklefritzDev"
+
+[node name="ButtonLabel" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/GameDevButton" index="0"]
+text = "GameDev
+YouTube"
+
+[node name="GamingButton" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(1, 1, 0.53333336, 1)
+layout_mode = 2
+texture_disabled = ExtResource("4_56fvm")
+script = ExtResource("8_7mmql")
+Url = "https://www.youtube.com/nicklefritz"
+
+[node name="ButtonLabel" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/GamingButton" index="0"]
+text = "Gaming
+YouTube"
+
+[node name="FacebookButton" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+layout_mode = 2
+texture_disabled = ExtResource("4_56fvm")
+script = ExtResource("8_7mmql")
+Url = "https://www.facebook.com/nicklefritzDev"
+
+[node name="ButtonLabel" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/FacebookButton" index="0"]
+text = "Facebook"
+
+[node name="ThreadsButton" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.53333336, 0.8, 1, 1)
+layout_mode = 2
+texture_disabled = ExtResource("4_56fvm")
+script = ExtResource("8_7mmql")
+Url = "https://www.threads.com/@nicklefritzdev"
+
+[node name="ButtonLabel" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/ThreadsButton" index="0"]
+text = "Threads"
+
+[node name="TwitterButton" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.53333336, 0.53333336, 1, 1)
+layout_mode = 2
+texture_disabled = ExtResource("4_56fvm")
+script = ExtResource("8_7mmql")
+Url = "https://x.com/nicklefritzDev"
+
+[node name="ButtonLabel" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/TwitterButton" index="0"]
+text = "Twitter"
+
+[node name="SpotifyButton" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons" instance=ExtResource("3_pqhkh")]
+self_modulate = Color(0.8, 0.53333336, 1, 1)
+layout_mode = 2
+texture_disabled = ExtResource("4_56fvm")
+script = ExtResource("8_7mmql")
+Url = "https://open.spotify.com/artist/3rRZlHaSwLeTRIm3CPQTcf"
+
+[node name="ButtonLabel" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/SpotifyButton" index="0"]
+text = "Spotify"
+
+[node name="CloseButton" parent="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton" index="0"]
+texture_disabled = ExtResource("4_56fvm")
+
+[node name="ThankYou" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_it30p")
+
+[editable path="MainMenuControls/MarginButtons/HBoxButtons/PlayButton"]
+[editable path="MainMenuControls/MarginButtons/HBoxButtons/InfiniteModeButton"]
+[editable path="MainMenuControls/MarginButtons/HBoxButtons/RulesButton"]
+[editable path="MainMenuControls/MarginButtons/HBoxButtons/MovesButton"]
+[editable path="MainMenuControls/MarginButtons/HBoxButtons/QuitButton"]
+[editable path="MainMenuControls/MarginButtons/HBoxButtons/CreditsButton"]
+[editable path="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/ResetButton"]
+[editable path="MainMenuControls/MarginHighScore/VBoxScore/HBoxScore/HBoxButtons/RestoreButton"]
+[editable path="MainMenuControls/MarginHighScore/VBoxDeveloper/HBoxContainer/HelloButton"]
+[editable path="MainMenuControls/MarginHighScore/VBoxDeveloper/HBoxContainer/ThankYouButton"]
+[editable path="Modals/RulesModal"]
+[editable path="Modals/RulesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
+[editable path="Modals/MovesModal"]
+[editable path="Modals/MovesModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
+[editable path="Modals/CreditsModal"]
+[editable path="Modals/CreditsModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]
+[editable path="Modals/HelloModal"]
+[editable path="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/WebsiteButton"]
+[editable path="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/GameDevButton"]
+[editable path="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/GamingButton"]
+[editable path="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/FacebookButton"]
+[editable path="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/ThreadsButton"]
+[editable path="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/TwitterButton"]
+[editable path="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxSocialButtonsWrapper/HBoxButtons/SpotifyButton"]
+[editable path="Modals/HelloModal/MarginOuter/Panel/MarginInner/VBoxContainer/HBoxButtonWrapper/HBoxButton/CloseButton"]

@@ -2,7 +2,7 @@ namespace GemCatcher.utils
 {
   public static class CustomDebug
   {
-    public static readonly bool IsDebugging = true;
+    public static readonly bool IsDebugging = false;
 
     public static string GetGameStateString()
     {
@@ -25,5 +25,4 @@ namespace GemCatcher.utils
       };
     }
   }
-
 }

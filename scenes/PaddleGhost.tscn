@@ -11,7 +11,7 @@ height = 104.0
 script = ExtResource("1_dtdlc")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-modulate = Color(0.48, 0.48, 0.48, 0.5882353)
+modulate = Color(0.5730574, 0.5730574, 0.5730574, 0.90000004)
 texture = ExtResource("2_d3amv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

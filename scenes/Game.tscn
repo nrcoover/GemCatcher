@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://cc06i1thctrii" path="res://scripts/Game.cs" id="1_78awf"]
 [ext_resource type="Texture2D" uid="uid://f4oflard74sa" path="res://assets/images/backgrounds/GameBg.png" id="1_ibkli"]
-[ext_resource type="PackedScene" uid="uid://3kq5fr5oomem" path="res://scenes/Paddle.tscn" id="2_qbsmt"]
 [ext_resource type="PackedScene" uid="uid://d2eah2eim18xg" path="res://scenes/Camera.tscn" id="3_kyk2p"]
 [ext_resource type="PackedScene" uid="uid://cq8skradygbr0" path="res://scenes/MotionBackdrop.tscn" id="4_vjgi4"]
+[ext_resource type="PackedScene" uid="uid://bsd3ktyaellt5" path="res://scenes/PaddleWrapper.tscn" id="6_426vi"]
 [ext_resource type="PackedScene" uid="uid://bbrkr3etn88hu" path="res://scenes/GemSpawner.tscn" id="6_kyk2p"]
 [ext_resource type="PackedScene" uid="uid://ejfvyw78locs" path="res://scenes/NormalSpawnContainer.tscn" id="7_0bq3a"]
 [ext_resource type="PackedScene" uid="uid://bgk1gf8kovaqj" path="res://scenes/VictorySpawnerContainer.tscn" id="7_jhsr3"]
@@ -487,21 +487,25 @@ flip_v = true
 
 [node name="MotionBackdrop" parent="." instance=ExtResource("4_vjgi4")]
 
-[node name="Paddle" parent="." node_paths=PackedStringArray("_boostLabel", "_powerUpSecondsLabel", "_boostPercentageLabel", "_boostFuelAnimator", "_progressBoostLeft", "_progressBoostRight", "_progressPowerUpLeft", "_progressPowerUpRight", "_audioDisengageBoosters", "_audioBoostersReengaged", "_audioCooldownInProgress") instance=ExtResource("2_qbsmt")]
+[node name="PaddleWrapper" parent="." instance=ExtResource("6_426vi")]
 position = Vector2(561, 570)
-scale = Vector2(0.600926, 0.6009259)
+scale = Vector2(0.6, 0.6)
+
+[node name="Paddle" parent="PaddleWrapper" index="1" node_paths=PackedStringArray("_paddleWrapper", "_boostLabel", "_powerUpSecondsLabel", "_boostPercentageLabel", "_boostFuelAnimator", "_engineFireParticles", "_progressBoostLeft", "_progressBoostRight", "_progressPowerUpLeft", "_progressPowerUpRight", "_audioDisengageBoosters", "_audioBoostersReengaged", "_audioCooldownInProgress")]
 _boundaryMargin = 35.0
-_boostLabel = NodePath("../CanvasLayer/GameUi/MarginContainer/BoostDebugLabel")
-_powerUpSecondsLabel = NodePath("../CanvasLayer/GameUi/MarginContainer/VBoxContainer/PowerUpSecondsLabel")
-_boostPercentageLabel = NodePath("../CanvasLayer/GameUi/MarginContainer/VBoxContainer/BoostPercentageLabel")
-_boostFuelAnimator = NodePath("../BoostFuelAnimator")
-_progressBoostLeft = NodePath("../CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft")
-_progressBoostRight = NodePath("../CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight")
-_progressPowerUpLeft = NodePath("../CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/ProgressPowerUpLeft")
-_progressPowerUpRight = NodePath("../CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/ProgressPowerUpRight")
-_audioDisengageBoosters = NodePath("../Audio/Voice/DisengageBoosters")
-_audioBoostersReengaged = NodePath("../Audio/Voice/BoostersReengaged")
-_audioCooldownInProgress = NodePath("../Audio/Voice/CoolDownInProgress")
+_paddleWrapper = NodePath("..")
+_boostLabel = NodePath("../../CanvasLayer/GameUi/MarginContainer/BoostDebugLabel")
+_powerUpSecondsLabel = NodePath("../../CanvasLayer/GameUi/MarginContainer/VBoxContainer/PowerUpSecondsLabel")
+_boostPercentageLabel = NodePath("../../CanvasLayer/GameUi/MarginContainer/VBoxContainer/BoostPercentageLabel")
+_boostFuelAnimator = NodePath("../../BoostFuelAnimator")
+_engineFireParticles = NodePath("../EngineFireParticles2")
+_progressBoostLeft = NodePath("../../CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostLeft")
+_progressBoostRight = NodePath("../../CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer2/ProgressBoostRight")
+_progressPowerUpLeft = NodePath("../../CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/ProgressPowerUpLeft")
+_progressPowerUpRight = NodePath("../../CanvasLayer/GameUi/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer3/ProgressPowerUpRight")
+_audioDisengageBoosters = NodePath("../../Audio/Voice/DisengageBoosters")
+_audioBoostersReengaged = NodePath("../../Audio/Voice/BoostersReengaged")
+_audioCooldownInProgress = NodePath("../../Audio/Voice/CoolDownInProgress")
 
 [node name="NormalSpawnerContainer" parent="." instance=ExtResource("7_0bq3a")]
 
@@ -623,6 +627,8 @@ volume_db = -12.0
 stream = ExtResource("17_attvq")
 volume_db = -12.0
 
+[editable path="PaddleWrapper"]
+[editable path="PaddleWrapper/BlackHole"]
 [editable path="NormalSpawnerContainer"]
 [editable path="VictorySpawnerContainer"]
 [editable path="VictorySpawnerContainer/GemSpawner"]

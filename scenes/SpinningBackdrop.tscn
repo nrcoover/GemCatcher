@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://bd4dtukgxgchv"]
 
-[ext_resource type="Texture2D" uid="uid://ds3ofngwhtmvc" path="res://assets/images/backgrounds/pexels-daria-rohova-901305820-19824838.jpg" id="1_bk4qj"]
 [ext_resource type="Script" uid="uid://dolw83tvet567" path="res://scripts/SpinningBackdrop.cs" id="1_m84rw"]
+[ext_resource type="Texture2D" uid="uid://c1jnuwjbv6g1" path="res://assets/images/backgrounds/pexels-daria-rohova-901305820-19824838_darkened-blurred.png" id="2_m84rw"]
 
 [sub_resource type="Animation" id="Animation_m84rw"]
 length = 0.001
@@ -50,7 +50,8 @@ _fadeInTimer = NodePath("FadeInTimer")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 modulate = Color(0.9019608, 0.42352942, 0.35686275, 0)
 position = Vector2(20, 13)
-texture = ExtResource("1_bk4qj")
+scale = Vector2(1.15, 1.15)
+texture = ExtResource("2_m84rw")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

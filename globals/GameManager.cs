@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using GemCatcher.utils;
 using Godot;
 
 public partial class GameManager : Node
@@ -18,8 +19,8 @@ public partial class GameManager : Node
 	const int DEFAULT_GAME_STATE = (int)GameState.PLAYING;
 	
 	const int STARTING_STAGE = 1;
-	public const int VICTORY_STAGE = 3; // TODO set to 12 after debugging
-	const int STAGE_ADVANCEMENT_INCREMENTOR = 3; // TODO set to 10 after debugging
+	public const int VICTORY_STAGE = 12;
+	public const int STAGE_ADVANCEMENT_INCREMENTOR = 25;
 
 	public enum GameState
 	{
@@ -357,19 +358,26 @@ public partial class GameManager : Node
 
 	private void IncreaseDifficulty(int currentScore)
 	{
-		GD.Print("---------------NEW LOG--------------");
-		GD.Print("INCREASE DIFFICUTLY COMMENSING!!!");
-		GD.Print($"Current Level: {DifficultyLevel}");
-		GD.Print($"Current Score: {currentScore}");
+		if (CustomDebug.IsDebugging)
+		{
+			GD.Print("---------------NEW LOG--------------");
+			GD.Print("INCREASE DIFFICUTLY COMMENSING!!!");
+			GD.Print($"Current Level: {DifficultyLevel}");
+			GD.Print($"Current Score: {currentScore}");
+		}
 		
 		DifficultyLevel = (float)Mathf.Clamp(
 			DifficultyLevel * DIFFICULTY_MULTIPLIER
 			, DEFAULT_DIFFICULTY_LEVEL
 			, MAXIMUM_DIFFICULTY
 		);
-		GD.Print($"Updated Level: {DifficultyLevel}");
-		GD.Print($"DIFFICULTY LEVEL CHANGE COMPLETE!!!");
-		GD.Print("------------------------------------");
+
+		if (CustomDebug.IsDebugging)
+		{
+			GD.Print($"Updated Level: {DifficultyLevel}");
+			GD.Print($"DIFFICULTY LEVEL CHANGE COMPLETE!!!");
+			GD.Print("------------------------------------");
+		}
 
 		SignalManager.Instance.EmitDifficultyIncreased();
 	}
@@ -405,13 +413,9 @@ public partial class GameManager : Node
 
 
 
-	//TODO: Move to Score Manager
 	public void IncrementScore(int points, Color color)
 	{
-		GD.Print($"Current Score: {CurrentScore}");
-		GD.Print($"Add points: {points}");
 		CurrentScore += points;
-		GD.Print($"Current Score: {CurrentScore}");
 		SignalManager.Instance.EmitScoreIncremented(CurrentScore, color);
 	}
 
