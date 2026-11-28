@@ -956,7 +956,13 @@ public partial class Paddle : Area2D
 
   private void SelectRandomPowerUp(Color color)
   {
-		var randomNumber = Helper.GetRandomInt(0, 2);
+		var stellarDifficultyMax = 2;
+		var otherDifficultiesMaz = 3;
+		var randomNumberMax = GameManager.Instance.SelectedDifficultyMode == GameManager.GameDifficulty.STELLAR 
+			? stellarDifficultyMax
+			:	otherDifficultiesMaz;
+
+		var randomNumber = Helper.GetRandomInt(0, randomNumberMax);
 
 		switch (randomNumber)
 		{
@@ -970,6 +976,10 @@ public partial class Paddle : Area2D
 				break;
 			
 			case (int)PowerUp.BlackHole:
+				BeginBlackHolePowerUp();
+				break;
+			
+			default:
 				BeginBlackHolePowerUp();
 				break;
 		}

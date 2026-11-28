@@ -6,7 +6,6 @@ using Godot;
 // TODO: Update save structure to support multiple high scores for each level of difficulty;
 // TODO: Fix spacing issue on Play Modal and Infinite Play Modal;
 // TODO: Gray out infinite modes based on the highest difficulty mode completed;
-// TODO: Update percentage of Black Hole power up based on difficulty level;
 // TODO: Slightly decrease maximum paddle speed;
 // TODO: Reassess gem speed;
 // TODO: Update final stage number based on difficulty level: 8, 10, 12;
@@ -21,7 +20,7 @@ public partial class GameManager : Node
 
 	const int DEFAULT_SCORE = 0;
 
-	const float DEFAULT_DIFFICULTY_LEVEL = 1;
+	const float DEFAULT_DIFFICULTY_LEVEL = 1f;
 	const float DIFFICULTY_MULTIPLIER_CHILDSPLAY = 1f;
 	const float DIFFICULTY_MULTIPLIER_NORMAL = 1.005f;
 	const float DIFFICULTY_MULTIPLIER_STELLAR = 1.01f;
